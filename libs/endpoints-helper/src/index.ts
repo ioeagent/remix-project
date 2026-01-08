@@ -20,6 +20,7 @@ type EndpointUrls = {
     credits: string;
     wallet: string;
     audio;
+    permissions: string;
 };
 
 const defaultUrls: EndpointUrls = {
@@ -44,6 +45,7 @@ const defaultUrls: EndpointUrls = {
   credits: 'https://auth.api.remix.live:8443/credits',
   wallet: 'https://auth.api.remix.live:8443/wallet',
   audio: 'https://audio.api.remix.live',
+  permissions: 'https://auth.api.remix.live:8443/permissions',
 };
 
 const endpointPathMap: Record<keyof EndpointUrls, string> = {
@@ -68,6 +70,7 @@ const endpointPathMap: Record<keyof EndpointUrls, string> = {
   credits: 'credits',
   wallet: 'wallet',
   audio: 'audio',
+  permissions: 'permissions',
 };
 
 const prefix = process.env.NX_ENDPOINTS_URL;
@@ -108,6 +111,9 @@ const localhostUrls: EndpointUrls = {
   // WALLET service (same as AUTH on port 3001)
   wallet: 'http://localhost:3001/wallet',
   audio: 'http://localhost:3004/audio',
+  
+  // PERMISSIONS service
+  permissions: 'http://localhost:3002/permissions',
 };
 
 const resolvedUrls: EndpointUrls = prefix
