@@ -3392,16 +3392,16 @@
     "@ethereumjs/common" "^10.1.0"
     "@ethereumjs/rlp" "^10.1.0"
     "@ethereumjs/util" "^10.1.0"
-    "@noble/curves" "^2.0.1"
-    "@noble/hashes" "^2.0.1"
+    ethereum-cryptography "^3.2.0"
 
-"@ethereumjs/util@^10.1.0":
+"@ethereumjs/util@^10.1.0", "@ethereumjs/util@github:Aniket-Engg/ethereumjs-util#main":
   version "10.1.0"
-  resolved "https://registry.yarnpkg.com/@ethereumjs/util/-/util-10.1.0.tgz#56ba2abd5ca0030a1bb6d543bf205c27307cd592"
-  integrity sha512-GGTCkRu1kWXbz2JoUnIYtJBOoA9T5akzsYa91Bh+DZQ3Cj4qXj3hkNU0Rx6wZlbcmkmhQfrjZfVt52eJO/y2nA==
+  uid c6aa605f9b5b65d09effd0578a0c87de27af41bd
+  resolved "https://codeload.github.com/Aniket-Engg/ethereumjs-util/tar.gz/c6aa605f9b5b65d09effd0578a0c87de27af41bd"
   dependencies:
     "@ethereumjs/rlp" "^10.1.0"
-    ethereum-cryptography "^3.2.0"
+    "@noble/curves" "^2.0.1"
+    "@noble/hashes" "^2.0.1"
 
 "@ethereumjs/util@^8.1.0":
   version "8.1.0"
