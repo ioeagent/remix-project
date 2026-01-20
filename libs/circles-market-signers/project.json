@@ -1,0 +1,8 @@
+{
+  "name": "circles-market-signers",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/circles-market-signers/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": []
+}
