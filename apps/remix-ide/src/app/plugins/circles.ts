@@ -85,11 +85,11 @@ const DEFAULT_CHAIN_CONFIG: CirclesConfig = {
 const DEFAULT_CONFIG: CirclesPluginConfig = {
   chainId: 100,
   chainConfig: DEFAULT_CHAIN_CONFIG,
-  pinApiBase: 'http://localhost:5084/',
+  pinApiBase: 'https://market-api.aboutcircles.com/',
   avatar: null,
-  operatorNamespace: 'remix-snippet-manager',
+  operatorNamespace: '0xde374ece6fa50e781e81aac78e811b33d16912c7',
   enforceChainId: true,
-  listDefaultLimit: 50
+  listDefaultLimit: 50,
 }
 
 function isRecord(v: unknown): v is Record<string, unknown> {

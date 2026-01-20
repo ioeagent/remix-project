@@ -23,8 +23,8 @@ export function createCirclesSdkProfilesBindings(opts: {
   circlesSdk: Sdk;
   pinApiBase?: string;
   gatewayUrlForCid?: (cid: string) => string;
-  maxJsonBytes?: number;    // default 8 MiB
-  maxMediaBytes?: number;   // default 8 MiB
+  maxJsonBytes?: number; // default 8 MiB
+  maxMediaBytes?: number; // default 8 MiB
 }): { bindings: ProfilesBindings; media: MediaBindings } {
   const { circlesSdk } = opts;
   if (!circlesSdk) throw new Error('Circles SDK not initialized');
@@ -85,7 +85,7 @@ export function createCirclesSdkProfilesBindings(opts: {
     const res = await fetch(pinMediaUrl, {
       method: 'POST',
       headers: { 'Content-Type': (mime || 'application/octet-stream'), 'Accept': 'application/json' },
-      body: bytes as Uint8Array<ArrayBuffer>
+      body: bytes as Uint8Array
     });
     if (!res.ok) {
       let detail = '';
