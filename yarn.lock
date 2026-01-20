@@ -2275,6 +2275,25 @@
     "@chainsafe/persistent-merkle-tree" "^0.4.2"
     case "^1.6.3"
 
+"@circles-market/core@0.1.0", "@circles-market/core@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@circles-market/core/-/core-0.1.0.tgz#9d8d31cd1b2fa0e5af3f429a2d8375406820910f"
+  integrity sha512-SN0clHi4EmGM9f++Wjl2RYtnszAFXK8ZPssCWvAjpaVi8y8Vmny8iczqG+slDScUYhzUXDA4R/avI/FZYeFdHw==
+
+"@circles-market/signers@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@circles-market/signers/-/signers-0.1.0.tgz#99160101558b827eeb51b82078ff95a7d192133c"
+  integrity sha512-3DgXlirDQB+r+iDt/S3m1g65XZszEUIx+FWklmWi5h0LdANvDqHhMQiHZuODsKoo6UOkcraTLhweCg8H1SmUiQ==
+  dependencies:
+    "@circles-market/core" "0.1.0"
+
+"@circles-profile/core@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@circles-profile/core/-/core-0.1.0.tgz#2a8e8523556557136391002486f4a71b0a9296d1"
+  integrity sha512-9uPQdCQpkPXn3mY/n8UqDD9SdG4KhA/heRl4IooAXwRczqvUjcJ7D2Q/bESe0QtyjbaVZ5IwYQzr4f1YzWuXVw==
+  dependencies:
+    "@circles-sdk/sdk" "^0.29.2"
+
 "@circles-sdk/abi-v1@0.29.2":
   version "0.29.2"
   resolved "https://registry.yarnpkg.com/@circles-sdk/abi-v1/-/abi-v1-0.29.2.tgz#57f1e859dc7717f11ba9d93f1363dfb197f2e789"

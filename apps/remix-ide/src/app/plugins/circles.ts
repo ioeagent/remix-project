@@ -380,17 +380,18 @@ export class Circles extends Plugin {
             file = typeof fileField === 'string' ? fileField : undefined
           }
 
+          const payload: CirclesSnippetPayload = {
+            '@context': String(raw['@context'] ?? 'https://aboutcircles.com/contexts/circles-gist/'),
+            '@type': 'Snippet',
+            content: typeof raw.content === 'string' ? raw.content : '',
+            createdAt: typeof raw.createdAt === 'number' ? raw.createdAt : 0,
+            title,
+            language,
+            source: { file }
+          }
           return {
             link: l,
-            payload: {
-              '@context': String(raw['@context'] ?? 'https://aboutcircles.com/contexts/circles-gist/'),
-              '@type': 'Snippet',
-              content: typeof raw.content === 'string' ? raw.content : '',
-              createdAt: typeof raw.createdAt === 'number' ? raw.createdAt : 0,
-              title,
-              language,
-              source: { file }
-            } satisfies CirclesSnippetPayload
+            payload
           }
         })
       )
@@ -650,7 +651,8 @@ export class Circles extends Plugin {
       seenChunkCids.add(currentChunkCid as string)
     }
 
-    while (true) {
+    const t = true;
+    while (t) {
       const chunkLinks = Array.isArray(currentChunk?.links) ? (currentChunk.links as CustomDataLink[]) : []
       for (let i = chunkLinks.length - 1; i >= 0; i--) {
         const l = chunkLinks[i]

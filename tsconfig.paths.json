@@ -109,15 +109,6 @@
             "@remix-ui/remix-ui-grid-section": [
               "libs/remix-ui/grid-view/src/index.ts"
             ],
-            "@circles-market/core": [
-              "libs/circles-market-core/src/index.ts"
-            ],
-            "@circles-market/signers": [
-              "libs/circles-market-signers/src/index.ts"
-            ],
-            "@circles-profile/core": [
-              "libs/circles-profile-core/src/index.ts"
-            ],
             "@remix-ui/remix-ui-grid-cell": [
               "libs/remix-ui/grid-view/src/index.ts"
             ],
