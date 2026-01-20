@@ -16,6 +16,7 @@ const swarmPrivateBeeAddress = config.get('settings/swarm-private-bee-address') 
 const swarmPostageStampId = config.get('settings/swarm-postage-stamp-id') || ''
 const sindriAccessToken = config.get('settings/sindri-access-token') || ''
 const etherscanAccessToken = config.get('settings/etherscan-access-token') || ''
+const circlesSnippetLocation = config.get('settings/circles-snippet-location') || ''
 const mcpServersEnable = config.get('settings/mcp/servers/enable') || false
 const mcpServerManagement = config.get('settings/mcp-server-management') || false
 const ollamaEndpoint = config.get('settings/ollama-endpoint') || 'http://localhost:11434'
@@ -25,6 +26,7 @@ let ipfsConfig = config.get('settings/ipfs-config') || false
 let swarmConfig = config.get('settings/swarm-config') || false
 let sindriConfig = config.get('settings/sindri-config') || false
 let etherscanConfig = config.get('settings/etherscan-config') || false
+let circlesConfig = config.get('settings/circles-config') || false
 let ollamaConfig = config.get('settings/ollama-config') || false
 let generateContractMetadata = config.get('settings/generate-contract-metadata')
 let autoCompletion = config.get('settings/auto-completion')
@@ -52,6 +54,10 @@ if (!etherscanConfig && etherscanAccessToken) {
   config.set('settings/etherscan-config', true)
   etherscanConfig = true
 }
+if (!circlesConfig && circlesSnippetLocation) {
+  config.set('settings/circles-config', true)
+  circlesConfig = true
+}
 if (!ollamaConfig && ollamaEndpoint !== 'http://localhost:11434') {
   config.set('settings/ollama-config', true)
   ollamaConfig = true
@@ -78,6 +84,10 @@ if (typeof saveEvmState !== 'boolean') {
 }
 
 export const initialState: SettingsState = {
+  'circles-snippet-location': {
+    value: config.get('settings/circles-snippet-location') || '',
+    isLoading: false
+  },
   'generate-contract-metadata': {
     value: generateContractMetadata,
     isLoading: false
@@ -136,6 +146,10 @@ export const initialState: SettingsState = {
   },
   'sindri-config': {
     value: sindriConfig,
+    isLoading: false
+  },
+  'circles-config': {
+    value: circlesConfig,
     isLoading: false
   },
   'etherscan-config': {

@@ -269,3 +269,15 @@ export const EtherscanConfigDescription = () => {
     </>
   )
 }
+
+export const CirclesConfigDescription = () => {
+  const intl = useIntl()
+
+  return (
+    <>
+      <p className="mb-1">
+        Circles Snippet location
+      </p>
+    </>
+  )
+}

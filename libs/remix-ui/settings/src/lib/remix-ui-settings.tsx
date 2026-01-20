@@ -1,7 +1,7 @@
 import { ViewPlugin } from '@remixproject/engine-web'
 import React, {useState, useReducer, useEffect} from 'react' // eslint-disable-line
 import Fuse from 'fuse.js'
-import { EtherscanConfigDescription, GitHubCredentialsDescription, SindriCredentialsDescription } from '@remix-ui/helper'
+import { EtherscanConfigDescription, GitHubCredentialsDescription, SindriCredentialsDescription, CirclesConfigDescription } from '@remix-ui/helper'
 
 import { initialState, settingReducer } from './settingsReducer'
 import {Toaster} from '@remix-ui/toaster' // eslint-disable-line
@@ -227,6 +227,15 @@ const settingsSections: SettingsSection[] = [
         toggleUIOptions: [{
           name: 'etherscan-access-token',
           type: 'password'
+        }]
+      },{
+        name: 'circles-config',
+        label: 'settings.circles',
+        type: 'toggle',
+        toggleUIDescription: <CirclesConfigDescription />,
+        toggleUIOptions: [{
+          name: 'circles-snippet-location',
+          type: 'text'
         }]
       }]
     }]}

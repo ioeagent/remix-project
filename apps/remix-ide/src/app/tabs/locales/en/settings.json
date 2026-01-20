@@ -19,6 +19,7 @@
   "settings.gitAccessTokenText2": "Create a new token",
   "settings.gitAccessTokenText3":"and save it in Remix. Make sure this token has only 'create gist' permission",
   "settings.etherscanTokenTitle": "EtherScan Access Token",
+  "settings.circles": "Circles Snippet Location",
   "settings.etherscanAccessTokenText": "Manage the api key used to interact with Etherscan.",
   "settings.etherscanAccessTokenText2": "Create a new api key",
   "settings.etherscanAccessTokenText3": "and save it in Remix.",
