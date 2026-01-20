@@ -477,13 +477,12 @@ export class Circles extends Plugin {
     this.safeSignerPromise = null
   }
 
-  private getEthereumOrThrow(): WalletProvider {
-    const ethereum = (globalThis as any)?.ethereum as WalletProvider | undefined
-    const hasRequest = !!ethereum && typeof ethereum.request === 'function'
-    if (!hasRequest) {
-      throw new Error('No injected wallet found (window.ethereum missing)')
+  private async getEthereumOrThrow(): Promise<WalletProvider> {
+    const providerObj = await this.call('blockchain', 'getProviderObject')
+    if (!providerObj.provider) {
+      throw new Error('No provider found')
     }
-    return ethereum
+    return providerObj.provider
   }
 
   private async getEthersSigner(ethereum: WalletProvider): Promise<ethers.Signer> {
@@ -498,7 +497,7 @@ export class Circles extends Plugin {
     }
 
     const sdkPromise = (async () => {
-      const ethereum = this.getEthereumOrThrow()
+      const ethereum = await this.getEthereumOrThrow()
       const signer = await this.getEthersSigner(ethereum)
       return new Sdk(signer as any, this.config.chainConfig)
     })()
@@ -532,7 +531,7 @@ export class Circles extends Plugin {
 
     const signerPromise = (async () => {
       const avatar = this.ensureAvatarConfigured()
-      const ethereum = this.getEthereumOrThrow()
+      const ethereum = await this.getEthereumOrThrow()
 
       const safeSigner = await this.signers.createSafeSignerForAvatar({
         avatar,

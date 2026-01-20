@@ -84,6 +84,7 @@ interface ConfigState {
 }
 
 export interface SettingsState {
+  'circles-snippet-location': ConfigState
   'generate-contract-metadata': ConfigState
   'text-wrap': ConfigState
   'personal-mode': ConfigState
@@ -100,6 +101,7 @@ export interface SettingsState {
   'swarm-config': ConfigState,
   'sindri-config': ConfigState,
   'etherscan-config': ConfigState,
+  'circles-config': ConfigState,
   'gist-access-token': ConfigState,
   'github-user-name': ConfigState,
   'github-email': ConfigState,
