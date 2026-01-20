@@ -2275,6 +2275,80 @@
     "@chainsafe/persistent-merkle-tree" "^0.4.2"
     case "^1.6.3"
 
+"@circles-sdk/abi-v1@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/abi-v1/-/abi-v1-0.29.2.tgz#57f1e859dc7717f11ba9d93f1363dfb197f2e789"
+  integrity sha512-e6VfeUGUPzjkjW5ac1ANLc5DG3Br0M+GffmDTdTwFEsoLGZXxcks8rggvl93OVrhlf8x76e5xckTAK/otzY2qQ==
+  dependencies:
+    ethers "^6.13.2"
+
+"@circles-sdk/abi-v2@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/abi-v2/-/abi-v2-0.29.2.tgz#5410e60906ecacb2e7f2fd072a7c7b4edc4decca"
+  integrity sha512-xEXEe4zJAYtNLtNu2SRZ6zC6n43soYzdCRc3wG6glqMkAV668tBIGzflIroMLIyxPLqkN3AWfz87sr7AQngxYA==
+  dependencies:
+    ethers "^6.13.2"
+
+"@circles-sdk/adapter-ethers@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/adapter-ethers/-/adapter-ethers-0.29.2.tgz#c9e22058919e3248d34b9ae5e07e1e621701afaa"
+  integrity sha512-fnTbKBA4AhV/wM7/2PmWeZrDqTcMN9Qh1K5VIZNFfbIuQPXT9A6KLvY6h7mnz4KehCWIKUmDsz5LFzq7oKSx2A==
+  dependencies:
+    "@circles-sdk/adapter" "0.29.2"
+    "@circles-sdk/utils" "0.29.2"
+    ethers "^6.13.2"
+
+"@circles-sdk/adapter@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/adapter/-/adapter-0.29.2.tgz#0e4a5b8102035ef05466325fca533a75726984de"
+  integrity sha512-/JQfXZ3xQDvgrMkOH0SnwUtpv37wSIeX1dMHBh5tV6mJ/z4dQWprpObbie+XWEt/Ykx3xIY56DaVd1dNSptfHg==
+
+"@circles-sdk/data@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/data/-/data-0.29.2.tgz#773c8ff2884a6d8c5104360de531132e51d77e15"
+  integrity sha512-8DQqpOIh8oX6t+p76+PhPHbwWuOWlFLsiTHeAR4ElGQwdDLNZg6yJg6SzYP+X1mTk3Yj3atNFfFCDQDOhzcqiA==
+  dependencies:
+    "@circles-sdk/utils" "0.29.2"
+
+"@circles-sdk/pathfinder@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/pathfinder/-/pathfinder-0.29.2.tgz#34069a08afa68c5c7b89f5a56f87e1bc590cd980"
+  integrity sha512-CiU/liZouxG1vsiTTZYDohR5To1fkQVBgNGMEQWyzibm4UhbZNH3kMBzmVi8ZcSqb0DJGU67Du+eNiQrg5+8cg==
+  dependencies:
+    "@circles-sdk/abi-v2" "0.29.2"
+    "@circles-sdk/data" "0.29.2"
+    "@circles-sdk/utils" "0.29.2"
+    ethers "^6.13.2"
+
+"@circles-sdk/profiles@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/profiles/-/profiles-0.29.2.tgz#7f46728471a1500dba6faad25c9155a1bbd29520"
+  integrity sha512-u+nV0YYWDmFYeCTIdgloQtjgPS+YFfBWeRLFFr+BTrLiFIA0el0U48lr9o8z83O/I+FdyZxrC5LuhVufLEJl7g==
+  dependencies:
+    "@circles-sdk/utils" "0.29.2"
+
+"@circles-sdk/sdk@^0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/sdk/-/sdk-0.29.2.tgz#5e44cf4cffb5323527a63a9c97af85202b06ffb6"
+  integrity sha512-yj3Ssn7jAKcgzp3KqPQYBaEFYfFnhJrRc7+9qORc8az0TXIHtNKygSDmbjAHVV+yi0IyjYV2Mk9zoKfx/cwIlQ==
+  dependencies:
+    "@circles-sdk/abi-v1" "0.29.2"
+    "@circles-sdk/abi-v2" "0.29.2"
+    "@circles-sdk/adapter-ethers" "0.29.2"
+    "@circles-sdk/data" "0.29.2"
+    "@circles-sdk/pathfinder" "0.29.2"
+    "@circles-sdk/profiles" "0.29.2"
+    ethers "^6.13.2"
+    multihashes "^4.0.3"
+
+"@circles-sdk/utils@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@circles-sdk/utils/-/utils-0.29.2.tgz#6f00a86e49a601c0bb4a42431969276a08826daa"
+  integrity sha512-T5NXE5JdBL/LZ/ZQeE8K+7TlpPaKXHG1/lDb2clor7j+e4jh0dCkSZq7kvEQcGC0ZzHo+FppvAmY3bIaIOS7ug==
+  dependencies:
+    bignumber.js "^9.1.2"
+    ethers "^6.13.2"
+
 "@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.3.2", "@codemirror/autocomplete@^6.7.1":
   version "6.19.1"
   resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.19.1.tgz#355e49c9fd275b42a6e16e9ea0cf4361f67a3ec4"
@@ -11230,6 +11304,11 @@ bignumber.js@^9.0.0:
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.1.tgz#8d7ba124c882bfd8e43260c67475518d0689e4e5"
   integrity sha512-IdZR9mh6ahOBv/hYGiXyVuyCetmGJhtYkqLBpTStdhEGjegpPlUawydyaF3pbIOFynJTpllEs+NP+CS9jKFLjA==
 
+bignumber.js@^9.1.2:
+  version "9.3.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.3.1.tgz#759c5aaddf2ffdc4f154f7b493e1c8770f88c4d7"
+  integrity sha512-Ko0uX15oIUS7wJ3Rb30Fs6SkVbLmPBAKdlm7q9+ak9bbIeFf0MwuBsQV6z7+X768/cHsfg+WlysDWJcmthjsjQ==
+
 binary-extensions@^1.0.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.13.1.tgz#598afe54755b2868a5330d2aff9d4ebb53209b65"
@@ -15972,6 +16051,19 @@ ethers@^5.7.1, ethers@^5.7.2:
     "@ethersproject/wallet" "5.7.0"
     "@ethersproject/web" "5.7.1"
     "@ethersproject/wordlists" "5.7.0"
+
+ethers@^6.13.2:
+  version "6.16.0"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.16.0.tgz#fff9b4f05d7a359c774ad6e91085a800f7fccf65"
+  integrity sha512-U1wulmetNymijEhpSEQ7Ct/P/Jw9/e7R1j5XIbPRydgV2DjLVMsULDlNksq3RQnFgKoLlZf88ijYtWEXcPa07A==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.1"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@types/node" "22.7.5"
+    aes-js "4.0.0-beta.5"
+    tslib "2.7.0"
+    ws "8.17.1"
 
 ethers@^6.14.0:
   version "6.14.0"
@@ -23684,7 +23776,7 @@ multihashes@^3.0.1:
     uint8arrays "^2.0.5"
     varint "^6.0.0"
 
-multihashes@^4.0.1:
+multihashes@^4.0.1, multihashes@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/multihashes/-/multihashes-4.0.3.tgz#426610539cd2551edbf533adeac4c06b3b90fb05"
   integrity sha512-0AhMH7Iu95XjDLxIeuCOOE4t9+vQZsACyKZ9Fxw2pcsRmlX4iCn1mby0hS0bb+nQOVpdQYWPpnyusw4da5RPhA==
