@@ -1,5 +1,5 @@
 import { Plugin } from '@remixproject/engine'
-import { ethers } from 'ethers'
+import { ethers, isAddress } from 'ethers'
 import { Sdk, type CirclesConfig } from '@circles-sdk/sdk'
 import { SignersClientImpl, type WalletProvider, type AvatarSigner } from '@circles-market/signers'
 import { normalizeEvmAddress } from '@circles-market/core'
@@ -16,6 +16,7 @@ import {
   type ProfilesBindings,
   type Cid
 } from '@circles-profile/core'
+import { SmartAccount } from '../../../../../libs/remix-ui/run-tab/src/lib/types'
 
 export type CirclesSnippetPayload = {
   '@context': string
@@ -60,7 +61,8 @@ const profile = {
     'setConfig',
     'getConfig',
     'setAvatarAddress',
-    'getAvatarAddress'
+    'getAvatarAddress',
+    'querySafesByOwner'
   ],
   events: ['snippetSaved', 'configChanged'],
   version: '0.1.0'
@@ -69,7 +71,7 @@ const profile = {
 const STORAGE_KEY = 'remix:circles-plugin:config'
 
 const DEFAULT_CHAIN_CONFIG: CirclesConfig = {
-  circlesRpcUrl: 'http://localhost:8545',
+  circlesRpcUrl: 'https://rpc.aboutcircles.com',
   pathfinderUrl: 'https://pathfinder.aboutcircles.com',
   profileServiceUrl: 'https://rpc.aboutcircles.com/profiles/',
   v1HubAddress: '0x29b9a7fbb8995b2423a71cc17cf9810798f6c543',
@@ -154,22 +156,121 @@ export class Circles extends Plugin {
   private safeSignerPromise: Promise<AvatarSigner> | null = null
 
   constructor() {
+    console.log(`circles: constructor()`)
     super(profile)
     this.config = this.loadConfig()
   }
 
+  async querySafesByOwner(ownerAddress: string): Promise<string[]> {
+    console.log(`circles: querySafesByOwner(ownerAddress: ${ownerAddress})`)
+    try {
+      const sdk = await this.getCirclesSdk()
+      const ownerLc = ownerAddress.toLowerCase()
+
+      const result = await sdk.data.rpc.call<{
+        columns: string[]
+        rows: any[][]
+      }>('circles_query', [
+        {
+          Namespace: 'V_Safe',
+          Table: 'Owners',
+          Columns: ['safeAddress'],
+          Filter: [
+            {
+              Type: 'FilterPredicate',
+              FilterType: 'Equals',
+              Column: 'owner',
+              Value: ownerLc,
+            },
+          ],
+          Order: [],
+          Limit: 1000,
+        },
+      ])
+
+      // Find index of safeAddress column just in case ordering differs
+      const colIdx = result.result.columns.findIndex(
+        (c) => c.toLowerCase() === 'safeaddress'
+      )
+
+      const safesRaw: string[] = (colIdx >= 0
+        ? result.result.rows.map((r) => r[colIdx])
+        : result.result.rows.map((r) => r[0]) // fallback if columns missing
+      ).filter(Boolean)
+
+      // Normalize, checksum and deduplicate
+      const unique = Array.from(
+        new Set(
+          safesRaw.map((s) => ethers.getAddress(s).toLowerCase())
+        )
+      )
+
+      return unique
+    } catch (err) {
+      console.error(`circles: Failed to query safes for owner ${ownerAddress}:`, err)
+      return []
+    }
+  }
+
+  onGnosisChain(eoa: string, safeInformation?: SmartAccount): void {
+    if (!safeInformation) {
+      console.log(`circles: Switched to Gnosis Chain account ${eoa}. Right now we only support Safes. Please switch to an existing Safe this account owns, or create a new one.`)
+      this.querySafesByOwner(eoa).then(safes => {
+        if (safes.length > 0) {
+          console.log(`circles: Found ${safes.length} Safes owned by ${eoa}:`, safes)
+          void this.call('terminal', 'log', { type: 'log', value: `Circles: Found ${safes.length} Safes owned by ${eoa}: ${safes.join(', ')}. Please switch to one of them.` })
+        } else {
+          console.log(`circles: No Safes found for owner ${eoa}`)
+        }
+      })
+      return
+    }
+
+    const owner = safeInformation.ownerEOA
+    const safe = safeInformation.address
+
+    // Update configuration with the new Safe address as the avatar
+    this.setAvatarAddress(safe).then(() => {
+      // resetCachedClients is already called inside setConfig (which setAvatarAddress calls),
+      // but calling it explicitly or ensuring the flow is clear is good.
+      this.resetCachedClients()
+
+      // Prime the SDK and Bindings
+      void this.getCirclesSdk()
+      void this.getBindings()
+
+      console.log(`circles: Initialized SDK and Bindings for Safe: ${safe} (Owner: ${owner})`)
+    }).catch(err => {
+      console.error(`circles: Failed to initialize for Safe ${safe}:`, err)
+    })
+  }
+
+  onOtherChain(): void {
+    console.log('circles: Tearing down SDK and bindings as we are no longer on Gnosis Chain.')
+    this.resetCachedClients()
+  }
+
   onActivation(): void {
+    console.log(`circles: onActivation()`)
     void this.call('terminal', 'log', { type: 'log', value: 'Circles plugin activated' })
-    this.on('udapp', 'accountChanged', (account, safeInformation) => {
-      console.log('account changed to ', account, safeInformation)
+    this.on('udapp', 'accountChanged', (account, safeInformation, networkName) => {
+      if (isAddress(account) && networkName === 'Gnosis (100) network') {
+        console.log('circles: Switched to Gnosis Chain account: ', account, safeInformation, networkName)
+        this.onGnosisChain(account, safeInformation);
+      } else {
+        console.log('circles: Switched to other account: ', account, safeInformation, networkName)
+        this.onOtherChain()
+      }
     })
   }
 
   getConfig(): CirclesPluginConfig {
+    console.log(`circles: getConfig()`)
     return { ...this.config, chainConfig: { ...this.config.chainConfig } }
   }
 
   async setConfig(next: Partial<CirclesPluginConfig>): Promise<CirclesPluginConfig> {
+    console.log(`circles: setConfig(next: ${next})`)
     const updated = { ...this.config }
 
     const hasChainId = typeof next.chainId === 'number' && Number.isFinite(next.chainId)
@@ -231,16 +332,19 @@ export class Circles extends Plugin {
   }
 
   async setAvatarAddress(avatar: string): Promise<string> {
+    console.log(`circles: setAvatarAddress(avatar: ${avatar})`)
     const normalized = normalizeEvmAddress(avatar)
     await this.setConfig({ avatar: normalized })
     return normalized
   }
 
   getAvatarAddress(): string | null {
+    console.log(`circles: getAvatarAddress()`)
     return this.config.avatar
   }
 
   async addSnippet(text: string): Promise<{ snippetCid: string; linkName: string; txHash?: string }> {
+    console.log(`circles: addSnippet(text: ${text})`)
     return await this.saveSnippet(text, {})
   }
 
@@ -251,8 +355,13 @@ export class Circles extends Plugin {
       language?: string
       file?: string
       workspace?: string
-    } = {}
+    } = {},
   ): Promise<{ snippetCid: string; linkName: string; txHash?: string }> {
+    console.log(`circles: saveSnippet(text: ${text}, opts: ${opts})`)
+
+    // this.emit('snippetSaved', { text: "Hello" })
+    // return;
+
     try {
       const isEmpty = !text || text.trim().length === 0
       if (isEmpty) {
@@ -266,12 +375,7 @@ export class Circles extends Plugin {
       const signer = await this.getSafeSigner()
 
       const activeFile = await this.call('fileManager', 'getCurrentFile')
-      const file =
-        typeof opts.file === 'string'
-          ? opts.file
-          : typeof activeFile === 'string'
-            ? activeFile
-            : undefined
+      const file = typeof opts.file === 'string' ? opts.file : typeof activeFile === 'string' ? activeFile : undefined
 
       const nowSec = Math.floor(Date.now() / 1000)
       const snippet: CirclesSnippetPayload = {
@@ -283,8 +387,8 @@ export class Circles extends Plugin {
         language: opts.language,
         source: {
           file,
-          workspace: opts.workspace
-        }
+          workspace: opts.workspace,
+        },
       }
 
       await this.call('notification', 'toast', 'Saving snippet to Circles…')
@@ -296,7 +400,7 @@ export class Circles extends Plugin {
         name: linkName,
         cid: snippetCid,
         chainId: this.config.chainId,
-        signerAddress: avatar
+        signerAddress: avatar,
       })
 
       const preimage = canonicaliseLink(linkDraft)
@@ -338,6 +442,7 @@ export class Circles extends Plugin {
   }
 
   async listSnippets(opts: { limit?: number; includePayload?: boolean } = {}): Promise<CirclesSnippetSummary[]> {
+    console.log(`circles: listSnippets(opts: ${opts})`)
     try {
       const avatar = this.ensureAvatarConfigured()
       const bindings = await this.getBindings()
@@ -353,10 +458,7 @@ export class Circles extends Plugin {
 
       const allLinksNewestFirst = await this.loadLinksNewestFirst(bindings, indexCid)
 
-      const limit =
-        typeof opts.limit === 'number' && Number.isFinite(opts.limit)
-          ? Math.max(1, Math.trunc(opts.limit))
-          : this.config.listDefaultLimit
+      const limit = typeof opts.limit === 'number' && Number.isFinite(opts.limit) ? Math.max(1, Math.trunc(opts.limit)) : this.config.listDefaultLimit
 
       const sliced = allLinksNewestFirst.slice(0, limit)
 
@@ -390,13 +492,13 @@ export class Circles extends Plugin {
             createdAt: typeof raw.createdAt === 'number' ? raw.createdAt : 0,
             title,
             language,
-            source: { file }
+            source: { file },
           }
           return {
             link: l,
-            payload
+            payload,
           }
-        })
+        }),
       )
 
       return payloads.map((x) => ({
@@ -405,7 +507,7 @@ export class Circles extends Plugin {
         createdAt: x.payload?.createdAt,
         title: x.payload?.title,
         language: x.payload?.language,
-        file: x.payload?.source?.file
+        file: x.payload?.source?.file,
       }))
     } catch (err) {
       const message = toErrorMessage(err)
@@ -415,6 +517,7 @@ export class Circles extends Plugin {
   }
 
   async getSnippet(cid: string): Promise<CirclesSnippetPayload> {
+    console.log(`circles: getSnippet(cid: ${cid})`)
     try {
       const trimmed = (cid ?? '').trim()
       const isEmpty = trimmed.length === 0
@@ -454,7 +557,7 @@ export class Circles extends Plugin {
         createdAt,
         title,
         language,
-        source: { file }
+        source: { file },
       }
 
       await this.call('terminal', 'log', { type: 'log', value: `Loaded snippet ${trimmed} for avatar ${avatar}` })
@@ -467,6 +570,7 @@ export class Circles extends Plugin {
   }
 
   private ensureAvatarConfigured(): string {
+    console.log(`circles: ensureAvatarConfigured()`)
     const avatar = this.config.avatar
     const hasAvatar = typeof avatar === 'string' && avatar.trim().length > 0
     if (!hasAvatar) {
@@ -476,12 +580,14 @@ export class Circles extends Plugin {
   }
 
   private resetCachedClients(): void {
+    console.log(`circles: resetCachedClients()`)
     this.sdkPromise = null
     this.bindingsPromise = null
     this.safeSignerPromise = null
   }
 
   private async getEthereumOrThrow(): Promise<WalletProvider> {
+    console.log(`circles: getEthereumOrThrow()`)
     const providerObj = await this.call('blockchain', 'getProviderObject')
     if (!providerObj.provider) {
       throw new Error('No provider found')
@@ -490,11 +596,13 @@ export class Circles extends Plugin {
   }
 
   private async getEthersSigner(ethereum: WalletProvider): Promise<ethers.Signer> {
+    console.log(`circles: getEthersSigner(ethereum: ${ethereum})`)
     const provider = new ethers.BrowserProvider(ethereum as any)
     return await provider.getSigner()
   }
 
   private async getCirclesSdk(): Promise<Sdk> {
+    console.log(`circles: getCirclesSdk()`)
     const existing = this.sdkPromise
     if (existing) {
       return existing
@@ -511,6 +619,7 @@ export class Circles extends Plugin {
   }
 
   private async getBindings(): Promise<ProfilesBindings> {
+    console.log(`circles: getBindings()`)
     const existing = this.bindingsPromise
     if (existing) {
       return existing
@@ -528,6 +637,7 @@ export class Circles extends Plugin {
   }
 
   private async getSafeSigner(): Promise<AvatarSigner> {
+    console.log(`circles: getSafeSigner()`)
     const existing = this.safeSignerPromise
     if (existing) {
       return existing
@@ -541,7 +651,7 @@ export class Circles extends Plugin {
         avatar,
         ethereum,
         chainId: BigInt(this.config.chainId),
-        enforceChainId: this.config.enforceChainId
+        enforceChainId: this.config.enforceChainId,
       })
 
       const signerAvatar = normalizeEvmAddress(safeSigner.avatar)
@@ -559,6 +669,7 @@ export class Circles extends Plugin {
   }
 
   private loadConfig(): CirclesPluginConfig {
+    console.log(`circles: loadConfig()`)
     try {
       const ls = (globalThis as any)?.localStorage as Storage | undefined
       const hasStorage = !!ls && typeof ls.getItem === 'function'
@@ -621,6 +732,7 @@ export class Circles extends Plugin {
   }
 
   private persistConfig(cfg: CirclesPluginConfig): void {
+    console.log(`circles: persistConfig(cfg: ${cfg})`)
     const ls = (globalThis as any)?.localStorage as Storage | undefined
     const hasStorage = !!ls && typeof ls.setItem === 'function'
     if (!hasStorage) {
@@ -634,13 +746,14 @@ export class Circles extends Plugin {
       avatar: cfg.avatar,
       operatorNamespace: cfg.operatorNamespace,
       enforceChainId: cfg.enforceChainId,
-      listDefaultLimit: cfg.listDefaultLimit
+      listDefaultLimit: cfg.listDefaultLimit,
     }
 
     ls.setItem(STORAGE_KEY, JSON.stringify(payload))
   }
 
   private async loadLinksNewestFirst(bindings: ProfilesBindings, indexCid: Cid): Promise<CustomDataLink[]> {
+    console.log(`circles: loadLinksNewestFirst(bindings: ${bindings}, indexCid: ${indexCid})`)
     const { head, headCid } = await loadIndex(bindings, indexCid)
 
     const links: CustomDataLink[] = []
@@ -654,7 +767,7 @@ export class Circles extends Plugin {
       seenChunkCids.add(currentChunkCid as string)
     }
 
-    const t = true;
+    const t = true
     while (t) {
       const chunkLinks = Array.isArray(currentChunk?.links) ? (currentChunk.links as CustomDataLink[]) : []
       for (let i = chunkLinks.length - 1; i >= 0; i--) {
