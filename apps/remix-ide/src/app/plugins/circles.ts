@@ -16,7 +16,6 @@ import {
   type ProfilesBindings,
   type Cid
 } from '@circles-profile/core'
-import { SmartAccount } from '../../../../../libs/remix-ui/run-tab/src/lib/types'
 
 export type CirclesSnippetPayload = {
   '@context': string
@@ -212,7 +211,7 @@ export class Circles extends Plugin {
     }
   }
 
-  onGnosisChain(eoa: string, safeInformation?: SmartAccount): void {
+  onGnosisChain(eoa: string, safeInformation?: any): void {
     if (!safeInformation) {
       console.log(`circles: Switched to Gnosis Chain account ${eoa}. Right now we only support Safes. Please switch to an existing Safe this account owns, or create a new one.`)
       this.querySafesByOwner(eoa).then(safes => {
