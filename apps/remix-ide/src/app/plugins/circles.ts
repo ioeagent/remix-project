@@ -160,6 +160,9 @@ export class Circles extends Plugin {
 
   onActivation(): void {
     void this.call('terminal', 'log', { type: 'log', value: 'Circles plugin activated' })
+    this.on('udapp', 'accountChanged', (account, safeInformation) => {
+      console.log('account changed to ', account, safeInformation)
+    })
   }
 
   getConfig(): CirclesPluginConfig {

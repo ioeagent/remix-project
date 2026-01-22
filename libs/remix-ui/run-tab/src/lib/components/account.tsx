@@ -66,6 +66,7 @@ export function AccountUI(props: AccountProps) {
 
   useEffect(() => {
     const run = async () => {
+      props.runTabPlugin.emit('accountChanged', selectedAccount, smartAccountsData[selectedAccount])
       if (selectExEnv !== 'vm-osaka' && selectExEnv !== 'vm-prague' && selectExEnv !== 'vm-mainnet-fork') {
         setEnableDelegationAuthorization(false)
         setContractHasDelegation(false)
