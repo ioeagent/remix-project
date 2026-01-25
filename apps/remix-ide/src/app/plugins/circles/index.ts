@@ -41,7 +41,7 @@ export class Circles extends Plugin {
     this.config = storage.loadConfig()
   }
 
-  async addSmartAccountToStorage(safeAddress: string, ownerEOA?: string): Promise<string> {
+  async addSmartAccountToStorage(safeAddress: string, ownerEOA?: string, circlesMetadata?: any): Promise<string> {
     console.log(`circles: addSmartAccountToStorage(safeAddress: ${safeAddress}, ownerEOA: ${ownerEOA})`)
     try {
       const trimmed = (safeAddress ?? '').trim()
@@ -76,7 +76,8 @@ export class Circles extends Plugin {
         address: normalized,
         salt: 0, // We don't know the salt
         ownerEOA: ownerEOA || '',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        circles: circlesMetadata || undefined
       }
 
       storage.saveSmartAccountsToStorage(smartAccountsObj)
@@ -146,6 +147,18 @@ export class Circles extends Plugin {
     }
   }
 
+  async getAvatarInfoBatch(addresses: string[]): Promise<any[]> {
+    console.log(`circles: getAvatarInfoBatch(addresses: ${addresses})`)
+    try {
+      const sdk = await this.getCirclesSdk()
+      const result = await sdk.data.rpc.call<any[]>('circles_getAvatarInfoBatch', [addresses])
+      return result.result
+    } catch (err) {
+      console.error('circles: Failed to get avatar info batch:', err)
+      return new Array(addresses.length).fill(null)
+    }
+  }
+
   onGnosisChain(eoa: string, safeInformation?: any): void {
     if (!safeInformation) {
       console.log(`circles: Switched to Gnosis Chain account ${eoa}. Right now we only support Safes. Please switch to an existing Safe this account owns, or create a new one.`)
@@ -167,9 +180,13 @@ export class Circles extends Plugin {
         let storedCount = 0
         let skippedCount = 0
 
-        for (const safe of safes) {
+        const avatarInfos = await this.getAvatarInfoBatch(safes)
+
+        for (let i = 0; i < safes.length; i++) {
+          const safe = safes[i]
+          const info = avatarInfos[i]
           try {
-            await this.addSmartAccountToStorage(safe, eoa)
+            await this.addSmartAccountToStorage(safe, eoa, info)
             storedCount++
           } catch (err) {
             const message = toErrorMessage(err)

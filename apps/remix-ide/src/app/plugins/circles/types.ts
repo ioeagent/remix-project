@@ -22,6 +22,23 @@ export type CirclesSnippetSummary = {
   file?: string
 }
 
+export type CirclesAvatarInfo = {
+  version: number
+  type: string
+  avatar: string
+  tokenId: string
+  name?: string
+  cidV0Digest?: string
+}
+
+export type SmartAccountCirclesMetadata = {
+  address: string
+  salt: number
+  ownerEOA: string
+  timestamp: number
+  circles?: CirclesAvatarInfo
+}
+
 export type CirclesPluginConfig = {
   chainId: number
   chainConfig: CirclesConfig
