@@ -112,7 +112,7 @@ import TabProxy from './app/panels/tab-proxy.js'
 import { Plugin } from '@remixproject/engine'
 import BottomBarPanel from './app/components/bottom-bar-panel'
 import { TemplateExplorerModalPlugin } from './app/plugins/template-explorer-modal'
-import { Circles } from './app/plugins/circles'
+import { Circles } from './app/plugins/circles/index'
 
 // Tracking now handled by this.track() method using MatomoManager
 
