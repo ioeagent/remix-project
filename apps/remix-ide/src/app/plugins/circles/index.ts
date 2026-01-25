@@ -184,7 +184,13 @@ export class Circles extends Plugin {
 
         for (let i = 0; i < safes.length; i++) {
           const safe = safes[i]
-          const info = avatarInfos[i]
+          const info = avatarInfos[i];
+          if (!info?.type?.startsWith("CrcV2")) {
+            continue;
+          }
+
+          console.log(info)
+
           try {
             await this.addSmartAccountToStorage(safe, eoa, info)
             storedCount++
