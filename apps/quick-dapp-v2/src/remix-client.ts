@@ -132,7 +132,8 @@ export class RemixClient extends PluginClient {
         name: payload.contractName,
         abi: payload.abi,
         chainId: payload.chainId,
-        networkName
+        networkName,
+        deployerAddress: payload.deployerAddress
       };
 
       const newDappConfig = await this.dappManager.createDapp(
