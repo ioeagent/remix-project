@@ -33,8 +33,13 @@ module.exports = {
             .waitForElementVisible('*[data-id="instanceEditIcon"]', 10000)
             .click('*[data-id="instanceEditIcon"]')
             .pause(2000)
+            // First modal: AI generation description
             .waitForElementVisible('*[data-id="generate-website-ai-modal-footer-ok-react"]', 10000)
             .click('*[data-id="generate-website-ai-modal-footer-ok-react"]')
+            .pause(1000)
+            // Second modal: Remix VM warning (non-injected provider)
+            .waitForElementVisible('*[data-id="remix-vm-warning-modal-footer-ok-react"]', 10000)
+            .click('*[data-id="remix-vm-warning-modal-footer-ok-react"]')
             .pause(10000)
             .frame(0)
             .waitForElementVisible('*[data-id="quick-dapp-dashboard"]', 30000)
