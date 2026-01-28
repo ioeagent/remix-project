@@ -271,7 +271,8 @@ export class RunTab extends ViewPlugin {
       'injected-metamask-arbitrum': 'Deploy to Arbitrum through the Metamask browser extension.',
       'injected-metamask-sepolia': 'Deploy to the Sepolia testnet through the Metamask browser extension.',
       'injected-metamask-ephemery': 'Deploy to the Ephemery testnet through the Metamask browser extension.',
-      'injected-metamask-linea': 'Deploy to Linea through the Metamask browser extension.'
+      'injected-metamask-linea': 'Deploy to Linea through the Metamask browser extension.',
+      'base-provider': 'Deploy through the Base Wallet.'
     }
 
     const addProvider = async (position: number, name: string, displayName: string, providerConfig: ProviderConfig, dataId = '', title = '') => {
@@ -435,6 +436,7 @@ export class RunTab extends ViewPlugin {
         registerInjectedProvider(event)
       }
     )
+    await addProvider(23, 'base-provider', 'Base Wallet Provider', { isInjected: true, isVM: false, isRpcForkedState: false, fork: '' })
     if (!isElectron()) window.dispatchEvent(new Event("eip6963:requestProvider"))
   }
 

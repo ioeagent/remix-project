@@ -39,6 +39,7 @@ import { StorageMonitorPlugin } from './app/plugins/storage-monitor'
 import { Layout } from './app/panels/layout'
 import { NotificationPlugin } from './app/plugins/notification'
 import { Blockchain } from './blockchain/blockchain'
+import { BaseProvider } from './app/providers/base-provider'
 import { MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider, PectraVMProvider, FusakaVMProvider } from './app/providers/vm-provider'
 import { MainnetForkVMProvider } from './app/providers/mainnet-vm-fork-provider'
 import { SepoliaForkVMProvider } from './app/providers/sepolia-vm-fork-provider'
@@ -390,6 +391,7 @@ class AppComponent {
     const ganacheProvider = new GanacheProvider(blockchain)
     const foundryProvider = new FoundryProvider(blockchain)
     const externalHttpProvider = new ExternalHttpProvider(blockchain)
+    const baseProvider = new BaseProvider()
 
     const environmentExplorer = new EnvironmentExplorer()
     // ----------------- convert offset to line/column service -----------
@@ -476,6 +478,7 @@ class AppComponent {
       ganacheProvider,
       foundryProvider,
       externalHttpProvider,
+      baseProvider,
       environmentExplorer,
       this.walkthroughService,
       search,
