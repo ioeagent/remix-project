@@ -461,6 +461,13 @@ export class AIDappGenerator extends Plugin {
 const cleanFileContent = (content: string, filename: string): string => {
   let cleaned = content.trim()
 
+  // Strip markdown horizontal rules (--- or ***) that vision models insert between sections
+  cleaned = cleaned.replace(/^-{3,}\s*\n?/gm, '')
+  cleaned = cleaned.replace(/\n?-{3,}\s*$/gm, '')
+
+  // Strip trailing markdown summary sections (e.g. ### Summary ... at end of content)
+  cleaned = cleaned.replace(/\n#{2,4}\s+Summary[\s\S]*$/i, '')
+
   const codeBlockRegex = /```[\w-]*\n([\s\S]*?)\n?```/;
   const match = cleaned.match(codeBlockRegex);
 
@@ -510,6 +517,8 @@ const ensureCompleteHtml = (html: string): string => {
 
 const parsePages = (content: string) => {
   const pages: Record<string, string> = {}
+
+  // ── Primary parser: START_TITLE markers (used by text models) ──
   const markerRegex = /<{3,}\s*START_TITLE\s+(.*?)\s+>{3,}(?:\s*END_TITLE)?/g
 
   const parts = content.split(markerRegex)
@@ -529,6 +538,78 @@ const parsePages = (content: string) => {
         pages[filename] = cleanContent;
       }
     }
+  }
+
+  // If primary parser found files, return immediately — no fallback needed
+  if (Object.keys(pages).length > 0) return pages
+
+  // ── Fallback parser: markdown header format (vision model output) ──
+  // Only runs when START_TITLE markers are absent.
+  // Handles patterns like:  ### `src/App.jsx`  or  ### src/App.jsx
+  console.log('[parsePages] No START_TITLE markers found, trying markdown header fallback...')
+
+  const VALID_EXTENSIONS = new Set([
+    '.html', '.htm', '.jsx', '.tsx', '.js', '.ts', '.css', '.json', '.md', '.svg',
+  ])
+
+  const isValidFilename = (name: string): boolean => {
+    if (!name || name.includes(' ') || !name.includes('.')) return false
+    const ext = name.substring(name.lastIndexOf('.'))
+    return VALID_EXTENSIONS.has(ext.toLowerCase())
+  }
+
+  // Pattern: ## to ###### headers with optional numbering
+  // Handles: ### `src/App.jsx`, #### 2. `src/main.jsx`, ## src/index.css
+  const mdRegex = /^#{2,6}\s+(?:\d+\.\s+)?`?([^`\n]+?)`?\s*$/gm
+  const mdParts = content.split(mdRegex)
+
+  for (let i = 1; i < mdParts.length; i += 2) {
+    const filename = mdParts[i].trim()
+    const rawFileContent = mdParts[i + 1]
+
+    if (isValidFilename(filename) && rawFileContent) {
+      let cleanContent = cleanFileContent(rawFileContent, filename)
+
+      if (filename.endsWith('.html')) {
+        cleanContent = ensureCompleteHtml(cleanContent)
+      }
+
+      if (cleanContent) {
+        pages[filename] = cleanContent
+      }
+    }
+  }
+
+  if (Object.keys(pages).length > 0) {
+    console.log(`[parsePages] Fallback parsed ${Object.keys(pages).length} files:`, Object.keys(pages))
+    return pages
+  }
+
+  // ── Last resort: code blocks with filename in first line ──
+  // Handles: ```jsx\n// src/App.jsx\n...```
+  console.log('[parsePages] Markdown headers not found, trying code block fallback...')
+
+  const codeBlockRegex = /```[\w-]*\s*\n\s*(?:\/\/|\/\*|{\/\*|<!--)\s*([^\n*]+?)(?:\s*\*\/|\s*\*\/}|\s*-->)?\s*\n([\s\S]*?)```/g
+  let cbMatch
+  while ((cbMatch = codeBlockRegex.exec(content)) !== null) {
+    const possibleFilename = cbMatch[1].trim()
+    const blockContent = cbMatch[2]
+
+    if (isValidFilename(possibleFilename) && blockContent) {
+      let cleanContent = blockContent.trim()
+
+      if (possibleFilename.endsWith('.html')) {
+        cleanContent = ensureCompleteHtml(cleanContent)
+      }
+
+      if (cleanContent) {
+        pages[possibleFilename] = cleanContent
+      }
+    }
+  }
+
+  if (Object.keys(pages).length > 0) {
+    console.log(`[parsePages] Code block fallback parsed ${Object.keys(pages).length} files:`, Object.keys(pages))
   }
 
   return pages

@@ -304,6 +304,52 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
     dispatch({ type: 'SET_VIEW', payload: 'create' });
   };
 
+  // Direct create handler for inline CreateInstance form
+  const createDappFromUI = async (payload: any) => {
+    dispatch({ type: 'SET_AI_LOADING', payload: true });
+
+    try {
+      const contractData = {
+        address: payload.address,
+        name: payload.contractName || payload.name || 'Untitled',
+        abi: payload.abi,
+        chainId: payload.chainId,
+        networkName: getNetworkName(payload.chainId),
+        sourceFilePath: payload.sourceFilePath || ''
+      };
+
+      const newDapp = await dappManager.createDapp(
+        contractData.name,
+        contractData,
+        payload.isBaseMiniApp || false
+      );
+
+      dispatch({ type: 'SET_ACTIVE_DAPP', payload: newDapp });
+      dispatch({ type: 'SET_DAPPS', payload: [newDapp, ...dappsRef.current]});
+      dispatch({ type: 'SET_DAPP_PROCESSING', payload: { slug: newDapp.slug, isProcessing: true } });
+      dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
+      dispatch({ type: 'SET_AI_LOADING', payload: false });
+
+      await plugin.call('ai-dapp-generator', 'generateDapp', {
+        description: payload.description,
+        address: payload.address,
+        abi: payload.abi,
+        chainId: payload.chainId,
+        contractName: contractData.name,
+        isBaseMiniApp: payload.isBaseMiniApp || false,
+        image: payload.image,
+        slug: newDapp.slug,
+        figmaUrl: payload.figmaUrl,
+        figmaToken: payload.figmaToken
+      });
+
+    } catch (error: any) {
+      console.error('[QuickDapp] Failed to create dapp:', error);
+      dispatch({ type: 'SET_AI_LOADING', payload: false });
+      plugin.call('notification', 'toast', `Failed to create DApp: ${error.message}`);
+    }
+  };
+
   const renderContent = () => {
     if (isAppLoading || !locale.messages) {
       return (
@@ -317,7 +363,7 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
     if (appState.isAiLoading) {
       return (
         <div className="container-fluid">
-          <CreateInstance isAiLoading={true} />
+          <CreateInstance isAiLoading={true} plugin={plugin} onCreateDapp={createDappFromUI} />
         </div>
       );
     }
@@ -325,7 +371,7 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
     if (!appState.dapps || appState.dapps.length === 0) {
       return (
         <div className="container-fluid pt-3">
-          <CreateInstance isAiLoading={appState.isAiLoading} />
+          <CreateInstance isAiLoading={appState.isAiLoading} plugin={plugin} onCreateDapp={createDappFromUI} />
         </div>
       );
     }
@@ -382,7 +428,7 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
               </button>
             </div>
           )}
-          <CreateInstance isAiLoading={appState.isAiLoading} />
+          <CreateInstance isAiLoading={appState.isAiLoading} plugin={plugin} onCreateDapp={createDappFromUI} />
         </div>
       );
     }
