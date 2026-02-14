@@ -29,7 +29,7 @@ export function callDepthChange (step, trace) {
    * @param {StepDetail} stepDetail - Current step details with stack info
    * @returns {boolean} True if exiting a constructor scope
    */
-export function isConstructorExit (tree, step, scopeId, initialEntrystackIndex, stepDetail, isConstructor) {
+export function isConstructorExit (tree: InternalCallTree, step, scopeId, stepDetail, isConstructor) {
   if (!isConstructor) return false // we are not in a constructor anyway
   const scope = tree.scopes[scopeId]
   if (scope.firstStep === step) {
@@ -39,6 +39,7 @@ export function isConstructorExit (tree, step, scopeId, initialEntrystackIndex, 
   if (!scope || !scope.functionDefinition || scope.functionDefinition.kind !== 'constructor') {
     return false
   }
+  const initialEntrystackIndex = tree.traceManager.trace[scope.firstStep].stack
   // Check if stack has returned to entry depth (or below, in case of cleanup)
   if (initialEntrystackIndex !== undefined && stepDetail.stack.length <= initialEntrystackIndex) {
     console.log('Exiting constructor scope ', scopeId, ' at step ', step)
@@ -123,7 +124,7 @@ export function getGeneratedSources (tree, scopeId, contractObj) {
  */
 export async function registerFunctionParameters (tree, functionDefinition, step, scopeId, contractObj, sourceLocation, address) {
   if (!sourceLocation) return
-  if (sourceLocation.jump !== 'i') return
+  // if (sourceLocation.jump !== 'i') return
   tree.functionCallStack.push(step)
   const functionDefinitionAndInputs = { functionDefinition, inputs: []}
   // means: the previous location was a function definition && JUMPDEST
@@ -414,7 +415,9 @@ export function addInputParams (step, functionDefinition, parameterList, tree: I
     console.log(`  - stackLength: ${stackLength}, paramCount: ${paramCount}`)
   }
 
-  const stackLengthAtStart = functionDefinition.kind === 'constructor' ? 0 : stackLength
+  const stackLengthAtStart = functionDefinition.kind === 'constructor' ? paramCount : stackLength
+  if (functionDefinition.kind === 'constructor') stackLength = paramCount
+
   for (let i = 0; i < paramCount; i++) {
     const param = parameterList.parameters[i]
 
@@ -672,6 +675,10 @@ export function debugVariableTracking(tree: InternalCallTree, step: number, scop
   }
 }
 
+export function isFunctionDef(node) {
+  return node && (node.nodeType === 'FunctionDefinition' || node.nodeType === 'YulFunctionDefinition')
+}
+
 export async function resolveNodesAtSourceLocation (tree, sourceLocation, generatedSources, address) {
   const ast = await tree.solidityProxy.ast(sourceLocation, generatedSources, address)
   let funcDef
@@ -683,19 +690,14 @@ export async function resolveNodesAtSourceLocation (tree, sourceLocation, genera
     if (nodes && nodes.length > 0) {
       for (let i = nodes.length - 1; i >= 0; i--) {
         const node = nodes[i]
-        if (node &&
-            (node.nodeType === 'FunctionDefinition' ||
-            node.nodeType === 'YulFunctionDefinition') ||
-            node.nodeType === 'Block') {
-          funcDef = node
-          blocksDef.push(node)
-        }
+        if (node && isFunctionDef(node)) funcDef = node
+        if (node && node.nodeType === 'Block') blocksDef.push(node)
       }
     }
 
-    return { nodes, functionDefinition: funcDef, blocksDefinition: blocksDef }
+    return { nodes, functionDefinitionInScope: funcDef, blocksDefinition: blocksDef }
   } else {
-    return { nodes: [], functionDefinition: null, blocksDefinition: []}
+    return { nodes: [], functionDefinitionInScope: null, blocksDefinition: []}
   }
 }
 

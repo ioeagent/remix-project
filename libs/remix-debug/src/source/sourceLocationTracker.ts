@@ -146,7 +146,7 @@ export class SourceLocationTracker {
       codeManager.getCode(address).then((result) => {
         const sourceMap = this.getSourceMap(address, result.bytecode, contracts)
         if (sourceMap) {
-          if (!isContractCreation(address)) self.sourceMapByAddress[address] = sourceMap
+          self.sourceMapByAddress[address] = sourceMap
           return resolve(sourceMap)
         }
         reject(new Error('no sourcemap associated with the code ' + address))
