@@ -29,9 +29,9 @@ export function callDepthChange (step, trace) {
    * @param {StepDetail} stepDetail - Current step details with stack info
    * @returns {boolean} True if exiting a constructor scope
    */
-export function isConstructorExit (tree: InternalCallTree, step, scopeId, stepDetail, isConstructor) {
-  if (!isConstructor) return false // we are not in a constructor anyway
+export function isConstructorExit (tree: InternalCallTree, step, scopeId, stepDetail) {
   const scope = tree.scopes[scopeId]
+  if (scope.functionDefinition && scope.functionDefinition.kind === 'constructor') return false // we are not in a constructor anyway
   if (scope.firstStep === step) {
     // we are just entering the constructor
     return false
@@ -39,9 +39,9 @@ export function isConstructorExit (tree: InternalCallTree, step, scopeId, stepDe
   if (!scope || !scope.functionDefinition || scope.functionDefinition.kind !== 'constructor') {
     return false
   }
-  const initialEntrystackIndex = tree.traceManager.trace[scope.firstStep].stack
+  const stackOnFirstStep = tree.traceManager.trace[scope.firstStep].stack
   // Check if stack has returned to entry depth (or below, in case of cleanup)
-  if (initialEntrystackIndex !== undefined && stepDetail.stack.length <= initialEntrystackIndex) {
+  if (stackOnFirstStep && stepDetail.stack.length <= stackOnFirstStep.length) {
     console.log('Exiting constructor scope ', scopeId, ' at step ', step)
     return true
   }
@@ -415,11 +415,12 @@ export function addInputParams (step, functionDefinition, parameterList, tree: I
     console.log(`  - stackLength: ${stackLength}, paramCount: ${paramCount}`)
   }
 
-  const stackLengthAtStart = functionDefinition.kind === 'constructor' ? paramCount : stackLength
-  if (functionDefinition.kind === 'constructor') stackLength = paramCount
+  const stackLengthAtStart = /*functionDefinition.kind === 'constructor' ? paramCount :*/ stackLength
+  // if (functionDefinition.kind === 'constructor') stackLength = paramCount
 
+  const paramsFn = functionDefinition.kind === 'constructor' ? parameterList.parameters.reverse() : parameterList.parameters
   for (let i = 0; i < paramCount; i++) {
-    const param = parameterList.parameters[i]
+    const param = paramsFn[i]
 
     // Calculate stack index based on call type
     let stackIndex = stackLengthAtStart - paramCount + i

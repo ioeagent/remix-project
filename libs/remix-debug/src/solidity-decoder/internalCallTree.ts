@@ -231,7 +231,7 @@ export class InternalCallTree {
     * @param {Object} opts  - { includeLocalVariables, debugWithGeneratedSources }
     */
   constructor (debuggerEvent, traceManager, solidityProxy, codeManager, opts, offsetToLineColumnConverter?) {
-    this.debug = opts.debug || true
+    this.debug = opts.debug || false
     this.getCache = opts.getCache
     this.includeLocalVariables = opts.includeLocalVariables
     this.debugWithGeneratedSources = opts.debugWithGeneratedSources
@@ -651,7 +651,7 @@ export class InternalCallTree {
  * @param {Object} [validSourceLocation] - Last valid source location
  * @returns {Promise<Object>} Object with outStep (next step to process) and optional error message
  */
-async function buildTree (tree: InternalCallTree, step, scopeId, isCreation, functionDefinition?, contractObj?, sourceLocation?, validSourceLocation?, parentScopeId?, isConstructor?) {
+async function buildTree (tree: InternalCallTree, step, scopeId, isCreation, functionDefinition?, contractObj?, sourceLocation?, validSourceLocation?, parentScopeId?) {
   let subScope = 1
   const address = tree.traceManager.getCurrentCalledAddressAt(step)
   tree.scopes[scopeId].address = address
@@ -750,7 +750,7 @@ async function buildTree (tree: InternalCallTree, step, scopeId, isCreation, fun
     const generatedSources = getGeneratedSources(tree, scopeId, contractObj)
     const { nodes, blocksDefinition, functionDefinitionInScope } = await resolveNodesAtSourceLocation(tree, sourceLocation, generatedSources, address)
     const functionIsLeaf = nodes && nodes.length && functionDefinitionInScope && nodes[nodes.length - 1].id === functionDefinitionInScope.id
-    
+
     functionDefinition = await resolveFunctionDefinition(tree, sourceLocation, generatedSources, address)
 
     if (!tree.scopes[scopeId].functionDefinition && stepDetail.op === 'JUMPDEST' && functionDefinition && (tree.scopes[scopeId].firstStep === step - 1)) {
@@ -761,7 +761,7 @@ async function buildTree (tree: InternalCallTree, step, scopeId, isCreation, fun
 
     // Update symbolic stack based on opcode execution
     const previousSymbolicStack = tree.symbolicStackManager.getStackAtStep(step)
-    if (stepDetail.stack.length !== previousSymbolicStack.length) {
+    if (tree.debug && stepDetail.stack.length !== previousSymbolicStack.length) {
       console.warn('STACK SIZE MISMATCH at step ', step, ' opcode ', stepDetail.op, ' symbolic stack size ', previousSymbolicStack.length, ' actual stack size ', stepDetail.stack.length )
     }
 
@@ -779,14 +779,13 @@ async function buildTree (tree: InternalCallTree, step, scopeId, isCreation, fun
     let internalfunctionCall = /*functionDefinition &&*/ (sourceLocation && sourceLocation.jump === 'i') /*&& functionDefinition.kind !== 'constructor'*/
     const isJumpOutOfFunction = /*functionDefinition &&*/ (sourceLocation && sourceLocation.jump === 'o') /*&& functionDefinition.kind !== 'constructor'*/
 
-    if (stepDetail.op === 'JUMP' && functionDefinition && internalfunctionCall && !tree.fnJumpDest[currentAddress + ' ' + functionDefinition.id]) {
+    if (stepDetail.op === 'JUMP' && functionDefinition && functionDefinition.kind !== 'constructor' && internalfunctionCall && !tree.fnJumpDest[currentAddress + ' ' + functionDefinition.id]) {
       // record entry point for that function
       tree.fnJumpDest[currentAddress + ' ' + functionDefinition.id] = nextStepDetail && nextStepDetail.pc // JUMPDEST
-    } else if (!functionIsLeaf && functionDefinitionInScope && !tree.fnJumpDest[currentAddress + ' ' + functionDefinitionInScope.id]) {
+    } else if (!functionIsLeaf && functionDefinitionInScope && functionDefinitionInScope.kind === 'constructor' && !tree.fnJumpDest[currentAddress + ' ' + functionDefinitionInScope.id]) {
       // we might get through a ctor without encountering a JUMP
       tree.fnJumpDest[currentAddress + ' ' + functionDefinitionInScope.id] = nextStepDetail && nextStepDetail.pc
       functionDefinition = functionDefinitionInScope
-      console.log('step', step, 'registeing new ctor entry', functionDefinition)
     }
 
     const currentStepIsFunctionEntryPoint = functionDefinition && nextStepDetail && nextStepDetail.pc === tree.fnJumpDest[currentAddress + ' ' + functionDefinition.id]
@@ -804,25 +803,25 @@ async function buildTree (tree: InternalCallTree, step, scopeId, isCreation, fun
 
     if (isInternalTxInstrn || (internalfunctionCall && functionDefinition) || lowLevelScope) {
       try {
+        const isConstructor = functionDefinition && functionDefinition.kind === 'constructor'
+        const stepScopeStart = isConstructor ? step - 1 : step
         previousSourceLocation = null
         const newScopeId = scopeId === '' ? subScope.toString() : scopeId + '.' + subScope
-        console.log('Entering new scope at step ', step, newScopeId, isInternalTxInstrn, internalfunctionCall)
-        tree.scopeStarts[step] = newScopeId
+        if (tree.debug) console.log('Entering new scope at step ', stepScopeStart, newScopeId, isInternalTxInstrn, internalfunctionCall)
+        tree.scopeStarts[stepScopeStart] = newScopeId
         const startExecutionLine = lineColumnPos && lineColumnPos.start ? lineColumnPos.start.line + 1 : undefined
-        tree.scopes[newScopeId] = { firstStep: step, locals: {}, isCreation, gasCost: 0, startExecutionLine, functionDefinition: null, opcodeInfo: stepDetail, stackBeforeJumping: newSymbolicStack, lowLevelScope: true }
-        addReducedTrace(tree, step)
+        tree.scopes[newScopeId] = { firstStep: stepScopeStart, locals: {}, isCreation, gasCost: 0, startExecutionLine, functionDefinition: null, opcodeInfo: stepDetail, stackBeforeJumping: newSymbolicStack, lowLevelScope: true }
+        addReducedTrace(tree, stepScopeStart)
         // for the ctor we are at the start of its trace, we have to replay this step in order to catch all the locals:
-        let isConstructor = false
         if (!lowLevelScope && functionDefinition) {
-          isConstructor = functionDefinition && functionDefinition.kind === 'constructor'
           tree.scopes[newScopeId].functionDefinition = functionDefinition
           tree.scopes[newScopeId].lowLevelScope = false
           // Register function parameters when entering new function scope (internal calls or external calls)
-          await registerFunctionParameters(tree, functionDefinition, step, newScopeId, contractObj, sourceLocation, address)
+          await registerFunctionParameters(tree, functionDefinition, stepScopeStart, newScopeId, contractObj, sourceLocation, address)
         }
         let externalCallResult
         try {
-          externalCallResult = await buildTree(tree, step + 1, newScopeId, isCreateInstrn, functionDefinition, contractObj, sourceLocation, validSourceLocation, scopeId, isConstructor)
+          externalCallResult = await buildTree(tree, step + 1, newScopeId, isCreateInstrn, functionDefinition, contractObj, sourceLocation, validSourceLocation, scopeId)
         } catch (e) {
           console.error(e)
           return { outStep: step, error: 'InternalCallTree - ' + e.message }
@@ -846,7 +845,7 @@ async function buildTree (tree: InternalCallTree, step, scopeId, isCreation, fun
         console.error(e)
         return { outStep: step, error: 'InternalCallTree - ' + e.message }
       }
-    } else if (callDepthChange(step, tree.traceManager.trace) || isStopInstruction(stepDetail) || isReturnInstruction(stepDetail) || (isJumpOutOfFunction && !originIsCall) || isRevert || isConstructorExit(tree, step, scopeId, stepDetail, isConstructor)) {
+    } else if (callDepthChange(step, tree.traceManager.trace) || isStopInstruction(stepDetail) || isReturnInstruction(stepDetail) || (isJumpOutOfFunction && !originIsCall) || isRevert || isConstructorExit(tree, step, scopeId, stepDetail)) {
       const popCount = countConsecutivePopOpcodes(tree.traceManager.trace, step)
       // if not, we might be returning from a CALL or internal function. This is what is checked here.
       // For constructors in inheritance chains, we also check if stack depth has returned to entry level
