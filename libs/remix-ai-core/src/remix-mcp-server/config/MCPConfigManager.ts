@@ -61,9 +61,8 @@ export class MCPConfigManager {
 
         // Handle empty or whitespace-only files
         if (!configContent || configContent.trim() === '') {
-          console.log('[MCPConfigManager] Config file is empty, creating default');
+          console.log('[MCPConfigManager] Config file is empty, using in-memory defaults');
           this.config = minimalMCPConfig;
-          await this.saveConfig(this.config);
           return this.config;
         }
 
@@ -84,19 +83,16 @@ export class MCPConfigManager {
               }
             }
           } else {
-            console.log('[MCPConfigManager] No mcp config in file, creating default');
+            console.log('[MCPConfigManager] No mcp config in file, using in-memory defaults');
             this.config = minimalMCPConfig;
-            await this.saveConfig(this.config);
           }
         } catch (parseError) {
-          console.error('[MCPConfigManager] Error parsing config file, creating default:', parseError);
+          console.error('[MCPConfigManager] Error parsing config file, using in-memory defaults:', parseError);
           this.config = minimalMCPConfig;
-          await this.saveConfig(this.config);
         }
       } else {
-        console.log('[MCPConfigManager] Config file does not exist, creating default');
+        console.log('[MCPConfigManager] Config file does not exist, using in-memory defaults (will save on first config change)');
         this.config = minimalMCPConfig;
-        await this.saveConfig(this.config);
       }
 
       return this.config;
