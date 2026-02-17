@@ -7,6 +7,7 @@ import { MCPInferencer } from '@remix/remix-ai-core';
 import { IMCPServer, IMCPConnectionStatus } from '@remix/remix-ai-core';
 import { RemixMCPServer, createRemixMCPServer } from '@remix/remix-ai-core';
 import { AIModel, getDefaultModel, getModelById } from '@remix/remix-ai-core';
+import { initializeCreditSystem, CreditMiddleware, CreditManager, CreditConfigManager, UsageLogger } from '@remix/remix-ai-core';
 import axios from 'axios';
 import { endpointUrls } from "@remix-endpoints-helper"
 import { QueryParams } from '@remix-project/remix-lib'
@@ -27,7 +28,8 @@ const profile = {
     'getSelectedModel', 'getModelAccess', 'getOllamaModels',
     'addMCPServer', 'removeMCPServer', 'getMCPConnectionStatus', 'getMCPResources', 'getMCPTools', 'executeMCPTool',
     'enableMCPEnhancement', 'disableMCPEnhancement', 'isMCPEnabled', 'getIMCPServers',
-    'loadMCPServersFromSettings', 'clearCaches'
+    'loadMCPServersFromSettings', 'clearCaches',
+    'getCreditBalance', 'getCreditUsageHistory', 'getCreditConfig', 'updateCreditConfig'
   ],
   events: [],
   icon: 'assets/img/remix-logo-blue.png',
@@ -58,6 +60,10 @@ export class RemixAIPlugin extends Plugin {
   mcpInferencer: MCPInferencer | null = null
   mcpEnabled: boolean = false
   remixMCPServer: RemixMCPServer | null = null
+  creditMiddleware: CreditMiddleware | null = null
+  creditManager: CreditManager | null = null
+  creditConfigManager: CreditConfigManager | null = null
+  usageLogger: UsageLogger | null = null
 
   constructor() {
     super(profile)
@@ -85,6 +91,24 @@ export class RemixAIPlugin extends Plugin {
     this.remoteInferencer.event.on('onInferenceDone', () => {
       this.isInferencing = false
     })
+
+    // Initialize credit system
+    try {
+      const creditApiUrl = endpointUrls.credits || 'https://api.remix-ide.com/credits';
+      const creditSystem = await initializeCreditSystem(this, creditApiUrl);
+      this.creditMiddleware = creditSystem.middleware;
+      this.creditManager = creditSystem.creditManager;
+      this.creditConfigManager = creditSystem.configManager;
+      this.usageLogger = creditSystem.usageLogger;
+
+      // Wrap the inferencer with credit tracking
+      this.remoteInferencer = this.creditMiddleware.wrapInferencer(this.remoteInferencer);
+
+      console.log('[RemixAI] Credit system enabled');
+    } catch (error) {
+      console.warn('[RemixAI] Credit system initialization failed:', error);
+      console.warn('[RemixAI] Continuing without credit tracking');
+    }
 
     // Always initialize with default model on page reload
     await this.setModel(this.selectedModelId)
@@ -702,6 +726,38 @@ export class RemixAIPlugin extends Plugin {
 
   getIMCPServers(): IMCPServer[] {
     return this.mcpServers;
+  }
+
+  async getCreditBalance(): Promise<any> {
+    if (!this.creditManager) {
+      throw new Error('Credit system not initialized');
+    }
+
+    return await this.creditManager.getBalance();
+  }
+
+  async getCreditUsageHistory(limit?: number): Promise<any> {
+    if (!this.usageLogger) {
+      throw new Error('Credit system not initialized');
+    }
+
+    return await this.usageLogger.getHistory(limit);
+  }
+
+  getCreditConfig(): any {
+    if (!this.creditConfigManager) {
+      throw new Error('Credit system not initialized');
+    }
+
+    return this.creditConfigManager.getConfig();
+  }
+
+  async updateCreditConfig(updates: any): Promise<any> {
+    if (!this.creditConfigManager) {
+      throw new Error('Credit system not initialized');
+    }
+
+    return await this.creditConfigManager.updateConfig(updates);
   }
 
   clearCaches(){
