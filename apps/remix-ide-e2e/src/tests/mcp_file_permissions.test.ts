@@ -22,10 +22,10 @@ const tests = {
   after: function (browser: NightwatchBrowser) {
     browser.perform((done) => {
       // Clean up any test artifacts
-      browser.execute(function () {
+      browser.execute(async function () {
         try {
           localStorage.removeItem('remix.config.json');
-          (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
+          await (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
         } catch (e) {
           console.log('Cleanup error:', e);
         }
@@ -74,11 +74,12 @@ const tests = {
   'Should show permission modal on first file write #group1': function (browser: NightwatchBrowser) {
     browser
       // Clear any existing config to ensure fresh state
-      .execute(function () {
+      .execute(async function () {
         localStorage.removeItem('remix.config.json');
-        (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
-        (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
+        await (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
+        await (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
       })
+      .pause(2000)
       .refresh()
       // Wait for IDE to be ready
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
@@ -113,11 +114,12 @@ const tests = {
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(1000)
       // Clear config
-      .execute(function () {
+      .execute(async function () {
         localStorage.removeItem('remix.config.json');
-        (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
-        (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
+        await (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
+        await (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
       })
+      .pause(2000)
       .refresh()
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(1000)
@@ -184,11 +186,12 @@ const tests = {
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(1000)
       // Clear config
-      .execute(function () {
+      .execute(async function () {
         localStorage.removeItem('remix.config.json');
-        (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
-        (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
+        await (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
+        await (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
       })
+      .pause(2000)
       .refresh()
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(1000)
@@ -255,11 +258,12 @@ const tests = {
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(1000)
       // Clear config
-      .execute(function () {
+      .execute(async function () {
         localStorage.removeItem('remix.config.json');
-        (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
-        (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
+        await (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
+        await (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
       })
+      .pause(2000)
       .refresh()
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(1000)
@@ -350,11 +354,12 @@ const tests = {
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(1000)
       // Clear config
-      .execute(function () {
+      .execute(async function () {
         localStorage.removeItem('remix.config.json');
-        (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
-        (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
+        await (window as any).getRemixAIPlugin.call('fileManager', 'remove', 'remix.config.json');
+        await (window as any).getRemixAIPlugin.remixMCPServer.reloadConfig();
       })
+      .pause(2000)
       .refresh()
       .waitForElementVisible('*[data-id="remixIdeSidePanel"]', 10000)
       .pause(2000)
