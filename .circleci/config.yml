@@ -34,6 +34,9 @@ parameters:
   run_deploy_alpha:
     type: boolean
     default: false
+  run_playwright:
+    type: boolean
+    default: false
 
   # Resource sizing
   resource_class:
@@ -905,6 +908,14 @@ workflows:
           selection_mode: << pipeline.parameters.rerun_failed_mode >>
           workflow_name: << pipeline.parameters.rerun_failed_workflow >>
       - post-failed-report:
+          requires:
+            - build
+
+  playwright_only:
+    when: << pipeline.parameters.run_playwright >>
+    jobs:
+      - build
+      - playwright-e2e:
           requires:
             - build
 
