@@ -647,6 +647,56 @@ jobs:
           no_output_timeout: 30m
       - run: "./apps/remix-ide/ci/deploy_remix-<< parameters.script >>.sh"
 
+  # Playwright E2E tests — recorded browser tests
+  playwright-e2e:
+    docker:
+      - image: cimg/node:20.19.0-browsers
+    resource_class: << pipeline.parameters.resource_class >>
+    working_directory: ~/remix-project
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/remix-project
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+      - run: yarn
+      - run:
+          name: Unpack dist from workspace
+          command: |
+            if [ -f remix-dist.tar.gz ]; then
+              tar -xzf remix-dist.tar.gz
+            fi
+      - run:
+          name: Install Playwright browsers
+          command: npx playwright install --with-deps chromium
+      - run:
+          name: Start Remix IDE server
+          command: npx http-server ./dist/apps/remix-ide -p 8080 -c-1
+          background: true
+      - run:
+          name: Wait for Remix IDE to be ready
+          command: |
+            for i in $(seq 1 30); do
+              if curl -s http://127.0.0.1:8080 > /dev/null 2>&1; then
+                echo "Remix IDE is ready"
+                break
+              fi
+              echo "Waiting for server... ($i)"
+              sleep 2
+            done
+      - run:
+          name: Run Playwright E2E tests
+          command: CI=true yarn playwright:test
+          environment:
+            REMIX_URL: http://127.0.0.1:8080
+      - store_test_results:
+          path: ./reports/playwright-results
+      - store_artifacts:
+          path: ./reports/playwright-results
+      - store_artifacts:
+          path: ./reports/playwright-html
+
 
 workflows:
   run_file_tests:
@@ -785,12 +835,16 @@ workflows:
               shard_index: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
               vertical_mode: [true]
               skip_timings: [true]
+      - playwright-e2e:
+          requires:
+            - build
       - tests-passed:
           requires:
             - lint
             - remix-libs
             - chrome-tests
             - plugins
+            - playwright-e2e
       - deploy-build:
           script: "alpha"
           requires:
