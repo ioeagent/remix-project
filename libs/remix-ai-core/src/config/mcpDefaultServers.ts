@@ -25,7 +25,7 @@ export const mcpDefaultServersConfig: MCPDefaultServersConfig = {
       url: endpointUrls.mcpCorsProxy + '/solidity',
       autoStart: true,
       enabled: true,
-      timeout: 30000
+      timeout: 1000
     },
     {
       name: 'OpenZeppelin Contracts Cairo',
@@ -34,7 +34,7 @@ export const mcpDefaultServersConfig: MCPDefaultServersConfig = {
       url: endpointUrls.mcpCorsProxy + '/cairo',
       autoStart: true,
       enabled: true,
-      timeout: 30000
+      timeout: 1000
     },
     {
       name: 'OpenZeppelin Contracts Stellar',
@@ -43,7 +43,7 @@ export const mcpDefaultServersConfig: MCPDefaultServersConfig = {
       url: endpointUrls.mcpCorsProxy + '/stellar',
       autoStart: true,
       enabled: true,
-      timeout: 30000
+      timeout: 1000
     },
     {
       name: 'OpenZeppelin Contracts Stylus',
@@ -52,7 +52,7 @@ export const mcpDefaultServersConfig: MCPDefaultServersConfig = {
       url: endpointUrls.mcpCorsProxy + '/stylus',
       autoStart: true,
       enabled: true,
-      timeout: 30000
+      timeout: 1000
     },
     {
       name: 'Alchemy',
