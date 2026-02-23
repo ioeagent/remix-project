@@ -56,6 +56,7 @@ export class MCPInferencer extends RemoteInferencer implements ICompletions, IGe
     this.remixMCPServer = remixMCPServer;
     this.baseInferencer = baseInferencer;
     this.initializeMCPServers(servers);
+    console.log('mcp inference constructor')
   }
 
   private initializeMCPServers(servers: IMCPServer[]): void {
@@ -109,6 +110,7 @@ export class MCPInferencer extends RemoteInferencer implements ICompletions, IGe
         });
       }
     }
+    console.log('mcp inferencer initialized')
   }
 
   async connectAllServers(): Promise<void> {
@@ -377,6 +379,7 @@ export class MCPInferencer extends RemoteInferencer implements ICompletions, IGe
   // Override completion methods to include MCP context
 
   async answer(prompt: string, options: IParams = GenerationParams): Promise<IAIStreamResponse> {
+    console.log('mcp inferencer in answer')
     const mcpContext = await this.enrichContextWithMCPResources(options, prompt);
     const enrichedPrompt = mcpContext ? `${mcpContext}\n\n${prompt}` : prompt;
 
@@ -697,7 +700,6 @@ export class MCPInferencer extends RemoteInferencer implements ICompletions, IGe
     if (!client.isConnected()) {
       throw new Error(`MCP server ${serverName} is not connected`);
     }
-
     return client.callTool(toolCall);
   }
 
@@ -849,8 +851,10 @@ ${toolsList}`,
           let targetServer: string | undefined;
 
           for (const [serverName, tools] of Object.entries(toolsFromServers)) {
+            console.log("looking for tool analyze_files_with_slither", serverName)
             if (tools.some(tool => tool.name === innerToolCall.name)) {
               targetServer = serverName;
+              console.log("looking for tool analyze_files_with_slither: FOUND IT")
               break;
             }
           }

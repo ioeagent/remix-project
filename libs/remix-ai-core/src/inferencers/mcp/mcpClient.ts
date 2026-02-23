@@ -621,6 +621,7 @@ export class MCPClient {
       trackMatomoEvent('ai', 'remixAI', `mcp_tool_call_success_${this.server.name}|${toolCall.name}`);
       return response.result;
     } else if (this.server.transport === 'http') {
+      console.log('sending tool execution request ')
       const response = await this.sendHTTPRequest({
         jsonrpc: '2.0',
         id: this.getNextRequestId(),
@@ -629,9 +630,10 @@ export class MCPClient {
       });
 
       if (response.error) {
+        console.log('Error on sending tool execution request ')
         throw new Error(`Failed to call tool: ${response.error.message}`);
       }
-
+      console.log('payload tool execution request:', response.result)
       return response.result;
     } else if (this.server.transport === 'websocket' && this.wsConnection) {
       return new Promise((resolve, reject) => {

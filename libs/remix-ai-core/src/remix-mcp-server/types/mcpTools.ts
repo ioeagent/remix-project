@@ -352,3 +352,70 @@ export interface ToolRegistry {
   off(event: string, listener: (...args: any[]) => void): void;
   emit(event: string, ...args: any[]): boolean;
 }
+
+/**
+ * Frontend generation types
+ */
+export interface FileNode {
+  path: string; // e.g., "src/components/Header.tsx"
+  type: 'file' | 'directory';
+  description?: string; // What this file contains
+  dependencies?: string[]; // Files this depends on (for ordering)
+  priority?: number; // Generation order (1 = first)
+}
+
+export interface GenerationPlan {
+  id: string; // UUID
+  name: string; // Short description
+  description: string; // Full user prompt
+  fileTree: FileNode[]; // Ordered list of files/dirs
+  createdAt: Date;
+  status: 'pending' | 'approved' | 'executing' | 'completed' | 'failed';
+  totalFiles: number; // Count of files (not directories)
+  generatedFiles: number; // Progress counter
+  metadata?: {
+    projectType?: 'react' | 'vue' | 'angular' | 'vanilla';
+    framework?: string; // next, remix, vite, etc.
+    features?: string[];
+  };
+}
+
+export interface FileGenerationContext {
+  fileName: string;
+  description: string;
+  dependencies: string[];
+  alreadyGenerated: Record<string, string>; // fileName -> content
+}
+
+/**
+ * Frontend generation tool argument types
+ */
+export interface GenerateTreeArgs {
+  prompt: string;
+  projectType?: 'react' | 'vue' | 'angular' | 'vanilla';
+  framework?: string;
+  features?: string[];
+}
+
+export interface ModifyPlanArgs {
+  planId: string;
+  modifications: {
+    fileTree?: FileNode[];
+    metadata?: Partial<GenerationPlan['metadata']>;
+  };
+}
+
+export interface ApprovePlanArgs {
+  planId: string;
+}
+
+export interface ExecutePlanArgs {
+  planId: string;
+  options?: {
+    skipExisting?: boolean;
+  };
+}
+
+export interface GetPlanArgs {
+  planId: string;
+}

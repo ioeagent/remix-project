@@ -51,6 +51,7 @@ import { createTutorialsTools } from './handlers/TutorialsHandler';
 import { createAmpTools } from './handlers/AmpHandler';
 import { createMathUtilsTools } from './handlers/MathUtilsHandler';
 import { createFoundryHardhatTools } from './handlers/FoundryHardhatHandler';
+import { createFrontendGenerationTools } from './handlers/FrontendGenerationHandler';
 
 // Import resource providers
 import { ProjectResourceProvider } from './providers/ProjectResourceProvider';
@@ -874,6 +875,11 @@ export class RemixMCPServer extends EventEmitter implements IRemixMCPServer {
       const chartJsTools = createChartJsTools();
       this._tools.registerBatch(chartJsTools);
       */
+
+      // Register Frontend Generation tools
+      const frontendGenTools = createFrontendGenerationTools();
+      this._tools.registerBatch(frontendGenTools);
+
       const totalTools = this._tools.list().length;
 
     } catch (error) {
