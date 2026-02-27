@@ -228,6 +228,7 @@ export default class Filepanel extends ViewPlugin {
 
   setWorkspaces(workspaces) {
     this.workspaces = workspaces
+    this.call('sidePanel', 'openPanel')
   }
 
   createNewFile() {

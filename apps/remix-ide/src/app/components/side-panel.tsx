@@ -12,7 +12,7 @@ const sidePanel = {
   displayName: 'Side Panel',
   description: 'Remix IDE side panel',
   version: packageJson.version,
-  methods: ['addView', 'removeView', 'currentFocus', 'pinView', 'unPinView', 'focus', 'showContent', 'togglePanel', 'isPanelHidden']
+  methods: ['addView', 'removeView', 'currentFocus', 'pinView', 'unPinView', 'focus', 'showContent', 'togglePanel', 'isPanelHidden', 'openPanel']
 }
 
 export class SidePanel extends AbstractPanel {
@@ -208,6 +208,12 @@ export class SidePanel extends AbstractPanel {
     panelStates.leftSidePanel.isHidden = this.isHidden || false
     window.localStorage.setItem('panelStates', JSON.stringify(panelStates))
     this.renderComponent()
+  }
+
+  openPanel() {
+    if (this.isHidden) {
+      this.togglePanel()
+    }
   }
 
   togglePanel() {
