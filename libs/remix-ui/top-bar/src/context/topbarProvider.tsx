@@ -1,9 +1,8 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 // eslint-disable-next-line no-use-before-define
-import React, { useReducer, useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {Toaster} from '@remix-ui/toaster' // eslint-disable-line
 import {ModalDialog} from '@remix-ui/modal-dialog' // eslint-disable-line
-import { browserReducer, browserInitialState } from 'libs/remix-ui/workspace/src/lib/reducers/workspace'
 import { appPlatformTypes, platformContext } from '@remix-ui/app'
 import {
   clearPopUp
@@ -21,7 +20,6 @@ export interface TopbarProviderProps {
 export const TopbarProvider = (props: TopbarProviderProps) => {
   const { plugin } = props
   const platform = useContext(platformContext)
-  const [fs, fsDispatch] = useReducer(browserReducer, browserInitialState)
   const [focusModal, setFocusModal] = useState<Modal>({
     hide: true,
     title: '',
@@ -125,18 +123,6 @@ export const TopbarProvider = (props: TopbarProviderProps) => {
     }
   }, [toasters])
 
-  useEffect(() => {
-    if (fs.notification.title) {
-      modal(fs.notification.title, fs.notification.message, fs.notification.labelOk, fs.notification.actionOk, fs.notification.labelCancel, fs.notification.actionCancel)
-    }
-  }, [fs.notification])
-
-  useEffect(() => {
-    if (fs.popup) {
-      toast(fs.popup)
-    }
-  }, [fs.popup])
-
   const handleHideModal = () => {
     setFocusModal((modal) => {
       return { ...modal, hide: true, message: null }
@@ -163,7 +149,6 @@ export const TopbarProvider = (props: TopbarProviderProps) => {
   }
 
   const value = {
-    fs,
     plugin: plugin as unknown as Topbar,
     modal,
     toast,

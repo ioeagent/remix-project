@@ -5,8 +5,7 @@ import { Button, ButtonGroup, Dropdown, Overlay, Popover } from 'react-bootstrap
 import { remote } from '@remix-api'
 import { FiMoreVertical } from 'react-icons/fi'
 import { TopbarContext } from '../context/topbarContext'
-import { getWorkspaces } from 'libs/remix-ui/workspace/src/lib/actions'
-import { WorkspaceMetadata } from 'libs/remix-ui/workspace/src/lib/types'
+import { WorkspaceEntry } from 'libs/remix-ui/workspace/src/lib/cloud/types'
 import { appPlatformTypes, platformContext } from '@remix-ui/app'
 import path from 'path'
 import { DesktopDownload } from 'libs/remix-ui/desktop-download'
@@ -101,30 +100,13 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
   const toggleSubmenu = (id) => {
     setOpenSubmenuId((current) => (current === id ? null : id));
   }
-  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceMetadata>(null)
+  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceEntry>(null)
   const mainRef = useRef<HTMLDivElement>(null)
   const subRefs = useMemo( // useMemo or else rules of hooks is broken.
     () => menuItems.map(() => React.createRef<HTMLDivElement>()),
     [menuItems]
   )
   const [togglerText, setTogglerText] = useState<string>(NO_WORKSPACE)
-
-  // ── Refresh workspace list when cloud mode changes ──
-  useEffect(() => {
-    if (platform === appPlatformTypes.desktop) return
-    ; (async () => {
-      try {
-        const workspaces = await getWorkspaces()
-        const updated = (workspaces || []).map((workspace) => {
-          (workspace as any).submenu = subItems
-          return workspace as any
-        })
-        setMenuItems(updated)
-      } catch (error) {
-        console.info('[WorkspaceDropdown] Error fetching workspaces on cloud mode change:', error)
-      }
-    })()
-  }, [isCloudMode, cloudState.cloudWorkspaces.length, platform])
 
   const subItems = useMemo(() => {
     return [
@@ -176,12 +158,10 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
 
   useEffect(() => {
     if (platform !== appPlatformTypes.desktop) {
-      global.plugin.on('filePanel', 'setWorkspace', async (workspace) => {
+      global.plugin.on('filePanel', 'setWorkspace', (workspace) => {
         setTogglerText(workspace.name)
-        let workspaces = []
-        const fromLocalStore = localStorage.getItem('currentWorkspace')
-        workspaces = await getWorkspaces()
-        const current = workspaces.find((workspace) => workspace.name === fromLocalStore)
+        // selectedWorkspace is derived from the store list — find by name
+        const current = (cloudState.workspaces || []).find((w) => w.name === workspace.name)
         setSelectedWorkspace(current)
       })
 
@@ -191,24 +171,15 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
     }
   }, [global.plugin.filePanel.currentWorkspaceMetadata, platform])
 
+  // ── Derive menuItems from store workspaces reactively (replaces 150ms polling) ──
   useEffect(() => {
     if (platform !== appPlatformTypes.desktop) {
-      let workspaces: any[] = []
-
-      try {
-        setTimeout(async () => {
-          workspaces = await getWorkspaces()
-          const updated = (workspaces || []).map((workspace) => {
-            (workspace as any).submenu = subItems
-            return workspace as any
-          })
-          setMenuItems(updated)
-        }, 150)
-      } catch (error) {
-        console.info('Error fetching workspaces:', error)
-      }
+      const updated = (cloudState.workspaces || []).map((workspace) => {
+        return { ...workspace, submenu: subItems } as any
+      })
+      setMenuItems(updated)
     }
-  }, [togglerText, openSubmenuId, platform])
+  }, [cloudState.workspaces, cloudState.workspaces.length, platform])
 
   useClickOutside([mainRef, ...subRefs], () => {
     setShowMain(false)
@@ -308,10 +279,7 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
         as={"div"}
       >
         <div id="scrollable-section" className="overflow-y-scroll" style={{ maxHeight: '160px', opacity: isWorkspaceLoading ? 0.5 : 1, pointerEvents: isWorkspaceLoading ? 'none' : 'auto' }}>
-          {/* Deduplicate by name — multiple async refresh paths can race and
-              produce duplicates during workspace creation (especially git-based
-              templates that trigger clone → checkGit → setWorkspaces cascades). */}
-          {menuItems.filter((item, idx, arr) => arr.findIndex(i => i.name === item.name) === idx).map((item, idx) => {
+          {menuItems.map((item, idx) => {
             const id = idx + 1
             if (!iconRefs.current[id]) iconRefs.current[id] = { current: null }
             return (

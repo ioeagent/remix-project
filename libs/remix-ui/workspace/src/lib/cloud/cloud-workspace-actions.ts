@@ -187,7 +187,7 @@ export async function enableCloud(): Promise<void> {
   if (cloudStore.isCloudMode) return // already on
 
   // Remember the current local workspace so we can restore it on disable
-  const currentLocal = localStorage.getItem('currentWorkspace')
+  const currentLocal = cloudStore.activeWorkspaceName || localStorage.getItem('currentWorkspace')
   if (currentLocal) localStorage.setItem('lastLocalWorkspace', currentLocal)
   // Note: lastLocalWorkspace is NOT user-scoped because it stores which
   // local (legacy) workspace to return to — that's independent of cloud user.
@@ -223,6 +223,9 @@ export async function enableCloud(): Promise<void> {
         _dispatch(setMode('browser'))
         _dispatch(setCurrentWorkspace({ name: targetWs.name, isGitRepo: false }))
         _dispatch(setReadOnlyMode(false))
+        // ── Store dual-write
+        cloudStore.setActiveWorkspace(targetWs.name)
+        cloudStore.setBrowserMode('browser')
         localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), targetWs.name)
       } catch (err) {
         console.error('[enableCloud] Failed to switch to cloud workspace:', err)
@@ -315,6 +318,9 @@ export async function disableCloud(): Promise<void> {
       _dispatch(setMode('browser'))
       _dispatch(setCurrentWorkspace({ name: targetLocal, isGitRepo: false }))
       _dispatch(setReadOnlyMode(false))
+      // ── Store dual-write
+      cloudStore.setActiveWorkspace(targetLocal)
+      cloudStore.setBrowserMode('browser')
     } else {
       // No local workspaces at all — create a default one
       // This mirrors the standard Remix behavior (switchToWorkspace(NO_WORKSPACE))

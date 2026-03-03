@@ -13,8 +13,9 @@ import { HOME_TAB_NEW_UPDATES } from 'libs/remix-ui/home-tab/src/lib/components/
 import axios from 'axios'
 import { UpdateInfo } from 'libs/remix-ui/home-tab/src/lib/components/types/carouselTypes'
 import { GitPlugin } from '../plugins/git'
-import { createWorkspace, deleteWorkspace, getWorkspaces, renameWorkspace, WorkspaceType } from 'libs/remix-ui/workspace/src/lib/actions'
+import { createWorkspace, deleteWorkspace, renameWorkspace, WorkspaceType } from 'libs/remix-ui/workspace/src/lib/actions'
 import { Registry } from '@remix-project/remix-lib'
+import { cloudStore } from 'libs/remix-ui/workspace/src/lib/cloud/cloud-store'
 
 const TopBarProfile = {
   name: 'topbar',
@@ -68,8 +69,8 @@ export class Topbar extends Plugin {
   }
 
   async getWorkspaces() {
-    this.workspaces = await getWorkspaces()
-    return this.workspaces
+    // Read from the unified store — no need to call the action
+    return cloudStore.workspaces
   }
 
   async createWorkspace(workspaceName, workspaceTemplateName, isEmpty) {
@@ -122,8 +123,9 @@ export class Topbar extends Plugin {
     }
     this.emit('setWorkspace', workspace)
   }
-  saveRecent(name: any) {
-    throw new Error('Method not implemented.')
+  saveRecent(name: string) {
+    // Delegate to filePanel which has the full implementation
+    this.filePanel.saveRecent(name)
   }
 
   switchToWorkspace(workspaceName) {

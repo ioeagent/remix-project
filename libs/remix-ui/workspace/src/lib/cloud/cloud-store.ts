@@ -22,6 +22,7 @@ import {
   CloudWorkspace,
   WorkspaceSyncStatus,
   STSToken,
+  WorkspaceEntry,
 } from './types'
 
 // ── State ─────────────────────────────────────────────────
@@ -36,6 +37,10 @@ const initialState: CloudState = {
   stsToken: null,
   syncStatus: {},
   error: null,
+  // Unified workspace state
+  legacyWorkspaces: [],
+  activeWorkspaceName: '',
+  browserMode: 'browser',
 }
 
 class CloudStore extends EventEmitter {
@@ -157,6 +162,80 @@ class CloudStore extends EventEmitter {
     }
   }
 
+  // ── Unified workspace state (both cloud and legacy) ─────
+
+  /**
+   * Computed getter: returns the workspace list for the current mode.
+   * In cloud mode → cloudWorkspaces mapped to WorkspaceEntry.
+   * In legacy mode → legacyWorkspaces.
+   */
+  get workspaces(): WorkspaceEntry[] {
+    if (this.state.mode === 'cloud') {
+      return this.state.cloudWorkspaces.map(cw => ({
+        name: cw.name,
+        isGitRepo: false,
+        hasGitSubmodules: false,
+        isGist: null,
+        remoteId: cw.uuid,
+        cloudUuid: cw.uuid,
+      }))
+    }
+    return this.state.legacyWorkspaces
+  }
+
+  /** Public read-only accessor for the active workspace name */
+  get activeWorkspaceName(): string {
+    return this.state.activeWorkspaceName
+  }
+
+  /** Set the legacy (local/IndexedDB) workspace list */
+  setLegacyWorkspaces(workspaces: WorkspaceEntry[]) {
+    this.setState({ legacyWorkspaces: workspaces })
+  }
+
+  /** Set the active workspace name (used in both cloud and legacy modes) */
+  setActiveWorkspace(name: string) {
+    this.setState({ activeWorkspaceName: name })
+    // Keep localStorage in sync for cross-session persistence
+    if (name) {
+      localStorage.setItem('currentWorkspace', name)
+    }
+  }
+
+  /** Set the browser mode ('browser' | 'localhost') */
+  setBrowserMode(mode: 'browser' | 'localhost') {
+    this.setState({ browserMode: mode })
+  }
+
+  /** Add a single workspace to the legacy list (deduplicates by name) */
+  addLegacyWorkspace(workspace: WorkspaceEntry) {
+    const existing = this.state.legacyWorkspaces
+    if (existing.some(w => w.name === workspace.name)) {
+      // Update in-place
+      this.setState({
+        legacyWorkspaces: existing.map(w => w.name === workspace.name ? workspace : w),
+      })
+    } else {
+      this.setState({ legacyWorkspaces: [...existing, workspace] })
+    }
+  }
+
+  /** Remove a workspace from the legacy list by name */
+  removeLegacyWorkspace(name: string) {
+    this.setState({
+      legacyWorkspaces: this.state.legacyWorkspaces.filter(w => w.name !== name),
+    })
+  }
+
+  /** Rename a workspace in the legacy list */
+  renameLegacyWorkspace(oldName: string, newName: string) {
+    this.setState({
+      legacyWorkspaces: this.state.legacyWorkspaces.map(w =>
+        w.name === oldName ? { ...w, name: newName } : w
+      ),
+    })
+  }
+
   // ── Sync status persistence helpers ──────────────────────
   private _syncStatusKey(): string {
     const uid = this.state.userId
@@ -240,6 +319,8 @@ export function useCloudStore() {
   return {
     ...state,
     isCloudMode: state.mode === 'cloud',
+    /** Computed workspace list for the current mode (cloud or legacy) */
+    workspaces: cloudStore.workspaces,
     store: cloudStore,
   }
 }

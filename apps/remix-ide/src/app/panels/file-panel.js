@@ -6,6 +6,7 @@ import { FileSystemProvider } from '@remix-ui/workspace' // eslint-disable-line
 import {Registry} from '@remix-project/remix-lib'
 import { RemixdHandle } from '../plugins/remixd-handle'
 import {PluginViewWrapper} from '@remix-ui/helper'
+import { cloudStore } from 'libs/remix-ui/workspace/src/lib/cloud/cloud-store'
 const { TruffleHandle } = require('../files/truffle-handle.js')
 
 /*
@@ -152,7 +153,7 @@ export default class Filepanel extends ViewPlugin {
   }
 
   getWorkspaces() {
-    return this.workspaces
+    return cloudStore.workspaces
   }
 
   /**
@@ -161,8 +162,9 @@ export default class Filepanel extends ViewPlugin {
    * Use this method instead of getWorkspaces() when calling from external plugins.
    */
   getWorkspacesForPlugin() {
-    if (!this.workspaces) return []
-    return this.workspaces
+    const workspaces = cloudStore.workspaces
+    if (!workspaces) return []
+    return workspaces
       .filter(ws => ws && ws.name && ws.name !== 'null' && ws.name !== null && ws.name !== undefined)
       .map(ws => ({
         name: ws.name,
@@ -174,8 +176,9 @@ export default class Filepanel extends ViewPlugin {
   }
 
   workspaceExists(name) {
-    if (!this.workspaces) return false
-    return this.workspaces.find((workspace) => workspace.name === name)
+    const workspaces = cloudStore.workspaces
+    if (!workspaces) return false
+    return workspaces.find((workspace) => workspace.name === name)
   }
 
   async readFileFromWorkspace(workspaceName, filePath) {
@@ -220,18 +223,21 @@ export default class Filepanel extends ViewPlugin {
   }
 
   getAvailableWorkspaceName(name) {
-    if (!this.workspaces) return name
+    const workspaces = cloudStore.workspaces
+    if (!workspaces) return name
     let index = 1
-    let workspace = this.workspaces.find((workspace) => workspace.name === name + ' - ' + index)
+    let workspace = workspaces.find((workspace) => workspace.name === name + ' - ' + index)
     while (workspace) {
       index++
-      workspace = this.workspaces.find((workspace) => workspace.name === name + ' - ' + index)
+      workspace = workspaces.find((workspace) => workspace.name === name + ' - ' + index)
     }
     return name + ' - ' + index
   }
 
   setWorkspaces(workspaces) {
     this.workspaces = workspaces
+    // Keep store in sync (primary source of truth)
+    cloudStore.setLegacyWorkspaces(workspaces)
   }
 
   createNewFile() {

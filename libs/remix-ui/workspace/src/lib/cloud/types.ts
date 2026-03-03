@@ -71,6 +71,15 @@ export interface CloudState {
   syncStatus: Record<string, WorkspaceSyncStatus>
   /** Error message if something went wrong */
   error: string | null
+
+  // ── Unified workspace state (shared across all React trees) ──
+
+  /** Legacy (local/IndexedDB) workspace entries */
+  legacyWorkspaces: WorkspaceEntry[]
+  /** Name of the currently active workspace (cloud or legacy) */
+  activeWorkspaceName: string
+  /** Browser mode: 'browser' | 'localhost' */
+  browserMode: 'browser' | 'localhost'
 }
 
 export interface WorkspaceSyncStatus {
@@ -120,4 +129,18 @@ export interface WorkspaceMapping {
   cloudId: string
   cloudName: string
   lastSync: number
+}
+
+// ── Unified workspace entry used by the workspace store ──
+// This type consolidates cloud and legacy workspace entries
+// so both React trees (topbar + workspace panel) share one list.
+export interface WorkspaceEntry {
+  name: string
+  isGitRepo: boolean
+  hasGitSubmodules?: boolean
+  branches?: { remote: any; name: string }[]
+  currentBranch?: string
+  isGist?: string | null
+  remoteId?: string
+  cloudUuid?: string
 }

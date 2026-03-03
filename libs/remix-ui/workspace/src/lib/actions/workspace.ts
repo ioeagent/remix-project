@@ -161,6 +161,8 @@ export const createWorkspace = async (
   dispatch(createWorkspaceRequest())
   promise.then(async () => {
     dispatch(createWorkspaceSuccess({ name: workspaceName, isGitRepo }))
+    // ── Store dual-write: track active workspace
+    cloudStore.setActiveWorkspace(workspaceName)
     await plugin.setWorkspace({ name: workspaceName, isLocalhost: false })
     await plugin.workspaceCreated(workspaceName)
 
@@ -585,6 +587,8 @@ export const renameWorkspace = async (oldName: string, workspaceName: string, cb
         cloudStore.updateCloudWorkspace(updated)
       }
       await dispatch(setRenameWorkspace(oldName, workspaceName))
+      // ── Store dual-write
+      cloudStore.setActiveWorkspace(workspaceName)
       await plugin.setWorkspace({ name: workspaceName, isLocalhost: false })
       await plugin.workspaceRenamed(oldName, workspaceName)
       await plugin.setWorkspaces(await getWorkspaces())
@@ -599,6 +603,9 @@ export const renameWorkspace = async (oldName: string, workspaceName: string, cb
   // ── Legacy mode ──
   await renameWorkspaceFromProvider(oldName, workspaceName)
   await dispatch(setRenameWorkspace(oldName, workspaceName))
+  // ── Store dual-write: rename in legacy list + update active name
+  cloudStore.renameLegacyWorkspace(oldName, workspaceName)
+  cloudStore.setActiveWorkspace(workspaceName)
   await plugin.setWorkspace({ name: workspaceName, isLocalhost: false })
   await plugin.deleteWorkspace(oldName)
   await plugin.workspaceRenamed(oldName, workspaceName)
@@ -646,6 +653,9 @@ export const deleteWorkspace = async (workspaceName: string, cb?: (err: Error, r
           dispatch(setMode('browser'))
           dispatch(setCurrentWorkspace({ name: nextWs.name, isGitRepo: false }))
           dispatch(setReadOnlyMode(false))
+          // ── Store dual-write
+          cloudStore.setActiveWorkspace(nextWs.name)
+          cloudStore.setBrowserMode('browser')
           localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), nextWs.name)
         } catch (switchErr) {
           console.error('[deleteWorkspace] Failed to switch to next cloud workspace:', switchErr)
@@ -678,6 +688,8 @@ export const deleteWorkspace = async (workspaceName: string, cb?: (err: Error, r
   // ── Legacy mode ──
   await deleteWorkspaceFromProvider(workspaceName)
   await dispatch(setDeleteWorkspace(workspaceName))
+  // ── Store dual-write: remove from legacy list
+  cloudStore.removeLegacyWorkspace(workspaceName)
   plugin.workspaceDeleted(workspaceName)
   cb && cb(null, workspaceName)
 }
@@ -719,6 +731,9 @@ export const switchToWorkspace = async (name: string) => {
         dispatch(setMode('browser'))
         dispatch(setCurrentWorkspace({ name, isGitRepo: false }))
         dispatch(setReadOnlyMode(false))
+        // ── Store dual-write
+        cloudStore.setActiveWorkspace(name)
+        cloudStore.setBrowserMode('browser')
         localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), name)
         return
       }
@@ -735,6 +750,9 @@ export const switchToWorkspace = async (name: string) => {
 
     if (!isActive) await plugin.call('manager', 'activatePlugin', 'remixd')
     dispatch(setMode('localhost'))
+    // ── Store dual-write
+    cloudStore.setBrowserMode('localhost')
+    cloudStore.setActiveWorkspace('')
     plugin.emit('setWorkspace', { name: null, isLocalhost: true })
   } else if (name === NO_WORKSPACE) {
     // In both legacy and cloud mode, ensure at least one workspace exists.
@@ -756,6 +774,9 @@ export const switchToWorkspace = async (name: string) => {
     await plugin.setWorkspace({ name, isLocalhost: false })
     dispatch(setMode('browser'))
     dispatch(setCurrentWorkspace({ name, isGitRepo: false }))
+    // ── Store dual-write
+    cloudStore.setActiveWorkspace(name)
+    cloudStore.setBrowserMode('browser')
 
   } else {
     const isActive = await plugin.call('manager', 'isActive', 'remixd')
@@ -767,6 +788,9 @@ export const switchToWorkspace = async (name: string) => {
     dispatch(setMode('browser'))
     dispatch(setCurrentWorkspace({ name, isGitRepo }))
     dispatch(setReadOnlyMode(false))
+    // ── Store dual-write
+    cloudStore.setActiveWorkspace(name)
+    cloudStore.setBrowserMode('browser')
   }
 }
 
@@ -953,6 +977,8 @@ export const getWorkspaces = async (): Promise<WorkspaceType[]> | undefined => {
       })
     })
     await plugin.setWorkspaces(workspaces)
+    // ── Store dual-write: keep cloudStore in sync with the legacy workspace list
+    cloudStore.setLegacyWorkspaces(workspaces)
     return workspaces
   } catch (e) {}
 }

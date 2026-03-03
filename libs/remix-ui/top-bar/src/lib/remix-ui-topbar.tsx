@@ -7,7 +7,7 @@ import { CustomToggle, CustomTopbarMenu } from 'libs/remix-ui/helper/src/lib/com
 import { WorkspaceMetadata } from 'libs/remix-ui/workspace/src/lib/types'
 import { CloudToggle } from 'libs/remix-ui/workspace/src/lib/cloud/cloud-sync-status-icon'
 import { enableCloud, disableCloud } from 'libs/remix-ui/workspace/src/lib/cloud/cloud-workspace-actions'
-import { cloudStore } from 'libs/remix-ui/workspace/src/lib/cloud/cloud-store'
+import { cloudStore, useCloudStore } from 'libs/remix-ui/workspace/src/lib/cloud/cloud-store'
 import { AppContext, platformContext } from 'libs/remix-ui/app/src/lib/remix-app/context/context'
 import { useAuth } from 'libs/remix-ui/app/src/lib/remix-app/context/auth-context'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -42,6 +42,9 @@ export function RemixUiTopbar() {
   const LOCALHOST = ' - connect to localhost - '
   const NO_WORKSPACE = ' - none - '
   const ROOT_PATH = '/'
+
+  // ── Unified workspace state from cloudStore (replaces dead Redux) ──
+  const { workspaces: storeWorkspaces, activeWorkspaceName, browserMode } = useCloudStore()
 
   const [currentWorkspace, setCurrentWorkspace] = useState<string>(NO_WORKSPACE)
   const [currentMenuItemName, setCurrentMenuItemName] = useState<string>(null)
@@ -134,11 +137,6 @@ export function RemixUiTopbar() {
   }
 
   useEffect(() => {
-    const current = localStorage.getItem('currentWorkspace')
-    setCurrentWorkspace(current)
-  }, [plugin.filePanel.workspaces])
-
-  useEffect(() => {
     const run = async () => {
       const [url, currentReleaseVersion] = await plugin.getLatestReleaseNotesUrl()
       setLatestReleaseNotesUrl(url)
@@ -210,30 +208,23 @@ export function RemixUiTopbar() {
     }
   }, [])
 
+  // ── Sync currentWorkspace from cloudStore (replaces dead Redux reads) ──
   useEffect(() => {
-    if (global.fs.mode === 'browser') {
-      if (global.fs.browser.currentWorkspace) {
-        setCurrentWorkspace(global.fs.browser.currentWorkspace)
-        fetchWorkspaceDirectory(ROOT_PATH)
+    if (browserMode === 'browser') {
+      if (activeWorkspaceName) {
+        setCurrentWorkspace(activeWorkspaceName)
       } else {
         setCurrentWorkspace(NO_WORKSPACE)
       }
-    } else if (global.fs.mode === 'localhost') {
-      fetchWorkspaceDirectory(ROOT_PATH)
+    } else if (browserMode === 'localhost') {
       setCurrentWorkspace(LOCALHOST)
     }
-  }, [global.fs.browser.currentWorkspace, global.fs.browser.workspaceSwitchVersion, global.fs.localhost.sharedFolder, global.fs.mode, showDropdown])
+  }, [activeWorkspaceName, browserMode])
 
+  // ── When workspace list changes, update menu items ──
   useEffect(() => {
-    if (global.fs.browser.currentWorkspace && !global.fs.browser.workspaces.find(({ name }) => name === global.fs.browser.currentWorkspace)) {
-      if (global.fs.browser.workspaces.length > 0) {
-        switchWorkspace(global.fs.browser.workspaces[global.fs.browser.workspaces.length - 1].name)
-      } else {
-        switchWorkspace(NO_WORKSPACE)
-      }
-    }
     updateMenuItems()
-  }, [global.fs.browser.workspaces, global.fs.browser.workspaces.length])
+  }, [storeWorkspaces, storeWorkspaces.length])
 
   useEffect(() => {
     plugin.on('theme', 'themeChanged', (theme) => {
@@ -473,7 +464,7 @@ export function RemixUiTopbar() {
 
     return (
       <>
-        {global.fs.browser.workspaces.map(({ name, isGitRepo }, index) => (
+        {storeWorkspaces.map(({ name, isGitRepo }, index) => (
           <div
             key={index}
             className="d-flex justify-content-between w-100"
@@ -501,7 +492,7 @@ export function RemixUiTopbar() {
   }
 
   const ShowNonLocalHostMenuItems = () => {
-    const cachedFilter = global.fs.browser.workspaces.filter(x => !x.name.includes('localhost'))
+    const cachedFilter = storeWorkspaces.filter(x => !x.name.includes('localhost'))
     return (
       <div className="">
         {
