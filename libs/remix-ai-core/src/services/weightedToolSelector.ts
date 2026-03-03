@@ -127,16 +127,19 @@ export class WeightedToolSelector extends SimpleToolSelector {
         st.matchDetails.conversationContext * this.weights.conversationContext;
     });
 
-    const coreTools = ['file_read', 'file_write', 'directory_list', 'solidity_compile', 'get_compilation_result'];
+    const coreTools = ['file_read', 'file_write', 'directory_list', 'solidity_compile', 'get_compilation_result', 'get_skill'];
     scoredTools.forEach(st => {
       if (coreTools.includes(st.tool.name)) {
         st.score += 1.0;
+      }
+      if (st.tool.name === 'get_skill') {
+        st.score += 1.5;
       }
     });
 
     scoredTools.sort((a, b) => b.score - a.score);
 
-    const topTools = scoredTools.slice(0, 5);
+    const topTools = scoredTools.slice(0, maxTools);
     console.log('[WeightedToolSelector] Top weighted matches:');
     topTools.forEach(st => {
       const d = st.matchDetails;
