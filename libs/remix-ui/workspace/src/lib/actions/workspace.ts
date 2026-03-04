@@ -998,6 +998,7 @@ export const cloneRepository = async (url: string) => {
           dispatch(setCurrentWorkspaceCurrentBranch(currentBranch))
           dispatch(cloneRepositorySuccess())
         }).catch(() => {
+          dispatch(cloneRepositoryFailed())
           const cloneModal = {
             id: 'cloneGitRepository',
             title: 'Clone Git Repository',
@@ -1007,11 +1008,9 @@ export const cloneRepository = async (url: string) => {
             okLabel: plugin.registry.get('platform').api.isDesktop() ? 'Select or create folder':'OK',
             okFn: async () => {
               await deleteWorkspace(repoName)
-              dispatch(cloneRepositoryFailed())
             },
             hideFn: async () => {
               await deleteWorkspace(repoName)
-              dispatch(cloneRepositoryFailed())
             }
           }
           plugin.call('notification', 'modal', cloneModal)
