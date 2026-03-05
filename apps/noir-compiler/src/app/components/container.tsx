@@ -68,7 +68,7 @@ export function Container () {
               <CustomTooltip
                 placement="bottom"
                 tooltipId="showNoirCompilerTooltip"
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
                 tooltipText='See compiler license'
               >
                 <span className="far fa-file-certificate border-0 p-0 ms-2" onClick={() => showCompilerLicense()}></span>
@@ -76,18 +76,18 @@ export function Container () {
               <CustomTooltip
                 placement="bottom"
                 tooltipId="noirVersionTooltip"
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
                 tooltipText={`Using Noir ${NOIR_VERSION} and Barretenberg ${BARRETENBERG_VERSION}`}
               >
                 <button
-                  className="btn btn-light btn-block w-100 d-inline-block border form-select"
+                  className="btn btn-light btn-block w-full inline-block border form-select"
                   style={{
                     cursor: 'default',
                     opacity: 1,
                     textAlign: 'left' 
                   }}
                 >
-                  <div className="d-flex justify-content-between align-items-center">
+                  <div className="flex justify-between items-center">
                     <div className="font-sm" style={{ flexGrow: 1, overflow: 'hidden', display:'flex', justifyContent:'left' }}>
                       { NOIR_VERSION }
                     </div>
@@ -101,11 +101,11 @@ export function Container () {
             </div>
             <RenderIf condition={noirApp.appState.status === 'succeed'}>
               <>
-                <label className="noir_label form-check-label mt-3">
+                <label className="noir_label form-check-label mt-4">
                   <FormattedMessage id="noir.compilationArtifacts" defaultMessage="Compilation Artifacts" />
                 </label>
-                <button className="btn btn-sm btn-outline-info w-100 text-start mt-2" onClick={(e) => handleViewFile(e, `${buildPath}/program.json`)}>
-                  <div className="d-flex align-items-center">
+                <button className="btn btn-sm btn-outline-info w-full text-left mt-2" onClick={(e) => handleViewFile(e, `${buildPath}/program.json`)}>
+                  <div className="flex items-center">
                     <i className="fas fa-file-invoice me-2"></i>
                     <span>View Artifact</span>
                   </div>
@@ -115,12 +115,12 @@ export function Container () {
                   <CustomTooltip
                     placement="bottom-start"
                     tooltipId="generateProofTooltip"
-                    tooltipClasses="text-nowrap"
+                    tooltipClasses="whitespace-nowrap"
                     tooltipText='If your circuit has public inputs, edit Prover.toml before generating the proof.'
                   >
                     <button
                       id="noir_generate_proof"
-                      className="btn btn-primary w-100"
+                      className="btn btn-primary w-full"
                       onClick={handleGenerateProofClick}
                       disabled={noirApp.appState.proofingStatus === 'proofing' || noirApp.appState.status === 'compiling'}
                     >
@@ -134,8 +134,8 @@ export function Container () {
                       )}
                     </button>
                   </CustomTooltip>
-                  <button className="btn btn-sm btn-outline-info w-100 text-start mt-2" onClick={(e) => handleViewFile(e, proverTomlPath)}>
-                    <div className="d-flex align-items-center">
+                  <button className="btn btn-sm btn-outline-info w-full text-left mt-2" onClick={(e) => handleViewFile(e, proverTomlPath)}>
+                    <div className="flex items-center">
                       <i className="fas fa-file-invoice me-2"></i>
                       <span>View Prover.toml</span>
                     </div>
@@ -144,34 +144,34 @@ export function Container () {
               </>   
             </RenderIf>
             <RenderIf condition={noirApp.appState.proofingStatus === 'succeed' && !!noirApp.appState.formattedProof}>
-              <div className="mt-3">
+              <div className="mt-4">
                 <label className="noir_label form-check-label">
                   <FormattedMessage id="noir.proofArtifacts" defaultMessage="Proof Artifacts" />
                 </label>
 
-                <div className="d-flex flex-wrap justify-content-between mt-2">
-                  <button className="btn btn-sm btn-outline-info mb-1 flex-grow-1 text-start" onClick={(e) => handleViewFile(e, `${buildPath}/proof`)}>
-                    <div className="d-flex align-items-center">
+                <div className="flex flex-wrap justify-between mt-2">
+                  <button className="btn btn-sm btn-outline-info mb-1 grow text-left" onClick={(e) => handleViewFile(e, `${buildPath}/proof`)}>
+                    <div className="flex items-center">
                       <i className="fas fa-file-code me-2"></i>
                       <span>View Proof</span>
                     </div>
                   </button>
-                  <button className="btn btn-sm btn-outline-info mb-1 flex-grow-1 text-start" onClick={(e) => handleViewFile(e, `${buildPath}/public_inputs`)}>
-                    <div className="d-flex align-items-center">
+                  <button className="btn btn-sm btn-outline-info mb-1 grow text-left" onClick={(e) => handleViewFile(e, `${buildPath}/public_inputs`)}>
+                    <div className="flex items-center">
                       <i className="fas fa-file-invoice me-2"></i>
                       <span>View Public Inputs</span>
                     </div>
                   </button>
                 </div>
-                <div className="d-flex flex-wrap justify-content-between">
-                  <button className="btn btn-sm btn-outline-info mb-1 flex-grow-1 text-start" onClick={(e) => handleViewFile(e, `${contractsPath}/Verifier.sol`)}>
-                    <div className="d-flex align-items-center">
+                <div className="flex flex-wrap justify-between">
+                  <button className="btn btn-sm btn-outline-info mb-1 grow text-left" onClick={(e) => handleViewFile(e, `${contractsPath}/Verifier.sol`)}>
+                    <div className="flex items-center">
                       <i className="fab fa-ethereum me-2"></i>
                       <span>View Verifier.sol</span>
                     </div>
                   </button>
-                  <button className="btn btn-sm btn-outline-info mb-1 flex-grow-1 text-start" onClick={(e) => handleViewFile(e, `${scriptsPath}/verify.ts`)}>
-                    <div className="d-flex align-items-center">
+                  <button className="btn btn-sm btn-outline-info mb-1 grow text-left" onClick={(e) => handleViewFile(e, `${scriptsPath}/verify.ts`)}>
+                    <div className="flex items-center">
                       <i className="fab fa-js-square me-2"></i>
                       <span>View verify.ts</span>
                     </div>

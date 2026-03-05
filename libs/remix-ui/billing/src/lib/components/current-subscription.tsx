@@ -12,7 +12,7 @@ export const CurrentSubscription: React.FC<CurrentSubscriptionProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="d-flex justify-content-center p-3">
+      <div className="flex justify-center p-4">
         <div className="spinner-border spinner-border-sm" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -22,7 +22,7 @@ export const CurrentSubscription: React.FC<CurrentSubscriptionProps> = ({
 
   if (!subscription) {
     return (
-      <div className="p-3 bg-light rounded">
+      <div className="p-4 bg-light rounded">
         <div className="text-muted">
           <i className="fas fa-info-circle me-2"></i>
           No active subscription
@@ -82,8 +82,8 @@ export const CurrentSubscription: React.FC<CurrentSubscriptionProps> = ({
   const billingInterval = mainItem?.billingCycle?.interval || 'month'
 
   return (
-    <div className="current-subscription p-3 bg-light rounded">
-      <div className="d-flex justify-content-between align-items-start mb-2">
+    <div className="current-subscription p-4 bg-light rounded">
+      <div className="flex justify-between items-start mb-2">
         <div>
           <h6 className="mb-1">
             {planName} {getStatusBadge()}
@@ -93,7 +93,7 @@ export const CurrentSubscription: React.FC<CurrentSubscriptionProps> = ({
           )}
         </div>
         {creditsPerMonth && (
-          <div className="text-end">
+          <div className="text-right">
             <div className="h5 mb-0 text-primary">
               <i className="fas fa-coins me-1"></i>
               {creditsPerMonth.toLocaleString()}
@@ -104,16 +104,16 @@ export const CurrentSubscription: React.FC<CurrentSubscriptionProps> = ({
       </div>
 
       {periodStart && periodEnd && (
-        <div className="row g-2 mb-3">
-          <div className="col-6">
-            <small className="text-muted d-block">Current Period</small>
+        <div className="flex flex-wrap g-2 mb-4">
+          <div className="w-1/2">
+            <small className="text-muted block">Current Period</small>
             <small>
               {formatDate(periodStart)} - {formatDate(periodEnd)}
             </small>
           </div>
           {isCanceling && (
-            <div className="col-6">
-              <small className="text-warning d-block">
+            <div className="w-1/2">
+              <small className="text-warning block">
                 <i className="fas fa-exclamation-triangle me-1"></i>
                 Cancels at period end
               </small>
@@ -122,7 +122,7 @@ export const CurrentSubscription: React.FC<CurrentSubscriptionProps> = ({
         </div>
       )}
 
-      <div className="d-flex gap-2">
+      <div className="flex gap-2">
         {onManage && (
           <button
             className="btn btn-sm btn-outline-primary"

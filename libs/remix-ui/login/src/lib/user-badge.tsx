@@ -25,10 +25,10 @@ export const UserBadge: React.FC<UserBadgeProps> = ({
   const [showDropdown, setShowDropdown] = useState(false)
 
   return (
-    <div className={`d-flex align-items-center ${className}`}>
+    <div className={`flex items-center ${className}`}>
       <div className="dropdown">
         <button
-          className="btn btn-sm btn-success dropdown-toggle d-flex flex-nowrap align-items-center"
+          className="btn btn-sm btn-success dropdown-toggle flex flex-nowrap items-center"
           type="button"
           onClick={() => setShowDropdown(!showDropdown)}
           data-id="user-badge"
@@ -62,7 +62,7 @@ export const UserBadge: React.FC<UserBadgeProps> = ({
           >
             <div className="dropdown-header">
               {user.picture && (
-                <div className="d-flex justify-content-center mb-2">
+                <div className="flex justify-center mb-2">
                   <img
                     src={user.picture}
                     alt="Avatar"
@@ -82,15 +82,15 @@ export const UserBadge: React.FC<UserBadgeProps> = ({
               <>
                 <div className="dropdown-divider"></div>
                 <div className="dropdown-item-text small">
-                  <div className="d-flex justify-content-between mb-1">
+                  <div className="flex justify-between mb-1">
                     <span>Total Credits:</span>
                     <strong>{credits.balance}</strong>
                   </div>
-                  <div className="d-flex justify-content-between text-muted">
+                  <div className="flex justify-between text-muted">
                     <span>Free:</span>
                     <span>{credits.free_credits}</span>
                   </div>
-                  <div className="d-flex justify-content-between text-muted">
+                  <div className="flex justify-between text-muted">
                     <span>Paid:</span>
                     <span>{credits.paid_credits}</span>
                   </div>

@@ -19,7 +19,7 @@ export default function App() {
   }
   return (
     <>
-      <div className="bg-light p-5">
+      <div className="bg-light p-12">
         <button className="btn btn-sm border mb-2" onClick={edit}>EDIT</button>
         <ReactMarkdown children={contents} remarkPlugins={[remarkGfm]} />
       </div>

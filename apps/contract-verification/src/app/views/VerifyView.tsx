@@ -214,7 +214,7 @@ export const VerifyView = () => {
         setAbiEncodingError={setAbiEncodingError}
       />}
       <div className="pt-1">
-        <div className="d-flex align-items-center form-check">
+        <div className="flex items-center form-check">
           <input id="has-proxy" className="form-check-input" type="checkbox" checked={!!hasProxy} onChange={(e) => setHasProxy(e.target.checked)} />
           <label htmlFor="has-proxy" className="ms-1 form-check-label" style={{ paddingTop: '2px' }}>
             <FormattedMessage id="contract-verification.proxyInputLabel" defaultMessage={'The deployed contract is behind a proxy'} />
@@ -230,14 +230,14 @@ export const VerifyView = () => {
         />}
       </div>
 
-      <div className="pt-3">
+      <div className="pt-4">
         Verify on:
         {VERIFIERS.map((verifierId) => {
           const disabledVerifier = !chainSettings || !validConfiguration(chainSettings, verifierId) || (verifierId === 'Sourcify' && !sourcifySupported)
 
           return (
             <div key={verifierId} className="pt-2">
-              <div className="d-flex align-items-center form-check">
+              <div className="flex items-center form-check">
                 <input
                   className="form-check-input mb-1"
                   type="checkbox"
@@ -248,13 +248,13 @@ export const VerifyView = () => {
                 />
                 <label
                   htmlFor={`verifier-${verifierId}`}
-                  className={`ms-1 form-check-label large  fw-bold${!disabledVerifier ? '' : ' text-secondary'}`}
+                  className={`ms-1 form-check-label large  font-bold${!disabledVerifier ? '' : ' text-secondary'}`}
                   style={{ fontSize: '1rem' }}
                 >
                   {verifierId}
                 </label>
               </div>
-              <div className="d-flex flex-column align-items-start ps-4">
+              <div className="flex flex-col items-start ps-6">
                 {!chainSettings ? (
                   ''
                 ) : !validConfiguration(chainSettings, verifierId) ? (
@@ -270,7 +270,7 @@ export const VerifyView = () => {
                     </span>
                   </CustomTooltip>
                 ) : (
-                  <span className="text-secondary d-inline-block text-truncate mw-100">{chainSettings.verifiers[verifierId].apiUrl}</span>
+                  <span className="text-secondary inline-block truncate max-w-full">{chainSettings.verifiers[verifierId].apiUrl}</span>
                 )}
               </div>
             </div>
@@ -285,7 +285,7 @@ export const VerifyView = () => {
                 ((hasProxy && !!proxyAddressError) || (hasProxy && !proxyAddress)) ? <FormattedMessage id="contract-verification.proxyAddressError" defaultMessage="Please provide a valid proxy address." /> :
                   <FormattedMessage id="contract-verification.generalVerifyError" defaultMessage={"Please provide all necessary data to verify"} />) // Is not expected to be a case
         : <FormattedMessage id="contract-verification.verifyButtonTooltip" defaultMessage="Verify the contract on the selected chains with the selected verifiers." />}>
-        <button type="submit" className="w-100 btn btn-primary mt-3" disabled={submitDisabled}>
+        <button type="submit" className="w-full btn btn-primary mt-4" disabled={submitDisabled}>
           <FormattedMessage id="contract-verification.verifyButton" defaultMessage="Verify" />
         </button>
       </CustomTooltip>

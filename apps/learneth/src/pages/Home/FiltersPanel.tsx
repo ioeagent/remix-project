@@ -25,18 +25,18 @@ export default function FiltersPanel(props: {
     setSelectedTags(selectedTags.includes(t) ? selectedTags.filter(v => v !== t) : [...selectedTags, t])
 
   return (
-    <div className="my-2 bg-light border rounded p-3" data-id="learneth-filter-panel">
-      <div className="d-flex justify-content-between align-items-center mb-2">
-        <span className="fw-bold">Filters</span>
+    <div className="my-2 bg-light border rounded p-4" data-id="learneth-filter-panel">
+      <div className="flex justify-between items-center mb-2">
+        <span className="font-bold">Filters</span>
         <button onClick={onClear} className="btn btn-sm btn-link text-primary p-0" type="button">
           Clear filters
         </button>
       </div>
 
       <div className="border-bottom">
-        <button className="d-flex justify-content-between align-items-center w-100 py-2 btn btn-transparent text-secondary p-0 border-0" onClick={() => setOpenLevel(v => !v)}>
-          <span className="small text-uppercase fw-bold">LEVEL</span>
-          <span className={`chevron-icon d-inline-flex ${openLevel ? 'open' : ''}`}><ChevronRight /></span>
+        <button className="flex justify-between items-center w-full py-2 btn btn-transparent text-secondary p-0 border-0" onClick={() => setOpenLevel(v => !v)}>
+          <span className="small uppercase font-bold">LEVEL</span>
+          <span className={`chevron-icon inline-flex ${openLevel ? 'open' : ''}`}><ChevronRight /></span>
         </button>
         {openLevel && (
           <div className="pb-2 pt-2">
@@ -54,9 +54,9 @@ export default function FiltersPanel(props: {
       </div>
 
       <div className="border-bottom">
-        <button className="d-flex justify-content-between align-items-center w-100 py-2 btn btn-transparent text-secondary p-0 border-0" onClick={() => setOpenTags(v => !v)}>
-          <span className="small text-uppercase fw-bold">TAGS</span>
-          <span className={`chevron-icon d-inline-flex ${openTags ? 'open' : ''}`}><ChevronRight /></span>
+        <button className="flex justify-between items-center w-full py-2 btn btn-transparent text-secondary p-0 border-0" onClick={() => setOpenTags(v => !v)}>
+          <span className="small uppercase font-bold">TAGS</span>
+          <span className={`chevron-icon inline-flex ${openTags ? 'open' : ''}`}><ChevronRight /></span>
         </button>
         {openTags && (
           <div className="pb-2 pt-2" style={{ maxHeight: 160, overflowY: 'auto' }}>

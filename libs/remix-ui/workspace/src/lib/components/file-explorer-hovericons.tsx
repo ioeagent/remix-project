@@ -14,7 +14,7 @@ export function FileHoverIcons(props: FileHoverIconsProps) {
   const [mouseOver, setMouseOver] = useState(false)
   return (
     <>
-      {<div className="d-flex flex-row align-items-center">
+      {<div className="flex flex-row items-center">
         {
           props.file.isDirectory ? (
             <>
@@ -23,7 +23,7 @@ export function FileHoverIcons(props: FileHoverIconsProps) {
                 delay={{ show: 1000, hide: 0 }}
                 tooltipText={<FormattedMessage id="filePanel.createNewFolder" />}
                 tooltipId={`filePanel.createNewFolder.${props.file.path}`}
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
               >
                 <span
                   data-id="fileExplorerHoverIcons-createNewFolder"
@@ -42,7 +42,7 @@ export function FileHoverIcons(props: FileHoverIconsProps) {
                 delay={{ show: 1000, hide: 0 }}
                 tooltipText={<FormattedMessage id="filePanel.createNewFile" />}
                 tooltipId={`fileExplorer.createNewFile.${props.file.path}`}
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
               >
                 <span
                   data-id="fileExplorerHoverIcons-createNewFile"
@@ -64,7 +64,7 @@ export function FileHoverIcons(props: FileHoverIconsProps) {
           delay={{ show: 1000, hide: 0 }}
           tooltipText={<FormattedMessage id="filePanel.rename" />}
           tooltipId={`filePanel.rename.${props.file.path}`}
-          tooltipClasses="text-nowrap"
+          tooltipClasses="whitespace-nowrap"
         >
           <span
             data-id="fileExplorerHoverIcons-rename"
@@ -83,7 +83,7 @@ export function FileHoverIcons(props: FileHoverIconsProps) {
           delay={{ show: 1000, hide: 0 }}
           tooltipText={<FormattedMessage id="filePanel.deleteItem" />}
           tooltipId={`filePanel.deleteItem.${props.file.path}`}
-          tooltipClasses="text-nowrap"
+          tooltipClasses="whitespace-nowrap"
         >
           <span
             data-id="fileExplorerHoverIcons-delete"

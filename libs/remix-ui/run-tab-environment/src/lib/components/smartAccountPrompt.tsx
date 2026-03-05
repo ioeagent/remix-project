@@ -23,11 +23,11 @@ export function SmartAccountPrompt ({ plugin }: { plugin: EnvironmentPlugin }) {
   }, [])
 
   return (
-    <div className="w-100" data-id="createSmartAccountModal">
+    <div className="w-full" data-id="createSmartAccountModal">
       <p className="mb-2">
         <FormattedMessage id="udapp.createSmartAccountDesc1" />
       </p>
-      <p className="mb-3">
+      <p className="mb-4">
         <FormattedMessage id="udapp.createSmartAccountDesc2" />
       </p>
       <a
@@ -35,7 +35,7 @@ export function SmartAccountPrompt ({ plugin }: { plugin: EnvironmentPlugin }) {
         target="_blank"
         rel="noreferrer noopener"
         onClick={() => trackMatomoEvent({ category: 'udapp', action: 'safeSmartAccount', name: 'learnMore', isClick: true })}
-        className="mb-3 d-inline-block link-primary"
+        className="mb-4 inline-block link-primary"
       >
           Learn more
       </a>
@@ -44,14 +44,14 @@ export function SmartAccountPrompt ({ plugin }: { plugin: EnvironmentPlugin }) {
         <FormattedMessage id="udapp.createSmartAccountDesc4" />
       </p>
       { selectedProvider && selectedProvider.startsWith('injected') && (
-        <div className="alert alert-warning d-flex align-items-center" role="alert">
+        <div className="alert alert-warning flex items-center" role="alert">
           <i className="fas fa-exclamation-triangle me-2"></i>
           <div>
             <FormattedMessage id="udapp.createSmartAccountDesc5" />
           </div>
         </div>
       )}
-      <label className="form-label text-uppercase text-muted small mb-1">
+      <label className="form-label uppercase text-muted small mb-1">
           Account
       </label>
       <CustomTooltip

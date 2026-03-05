@@ -76,7 +76,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
 
   if (loading) {
     return (
-      <div className="p-3">
+      <div className="p-4">
         <div className="spinner-border spinner-border-sm" role="status">
           <span className="sr-only">Loading...</span>
         </div>
@@ -87,7 +87,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
 
   if (error) {
     return (
-      <div className="alert alert-warning p-3" role="alert">
+      <div className="alert alert-warning p-4" role="alert">
         <i className="fas fa-exclamation-triangle me-2"></i>
         {error}
       </div>
@@ -96,7 +96,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
 
   if (!accounts || accounts.length === 0) {
     return (
-      <div className="p-3">
+      <div className="p-4">
         <p className="text-muted">No accounts found. Please log in first.</p>
       </div>
     )
@@ -104,19 +104,19 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
 
   return (
     <div>
-      <div className="list-group mb-3">
+      <div className="list-group mb-4">
         {accounts.map((account) => (
           <div
             key={account.id}
             className={`list-group-item`}
           >
-            <div className="d-flex align-items-start gap-3 mt-1">
-              <div className={`badge ${getProviderColor(account.provider)} d-flex align-items-center justify-content-center rounded-circle flex-shrink-0`} style={{ width: '40px', height: '40px', fontSize: '1.2em' }}>
+            <div className="flex items-start gap-4 mt-1">
+              <div className={`badge ${getProviderColor(account.provider)} flex items-center justify-center rounded-circle shrink-0`} style={{ width: '40px', height: '40px', fontSize: '1.2em' }}>
                 {getProviderIcon(account.provider)}
               </div>
-              <div className="flex-grow-1">
-                <div className="d-flex align-items-center mb-1">
-                  <span className="font-weight-bold text-capitalize">{account.provider}</span>
+              <div className="grow">
+                <div className="flex items-center mb-1">
+                  <span className="font-weight-bold capitalize">{account.provider}</span>
                   {account.isPrimary && (
                     <span className="badge bg-primary ms-2">Primary</span>
                   )}
@@ -130,7 +130,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
                   <div className="small text-muted" style={{ fontSize: '0.75rem' }}>{account.name}</div>
                 )}
               </div>
-              <div className="d-flex flex-column align-items-end">
+              <div className="flex flex-col items-end">
                 {account.picture && (
                   <img
                     src={account.picture}
@@ -164,10 +164,10 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
         <p className="text-muted mb-2" style={{ fontSize: '0.85rem' }}>
           Connect more authentication providers to your account. Accounts with matching emails are automatically linked.
         </p>
-        <div className="d-flex flex-column gap-2">
+        <div className="flex flex-col gap-2">
           {!accounts.some(a => a.provider === 'github') && (
             <button
-              className="btn btn-light border-0 w-100 d-flex align-items-center justify-content-center py-2"
+              className="btn btn-light border-0 w-full flex items-center justify-center py-2"
               onClick={handleLinkGitHub}
             >
               <span className="me-2 fs-medium">
@@ -178,7 +178,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
           )}
           {!accounts.some(a => a.provider === 'google') && (
             <button
-              className="btn btn-light border-0 w-100 d-flex align-items-center justify-content-center py-2"
+              className="btn btn-light border-0 w-full flex items-center justify-center py-2"
               onClick={handleLinkGoogle}
             >
               <span className="me-2 fs-medium">
@@ -189,7 +189,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
           )}
           {!accounts.some(a => a.provider === 'discord') && (
             <button
-              className="btn btn-light border-0 w-100 d-flex align-items-center justify-content-center py-2"
+              className="btn btn-light border-0 w-full flex items-center justify-center py-2"
               onClick={handleLinkDiscord}
             >
               <span className="me-2 fs-medium">
@@ -200,7 +200,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
           )}
           {!accounts.some(a => a.provider === 'siwe') && (
             <button
-              className="btn btn-light border-0 w-100 d-flex align-items-center justify-content-center py-2"
+              className="btn btn-light border-0 w-full flex items-center justify-center py-2"
               onClick={handleLinkSIWE}
             >
               <span className="me-2 fs-medium">
@@ -213,7 +213,7 @@ export const ConnectedAccounts: React.FC<ConnectedAccountsProps> = ({ plugin }) 
       </div>
 
       <div className="alert alert-info mt-2" role="alert">
-        <div className="d-flex align-items-start">
+        <div className="flex items-start">
           <i className="fas fa-info-circle me-1 mt-1"></i>
           <div>
             <strong>Automatic Linking</strong><br />

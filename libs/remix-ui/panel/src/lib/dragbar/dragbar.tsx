@@ -41,13 +41,13 @@ const DragBar = (props: IRemixDragBarUi) => {
       handleResize()
     }, 100)
 
-    // Watch for terminal element changes (class/style changes when d-none is added/removed)
+    // Watch for terminal element changes (class/style changes when hidden is added/removed)
     const terminalElement = props.refObject.current
     let observer: MutationObserver | null = null
 
     if (terminalElement) {
       observer = new MutationObserver(() => {
-        // Wait for layout to settle after d-none is removed
+        // Wait for layout to settle after hidden is removed
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             handleResize()
@@ -74,7 +74,7 @@ const DragBar = (props: IRemixDragBarUi) => {
 
   return (
     <>
-      <div className={`overlay ${dragState ? '' : 'd-none'}`}></div>
+      <div className={`overlay ${dragState ? '' : 'hidden'}`}></div>
       <Draggable nodeRef={nodeRef} position={{ x: 0, y: dragBarPosY }} onStart={startDrag} onStop={stopDrag} axis="y">
         <div ref={nodeRef} className={`dragbar_terminal ${dragState ? 'ondrag' : ''}`}></div>
       </Draggable>

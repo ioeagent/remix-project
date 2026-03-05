@@ -55,7 +55,7 @@ const RemixUIMainPanel = (props: RemixUIMainPanelProps) => {
     // Watch for terminal visibility changes
     const checkTerminalVisibility = () => {
       if (terminalRef.current) {
-        const isHidden = terminalRef.current.classList.contains('d-none') || terminalRef.current.classList.contains('minimized')
+        const isHidden = terminalRef.current.classList.contains('hidden') || terminalRef.current.classList.contains('minimized')
         setTerminalVisible(!isHidden)
       }
     }

@@ -50,7 +50,7 @@ export const Branches = () => {
         {context.branches && context.branches.length ?
           <div>
             <div data-id='branches-panel-content-local-branches'>
-              <label className="text-uppercase">local branches </label><div className="badge text-bg-info rounded-pill ms-2">{localBranches.length}</div>
+              <label className="uppercase">local branches </label><div className="badge text-bg-info rounded-pill ms-2">{localBranches.length}</div>
               {currentBranch && <LocalBranchDetails branch={currentBranch}></LocalBranchDetails>}
               {context.branches && localBranches.slice(0, localBranchPage * pageLength).map((branch, index) => {
                 return (
@@ -65,7 +65,7 @@ export const Branches = () => {
             {context.upstream ?
               <>
                 <div data-id='branches-panel-content-remote-branches'>
-                  <label className="text-uppercase">remote branches on {context.upstream ? context.upstream.name : null}</label><div className="badge text-bg-info rounded-pill ms-2">{remoteBranches.length}</div>
+                  <label className="uppercase">remote branches on {context.upstream ? context.upstream.name : null}</label><div className="badge text-bg-info rounded-pill ms-2">{remoteBranches.length}</div>
                   {context.branches && remoteBranches
                     .slice(0, remoteBranchPage * pageLength)
                     .map((branch, index) => {
@@ -89,13 +89,13 @@ export const Branches = () => {
           && (!context.branches || context.branches.length === 0) ?
           <div className="text-muted">Current branch is <strong className="text-dark">{`${context.currentBranch.name}`}</strong> but you have no commits.</div>
           : null}
-        <label className="text-uppercase pt-2 pb-1">Create branch</label>
-        <div className="mb-3">
+        <label className="uppercase pt-2 pb-1">Create branch</label>
+        <div className="mb-4">
 
           <input
             placeholder="branch name"
             onChange={handleChange}
-            className="form-control w-md-25 w-100"
+            className="form-control w-md-25 w-full"
             data-id="newbranchname"
             type="text"
             id="newbranchname"
@@ -104,7 +104,7 @@ export const Branches = () => {
         <GitUIButton
           data-id="sourcecontrol-create-branch"
           onClick={async () => actions.createBranch(newBranch.value)}
-          className="btn w-md-25 w-100 btn-primary mb-3"
+          className="btn w-md-25 w-full btn-primary mb-4"
           id="createbranch-btn"
         >
           create new branch

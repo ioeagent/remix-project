@@ -153,7 +153,7 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
             </button>
           </div>
           <div className="invite-modal-body">
-            <p className="text-center mb-3">
+            <p className="text-center mb-4">
               You have successfully activated <strong>{validation.name}</strong>
             </p>
             {redeemResult.actions_applied && redeemResult.actions_applied.length > 0 && (
@@ -161,7 +161,7 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
                 <h5>Benefits Applied:</h5>
                 <ul className="list-unstyled">
                   {redeemResult.actions_applied.map((action, idx) => (
-                    <li key={idx} className="d-flex align-items-center mb-2">
+                    <li key={idx} className="flex items-center mb-2">
                       <i className={`fas ${action.success ? 'fa-check text-success' : 'fa-times text-danger'} me-2`}></i>
                       <span>{action.type}</span>
                     </li>
@@ -228,14 +228,14 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
 
         <div className="invite-modal-body">
           {/* Token Name & Description */}
-          <div className="invite-token-info mb-4">
+          <div className="invite-token-info mb-6">
             <h4 className="mb-2">{validation.name}</h4>
             {validation.description && (
               <p className="text-muted">{validation.description}</p>
             )}
 
             {/* Expiry & Remaining Uses */}
-            <div className="invite-meta d-flex gap-3 mt-2">
+            <div className="invite-meta flex gap-4 mt-2">
               {validation.expires_at && (
                 <span className="badge bg-secondary">
                   <i className="fas fa-clock me-1"></i>
@@ -253,11 +253,11 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
 
           {/* Actions/Benefits preview */}
           {validation.actions && validation.actions.length > 0 && (
-            <div className="invite-benefits mb-4">
-              <h5 className="text-uppercase small">What you'll get:</h5>
+            <div className="invite-benefits mb-6">
+              <h5 className="uppercase small">What you'll get:</h5>
               <ul className="list-unstyled">
                 {validation.actions.map((action, idx) => (
-                  <li key={idx} className="d-flex align-items-center mb-2">
+                  <li key={idx} className="flex items-center mb-2">
                     <i className={`fas fa-${getActionIcon(action.type)} text-primary me-2`}></i>
                     <span>{action.description}</span>
                   </li>
@@ -278,7 +278,7 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
         <div className="invite-modal-footer">
           {isAuthenticated ? (
             <button
-              className="btn btn-primary btn-lg w-100"
+              className="btn btn-primary btn-lg w-full"
               onClick={() => onRedeem(token)}
               disabled={redeeming}
             >
@@ -295,12 +295,12 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
               )}
             </button>
           ) : (
-            <div className="w-100">
-              <p className="text-center text-muted mb-3">
+            <div className="w-full">
+              <p className="text-center text-muted mb-4">
                 <i className="fas fa-info-circle me-1"></i>
                 Sign in to activate this invite
               </p>
-              <LoginButton className="btn-lg w-100" />
+              <LoginButton className="btn-lg w-full" />
             </div>
           )}
         </div>

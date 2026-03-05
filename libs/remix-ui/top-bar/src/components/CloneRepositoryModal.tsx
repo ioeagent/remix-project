@@ -1,9 +1,10 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import React, { useRef, useState } from 'react'
+import { Button, Modal } from '@remix-ui/helper';
 import { cloneRepository } from 'libs/remix-ui/workspace/src/lib/actions'
 import { IntlShape } from 'react-intl'
 import { appPlatformTypes } from 'libs/remix-ui/app/src/lib/remix-app/context/context'
-import { Modal, Button, Form } from 'react-bootstrap'
+import { Form } from '@remix-ui/helper'
 
 interface CloneRepositoryModalProps {
   intl: IntlShape

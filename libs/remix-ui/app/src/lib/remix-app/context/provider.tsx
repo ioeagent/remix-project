@@ -115,7 +115,7 @@ export const useDialogDispatchers = () => {
 export const defaultFocusTemplateExplorer = () => {
   return (
     <>
-      <p className="fs-3 text-center">Template Explorer</p>
+      <p className="text-2xl text-center">Template Explorer</p>
     </>
   )
 }

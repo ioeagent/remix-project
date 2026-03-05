@@ -93,7 +93,7 @@ export const SourceControlButtons = (props: SourceControlButtonsProps) => {
   }
 
   return (
-    <span className="d-flex justify-content-end align-items-center">
+    <span className="flex justify-end items-center">
       {props.panel === gitUIPanels.COMMITS || props.panel === gitUIPanels.SOURCECONTROL ? (
         <>
           <GitUIButton
@@ -103,7 +103,7 @@ export const SourceControlButtons = (props: SourceControlButtonsProps) => {
             className="btn btn-sm ps-0 pe-2"
             tooltip={getTooltipText('git.pull')}
           >
-            <div className="d-flex align-items-baseline">
+            <div className="flex items-baseline">
               {syncState.commitsBehind.length ? <div className="badge rounded-pill ps-0">{syncState.commitsBehind.length}</div> : null}
               <FontAwesomeIcon icon={faArrowDown} className="" />
             </div>
@@ -115,7 +115,7 @@ export const SourceControlButtons = (props: SourceControlButtonsProps) => {
             className="btn btn-sm ps-0 pe-2"
             tooltip={getTooltipText('git.push')}
           >
-            <div className="d-flex align-items-baseline">
+            <div className="flex items-baseline">
               {syncState.commitsAhead.length ? <div className="badge rounded-pill ps-0">{syncState.commitsAhead.length}</div> : null}
               <FontAwesomeIcon icon={faArrowUp} className="" />
             </div>

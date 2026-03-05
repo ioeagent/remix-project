@@ -415,7 +415,7 @@ export const FileSystemProvider = (props: WorkspaceProps) => {
   return (
     <FileSystemContext.Provider value={value}>
       {fs.initializingFS && (
-        <div className="text-center py-5">
+        <div className="text-center py-12">
           <i className="fas fa-spinner fa-pulse fa-2x"></i>
         </div>
       )}

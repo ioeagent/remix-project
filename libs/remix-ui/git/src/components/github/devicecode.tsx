@@ -106,14 +106,14 @@ export const ConnectToGitHub = () => {
   return (
     <>
       {(context.gitHubUser && context.gitHubUser.isConnected) ? null : <>
-        <label className="text-uppercase">Connect to GitHub</label>
-        <button className='btn btn-secondary mt-1 w-100' onClick={openPopupLogin}>
+        <label className="uppercase">Connect to GitHub</label>
+        <button className='btn btn-secondary mt-1 w-full' onClick={openPopupLogin}>
           <i className="fab fa-github me-1"></i>connect with GitHub
         </button>
         {popupError && !gitHubResponse && !authorized && (
           <div className="alert alert-warning mt-2" role="alert">
             GitHub login failed. You can continue using another method.
-            <button className='btn btn-outline-primary btn-sm mt-2 w-100' onClick={handleGetDeviceCode}>
+            <button className='btn btn-outline-primary btn-sm mt-2 w-full' onClick={handleGetDeviceCode}>
               Use another method
             </button>
           </div>
@@ -122,7 +122,7 @@ export const ConnectToGitHub = () => {
           <i className="fas fa-spinner fa-spin fa-2x mt-1"></i>
           <div className="alert alert-warning mt-2" role="alert">
             In case of issues, you can try another method.
-            <button className='btn btn-outline-primary btn-sm mt-2 w-100' onClick={handleGetDeviceCode}>
+            <button className='btn btn-outline-primary btn-sm mt-2 w-full' onClick={handleGetDeviceCode}>
               Use another method
             </button>
           </div>
@@ -149,7 +149,7 @@ export const ConnectToGitHub = () => {
           <br></br><a target="_blank" href={gitHubResponse.verification_uri}>{gitHubResponse.verification_uri}</a>
           <br /><br></br>
           Step 3: When you are done, click on the button below:
-          <button className='btn btn-primary mt-1 w-100' onClick={async () => {
+          <button className='btn btn-primary mt-1 w-full' onClick={async () => {
             connectApp()
           }}>Connect</button>
         </div>
@@ -157,7 +157,7 @@ export const ConnectToGitHub = () => {
       {
         (context.gitHubUser && context.gitHubUser.isConnected) ?
           <div className="pt-2">
-            <button data-id='disconnect-github' className='btn btn-primary mt-1 w-100' onClick={async () => {
+            <button data-id='disconnect-github' className='btn btn-primary mt-1 w-full' onClick={async () => {
               handleDisconnect()
             }}>Disconnect</button>
           </div> : null
@@ -167,19 +167,19 @@ export const ConnectToGitHub = () => {
           <div className="pt-2">
 
             <div className="mb-1" data-id={`connected-as-${context.gitHubUser.login}`}>Connected as {context.gitHubUser.login}</div>
-            <div className="row">
+            <div className="flex flex-wrap">
               {context.gitHubUser.avatar_url ?
-                <div className="col-6">
-                  <img data-id={`connected-img-${context.gitHubUser.login}`} src={context.gitHubUser.avatar_url} className="w-100" />
+                <div className="w-1/2">
+                  <img data-id={`connected-img-${context.gitHubUser.login}`} src={context.gitHubUser.avatar_url} className="w-full" />
                 </div> : null}
             </div>
-            <div className="row mt-2">
-              <div className="col-6">
+            <div className="flex flex-wrap mt-2">
+              <div className="w-1/2">
                 {context.gitHubUser.html_url ? <>
-                  <label className="text-uppercase">user on github:</label>
+                  <label className="uppercase">user on github:</label>
                   <a data-id={`connected-link-${context.gitHubUser.login}`} href={context.gitHubUser.html_url}>{context.gitHubUser.html_url}</a> </> : null}
                 {context.userEmails && context.userEmails.length > 0 ? <>
-                  <label className="text-uppercase mt-2">email:</label>
+                  <label className="uppercase mt-2">email:</label>
                   {context.userEmails && context.userEmails.filter((email: any) => email.primary).map((email: any) => {
                     return <span key={email.email}><br></br>{email.email}</span>
                   })}</> : null}

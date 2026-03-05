@@ -155,7 +155,7 @@ export const TabsUI = (props: TabsUIProps) => {
 
   const renderTab = (tab: Tab, index) => {
     const classNameImg = 'my-1 me-1 text-dark ' + tab.iconClass
-    const classNameTab = 'nav-item nav-link d-flex justify-content-center align-items-center px-2 py-1 tab' + (index === currentIndexRef.current ? ' active' : '')
+    const classNameTab = 'nav-item nav-link flex justify-center items-center px-2 py-1 tab' + (index === currentIndexRef.current ? ' active' : '')
     const invert = props.themeQuality === 'dark' ? 'invert(1)' : 'invert(0)'
     return (
       <CustomTooltip tooltipId="tabsActive" tooltipText={tab.tooltip} placement="bottom-start">
@@ -670,7 +670,7 @@ export const TabsUI = (props: TabsUIProps) => {
 
         const InstanceSelector = () => (
           <div>
-            <div className="mb-3">Deployed contracts from "{currentFileName}":</div>
+            <div className="mb-4">Deployed contracts from "{currentFileName}":</div>
             <select
               className="form-select"
               defaultValue="0"
@@ -883,14 +883,14 @@ export const TabsUI = (props: TabsUIProps) => {
   return (
     <>
       <div
-        className={`remix-ui-tabs justify-content-between  border-0 header nav-tabs ${
-          appContext.appState.connectedToDesktop === desktopConnectionType .disabled ? 'd-flex' : 'd-none'
+        className={`remix-ui-tabs justify-between  border-0 header nav-tabs ${
+          appContext.appState.connectedToDesktop === desktopConnectionType .disabled ? 'flex' : 'hidden'
         }`}
         data-id="tabs-component"
       >
-        <div className="d-flex flex-row" style={{ maxWidth: 'fit-content', width: '99%' }}>
-          <div className="d-flex flex-row justify-content-center align-items-center m-1 mt-1">
-            <div className="d-flex align-items-center m-1">
+        <div className="flex flex-row" style={{ maxWidth: 'fit-content', width: '99%' }}>
+          <div className="flex flex-row justify-center items-center m-1 mt-1">
+            <div className="flex items-center m-1">
               {props.isDebugging ? (
                 <CustomTooltip
                   placement="bottom"
@@ -898,7 +898,7 @@ export const TabsUI = (props: TabsUIProps) => {
                   tooltipText={<span>Ask RemixAI about debugging</span>}
                 >
                   <button
-                    className="btn btn-ai d-flex align-items-center justify-content-center border-0 px-3 py-1"
+                    className="btn btn-ai flex items-center justify-center border-0 px-4 py-1"
                     data-id="ask-remixai-action"
                     style={{
                       fontFamily: "Nunito Sans, sans-serif",
@@ -935,7 +935,7 @@ export const TabsUI = (props: TabsUIProps) => {
                       }
                     >
                       <button
-                        className="btn btn-primary d-flex align-items-center justify-content-center"
+                        className="btn btn-primary flex items-center justify-center"
                         data-id="compile-action"
                         style={{
                           padding: "4px 8px",
@@ -965,12 +965,12 @@ export const TabsUI = (props: TabsUIProps) => {
               )}
             </div>
 
-            <div className="d-flex border-start ms-1 align-items-center" style={{ height: "3em" }}>
+            <div className="flex border-start ms-1 items-center" style={{ height: "3em" }}>
               <CustomTooltip placement="bottom" tooltipId="overlay-tooltip-zoom-out" tooltipText={<FormattedMessage id="remixUiTabs.zoomOut" />}>
-                <span data-id="tabProxyZoomOut" className="btn fas fa-search-minus text-dark ps-2 pe-0 py-0 d-flex" onClick={() => props.onZoomOut()}></span>
+                <span data-id="tabProxyZoomOut" className="btn fas fa-search-minus text-dark ps-2 pe-0 py-0 flex" onClick={() => props.onZoomOut()}></span>
               </CustomTooltip>
               <CustomTooltip placement="bottom" tooltipId="overlay-tooltip-run-zoom-in" tooltipText={<FormattedMessage id="remixUiTabs.zoomIn" />}>
-                <span data-id="tabProxyZoomIn" className="btn fas fa-search-plus text-dark ps-2 pe-0 py-0 d-flex" onClick={() => props.onZoomIn()}></span>
+                <span data-id="tabProxyZoomIn" className="btn fas fa-search-plus text-dark ps-2 pe-0 py-0 flex" onClick={() => props.onZoomIn()}></span>
               </CustomTooltip>
             </div>
           </div>
@@ -995,16 +995,16 @@ export const TabsUI = (props: TabsUIProps) => {
               setCompileState('idle')
             }}
           >
-            <TabList className="d-flex flex-row align-items-center">
+            <TabList className="flex flex-row items-center">
               {props.tabs.map((tab, i) => (
-                <Tab className={tab.show ? '' : 'd-none'} key={tab.name} data-id={tab.id}>
+                <Tab className={tab.show ? '' : 'hidden'} key={tab.name} data-id={tab.id}>
                   {renderTab(tab, i)}
                 </Tab>
               ))}
               <div style={{ minWidth: '4rem', height: '1rem' }} id="dummyElForLastXVisibility"></div>
             </TabList>
             {props.tabs.map((tab) => (
-              <TabPanel className={tab.show ? '' : 'd-none'} key={tab.name}></TabPanel>
+              <TabPanel className={tab.show ? '' : 'hidden'} key={tab.name}></TabPanel>
             ))}
           </Tabs>
 

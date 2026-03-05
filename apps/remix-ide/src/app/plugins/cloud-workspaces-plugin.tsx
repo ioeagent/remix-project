@@ -1273,7 +1273,7 @@ export class CloudWorkspacesPlugin extends ViewPlugin {
 
   render(): JSX.Element {
     return (
-      <div id="cloudWorkspaces" className="h-100">
+      <div id="cloudWorkspaces" className="h-full">
         <PluginViewWrapper plugin={this} />
       </div>
     )

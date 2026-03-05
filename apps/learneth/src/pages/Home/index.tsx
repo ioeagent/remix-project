@@ -14,7 +14,7 @@ const LEVEL_LABEL: Record<LevelKey, string> = { '1': 'Beginner', '2': 'Intermedi
 function Antenna({ level }: { level: number }) {
   const active = Math.min(Math.max(level, 0), 3)
   return (
-    <span className="d-inline-flex align-items-end me-2">
+    <span className="inline-flex items-end me-2">
       {[0, 1, 2].map(i => (
         <span key={i}
           className={`antenna-bar ${i < active ? 'bg-primary' : 'bg-secondary'}`}
@@ -155,19 +155,19 @@ function HomePage(): JSX.Element {
   }, [flatItems, debouncedSearch, selectedLevels, selectedTags])
 
   return (
-    <div id="learneth" className="App mb-5 container-fluid">
+    <div id="learneth" className="App mb-12 w-full">
       <RepoImporter list={list} selectedRepo={selectedRepo || {}} />
-      <div className="container-fluid mb-3">
-        <hr className="my-3"/>
+      <div className="w-full mb-4">
+        <hr className="my-4"/>
         <div className="remixui_pluginSearch" data-id="learneth-search-sticky">
-          <div className="d-flex w-100 mb-2">
-            <div className="search-bar-container w-100">
+          <div className="flex w-full mb-2">
+            <div className="search-bar-container w-full">
               <i className="fas fa-search search-bar-icon" aria-hidden="true"></i>
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="form-control form-control-sm remixui_pluginSearchInput ps-4"
+                className="form-control form-control-sm remixui_pluginSearchInput ps-6"
                 placeholder="Search tutorials..."
                 data-id="learneth-search-input"
               />
@@ -175,7 +175,7 @@ function HomePage(): JSX.Element {
 
             <button
               onClick={() => setShowFilters(s => !s)}
-              className="btn btn-sm btn-secondary ms-2 d-flex align-items-center"
+              className="btn btn-sm btn-secondary ms-2 flex items-center"
               data-id="learneth-filter-button"
             >
               <svg width="8" height="8" viewBox="0 0 8 8" className="me-1">
@@ -197,19 +197,19 @@ function HomePage(): JSX.Element {
       </div>
 
       {selectedRepo && (
-        <div className="container-fluid">
+        <div className="w-full">
           {filtered.length > 0 ? (
             filtered.map((r) => (
-              <article key={r.id} className="card card-hover mb-3 border overflow-hidden">
-                <div className="card-header d-flex justify-content-between align-items-center bg-transparent px-3 py-2">
-                  <div className="d-flex align-items-center">
+              <article key={r.id} className="card card-hover mb-4 border overflow-hidden">
+                <div className="card-header flex justify-between items-center bg-transparent px-4 py-2">
+                  <div className="flex items-center">
                     <Antenna level={r.levelNum} />
-                    <span className="small fw-medium text-body-emphasis">{r.levelText}</span>
+                    <span className="small font-medium text-body-emphasis">{r.levelText}</span>
                     {completedTutorials[r.id] && (
                       <CustomTooltip
                         placement={"auto"}
                         tooltipId="tutorialCompletedTooltip"
-                        tooltipClasses="text-nowrap"
+                        tooltipClasses="whitespace-nowrap"
                         tooltipText={<span>{'Completed'}</span>}
                       ><i className="text-success ms-2 fas fa-check"></i></CustomTooltip>
                     )}
@@ -230,8 +230,8 @@ function HomePage(): JSX.Element {
               </article>
             ))
           ) : (
-            <div className="text-center text-muted mt-5 p-3">
-              <h5 className="fw-bold">No tutorials found</h5>
+            <div className="text-center text-muted mt-12 p-4">
+              <h5 className="font-bold">No tutorials found</h5>
               <p className="mb-0">Please try adjusting your search or filter criteria.</p>
             </div>
           )}

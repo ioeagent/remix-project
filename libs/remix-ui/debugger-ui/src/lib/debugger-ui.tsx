@@ -75,7 +75,7 @@ export const DebuggerUI = (props: DebuggerUIProps) => {
     }).catch(() => {
       // If udappTransactions is not available, show fallback message
       setTransactionRecorderUI(
-        <div className="alert alert-info m-3">
+        <div className="alert alert-info m-4">
           <i className="fas fa-info-circle mr-2"></i>
           Transaction recorder is available in the Deploy & Run Transactions tab.
         </div>
@@ -605,7 +605,7 @@ export const DebuggerUI = (props: DebuggerUIProps) => {
 
           {/* Informational Text */}
           <div className="debugger-info ms-2 me-2 mb-2">
-            <h6 className="search-bar-title mt-3">
+            <h6 className="search-bar-title mt-4">
               <FormattedMessage id="debugger.startDebugging" defaultMessage="Start debugging a transaction" />
             </h6>
             <div className="mt-2">
@@ -616,7 +616,7 @@ export const DebuggerUI = (props: DebuggerUIProps) => {
           </div>
 
           {/* Validation Error */}
-          {state.validationError && <span className="w-100 py-1 text-danger validationError d-block mb-3">{state.validationError}</span>}
+          {state.validationError && <span className="w-full py-1 text-danger validationError block mb-4">{state.validationError}</span>}
 
           {/* Configuration Options */}
           <div>
@@ -655,7 +655,7 @@ export const DebuggerUI = (props: DebuggerUIProps) => {
       )}
 
       {state.debugging && state.sourceLocationStatus && (
-        <div className="text-warning mt-3">
+        <div className="text-warning mt-4">
           <i className="fas fa-exclamation-triangle" aria-hidden="true"></i> {state.sourceLocationStatus}
         </div>
       )}

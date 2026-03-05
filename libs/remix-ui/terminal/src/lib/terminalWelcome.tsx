@@ -11,7 +11,7 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
   }
 
   return (
-    <div className="remix_ui_terminal_block px-4 " data-id="block_null">
+    <div className="remix_ui_terminal_block px-6 " data-id="block_null">
       <div className="remix_ui_terminal_welcome">
         {' '}
         <FormattedMessage id="terminal.welcomeText1" /> Remix {packageJson}{' '}
@@ -24,7 +24,7 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
       <div>
         <FormattedMessage id="terminal.welcomeText3" />:{' '}
       </div>
-      <ul className="ms-0 me-4">
+      <ul className="ms-0 me-6">
         <li key="details-and-debug">
           <FormattedMessage id="terminal.welcomeText4" />.
         </li>
@@ -51,7 +51,7 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
       <div>
         <FormattedMessage id="terminal.welcomeText9" />:
       </div>
-      <ul className="ms-0 me-4">
+      <ul className="ms-0 me-6">
         <li key="ethers-console">
           <a target="_blank" href="https://docs.ethers.io">
             ethers.js

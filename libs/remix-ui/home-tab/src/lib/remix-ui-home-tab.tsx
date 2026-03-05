@@ -105,19 +105,19 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
   // }
 
   return (
-    <div className="d-flex flex-column w-100" data-id="remixUIHTAll">
+    <div className="flex flex-col w-full" data-id="remixUIHTAll">
       <ThemeContext.Provider value={state.themeQuality}>
-        <div className="container-fluid">
-          <div className="row">
-            <div className="d-flex w-100 m-3 justify-content-end">
-              <button className="btn btn-secondary btn-md me-3" onClick={startLearnEth}><i className="fa-solid fa-book me-1"></i><FormattedMessage id="home.startLearning" /></button>
+        <div className="w-full">
+          <div className="flex flex-wrap">
+            <div className="flex w-full m-4 justify-end">
+              <button className="btn btn-secondary btn-md me-4" onClick={startLearnEth}><i className="fa-solid fa-book me-1"></i><FormattedMessage id="home.startLearning" /></button>
               <button data-id="landingPageImportFromTemplate" className="btn btn-primary btn-md me-2" onClick={openTemplateSelection}><i className="fa-solid fa-plus me-1"></i><FormattedMessage id="home.createNewWorkspace" /></button>
             </div>
-            <div className="col-lg-8 col-xl-5 col-sm-12 mb-4">
+            <div className="lg:w-2/3 xl:w-5/12 sm:w-full mb-6">
               <HomeTabTitle />
               {!(platform === appPlatformTypes.desktop) ? <HomeTabRecentWorkspaces plugin={plugin} /> : <HomeTabRecentWorkspacesElectron plugin={plugin} />}
             </div>
-            <div className="col-lg-4 col-xl-7 col-sm-12" style={{ overflowY: 'auto', maxHeight: isTerminalHidden ? '85vh' : '61vh' }}>
+            <div className="lg:w-1/3 xl:w-7/12 sm:w-full" style={{ overflowY: 'auto', maxHeight: isTerminalHidden ? '85vh' : '61vh' }}>
               <HomeTabUpdates plugin={plugin} />
               <HomeTabFeaturedPlugins plugin={plugin} />
             </div>

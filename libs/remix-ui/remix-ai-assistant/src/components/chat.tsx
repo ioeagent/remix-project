@@ -46,11 +46,11 @@ const AiChatIntro: React.FC<AiChatIntroProps> = ({ sendPrompt, theme, plugin, ha
   }, [])
 
   return (
-    <div className="assistant-landing d-flex flex-column mx-1 align-items-center justify-content-center text-center h-100 w-100" data-id="ai-assistant-landing">
-      <div className="d-flex align-items-center justify-content-center rounded-circle border mb-3" style={{ width: '120px', height: '120px', borderWidth: '2px', borderColor: 'var(--bs-border-color)' }}>
+    <div className="assistant-landing flex flex-col mx-1 items-center justify-center text-center h-full w-full" data-id="ai-assistant-landing">
+      <div className="flex items-center justify-center rounded-circle border mb-4" style={{ width: '120px', height: '120px', borderWidth: '2px', borderColor: 'var(--bs-border-color)' }}>
         <img src={theme && theme.toLowerCase() === 'dark' ? assistantAvatar : assitantAvatarLight} alt="RemixAI logo" style={{ width: '60px', height: '60px' }} className="container-img" />
       </div>
-      <p className="mb-4" style={{ fontSize: '0.9rem' }}>
+      <p className="mb-6" style={{ fontSize: '0.9rem' }}>
         What do you want to build today?
       </p>
       <AiChatButtons theme={theme} plugin={plugin} sendPrompt={sendPrompt} handleGenerateWorkspace={handleGenerateWorkspace} />
@@ -71,7 +71,7 @@ export const ChatHistoryComponent: React.FC<ChatHistoryComponentProps> = ({
   return (
     <div
       ref={historyRef}
-      className="d-flex flex-column overflow-y-auto border-box-sizing preserve-wrap overflow-x-hidden"
+      className="flex flex-col overflow-y-auto border-box-sizing preserve-wrap overflow-x-hidden"
     >
       {messages.length === 0 ? (
         <AiChatIntro sendPrompt={sendPrompt} theme={theme} plugin={plugin} handleGenerateWorkspace={handleGenerateWorkspace} />
@@ -81,18 +81,18 @@ export const ChatHistoryComponent: React.FC<ChatHistoryComponentProps> = ({
             msg.role === 'user' ? 'bubble-user' : 'bubble-assistant'
 
           return (
-            <div key={msg.id} className={`chat-row d-flex mb-2 ${msg.role === 'user' ? 'justify-content-end' : ''}`} style={{ minWidth: '90%' }}>
+            <div key={msg.id} className={`chat-row flex mb-2 ${msg.role === 'user' ? 'justify-end' : ''}`} style={{ minWidth: '90%' }}>
               {/* Avatar for assistant */}
               {msg.role === 'assistant' && (
                 <img
                   src={theme && theme.toLowerCase() === 'dark' ? assistantAvatar : assitantAvatarLight}
                   alt="AI"
-                  className="assistant-avatar me-2 flex-shrink-0 me-1"
+                  className="assistant-avatar me-2 shrink-0 me-1"
                 />
               )}
 
               {/* Bubble */}
-              <div data-id="ai-response-chat-bubble-section" className={`overflow-y-scroll ${msg.role === 'assistant' ? 'me-3' : ''}`} style={{
+              <div data-id="ai-response-chat-bubble-section" className={`overflow-y-scroll ${msg.role === 'assistant' ? 'me-4' : ''}`} style={{
                 width: '90%'
               }}>
                 {/* Only render bubble if there's content OR not currently executing tools */}
@@ -102,12 +102,12 @@ export const ChatHistoryComponent: React.FC<ChatHistoryComponentProps> = ({
                     data-id="ai-user-chat-bubble"
                   >
                     {msg.role === 'user' && (
-                      <small className="text-uppercase fw-bold text-secondary d-block mb-1">
+                      <small className="uppercase font-bold text-secondary block mb-1">
                         You
                       </small>
                     )}
 
-                    <div className="aiMarkup lh-base text-wrap">
+                    <div className="aiMarkup leading-normal text-wrap">
                       {msg.role === 'assistant' ? (
                         RemixMarkdownViewer(theme, msg.content)
                       ) : (
@@ -132,12 +132,12 @@ export const ChatHistoryComponent: React.FC<ChatHistoryComponentProps> = ({
 
                 {/* Feedback buttons */}
                 {msg.role === 'assistant' && (
-                  <div className="feedback text-end mt-2 me-1">
+                  <div className="feedback text-right mt-2 me-1">
                     <CustomTooltip tooltipText="Good Response" placement="top">
                       <span
                         role="button"
                         aria-label="thumbs up"
-                        className={`feedback-btn me-3 ${msg.sentiment === 'like' ? 'fas fa-thumbs-up' : 'far fa-thumbs-up'
+                        className={`feedback-btn me-4 ${msg.sentiment === 'like' ? 'fas fa-thumbs-up' : 'far fa-thumbs-up'
                         }`}
                         onClick={() =>
                           recordFeedback(
@@ -233,22 +233,22 @@ function RemixMarkdownViewer(theme: string, markDownContent: string): React.Reac
       ),
       // Headings
       h1: ({ node, ...props }) => (
-        <h1 className="ai-heading ai-h1 fs-5 mb-1" {...props} />
+        <h1 className="ai-heading ai-h1 text-lg mb-1" {...props} />
       ),
       h2: ({ node, ...props }) => (
-        <h2 className="ai-heading ai-h2 fs-5 mb-1" {...props} />
+        <h2 className="ai-heading ai-h2 text-lg mb-1" {...props} />
       ),
       h3: ({ node, ...props }) => (
-        <h3 className="ai-heading ai-h3 fs-5 mb-1" {...props} />
+        <h3 className="ai-heading ai-h3 text-lg mb-1" {...props} />
       ),
       h4: ({ node, ...props }) => (
-        <h4 className="ai-heading ai-h4 fs-6 mb-1" {...props} />
+        <h4 className="ai-heading ai-h4 text-base mb-1" {...props} />
       ),
       h5: ({ node, ...props }) => (
-        <h5 className="ai-heading ai-h5 fs-6 mb-1" {...props} />
+        <h5 className="ai-heading ai-h5 text-base mb-1" {...props} />
       ),
       h6: ({ node, ...props }) => (
-        <h6 className="ai-heading ai-h6 fs-6 mb-1" {...props} />
+        <h6 className="ai-heading ai-h6 text-base mb-1" {...props} />
       ),
       // Lists
       ul: ({ node, ...props }) => (

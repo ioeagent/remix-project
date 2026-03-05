@@ -63,8 +63,8 @@ export const BrancheDetailsNavigation = (props: BrancheDetailsNavigationProps) =
 
   return (
     <>
-      <div className="d-flex flex-row w-100 mb-2 mt-2">
-        <div data-type='branches-branch' data-id={`branches-${context.currentBranch.name === branch.name ? 'current-' : ''}branch-${branch.name}`} onClick={() => handleClick()} role={'button'} className='pointer d-flex flex-row w-100 commit-navigation'>
+      <div className="flex flex-row w-full mb-2 mt-2">
+        <div data-type='branches-branch' data-id={`branches-${context.currentBranch.name === branch.name ? 'current-' : ''}branch-${branch.name}`} onClick={() => handleClick()} role={'button'} className='pointer flex flex-row w-full commit-navigation'>
           {
             activePanel === eventKey ? <FontAwesomeIcon className='' icon={faCaretDown}></FontAwesomeIcon> : <FontAwesomeIcon className='' icon={faCaretRight}></FontAwesomeIcon>
           }

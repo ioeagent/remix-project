@@ -317,7 +317,7 @@ export const SolidityCompiler = (props: SolidityCompilerProps) => {
           />
         )}
         {compileErrors && compileErrors[currentFile] && (
-          <div className="remixui_errorBlobs p-4" data-id="compiledErrors">
+          <div className="remixui_errorBlobs p-6" data-id="compiledErrors">
             <>
               <span data-id={`compilationFinishedWith_${currentVersion}`}></span>
               {compileErrors[currentFile].error && (

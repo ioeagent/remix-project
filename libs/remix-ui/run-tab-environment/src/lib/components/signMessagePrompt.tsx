@@ -109,14 +109,14 @@ export function SignMessagePrompt ({
 
 export function SignedMessagePrompt ({ msgHash, signedData }: { msgHash: string, signedData: string }) {
   return (
-    <div className="d-flex flex-column">
-      <label className="text-uppercase">
+    <div className="flex flex-col">
+      <label className="uppercase">
         <FormattedMessage id="udapp.hash" />
       </label>
       <span id="remixRunSignMsgHash" data-id="settingsRemixRunSignMsgHash">
         {msgHash}
       </span>
-      <label className="pt-2 text-uppercase">
+      <label className="pt-2 uppercase">
         <FormattedMessage id="udapp.signature" />
       </label>
       <span id="remixRunSignMsgSignature" data-id="settingsRemixRunSignMsgSignature">

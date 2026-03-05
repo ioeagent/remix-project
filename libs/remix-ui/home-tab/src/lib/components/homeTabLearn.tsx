@@ -54,26 +54,26 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
   }
 
   return (
-    <div className="d-flex px-2 pb-2 pt-2 d-flex flex-column" id="hTLearnSection">
-      <div className="d-flex justify-content-between">
-        <label className="py-2 pt-3 align-self-center m-0" style={{ fontSize: '1.2rem' }}>
+    <div className="flex px-2 pb-2 pt-2 flex flex-col" id="hTLearnSection">
+      <div className="flex justify-between">
+        <label className="py-2 pt-4 self-center m-0" style={{ fontSize: '1.2rem' }}>
           <FormattedMessage id="home.learn" />
         </label>
         <CustomTooltip
           placement={'top'}
           tooltipId="overlay-tooltip"
-          tooltipClasses="text-nowrap"
+          tooltipClasses="whitespace-nowrap"
           tooltipText={<FormattedMessage id="home.seeAllTutorials" />}
-          tooltipTextClasses="border bg-light text-dark p-1 pe-3"
+          tooltipTextClasses="border bg-light text-dark p-1 pe-4"
         >
           <button
             onClick={async () => {
               await goToLearnEthHome()
             }}
-            className="h-100 px-2 pt-0 btn"
+            className="h-full px-2 pt-0 btn"
           >
             <img
-              className="align-self-center"
+              className="self-center"
               src="assets/img/learnEthLogo.webp"
               alt=""
               style={{
@@ -85,20 +85,20 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
           </button>
         </CustomTooltip>
       </div>
-      <div className="d-flex flex-column">
+      <div className="flex flex-col">
         <label
-          className="d-flex flex-column btn border"
+          className="flex flex-col btn border"
           onClick={() =>
             setState((prevState) => {
               return { ...prevState, visibleTutorial: VisibleTutorial.Basics }
             })
           }
         >
-          <label className="card-title align-self-start m-0 float-start" style={{ fontSize: '1rem' }}>
+          <label className="card-title self-start m-0 float-start" style={{ fontSize: '1rem' }}>
             <FormattedMessage id="home.learnEth1" />
           </label>
           {state.visibleTutorial === VisibleTutorial.Basics && (
-            <div className="pt-2 d-flex flex-column text-start">
+            <div className="pt-2 flex flex-col text-left">
               <span className="py-1" style={{ fontSize: '0.8rem' }}>
                 <FormattedMessage id="home.learnEth1Desc" />
               </span>
@@ -109,7 +109,7 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
           )}
         </label>
         <label
-          className="d-flex flex-column btn border"
+          className="flex flex-col btn border"
           onClick={() =>
             setState((prevState) => {
               return {
@@ -119,11 +119,11 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
             })
           }
         >
-          <label className="card-title align-self-start m-0 float-start" style={{ fontSize: '1rem' }}>
+          <label className="card-title self-start m-0 float-start" style={{ fontSize: '1rem' }}>
             <FormattedMessage id="home.learnEth2" />
           </label>
           {state.visibleTutorial === VisibleTutorial.Intermediate && (
-            <div className="pt-2 d-flex flex-column text-start">
+            <div className="pt-2 flex flex-col text-left">
               <span className="py-1" style={{ fontSize: '0.8rem' }}>
                 <FormattedMessage id="home.learnEth2Desc" />
               </span>
@@ -134,18 +134,18 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
           )}
         </label>
         <label
-          className="d-flex flex-column btn border"
+          className="flex flex-col btn border"
           onClick={() =>
             setState((prevState) => {
               return { ...prevState, visibleTutorial: VisibleTutorial.Advanced }
             })
           }
         >
-          <label className="card-title align-self-start m-0 float-start" style={{ fontSize: '1rem' }}>
+          <label className="card-title self-start m-0 float-start" style={{ fontSize: '1rem' }}>
             <FormattedMessage id="home.remixAdvanced" />
           </label>
           {state.visibleTutorial === VisibleTutorial.Advanced && (
-            <div className="pt-2 d-flex flex-column text-start">
+            <div className="pt-2 flex flex-col text-left">
               <span className="py-1" style={{ fontSize: '0.8rem' }}>
                 <FormattedMessage id="home.remixAdvancedDesc" />
               </span>

@@ -67,7 +67,7 @@ export default function SubmenuPortal({
     <>
       <span
         ref={anchorRef}
-        className="dropdown-item d-flex justify-content-between align-items-center"
+        className="dropdown-item flex justify-between items-center"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
         role="button"

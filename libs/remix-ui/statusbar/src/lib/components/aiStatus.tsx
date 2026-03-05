@@ -60,7 +60,7 @@ export default function AIStatus(props: AIStatusProps) {
           {copilotActive === false ? 'RemixAI Copilot (disabled)' : 'RemixAI Copilot (enabled)'}
         </span>
       </CustomTooltip>
-      <div className="d-flex text-sm flex-row pe-2 text-white justify-content-center align-items-center">
+      <div className="flex text-sm flex-row pe-2 text-white justify-center items-center">
         <style>{`
           button.aiButton:focus {
             outline: none;
@@ -70,7 +70,7 @@ export default function AIStatus(props: AIStatusProps) {
             border-color: var(--info)
           }
         `}</style>
-        { !appContext.appState.showPopupPanel && <div className='d-flex flex-column' style={{
+        { !appContext.appState.showPopupPanel && <div className='flex flex-col' style={{
           position: 'absolute',
           bottom: '1.5rem',
           right: '0.5rem',
@@ -97,7 +97,7 @@ export default function AIStatus(props: AIStatusProps) {
               boxShadow: "0 1px 7px var(--bs-secondary)"
             }}
             data-id="aiStatusButton"
-            className='aiButton d-flex align-items-center h3 p-1'
+            className='aiButton flex items-center h3 p-1'
             onClick={async () => {
               appContext.appStateDispatch({
                 type: appActionTypes.setShowPopupPanel,
@@ -105,7 +105,7 @@ export default function AIStatus(props: AIStatusProps) {
               })
             }}
           >
-            <img className="align-self-start" src="assets/img/aiLogoHead.webp" alt="" style={{ height: "2rem" }}></img>
+            <img className="self-start" src="assets/img/aiLogoHead.webp" alt="" style={{ height: "2rem" }}></img>
           </button> */}
         </div>
         }

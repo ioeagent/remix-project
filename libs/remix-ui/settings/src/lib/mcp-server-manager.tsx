@@ -227,13 +227,13 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
 
   return (
     <div className="mcp-server-manager">
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="flex justify-between items-center mb-4">
         <h6 className="mb-0">MCP Servers</h6>
       </div>
 
       <div className="mcp-servers-list">
         {servers.length === 0 ? (
-          <div className="text-center text-muted p-3">
+          <div className="text-center text-muted p-4">
             <p>No MCP servers configured</p>
             <small>Add a server to start using MCP integration</small>
           </div>
@@ -241,9 +241,9 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
           <div className="list-group">
             {servers.map((server) => (
               <div key={server.name} className="list-group-item">
-                <div className="d-flex justify-content-between align-items-start">
-                  <div className="flex-grow-1">
-                    <div className="d-flex align-items-center mb-1">
+                <div className="flex justify-between items-start">
+                  <div className="grow">
+                    <div className="flex items-center mb-1">
                       {getStatusIcon(connectionStatuses[server.name])}
                       <strong className="ms-2">{server.name}</strong>
                       {connectionStatuses[server.name]?.status === 'connected' ? (
@@ -277,7 +277,7 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
                       )}
                     </div>
                   </div>
-                  <div className="d-flex flex-column gap-1">
+                  <div className="flex flex-col gap-1">
                     {!server.isBuiltIn && (
                       <button
                         className={`btn btn-sm ${server.enabled ? 'btn-warning' : 'btn-success'}`}
@@ -317,7 +317,7 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
         )}
       </div>
 
-      <div className="mt-3">
+      <div className="mt-4">
         <button
           className="btn btn-sm btn-outline-primary"
           onClick={loadConnectionStatuses}
@@ -326,7 +326,7 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
         </button>
       </div>
 
-      <div className="mt-3 small text-muted">
+      <div className="mt-4 small text-muted">
         <p><strong>Transport Types:</strong></p>
         <ul>
           <li><strong>Internal (Built-in):</strong> Built-in Remix IDE MCP servers</li>
@@ -343,7 +343,7 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
         </p>
       </div>
 
-      <hr className="my-4" />
+      <hr className="my-6" />
     </div>
   )
 }

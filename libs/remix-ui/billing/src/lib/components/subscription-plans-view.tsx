@@ -16,7 +16,7 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="d-flex justify-content-center p-4">
+      <div className="flex justify-center p-6">
         <div className="spinner-border spinner-border-sm" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -26,7 +26,7 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
 
   if (error) {
     return (
-      <div className="alert alert-warning m-3">
+      <div className="alert alert-warning m-4">
         <i className="fas fa-exclamation-triangle me-2"></i>
         {error}
       </div>
@@ -35,7 +35,7 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
 
   if (!plans || plans.length === 0) {
     return (
-      <div className="text-muted text-center p-4">
+      <div className="text-muted text-center p-6">
         No subscription plans available
       </div>
     )
@@ -45,7 +45,7 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
 
   return (
     <div className="subscription-plans-view">
-      <div className="row g-3">
+      <div className="flex flex-wrap g-3">
         {plans.map((plan) => {
           const isCurrent = isCurrentPlan(plan.id)
           const isFree = plan.priceUsd === 0
@@ -54,8 +54,8 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
           const priceId = paddleProvider?.priceId || null
 
           return (
-            <div key={plan.id} className="col-12 col-md-6 col-lg-4">
-              <div className={`card h-100 ${plan.popular ? 'border-primary' : ''} ${isCurrent ? 'border-success' : ''}`}>
+            <div key={plan.id} className="w-full md:w-1/2 lg:w-1/3">
+              <div className={`card h-full ${plan.popular ? 'border-primary' : ''} ${isCurrent ? 'border-success' : ''}`}>
                 {plan.popular && !isCurrent && (
                   <div className="card-header bg-primary text-white text-center py-1">
                     <small><i className="fas fa-star me-1"></i>Most Popular</small>
@@ -67,13 +67,13 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
                   </div>
                 )}
 
-                <div className="card-body d-flex flex-column">
+                <div className="card-body flex flex-col">
                   <h5 className="card-title">{plan.name}</h5>
                   <p className="card-text text-muted small">
                     {plan.description}
                   </p>
 
-                  <div className="mb-3">
+                  <div className="mb-4">
                     {isFree ? (
                       <span className="h4">Free</span>
                     ) : (
@@ -84,7 +84,7 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
                     )}
                   </div>
 
-                  <div className="mb-3">
+                  <div className="mb-4">
                     <div className="h5 text-primary">
                       <i className="fas fa-coins me-2"></i>
                       {plan.creditsPerMonth.toLocaleString()}
@@ -93,7 +93,7 @@ export const SubscriptionPlansView: React.FC<SubscriptionPlansViewProps> = ({
                   </div>
 
                   {plan.features && plan.features.length > 0 && (
-                    <ul className="list-unstyled mb-3 flex-grow-1">
+                    <ul className="list-unstyled mb-4 grow">
                       {plan.features.map((feature, idx) => (
                         <li key={idx} className="mb-1 small">
                           <i className="fas fa-check text-success me-2"></i>

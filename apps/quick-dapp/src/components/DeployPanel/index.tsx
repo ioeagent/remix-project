@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Form, Button, Alert, InputGroup } from 'react-bootstrap';
+import { Alert, Button } from '@remix-ui/helper'
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
   deploy,
@@ -9,7 +9,7 @@ import {
   getInfoFromNatSpec,
 } from '../../actions';
 import { ThemeUI } from './theme';
-import { CustomTooltip } from '@remix-ui/helper';
+import { CustomTooltip, Form, InputGroup } from '@remix-ui/helper'
 import { AppContext } from '../../contexts';
 
 function DeployPanel(): JSX.Element {
@@ -48,8 +48,8 @@ function DeployPanel(): JSX.Element {
   }, [deployState, teardownState])
 
   return (
-    <div className="col-3 d-inline-block">
-      <h3 className="mb-3" data-id="quick-dapp-admin">QuickDapp <FormattedMessage id="quickDapp.admin" /></h3>
+    <div className="w-1/4 inline-block">
+      <h3 className="mb-4" data-id="quick-dapp-admin">QuickDapp <FormattedMessage id="quickDapp.admin" /></h3>
       <Button
         size="sm"
         style={{ height: 32 }}
@@ -64,7 +64,7 @@ function DeployPanel(): JSX.Element {
         size="sm"
         style={{ height: 32, width: 100 }}
         data-id="deleteDapp"
-        className="ms-3"
+        className="ms-4"
         onClick={() => {
           emptyInstance();
         }}
@@ -93,7 +93,7 @@ function DeployPanel(): JSX.Element {
         }}
       >
         <Form.Group className="mb-2" controlId="formEmail">
-          <Form.Label className="text-uppercase mb-0"><FormattedMessage id="quickDapp.email" /></Form.Label>
+          <Form.Label className="uppercase mb-0"><FormattedMessage id="quickDapp.email" /></Form.Label>
           <Form.Control
             data-id="surgeEmail"
             type="email"
@@ -106,7 +106,7 @@ function DeployPanel(): JSX.Element {
           />
         </Form.Group>
         <Form.Group className="mb-2" controlId="formPassword">
-          <Form.Label className="text-uppercase mb-0"><FormattedMessage id="quickDapp.password" /></Form.Label>
+          <Form.Label className="uppercase mb-0"><FormattedMessage id="quickDapp.password" /></Form.Label>
           <Form.Control
             data-id="surgePassword"
             type="password"
@@ -119,7 +119,7 @@ function DeployPanel(): JSX.Element {
           />
         </Form.Group>
         <Form.Group className="mb-2" controlId="formPassword">
-          <Form.Label className="text-uppercase mb-0"><FormattedMessage id="quickDapp.subdomain" /></Form.Label>
+          <Form.Label className="uppercase mb-0"><FormattedMessage id="quickDapp.subdomain" /></Form.Label>
           <InputGroup>
             <InputGroup.Text>https://</InputGroup.Text>
             <Form.Control
@@ -135,7 +135,7 @@ function DeployPanel(): JSX.Element {
             <InputGroup.Text>.surge.sh</InputGroup.Text>
           </InputGroup>
         </Form.Group>
-        {/* <Form.Group className="mb-3" controlId="formShortname">
+        {/* <Form.Group className="mb-4" controlId="formShortname">
           <Form.Label>Disqus Shortname (Optional)</Form.Label>
           <Form.Control
             type="shortname"
@@ -147,11 +147,11 @@ function DeployPanel(): JSX.Element {
           />
         </Form.Group> */}
         <Form.Group className="mb-2" controlId="formShareTo">
-          <Form.Label className="text-uppercase mb-0">
+          <Form.Label className="uppercase mb-0">
             <FormattedMessage id="quickDapp.shareTo" />
           </Form.Label>
           <br />
-          <div className="d-inline-flex align-items-center form-check">
+          <div className="inline-flex items-center form-check">
             <input
               id="shareToTwitter"
               className="form-check-input"
@@ -172,7 +172,7 @@ function DeployPanel(): JSX.Element {
               Twitter
             </label>
           </div>
-          <div className="d-inline-flex align-items-center form-check ms-3">
+          <div className="inline-flex items-center form-check ms-4">
             <input
               id="shareToFacebook"
               className="form-check-input"
@@ -195,7 +195,7 @@ function DeployPanel(): JSX.Element {
           </div>
         </Form.Group>
         <Form.Group className="mb-2" controlId="formShareTo">
-          <Form.Label className="text-uppercase mb-0">
+          <Form.Label className="uppercase mb-0">
             <FormattedMessage id="quickDapp.useNatSpec" />
           </Form.Label>
           <br />
@@ -222,10 +222,10 @@ function DeployPanel(): JSX.Element {
           </span>
         </Form.Group>
         <Form.Group className="mb-2" controlId="formVerified">
-          <Form.Label className="text-uppercase mb-0">
+          <Form.Label className="uppercase mb-0">
             <FormattedMessage id="quickDapp.verifiedByEtherscan" />
           </Form.Label>
-          <div className="d-flex py-1 align-items-center form-check">
+          <div className="flex py-1 items-center form-check">
             <input
               id="verifiedByEtherscan"
               className="form-check-input"
@@ -249,10 +249,10 @@ function DeployPanel(): JSX.Element {
           </div>
         </Form.Group>
         <Form.Group className="mb-2" controlId="formNoTerminal">
-          <Form.Label className="text-uppercase mb-0">
+          <Form.Label className="uppercase mb-0">
             <FormattedMessage id="quickDapp.noTerminal" />
           </Form.Label>
-          <div className="d-flex py-1 align-items-center form-check">
+          <div className="flex py-1 items-center form-check">
             <input
               id="noTerminal"
               className="form-check-input"
@@ -280,7 +280,7 @@ function DeployPanel(): JSX.Element {
           data-id="deployDapp"
           variant="primary"
           type="submit"
-          className="mt-3"
+          className="mt-4"
           disabled={!formVal.email || !formVal.password || !formVal.subdomain}
         >
           {deployState.loading && (
@@ -291,7 +291,7 @@ function DeployPanel(): JSX.Element {
         <Button
           data-id="teardownDapp"
           variant="primary"
-          className="mt-3 ms-3"
+          className="mt-4 ms-4"
           disabled={!formVal.email || !formVal.password || !formVal.subdomain}
           // hide this button for now, just for e2e use
           style={{ display: 'none' }}
@@ -308,7 +308,7 @@ function DeployPanel(): JSX.Element {
           <FormattedMessage id="quickDapp.teardown" />
         </Button>
         {deployState.code !== '' && (
-          <Alert variant={deployState.code === 'SUCCESS' ? "success" : "danger"} className="mt-4" data-id="deployResult">
+          <Alert variant={deployState.code === 'SUCCESS' ? "success" : "danger"} className="mt-6" data-id="deployResult">
             {deployState.code === 'SUCCESS' ? <>
               <FormattedMessage id="quickDapp.text4" /> <br /> <FormattedMessage id="quickDapp.text5" />
               <br />
@@ -321,7 +321,7 @@ function DeployPanel(): JSX.Element {
           </Alert>
         )}
         {teardownState.code !== '' && (
-          <Alert variant={teardownState.code === 'SUCCESS' ? "success" : "danger"} className="mt-4" data-id="teardownResult">
+          <Alert variant={teardownState.code === 'SUCCESS' ? "success" : "danger"} className="mt-6" data-id="teardownResult">
             {teardownState.code === 'SUCCESS' ? <FormattedMessage id="quickDapp.text6" /> : teardownState.error}
           </Alert>
         )}

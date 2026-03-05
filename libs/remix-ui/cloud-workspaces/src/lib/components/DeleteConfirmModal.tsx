@@ -8,7 +8,7 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   onCancel
 }) => {
   return (
-    <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+    <div className="modal block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="modal-dialog modal-dialog-centered modal-sm">
         <div className="modal-content">
           <div className="modal-header py-2">
@@ -18,7 +18,7 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             <button type="button" className="btn-close btn-close-sm" onClick={onCancel}></button>
           </div>
           <div className="modal-body py-2 small">
-            <code className="text-truncate d-block" style={{ fontSize: '0.75rem' }}>{filename}</code>
+            <code className="truncate block" style={{ fontSize: '0.75rem' }}>{filename}</code>
           </div>
           <div className="modal-footer py-1">
             <button type="button" className="btn btn-sm btn-secondary" onClick={onCancel}>

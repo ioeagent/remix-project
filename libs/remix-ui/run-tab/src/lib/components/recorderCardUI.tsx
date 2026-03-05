@@ -35,14 +35,14 @@ export function RecorderUI(props: RecorderProps) {
 
   return (
     <div className="udapp_cardContainer py-1 list-group-item border-top border-bottom bg-dark" id="udappRecorderCard">
-      <div className="udapp_recorderSection d-flex justify-content-between">
-        <div className="d-flex justify-content-center align-items-center">
-          <label className="text-nowrap udapp_recorderSectionLabel" onClick={toggleClass}>
+      <div className="udapp_recorderSection flex justify-between">
+        <div className="flex justify-center items-center">
+          <label className="whitespace-nowrap udapp_recorderSectionLabel" onClick={toggleClass}>
             <FormattedMessage id="udapp.transactionsRecorded" />
           </label>
           <CustomTooltip
             placement={'auto-end'}
-            tooltipClasses="text-nowrap"
+            tooltipClasses="whitespace-nowrap"
             tooltipId="recordedTransactionsCounttooltip"
             tooltipText={<FormattedMessage id="udapp.transactionsCountTooltip" />}
           >
@@ -52,12 +52,12 @@ export function RecorderUI(props: RecorderProps) {
           </CustomTooltip>
           <CustomTooltip
             placement={'auto-end'}
-            tooltipClasses="text-nowrap"
+            tooltipClasses="whitespace-nowrap"
             tooltipId="recordedTransactionsWalkthroughtooltip"
             tooltipText={<FormattedMessage id="udapp.transactionsWalkthroughTooltip" />}
           >
             <i
-              className={'ms-2 fas fa-info align-self-center'}
+              className={'ms-2 fas fa-info self-center'}
               aria-hidden="true"
               onClick={() => startWalkthrough()}
               data-id="recorderStartWalkthrough"
@@ -65,14 +65,14 @@ export function RecorderUI(props: RecorderProps) {
             </i>
           </CustomTooltip>
         </div>
-        <div className="w-100" onClick={toggleClass}></div>
-        <div className="p-3">
+        <div className="w-full" onClick={toggleClass}></div>
+        <div className="p-4">
           <span data-id="udappRecorderTitleExpander" onClick={toggleClass}>
             <i className={!toggleExpander ? 'fas fa-angle-right' : 'fas fa-angle-down'} aria-hidden="true"></i>
           </span>
         </div>
       </div>
-      { toggleExpander && <div className={`pb-2 flex-column d-flex`} data-id='remixRecorderExpanded'>
+      { toggleExpander && <div className={`pb-2 flex-col flex`} data-id='remixRecorderExpanded'>
         <div className="mb-1 mt-1 form-check mb-1" id='udappRecorderUseLatest'>
           <input ref={inputLive} type="checkbox" id="livemode-recorder" className="form-check-input" name="input-livemode" />
           <CustomTooltip
@@ -93,7 +93,7 @@ export function RecorderUI(props: RecorderProps) {
         <div className="mb-1 mt-1 udapp_transactionActions">
           <CustomTooltip
             placement={'bottom-start'}
-            tooltipClasses="text-nowrap"
+            tooltipClasses="whitespace-nowrap"
             tooltipId="remixUdappTransactionSavetooltip"
             tooltipText={
               props.count === 0
@@ -113,7 +113,7 @@ export function RecorderUI(props: RecorderProps) {
               <FormattedMessage id="udapp.save" />
             </button>
           </CustomTooltip>
-          <CustomTooltip placement={'right'} tooltipClasses="text-nowrap" tooltipId="tooltip-run-recorder" tooltipText={<FormattedMessage id="udapp.runRecorderTooltip" />}>
+          <CustomTooltip placement={'right'} tooltipClasses="whitespace-nowrap" tooltipId="tooltip-run-recorder" tooltipText={<FormattedMessage id="udapp.runRecorderTooltip" />}>
             <button
               className={enableRunButton ? "btn btn-sm btn-secondary runtransaction udapp_runTxs" : "btn btn-sm btn-secondary runtransaction udapp_runTxs"}
               data-id="runtransaction"

@@ -72,7 +72,7 @@ interface IProps {
 
 	/**
 	 * Adds an event listener for when rows are rendered. The event value
-	 * contains the start row and end rows of the rendered area (ranges from `0`
+	 * contains the start flex flex-wrap and end rows of the rendered area (ranges from `0`
 	 * to `Terminal.rows - 1`).
 	 */
 	onRender?(event: { start: number; end: number }): void

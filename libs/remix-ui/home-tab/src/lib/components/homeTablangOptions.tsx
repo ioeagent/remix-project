@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Dropdown, DropdownButton } from 'react-bootstrap'
-import DropdownItem from 'react-bootstrap/DropdownItem'
 import { localeLang } from './types/carouselTypes'
 import { FormattedMessage } from 'react-intl'
 import { HomeTabEvent, MatomoEvent } from '@remix-api'
 import { TrackingContext } from '@remix-ide/tracking'
+import { Dropdown, DropdownButton, DropdownItem } from '@remix-ui/helper'
 
 export function LanguageOptions({ plugin }: { plugin: any }) {
   const [langOptions, setLangOptions] = useState<string>()
@@ -33,7 +32,7 @@ export function LanguageOptions({ plugin }: { plugin: any }) {
 
   return (
     <>
-      <div className="d-flex justify-content-between w-100 align-items-center pt-4">
+      <div className="flex justify-between w-full items-center pt-6">
         <label style={{ fontSize: '1.2rem' }} className="ms-2 pb-0 mb-0">
           <FormattedMessage id="home.featured" />
         </label>

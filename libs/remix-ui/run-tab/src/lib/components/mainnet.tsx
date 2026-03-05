@@ -70,7 +70,7 @@ export function MainnetPrompt(props: MainnetProps) {
         <br />
         <FormattedMessage id="udapp.mainnetText2" values={{ name: props.network.name }} />
       </div>
-      <div className="mt-3">
+      <div className="mt-4">
         <div>
           <span className="text-dark me-2">From:</span>
           <span>{props.tx.from}</span>
@@ -79,14 +79,14 @@ export function MainnetPrompt(props: MainnetProps) {
           <span className="text-dark me-2">To:</span>
           <span>{props.tx.to ? props.tx.to : `(${intl.formatMessage({ id: 'udapp.contractCreation' })})`}</span>
         </div>
-        <div className="d-flex align-items-center">
+        <div className="flex items-center">
           <span className="text-dark me-2">Data:</span>
           <pre className="udapp_wrapword mb-0">
             {props.tx.data && props.tx.data.length > 50 ? props.tx.data.substring(0, 49) + '...' : props.tx.data}
             <CopyToClipboard tip={intl.formatMessage({ id: 'udapp.copy' })} content={props.tx.data} />
           </pre>
         </div>
-        <div className="mb-3">
+        <div className="mb-4">
           <span className="text-dark me-2">
             <FormattedMessage id="udapp.amount" />:
           </span>
@@ -111,13 +111,13 @@ export function MainnetPrompt(props: MainnetProps) {
               tooltipText={intl.formatMessage({ id: 'udapp.title1' })}
               tooltipId="maxPriorityFeeTooltip"
             >
-              <div className="align-items-center my-1">
-                <div className="d-flex">
-                  <span className="text-dark me-2 text-nowrap">
+              <div className="items-center my-1">
+                <div className="flex">
+                  <span className="text-dark me-2 whitespace-nowrap">
                     <FormattedMessage id="udapp.maxPriorityFee" />:
                   </span>
                   <input
-                    className="form-control me-1 text-end"
+                    className="form-control me-1 text-right"
                     style={{ height: '1.2rem', width: '6rem' }}
                     id="maxpriorityfee"
                     onInput={(e: any) => onMaxPriorityFeeChange(e.target.value)}
@@ -138,13 +138,13 @@ export function MainnetPrompt(props: MainnetProps) {
               tooltipText={intl.formatMessage({ id: 'udapp.title2' })}
               tooltipId="maxFeeTooltip"
             >
-              <div className="align-items-center my-1">
-                <div className="d-flex">
-                  <span className="text-dark me-2 text-nowrap">
+              <div className="items-center my-1">
+                <div className="flex">
+                  <span className="text-dark me-2 whitespace-nowrap">
                     <FormattedMessage id="udapp.maxFee" values={{ baseFeePerGas: formatUnits(BigInt(props.network.lastBlock.baseFeePerGas), 'gwei') }} />:
                   </span>
                   <input
-                    className="form-control me-1 text-end"
+                    className="form-control me-1 text-right"
                     style={{ height: '1.2rem', width: '6rem' }}
                     id="maxfee"
                     onInput={(e: any) => onMaxFeeChange(e.target.value)}
@@ -157,11 +157,11 @@ export function MainnetPrompt(props: MainnetProps) {
             </CustomTooltip>
           </div>
         ) : (
-          <div className="d-flex align-items-center my-1">
-            <span className="text-dark me-2 text-nowrap">
+          <div className="flex items-center my-1">
+            <span className="text-dark me-2 whitespace-nowrap">
               <FormattedMessage id="udapp.gasPrice" />:
             </span>
-            <input className="form-control me-1 text-end" style={{ width: '40px', height: '28px' }} id="gasprice" onInput={(e: any) => onGasPriceChange(e.target.value)} />
+            <input className="form-control me-1 text-right" style={{ width: '40px', height: '28px' }} id="gasprice" onInput={(e: any) => onGasPriceChange(e.target.value)} />
             <span>
               Gwei (
               <FormattedMessage
@@ -178,7 +178,7 @@ export function MainnetPrompt(props: MainnetProps) {
             </span>
           </div>
         )}
-        <div className="mb-3">
+        <div className="mb-4">
           <span className="text-dark me-2">
             <FormattedMessage id="udapp.maxTransactionFee" />:
           </span>
@@ -187,7 +187,7 @@ export function MainnetPrompt(props: MainnetProps) {
           </span>
         </div>
       </div>
-      <div className="d-flex py-1 align-items-center form-check">
+      <div className="flex py-1 items-center form-check">
         <input className="form-check-input" id="confirmsetting" type="checkbox" />
         <label className="ms-1 mt-1 form-check-label" htmlFor="confirmsetting">
           <FormattedMessage id="udapp.mainnetText3" />

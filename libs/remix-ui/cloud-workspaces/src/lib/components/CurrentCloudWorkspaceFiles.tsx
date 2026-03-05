@@ -43,7 +43,7 @@ const CurrentBackupHistory: React.FC<{
   return (
     <>
       <div
-        className="d-flex align-items-center px-2 pt-2 pb-1"
+        className="flex items-center px-2 pt-2 pb-1"
         onClick={() => setIsOpen(!isOpen)}
         style={{ cursor: 'pointer' }}
       >
@@ -107,8 +107,8 @@ export const CurrentCloudWorkspaceFiles: React.FC<CurrentCloudWorkspaceFilesProp
   return (
     <div className="current-cloud-files-section border-bottom">
       {/* Section Header */}
-      <div className="d-flex justify-content-between align-items-center px-2 py-1 border-bottom bg-light">
-        <span className="text-muted small fw-bold">
+      <div className="flex justify-between items-center px-2 py-1 border-bottom bg-light">
+        <span className="text-muted small font-bold">
           <i className="fas fa-cloud me-1"></i>
           <FormattedMessage id="cloudWorkspaces.savedVersions" defaultMessage="Saved Versions" />
         </span>
@@ -124,7 +124,7 @@ export const CurrentCloudWorkspaceFiles: React.FC<CurrentCloudWorkspaceFilesProp
             </span>
           </div>
         ) : (backups.length === 0 && !autosave) ? (
-          <div className="py-2 px-3 text-muted small">
+          <div className="py-2 px-4 text-muted small">
             <FormattedMessage id="cloudWorkspaces.noSavedVersions" defaultMessage="No saved versions yet. Use Save or Backup above." />
           </div>
         ) : (

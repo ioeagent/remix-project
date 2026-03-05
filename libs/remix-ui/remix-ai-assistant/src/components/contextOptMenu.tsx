@@ -11,7 +11,7 @@ export interface GroupListMenuProps {
 export default function GroupListMenu(props: GroupListMenuProps) {
 
   return (
-    <div className="btn-group-vertical w-100">
+    <div className="btn-group-vertical w-full">
       {props.groupList.map((item, index) => (
         <button
           key={`${item.label}-${index}`}
@@ -22,9 +22,9 @@ export default function GroupListMenu(props: GroupListMenuProps) {
             props.setShowOptions(false)
           }}
         >
-          <div className="d-flex flex-column small text-start">
-            <span className="form-check-label fw-bold mb-1">{item.label}</span>
-            <div className="d-flex justify-content-between">
+          <div className="flex flex-col small text-left">
+            <span className="form-check-label font-bold mb-1">{item.label}</span>
+            <div className="flex justify-between">
               <span className="form-check-label me-2 text-wrap">{item.bodyText}</span>{ props.choice === item.stateValue && <span className={item.icon}></span> }
             </div>
           </div>

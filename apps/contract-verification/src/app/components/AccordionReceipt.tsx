@@ -142,15 +142,15 @@ export const AccordionReceipt: React.FC<AccordionReceiptProps> = ({ contract, in
 
   return (
     <div className={`${expanded ? 'bg-light' : 'border-bottom '}`}>
-      <div className="d-flex flex-row align-items-center">
+      <div className="flex flex-row items-center">
         <button className="btn" onClick={toggleAccordion} style={{ padding: '0.45rem' }}>
           <i className={`fas ${expanded ? 'fa-angle-down' : 'fa-angle-right'} text-secondary`}></i>
         </button>
 
-        <div className="small w-100 text-uppercase overflow-hidden text-nowrap">
+        <div className="small w-full uppercase overflow-hidden whitespace-nowrap">
           <CustomTooltip
             placement="bottom"
-            tooltipClasses=" text-break"
+            tooltipClasses=" break-words"
             tooltipText={`Contract: ${contract.contractName}, Address: ${contract.address}, Chain: ${chainName}, Proxy: ${contract.proxyAddress}`}
           >
             <span>
@@ -164,36 +164,36 @@ export const AccordionReceipt: React.FC<AccordionReceiptProps> = ({ contract, in
         </button>
       </div>
 
-      <div className={`${expanded ? '' : 'd-none'} px-2 pt-2 pb-3 small`}>
+      <div className={`${expanded ? '' : 'hidden'} px-2 pt-2 pb-4 small`}>
         <div>
-          <span className="fw-bold">Chain: </span>
+          <span className="font-bold">Chain: </span>
           {chainName} ({contract.chainId})
         </div>
         <div>
-          <span className="fw-bold">File: </span>
-          <span className="text-break">{contract.filePath}</span>
+          <span className="font-bold">File: </span>
+          <span className="break-words">{contract.filePath}</span>
         </div>
         <div>
-          <span className="fw-bold">Submitted at: </span>
+          <span className="font-bold">Submitted at: </span>
           {new Date(contract.date).toLocaleString()}
         </div>
 
         <div>
-          <span className="fw-bold">Verified at: </span>
+          <span className="font-bold">Verified at: </span>
           <ReceiptsBody receipts={contract.receipts} handleRetry={handleRetryVerification} isRetryAvailable={true} />
         </div>
 
         {hasProxy && (
           <>
-            <div className="mt-3">
-              <span className="fw-bold">Proxy Address: </span>
-              <CustomTooltip placement="top" tooltipClasses=" text-break" tooltipText={contract.proxyAddress}>
+            <div className="mt-4">
+              <span className="font-bold">Proxy Address: </span>
+              <CustomTooltip placement="top" tooltipClasses=" break-words" tooltipText={contract.proxyAddress}>
                 <span>{shortenAddress(contract.proxyAddress)}</span>
               </CustomTooltip>
               <CopyToClipboard tip="Copy" content={contract.proxyAddress} direction={'top'} />
             </div>
             <div>
-              <span className="fw-bold">Proxy verified at: </span>
+              <span className="font-bold">Proxy verified at: </span>
               <ReceiptsBody receipts={contract.proxyReceipts} handleRetry={handleRetryVerification} isRetryAvailable={true} />
             </div>
           </>
@@ -213,13 +213,13 @@ const ReceiptsBody = ({ receipts, handleRetry, isRetryAvailable }: {
       {receipts.map((receipt) => (
         <li
           key={`${receipt.contractId}-${receipt.verifierInfo.name}${receipt.isProxyReceipt ? '-proxy' : ''}-${receipt.receiptId}`}
-          className="list-group-item d-flex flex-column"
+          className="list-group-item flex flex-col"
         >
-          <div className="d-flex flex-row align-items-baseline w-100">
+          <div className="flex flex-row items-baseline w-full">
             <CustomTooltip
               placement="top"
-              tooltipClasses=" text-break"
-              tooltipTextClasses="text-capitalize"
+              tooltipClasses=" break-words"
+              tooltipTextClasses="capitalize"
               tooltipText={`Status: ${receipt.status}${receipt.message ? `, Message: ${receipt.message}` : ''}`}
             >
               <span className="me-2">
@@ -246,10 +246,10 @@ const ReceiptsBody = ({ receipts, handleRetry, isRetryAvailable }: {
                 </button>
               </CustomTooltip>
             )}
-            <div className="d-flex flex-row w-100 justify-content-between">
+            <div className="flex flex-row w-full justify-between">
               <div>
-                <CustomTooltip placement="top" tooltipClasses=" text-break" tooltipText={`API: ${receipt.verifierInfo.apiUrl}`}>
-                  <span className="fw-bold pe-2">{receipt.verifierInfo.name}</span>
+                <CustomTooltip placement="top" tooltipClasses=" break-words" tooltipText={`API: ${receipt.verifierInfo.apiUrl}`}>
+                  <span className="font-bold pe-2">{receipt.verifierInfo.name}</span>
                 </CustomTooltip>
                 {!!receipt.receiptLookupUrl && 
                   <CustomTooltip placement="top" tooltipText="View verification details">
@@ -266,7 +266,7 @@ const ReceiptsBody = ({ receipts, handleRetry, isRetryAvailable }: {
             </div>
           </div>
           {receipt.status === 'failed' && (
-            <div className="text-danger small mt-1 ps-4 d-flex align-items-center">
+            <div className="text-danger small mt-1 ps-6 flex items-center">
               <i className="fas fa-exclamation-circle me-1"></i>
               <span>
                 Verify failed. Please retry.

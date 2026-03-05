@@ -27,18 +27,18 @@ const App = () => {
   }, [])
 
   return (
-    <div className="p-3">
-      <h5 className="h-5 mb-3">
+    <div className="p-4">
+      <h5 className="h-5 mb-4">
         Compile a Solidity contract and generate its documentation as Markdown. (Right-click on a contract in the File
         Explorer and select "Generate Docs" from the context menu).
       </h5>
       {fileName && (
-        <div className="border-bottom border-top px-2 py-3 justify-center align-items-center d-flex">
+        <div className="border-bottom border-top px-2 py-4 justify-center items-center flex">
           <h6>File: {fileName}</h6>
         </div>
       )}
       {hasBuild && (
-        <button className="btn btn-primary btn-block mt-4" onClick={() => client.generateDocs()}>
+        <button className="btn btn-primary btn-block mt-6" onClick={() => client.generateDocs()}>
           Generate Docs
         </button>
       )}

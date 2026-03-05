@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Dropdown } from 'react-bootstrap'
-import { CustomToggle } from '@remix-ui/helper'
+import { CustomToggle, Dropdown } from '@remix-ui/helper'
 import { CustomMenu } from '@remix-ui/helper'
 import { Provider } from '../types'
 import { setExecutionContext } from '../actions'
@@ -38,15 +37,15 @@ export const EnvCategoryUI: React.FC<EnvCategoryUIProps> = ({ isOpen, onToggle }
         e.stopPropagation()
       }}
     >
-      <Dropdown.Toggle as={CustomToggle} data-id="settingsSelectEnvCategoryOptions" className="btn btn-secondary w-100 d-inline-block pe-0 border-0" icon="fas fa-caret-down text-secondary ms-2" useDefaultIcon={false} style={{ backgroundColor: 'var(--custom-onsurface-layer-3)' }}>
+      <Dropdown.Toggle as={CustomToggle} data-id="settingsSelectEnvCategoryOptions" className="btn btn-secondary w-full inline-block pe-0 border-0" icon="fas fa-caret-down text-secondary ms-2" useDefaultIcon={false} style={{ backgroundColor: 'var(--custom-onsurface-layer-3)' }}>
         <div style={{ flexGrow: 1, overflow: 'hidden', display:'flex', justifyContent:'left' }}>
-          <div className="text-truncate text-secondary">
+          <div className="truncate text-secondary">
             {<span data-id="selectedVersion">{provider?.displayName}</span>}
           </div>
         </div>
       </Dropdown.Toggle>
 
-      <Dropdown.Menu as={CustomMenu} className="w-100 custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-3)', zIndex: 1000, '--theme-text-color': themeQuality === 'dark' ? 'white' : 'black', padding: 0, '--bs-dropdown-min-width' : '6rem' } as React.CSSProperties}>
+      <Dropdown.Menu as={CustomMenu} className="w-full custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-3)', zIndex: 1000, '--theme-text-color': themeQuality === 'dark' ? 'white' : 'black', padding: 0, '--bs-dropdown-min-width' : '6rem' } as React.CSSProperties}>
         {subCategories.map((provider) => {
           return (
             <Dropdown.Item key={provider.name} onClick={() => handleCategorySelection(provider)} data-id={`dropdown-item-${provider.name}`} className="category-item-hover px-2">

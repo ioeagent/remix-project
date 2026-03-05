@@ -1,11 +1,11 @@
 import React, {useState, useContext, useRef, useEffect} from 'react' //eslint-disable-line
+import { Button, Dropdown } from '@remix-ui/helper';
 
 import { FileExplorerMenuProps } from '../types'
 import { FileSystemContext } from '../contexts'
 import { appActionTypes, AppContext, appPlatformTypes, platformContext } from '@remix-ui/app'
 import { TrackingContext } from '@remix-ide/tracking'
 import { MatomoEvent, FileExplorerEvent, MatomoCategories } from '@remix-api'
-import { Button, Dropdown } from 'react-bootstrap'
 import { createNewFile } from '../actions'
 
 export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
@@ -379,12 +379,12 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
       {!global.fs.browser.isSuccessfulWorkspace ? null :
         <>
 
-          <span data-id="spanContaining" className="ps-0 pb-1 w-50">
+          <span data-id="spanContaining" className="ps-0 pb-1 w-1/2">
             <Dropdown show={isCreateMenuOpen} onToggle={(next) => setIsCreateMenuOpen(next)}>
               <Dropdown.Toggle
                 as={Button}
                 variant="secondary"
-                className="w-100 mb-1 d-flex flex-row align-items-center justify-content-center border"
+                className="w-full mb-1 flex flex-row items-center justify-center border"
                 data-id="fileExplorerCreateButton"
                 onClick={() => {
                   setIsCreateMenuOpen((prev) => !prev)
@@ -398,15 +398,15 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                   color: '#fff'
                 }}
               >
-                <div className="w-50"></div>
+                <div className="w-1/2"></div>
                 <div
-                  className="d-flex flex-row align-items-center justify-items-start me-5 w-50"
+                  className="flex flex-row items-center justify-items-start me-12 w-1/2"
                 >
                   <i className="far fa-plus text-white me-2"></i>
-                  <span className="text-white fw-semibold" style={{ fontSize: '1.05rem' }}>Create</span>
+                  <span className="text-white font-semibold" style={{ fontSize: '1.05rem' }}>Create</span>
                 </div>
               </Dropdown.Toggle>
-              <Dropdown.Menu className="w-100 custom-dropdown-items bg-light">
+              <Dropdown.Menu className="w-full custom-dropdown-items bg-light">
                 {menuItems.filter((item) => item.action === 'newBlankFile').map(({ action, title, icon, placement, platforms }, index) => {
                   return (
                     <Dropdown.Item
@@ -422,7 +422,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         })
                       }}
                     >
-                      <span className="text-decoration-none">
+                      <span className="no-underline">
                         <i className={icon}></i>
                         <span className="ps-2">{title}</span>
                       </span>
@@ -443,7 +443,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         })
                       }}
                     >
-                      <span className="text-decoration-none">
+                      <span className="no-underline">
                         <i className={icon}></i>
                         <span className="ps-2">{title}</span>
                       </span>
@@ -468,7 +468,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         })
                       }}
                     >
-                      <span className="text-decoration-none">
+                      <span className="no-underline">
                         <i className={icon}></i>
                         <span className="ps-2">{title}</span>
                       </span>
@@ -491,7 +491,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         })
                       }}
                     >
-                      <span className="text-decoration-none">
+                      <span className="no-underline">
                         <i className={icon}></i>
                         <span className="ps-2">{title}</span>
                       </span>
@@ -514,7 +514,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         })
                       }}
                     >
-                      <span className="text-decoration-none">
+                      <span className="no-underline">
                         <i className={icon}></i>
                         <span className="ps-2">{title}</span>
                       </span>
@@ -539,7 +539,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         })
                       }}
                     >
-                      <span className="text-decoration-none">
+                      <span className="no-underline">
                         <i className={icon}></i>
                         <span className="ps-2">{title}</span>
                       </span>
@@ -564,7 +564,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         })
                       }}
                     >
-                      <span className="text-decoration-none">
+                      <span className="no-underline">
                         <i className={icon}></i>
                         <span className="ps-2">{title}</span>
                       </span>
@@ -576,10 +576,10 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
           </span>
 
           {!isDappWorkspace && (isCheckingDappMappings || isSwitchingToDapp || dappMappings.length > 0) && (
-            <span className="ps-0 pb-1 w-50" style={{ visibility: (isCheckingDappMappings && dappMappings.length === 0) ? 'hidden' : 'visible' }}>
+            <span className="ps-0 pb-1 w-1/2" style={{ visibility: (isCheckingDappMappings && dappMappings.length === 0) ? 'hidden' : 'visible' }}>
               <Button
                 variant="primary"
-                className="w-100 mb-1 d-flex flex-row align-items-center justify-content-center"
+                className="w-full mb-1 flex flex-row items-center justify-center"
                 data-id="fileExplorerGoToDappButton"
                 onClick={handleGoToDapp}
                 disabled={isSwitchingToDapp || dappMappings.length === 0}
@@ -600,10 +600,10 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
           )}
 
           {isDappWorkspace && sourceWorkspaceTarget && (
-            <span className="ps-0 pb-1 w-50">
+            <span className="ps-0 pb-1 w-1/2">
               <Button
                 variant="success"
-                className="w-100 mb-1 d-flex flex-row align-items-center justify-content-center"
+                className="w-full mb-1 flex flex-row items-center justify-center"
                 data-id="fileExplorerGoToContractButton"
                 onClick={handleGoToContract}
                 disabled={isSwitchingToContract}
@@ -625,7 +625,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
 
           {showDappSelectModal && (
             <div
-              className="modal d-block"
+              className="modal block"
               style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
               onClick={() => setShowDappSelectModal(false)}
             >
@@ -646,7 +646,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                     {dappMappings.map((mapping, index) => (
                       <div
                         key={index}
-                        className={`d-flex align-items-start mb-2 p-3 border rounded ${selectedDappIndex === index ? 'border-primary' : ''}`}
+                        className={`flex items-start mb-2 p-4 border rounded ${selectedDappIndex === index ? 'border-primary' : ''}`}
                         style={{
                           cursor: 'pointer',
                           backgroundColor: selectedDappIndex === index ? 'var(--primary)' : 'transparent',
@@ -655,7 +655,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                         onClick={() => setSelectedDappIndex(index)}
                       >
                         <input
-                          className="form-check-input mt-1 me-3"
+                          className="form-check-input mt-1 me-4"
                           type="radio"
                           name="dappSelection"
                           id={`dapp-${index}`}
@@ -663,7 +663,7 @@ export const FileExplorerMenu = (props: FileExplorerMenuProps) => {
                           onChange={() => setSelectedDappIndex(index)}
                           style={{ flexShrink: 0 }}
                         />
-                        <div className="flex-grow-1">
+                        <div className="grow">
                           <strong style={{ color: selectedDappIndex === index ? 'white' : 'inherit' }}>
                             {mapping.dappWorkspace}
                           </strong>

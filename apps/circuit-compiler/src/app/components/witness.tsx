@@ -36,7 +36,7 @@ export function WitnessSection () {
   }
 
   return (
-    <div className="flex-column d-flex">
+    <div className="flex-col flex">
       <RenderIf condition={signalInputs.length > 0}>
         <>
           {
@@ -62,7 +62,7 @@ export function WitnessSection () {
             </label>
           </div>
           <button
-            className="btn btn-secondary btn-block d-block w-100 text-break mb-1 mt-1"
+            className="btn btn-secondary btn-block block w-full break-words mb-1 mt-1"
             onClick={() => { computeWitness(plugin, appState, dispatch, status, witnessValues) }}
             disabled={(status === "compiling") || (status === "computing")}
             data-id="compute_witness_btn"

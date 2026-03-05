@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
 import { DappConfig } from '../types/dapp';
+import { Dropdown } from '@remix-ui/helper'
 
 interface DappCardProps {
   dapp: DappConfig;
@@ -32,9 +32,9 @@ const DappCard: React.FC<DappCardProps> = ({ dapp, isProcessing, onClick, onDele
   const loadingText = dapp.status === 'creating' ? 'AI Creating...' : 'AI Updating...';
 
   return (
-    <div className="col-12 col-md-6 col-xl-4 mb-4 qd-card-col">
+    <div className="w-full md:w-1/2 xl:w-1/3 mb-6 qd-card-col">
       <div
-        className="card h-100 border-secondary shadow-sm"
+        className="card h-full border-secondary shadow-sm"
         data-id={`dapp-card-${dapp.slug}`}
         style={{
           cursor: isProcessing ? 'wait' : 'pointer',
@@ -46,14 +46,14 @@ const DappCard: React.FC<DappCardProps> = ({ dapp, isProcessing, onClick, onDele
         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
       >
         {isProcessing && (
-          <div className="position-absolute w-100 h-100 d-flex flex-column align-items-center justify-content-center bg-white bg-opacity-75"
+          <div className="position-absolute w-full h-full flex flex-col items-center justify-center bg-white bg-opacity-75"
             style={{ zIndex: 10, backdropFilter: 'blur(1px)' }}>
             <div className="spinner-border text-primary mb-2" role="status"></div>
-            <span className="text-primary fw-bold small">{loadingText}</span>
+            <span className="text-primary font-bold small">{loadingText}</span>
           </div>
         )}
         <div
-          className="card-img-top d-flex align-items-center justify-content-center position-relative"
+          className="card-img-top flex items-center justify-center position-relative"
           style={{
             height: '160px',
             background: dapp.thumbnailPath
@@ -83,7 +83,7 @@ const DappCard: React.FC<DappCardProps> = ({ dapp, isProcessing, onClick, onDele
               title="Delete DApp and workspace"
             >
               <div
-                className={`rounded-circle d-flex align-items-center justify-content-center shadow-sm ${isHovered ? 'bg-danger' : 'bg-dark bg-opacity-75'
+                className={`rounded-circle flex items-center justify-center shadow-sm ${isHovered ? 'bg-danger' : 'bg-dark bg-opacity-75'
                 }`}
                 style={{
                   width: '32px',
@@ -97,33 +97,33 @@ const DappCard: React.FC<DappCardProps> = ({ dapp, isProcessing, onClick, onDele
           )}
         </div>
 
-        <div className="card-body d-flex flex-column justify-content-between">
+        <div className="card-body flex flex-col justify-between">
           <div>
-            <h6 className="card-title fw-bold mb-1 text-truncate text-body" data-id={`dapp-card-name-${dapp.slug}`}>{dapp.name}</h6>
-            <small className="text-muted d-block text-truncate" style={{ fontSize: '0.8rem' }}>
+            <h6 className="card-title font-bold mb-1 truncate text-body" data-id={`dapp-card-name-${dapp.slug}`}>{dapp.name}</h6>
+            <small className="text-muted block truncate" style={{ fontSize: '0.8rem' }}>
               {dapp.id}
             </small>
             {dapp.workspaceName && (
-              <small className="text-info d-block text-truncate mb-2" style={{ fontSize: '0.75rem' }}>
+              <small className="text-info block truncate mb-2" style={{ fontSize: '0.75rem' }}>
                 <i className="fas fa-folder-open me-1"></i>
                 {dapp.workspaceName}
               </small>
             )}
           </div>
 
-          <div className="d-flex justify-content-between align-items-end mt-2 border-top border-secondary pt-2">
+          <div className="flex justify-between items-end mt-2 border-top border-secondary pt-2">
             <small className="text-muted" style={{ fontSize: '0.75rem' }}>
               {dapp.deployment?.ensDomain || 'Not linked to ENS'}
             </small>
-            <div className={`d-flex align-items-center ${statusColor}`} data-id={`dapp-status-${dapp.slug}`}>
+            <div className={`flex items-center ${statusColor}`} data-id={`dapp-status-${dapp.slug}`}>
               <i className={`fas ${statusIcon} me-1 small`}></i>
-              <small className="fw-bold text-uppercase" style={{ fontSize: '0.75rem' }}>
+              <small className="font-bold uppercase" style={{ fontSize: '0.75rem' }}>
                 {dapp.status}
               </small>
             </div>
           </div>
 
-          <div className="text-end mt-1">
+          <div className="text-right mt-1">
             <small className="text-muted" style={{ fontSize: '0.7rem' }}>
               {dapp.status === 'deployed' ? 'Deployed' : 'Created'} {timeAgo(dapp.createdAt)}
             </small>

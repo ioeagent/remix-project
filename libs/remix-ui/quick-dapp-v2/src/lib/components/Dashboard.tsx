@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Modal } from '@remix-ui/helper';
 import { DappConfig } from '../types/dapp';
 import DappCard from './DappCard';
+import { Form } from '@remix-ui/helper'
 
 interface DashboardProps {
   dapps: DappConfig[];
@@ -73,13 +74,13 @@ const Dashboard: React.FC<DashboardProps> = ({
   };
 
   return (
-    <div className="container-fluid p-4" data-id="quick-dapp-dashboard" style={{ minHeight: '100vh' }}>
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 qd-header">
+    <div className="w-full p-6" data-id="quick-dapp-dashboard" style={{ minHeight: '100vh' }}>
+      <div className="flex flex-col md:flex-row justify-between md:items-center mb-6 qd-header">
         <div>
-          <h3 className="fw-bold mb-1 text-body">Quick Dapp</h3>
+          <h3 className="font-bold mb-1 text-body">Quick Dapp</h3>
           <p className="text-secondary mb-0">Edit and deploy your dapps.</p>
         </div>
-        <div className="d-flex gap-2 mt-3 mt-md-0 qd-header-buttons">
+        <div className="flex gap-2 mt-4 mt-md-0 qd-header-buttons">
           <Button variant="primary" onClick={onCreateNew} data-id="create-new-dapp-btn">
             <i className="fas fa-plus me-2"></i> Create a new dapp
           </Button>
@@ -91,7 +92,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
-      <div className="rounded p-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-2 border qd-filter-bar">
+      <div className="rounded p-4 mb-6 flex flex-wrap justify-between items-center gap-2 border qd-filter-bar">
         <h5 className="mb-0 text-body" style={{ whiteSpace: 'nowrap' }}>
           Your dapps <span className="badge bg-secondary ms-2" data-id="dapp-count-badge">{filteredAndSortedDapps.length}</span>
           {filteredAndSortedDapps.length !== validDapps.length && (
@@ -101,7 +102,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           )}
         </h5>
 
-        <div className="d-flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           <Form.Select
             size="sm"
             className="border-secondary"
@@ -130,11 +131,11 @@ const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
-      <div className="row">
+      <div className="flex flex-wrap">
         {filteredAndSortedDapps.length === 0 ? (
-          <div className="col-12 text-center py-5">
+          <div className="w-full text-center py-12">
             <div className="text-muted">
-              <i className="fas fa-box-open fa-3x mb-3"></i>
+              <i className="fas fa-box-open fa-3x mb-4"></i>
               <h5>No DApps found</h5>
               {validDapps.length > 0 ? (
                 <p>Try changing the filters.</p>

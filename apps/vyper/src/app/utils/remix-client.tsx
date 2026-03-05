@@ -131,7 +131,7 @@ export class RemixClient extends PluginClient<any, CustomRemixApi> {
     await this.client.call('editor', 'highlight', lineColumnPos, name)
     /*
     column: -1
-      row: -1
+      flex flex-wrap: -1
       text: "browser/Untitled1.sol: Warning: SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing "SPDX-License-Identifier: <SPDX-License>" to each source file. Use "SPDX-License-Identifier: UNLICENSED" for non-open-source code. Please see https://spdx.org for more information.↵"
       type: "warning"
     */

@@ -38,7 +38,7 @@ const addLineText = `
         },
         hide: false,
         className: 'text-muted small',
-        afterContentClassName: 'text-muted small fas fa-gas-pump ps-4',
+        afterContentClassName: 'text-muted small fas fa-gas-pump ps-6',
         hoverMessage: [{
             value: 'hovering1',
         },
@@ -58,7 +58,7 @@ const addLineText = `
         },
         hide: false,
         className: 'text-muted small',
-        afterContentClassName: 'text-muted small fas fa-gas-pump ps-4',
+        afterContentClassName: 'text-muted small fas fa-gas-pump ps-6',
         hoverMessage: [{
             value: 'hovering2',
         },

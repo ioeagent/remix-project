@@ -82,7 +82,7 @@ function StepDetailPage() {
   }, [])
 
   if (!clonedStep) {
-    return (<div className='pb-4'>
+    return (<div className='pb-6'>
       <div className="fixed-top">
         <div className="bg-light">
           <BackButton entity={entity} />
@@ -128,7 +128,7 @@ function StepDetailPage() {
   };
 
   return (
-    <div className='pb-4'>
+    <div className='pb-6'>
       <div className="fixed-top">
         <div className="bg-light">
           <BackButton entity={entity} />
@@ -138,9 +138,9 @@ function StepDetailPage() {
       {errorLoadingFile ? (
         <>
           <div className="errorloadingspacer"></div>
-          <h1 className="ps-3 pe-3 pt-3 pb-1">{clonedStep.name}</h1>
+          <h1 className="ps-4 pe-4 pt-4 pb-1">{clonedStep.name}</h1>
           <button
-            className="w-100 nav-item rounded-0 nav-link btn btn-success test"
+            className="w-full nav-item rounded-0 nav-link btn btn-success test"
             onClick={() => {
               dispatch({
                 type: 'remixide/displayFile',
@@ -150,15 +150,15 @@ function StepDetailPage() {
           >
             Load the file
           </button>
-          <div className="mb-4"></div>
+          <div className="mb-6"></div>
         </>
       ) : (
         <>
           <div className="menuspacer"></div>
-          <h1 className="pe-3 ps-3 pt-3 pb-1">{clonedStep.name}</h1>
+          <h1 className="pe-4 ps-4 pt-4 pb-1">{clonedStep.name}</h1>
         </>
       )}
-      <div className="container-fluid">
+      <div className="w-full">
         <ReactMarkdown
           remarkPlugins={[[remarkGfm, { }]]}
           remarkRehypeOptions={{
@@ -216,22 +216,22 @@ function StepDetailPage() {
             ),
             // Headings
             h1: ({ node, ...props }) => (
-              <h1 className="ai-heading ai-h1 fs-5 mb-1" {...props} />
+              <h1 className="ai-heading ai-h1 text-lg mb-1" {...props} />
             ),
             h2: ({ node, ...props }) => (
-              <h2 className="ai-heading ai-h2 fs-5 mb-1" {...props} />
+              <h2 className="ai-heading ai-h2 text-lg mb-1" {...props} />
             ),
             h3: ({ node, ...props }) => (
-              <h3 className="ai-heading ai-h3 fs-5 mb-1" {...props} />
+              <h3 className="ai-heading ai-h3 text-lg mb-1" {...props} />
             ),
             h4: ({ node, ...props }) => (
-              <h4 className="ai-heading ai-h4 fs-6 mb-1" {...props} />
+              <h4 className="ai-heading ai-h4 text-base mb-1" {...props} />
             ),
             h5: ({ node, ...props }) => (
-              <h5 className="ai-heading ai-h5 fs-6 mb-1" {...props} />
+              <h5 className="ai-heading ai-h5 text-base mb-1" {...props} />
             ),
             h6: ({ node, ...props }) => (
-              <h6 className="ai-heading ai-h6 fs-6 mb-1" {...props} />
+              <h6 className="ai-heading ai-h6 text-base mb-1" {...props} />
             ),
             // Lists
             ul: ({ node, ...props }) => (
@@ -290,7 +290,7 @@ function StepDetailPage() {
       </div>
       {clonedStep.test?.content ? (
         <>
-          <div className="mt-3 px-2">
+          <div className="mt-4 px-2">
             <nav className="nav nav-pills nav-fill">
               {errorLoadingFile ? (
                 <button
@@ -367,7 +367,7 @@ function StepDetailPage() {
             </nav>
             {success && (
               <button
-                className="w-100 rounded-0 nav-item nav-link btn btn-success"
+                className="w-full rounded-0 nav-item nav-link btn btn-success"
                 onClick={() => {
                   navigate(stepId === steps.length - 1 ? `/list?id=${id}` : `/detail?id=${id}&stepId=${stepId + 1}`)
                 }}
@@ -400,7 +400,7 @@ function StepDetailPage() {
         </>
       ) : (
         <>
-          <div className="mt-3 px-2">
+          <div className="mt-4 px-2">
             <nav className="nav nav-pills nav-fill">
               {!errorLoadingFile && clonedStep.answer?.content && (
                 <button
@@ -418,7 +418,7 @@ function StepDetailPage() {
             </nav>
             {stepId < steps.length - 1 && (
               <button
-                className="w-100 btn btn-success mt-3"
+                className="w-full btn btn-success mt-4"
                 onClick={() => {
                   navigate(`/detail?id=${id}&stepId=${stepId + 1}`);
                   trackMatomoEvent(remixClient, { 
@@ -434,7 +434,7 @@ function StepDetailPage() {
             )}
             {stepId === steps.length - 1 && (
               <button
-                className="w-100 btn btn-success"
+                className="w-full btn btn-success"
                 onClick={() => {
                   // Save tutorial completion to localStorage
                   const completedTutorials = JSON.parse(localStorage.getItem('learneth_completed_tutorials') || '{}');

@@ -244,7 +244,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
 
   if (loading) {
     return (
-      <div className={`d-flex align-items-center ${className}`}>
+      <div className={`flex items-center ${className}`}>
         <div className="spinner-border spinner-border-sm me-2" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -268,7 +268,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
                   href="https://github.com/remix-project-org/remix-desktop/releases"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-decoration-none"
+                  className="no-underline"
                 >
                   releases page
                 </a>
@@ -284,7 +284,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
     <div className={`desktop-download ${compact ? 'compact' : 'full'} ${variant === 'span' ? 'span-variant' : ''} ${className}`} style={style}>
       {variant === 'span' ? (
         // Span variant - for use in dropdown items
-        <div className="d-flex align-items-center">
+        <div className="flex items-center">
           {detectedDownload ? (
             <CustomTooltip
               placement="top"
@@ -293,7 +293,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
             >
               <a
                 href={detectedDownload.url}
-                className="text-decoration-none d-flex align-items-center"
+                className="no-underline flex items-center"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: 'inherit' }}
@@ -324,7 +324,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
             >
               <a
                 href={releaseData.html_url}
-                className="text-decoration-none d-flex align-items-center gap-2"
+                className="no-underline flex items-center gap-2"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: 'inherit' }}
@@ -347,7 +347,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
         </div>
       ) : compact ? (
         // Compact layout - single line with additional info below
-        <div className="d-flex flex-column gap-1">
+        <div className="flex flex-col gap-1">
           {detectedDownload ? (
             <>
               <CustomTooltip
@@ -357,7 +357,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
               >
                 <a
                   href={detectedDownload.url}
-                  className="btn btn-sm btn-primary d-flex align-items-center gap-2"
+                  className="btn btn-sm btn-primary flex items-center gap-2"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackDownloadClick(detectedDownload.platform, detectedDownload.filename, 'compact')}
@@ -381,7 +381,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
                     href={releaseData.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-decoration-none text-muted"
+                    className="no-underline text-muted"
                   >
                     <FormattedMessage
                       id="desktopDownload.otherVersions"
@@ -400,7 +400,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
               >
                 <a
                   href={releaseData.html_url}
-                  className="btn btn-sm btn-primary d-flex align-items-center gap-2"
+                  className="btn btn-sm btn-primary flex items-center gap-2"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackDownloadClick(undefined, undefined, 'compact-fallback')}
@@ -428,8 +428,8 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
         </div>
       ) : (
         // Full layout - original multi-line design
-        <div className="d-flex flex-column gap-2">
-          <div className="d-flex align-items-center gap-2">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
             <h5 className="mb-0">
               <FormattedMessage id="desktopDownload.title" defaultMessage="Remix Desktop" />
             </h5>
@@ -447,7 +447,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
           </div>
 
           {detectedDownload ? (
-            <div className="d-flex flex-column gap-2">
+            <div className="flex flex-col gap-2">
               <CustomTooltip
                 placement="top"
                 tooltipText={`Download ${detectedDownload.filename} (${formatSize(detectedDownload.size)})`}
@@ -455,7 +455,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
               >
                 <a
                   href={detectedDownload.url}
-                  className="btn btn-primary d-flex align-items-center gap-2"
+                  className="btn btn-primary flex items-center gap-2"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackDownloadClick(detectedDownload.platform, detectedDownload.filename, 'full')}
@@ -480,7 +480,7 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
                     href={releaseData.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-decoration-none text-muted"
+                    className="no-underline text-muted"
                   >
                     <FormattedMessage
                       id="desktopDownload.otherVersions"
@@ -491,10 +491,10 @@ export const DesktopDownload: React.FC<DesktopDownloadProps> = ({
               </div>
             </div>
           ) : (
-            <div className="d-flex flex-column gap-2">
+            <div className="flex flex-col gap-2">
               <a
                 href={releaseData.html_url}
-                className="btn btn-primary d-flex align-items-center gap-2"
+                className="btn btn-primary flex items-center gap-2"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackDownloadClick(undefined, undefined, 'full-fallback')}

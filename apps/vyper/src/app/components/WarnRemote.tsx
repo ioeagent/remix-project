@@ -10,7 +10,7 @@ function WarnRemoteLabel({environment}: Props) {
   }
 
   return (
-    <small className="mx-4 text-warning pb-4"></small>
+    <small className="mx-6 text-warning pb-6"></small>
   )
 }
 

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { OverlayTrigger, Popover } from 'react-bootstrap'
+
 import { TooltipPopupProps } from '../types'
 import './tooltip-popup.module.css'
+import { OverlayTrigger, Popover } from '@remix-ui/helper'
 
 const popover = (title?: string, content?: string | React.ReactNode) => (
   <Popover id="popover-basic" className="bg-danger border-danger">

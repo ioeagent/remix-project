@@ -44,7 +44,7 @@ export const Find = () => {
               tooltipText={intl.formatMessage({
                 id: 'search.matchCase'
               })}
-              tooltipClasses="text-nowrap"
+              tooltipClasses="whitespace-nowrap"
               tooltipId="searchCaseSensitiveTooltip"
               placement="top-start"
             >
@@ -64,7 +64,7 @@ export const Find = () => {
               tooltipText={intl.formatMessage({
                 id: 'search.matchWholeWord'
               })}
-              tooltipClasses="text-nowrap"
+              tooltipClasses="whitespace-nowrap"
               tooltipId="searchWholeWordTooltip"
               placement="top-start"
             >
@@ -84,7 +84,7 @@ export const Find = () => {
               tooltipText={intl.formatMessage({
                 id: 'search.useRegularExpression'
               })}
-              tooltipClasses="text-nowrap"
+              tooltipClasses="whitespace-nowrap"
               tooltipId="useRegularExpressionTooltip"
               placement="bottom-start"
             >

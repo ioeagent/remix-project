@@ -48,7 +48,7 @@ export const BackupItem: React.FC<BackupItemProps> = ({
   const relativeDate = formatRelativeDate(backup.lastModified)
 
   return (
-    <div className="d-flex align-items-center py-1 px-2 border-bottom">
+    <div className="flex items-center py-1 px-2 border-bottom">
       <i className="fas fa-archive me-1 text-muted" style={{ fontSize: '0.75rem' }}></i>
       {isEncrypted && (
         <CustomTooltip
@@ -62,7 +62,7 @@ export const BackupItem: React.FC<BackupItemProps> = ({
         placement="top"
         tooltipText={`${workspaceName} • ${backupDate} • ${formatSize(backup.size)}${isEncrypted ? ' 🔐' : ''}`}
       >
-        <div className="flex-grow-1 text-truncate" style={{ minWidth: 0, cursor: 'default' }}>
+        <div className="grow truncate" style={{ minWidth: 0, cursor: 'default' }}>
           <span className="small">
             {relativeDate}
           </span>

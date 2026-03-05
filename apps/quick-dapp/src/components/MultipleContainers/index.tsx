@@ -425,11 +425,11 @@ export function MultipleContainers({
       modifiers={modifiers}
     >
       <div
-        className="row pt-0"
+        className="flex flex-wrap pt-0"
         style={{
           boxSizing: 'border-box',
           padding: 20,
-          gridAutoFlow: vertical ? 'row' : 'column',
+          gridAutoFlow: vertical ? 'flex flex-wrap' : 'column',
         }}
       >
         <SortableContext

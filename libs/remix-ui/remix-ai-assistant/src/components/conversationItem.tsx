@@ -53,14 +53,14 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 
   return (
     <div
-      className={`conversation-item p-3 mb-1 rounded-3 cursor-pointer position-relative ${active ? 'conversation-item-active' : ''}`}
+      className={`conversation-item p-4 mb-1 rounded-3 cursor-pointer position-relative ${active ? 'conversation-item-active' : ''}`}
       onClick={onClick}
       data-id={`conversation-item-${conversation.id}`}
       data-theme={theme?.toLowerCase()}
     >
-      <div className="d-flex justify-content-between align-items-start">
-        <div className="flex-grow-1 overflow-hidden pe-2">
-          <div className="conversation-title text-truncate mb-1 text-light-emphasis" data-id="conversation-item-title">
+      <div className="flex justify-between items-start">
+        <div className="grow overflow-hidden pe-2">
+          <div className="conversation-title truncate mb-1 text-light-emphasis" data-id="conversation-item-title">
             {conversation.title}
           </div>
           <div className="conversation-meta text-light-emphasis small" data-id="conversation-item-meta">
@@ -83,7 +83,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
           {showMenu && (
             <div className="conversation-menu position-absolute end-0 mt-1 shadow-sm">
               <button
-                className="conversation-menu-item w-100 text-start"
+                className="conversation-menu-item w-full text-left"
                 onClick={(e) => {
                   e.stopPropagation()
                   onArchive(e)
@@ -94,7 +94,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
                 {conversation.archived ? 'Unarchive' : 'Archive'}
               </button>
               <button
-                className="conversation-menu-item conversation-menu-item-danger w-100 text-start"
+                className="conversation-menu-item conversation-menu-item-danger w-full text-left"
                 onClick={(e) => {
                   e.stopPropagation()
                   onDelete(e)

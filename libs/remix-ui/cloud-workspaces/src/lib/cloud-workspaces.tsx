@@ -86,8 +86,8 @@ export const RemixUICloudWorkspaces: React.FC<CloudWorkspacesProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="p-3 text-center">
-        <i className="fas fa-cloud fa-3x mb-3 text-muted"></i>
+      <div className="p-4 text-center">
+        <i className="fas fa-cloud fa-3x mb-4 text-muted"></i>
         <p className="text-muted">
           <FormattedMessage id="cloudWorkspaces.loginRequired" defaultMessage="Please log in to view your cloud workspaces" />
         </p>
@@ -112,7 +112,7 @@ export const RemixUICloudWorkspaces: React.FC<CloudWorkspacesProps> = ({
 
   return (
     <CloudWorkspacesProvider value={contextValue}>
-      <div className="cloud-workspaces-container h-100 d-flex flex-column" style={{ fontSize: '0.85rem' }}>
+      <div className="cloud-workspaces-container h-full flex flex-col" style={{ fontSize: '0.85rem' }}>
         {/* Current Workspace Section - shows local/cloud names, save/backup/restore buttons */}
         <CurrentWorkspaceSection plugin={plugin} />
 

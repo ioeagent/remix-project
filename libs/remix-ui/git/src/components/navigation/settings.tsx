@@ -19,8 +19,8 @@ export const SettingsNavigation = ({ eventKey, activePanel, callback }) => {
 
   return (
     <>
-      <div className={'d-flex justify-content-between ' + (activePanel === eventKey ? 'bg-light' : '')}>
-        <span onClick={() => handleClick()} role={'button'} className='nav d-flex justify-content-start align-items-center w-75 ms-1'>
+      <div className={'flex justify-between ' + (activePanel === eventKey ? 'bg-light' : '')}>
+        <span onClick={() => handleClick()} role={'button'} className='nav flex justify-start items-center w-3/4 ms-1'>
           {
             activePanel === eventKey ? <FontAwesomeIcon className='' icon={faCaretDown}></FontAwesomeIcon> : <FontAwesomeIcon className='' icon={faCaretRight}></FontAwesomeIcon>
           }
@@ -28,7 +28,7 @@ export const SettingsNavigation = ({ eventKey, activePanel, callback }) => {
 
         </span>
 
-        <span className='d-flex justify-content-end align-items-center w-25'>
+        <span className='flex justify-end items-center w-1/4'>
           <CustomTooltip tooltipText={<FormattedMessage id="Missing values" />}>
             <button onClick={async () => { await pluginactions.loadFiles() }} className='btn btn-sm text-warning'><FontAwesomeIcon icon={faTriangleExclamation} className="" /></button>
           </CustomTooltip>

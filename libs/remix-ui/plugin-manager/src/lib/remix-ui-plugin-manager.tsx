@@ -215,8 +215,8 @@ export const RemixUiPluginManager = ({ pluginComponent }: RemixUiPluginManagerPr
         selectedCategories={selectedCategories}
         setSelectedCategories={setSelectedCategories}
       >
-        <section data-id="pluginManagerComponentPluginManagerSection" className="px-3">
-          <nav ref={tabsRef} className="plugin-manager-tabs mt-2 d-flex flex-row">
+        <section data-id="pluginManagerComponentPluginManagerSection" className="px-4">
+          <nav ref={tabsRef} className="plugin-manager-tabs mt-2 flex flex-row">
             <a
               data-id="pluginManagerAllTab"
               className={`nav-link ${activeTab === 'all' ? 'active' : ''}`}
@@ -263,7 +263,7 @@ export const RemixUiPluginManager = ({ pluginComponent }: RemixUiPluginManagerPr
               </span>
             </a>
           </nav>
-          <div className="g-3 mt-3">{renderPluginList()}</div>
+          <div className="g-3 mt-4">{renderPluginList()}</div>
         </section>
       </RootView>
     </ThemeContext.Provider>

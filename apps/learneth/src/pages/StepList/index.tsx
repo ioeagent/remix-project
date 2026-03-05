@@ -25,7 +25,7 @@ export function normalizeMarkdown(input: string): string {
 const Antenna = ({ level }: { level: number }) => {
   const active = Math.min(Math.max(level, 0), 3)
   return (
-    <span className="antenna d-inline-flex align-items-end">
+    <span className="antenna inline-flex items-end">
       {[0, 1, 2].map(i => (
         <span
           key={i}
@@ -93,7 +93,7 @@ export default function StepListPage(): JSX.Element {
   }
 
   return (
-    <div className="mb-5">
+    <div className="mb-12">
       <div className="fixed-top">
         <div className="bg-light">
           <BackButton />
@@ -102,14 +102,14 @@ export default function StepListPage(): JSX.Element {
 
       <div className="menuspacer" />
 
-      <div className="container-fluid">
-        <article className="card course-hero mb-3 border border-secondary">
+      <div className="w-full">
+        <article className="card course-hero mb-4 border border-secondary">
           <div className="card-body">
             {entity?.id && completedTutorials[entity?.id] && (
                 <CustomTooltip
                 placement={"auto"}
                 tooltipId="tutorialCompletedTooltip"
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
                 tooltipText={<span>{'Completed'}</span>}
               ><span className="badge bg-success float-end">Completed</span></CustomTooltip>                      
               )}
@@ -169,22 +169,22 @@ export default function StepListPage(): JSX.Element {
                   ),
                   // Headings
                   h1: ({ node, ...props }) => (
-                    <h1 className="ai-heading ai-h1 fs-5 mb-1" {...props} />
+                    <h1 className="ai-heading ai-h1 text-lg mb-1" {...props} />
                   ),
                   h2: ({ node, ...props }) => (
-                    <h2 className="ai-heading ai-h2 fs-5 mb-1" {...props} />
+                    <h2 className="ai-heading ai-h2 text-lg mb-1" {...props} />
                   ),
                   h3: ({ node, ...props }) => (
-                    <h3 className="ai-heading ai-h3 fs-5 mb-1" {...props} />
+                    <h3 className="ai-heading ai-h3 text-lg mb-1" {...props} />
                   ),
                   h4: ({ node, ...props }) => (
-                    <h4 className="ai-heading ai-h4 fs-6 mb-1" {...props} />
+                    <h4 className="ai-heading ai-h4 text-base mb-1" {...props} />
                   ),
                   h5: ({ node, ...props }) => (
-                    <h5 className="ai-heading ai-h5 fs-6 mb-1" {...props} />
+                    <h5 className="ai-heading ai-h5 text-base mb-1" {...props} />
                   ),
                   h6: ({ node, ...props }) => (
-                    <h6 className="ai-heading ai-h6 fs-6 mb-1" {...props} />
+                    <h6 className="ai-heading ai-h6 text-base mb-1" {...props} />
                   ),
                   // Lists
                   ul: ({ node, ...props }) => (
@@ -253,7 +253,7 @@ export default function StepListPage(): JSX.Element {
 
             <button
               type="button"
-              className="btn btn-primary no-wiggle-btn btn-sm w-100 d-flex align-items-center justify-content-center mt-3"
+              className="btn btn-primary no-wiggle-btn btn-sm w-full flex items-center justify-center mt-4"
               onClick={() => {
                 trackMatomoEvent(remixClient, { 
                   category: 'learneth', 
@@ -287,9 +287,9 @@ export default function StepListPage(): JSX.Element {
           </div> 
         </section>
 
-        <hr className="hr-themed mb-3 mt-0" />
+        <hr className="hr-themed mb-4 mt-0" />
 
-        <div className="d-flex align-items-baseline justify-content-between mb-2">
+        <div className="flex items-baseline justify-between mb-2">
           <h3 className="h6 m-0">Syllabus</h3>
           <div className="small text-muted">{stepsLen} chapters</div>
         </div>
@@ -300,7 +300,7 @@ export default function StepListPage(): JSX.Element {
               <Link
                 key={i}
                 to={`/detail?id=${id}&stepId=${i}`}
-                className="list-group-item list-group-item-action d-flex align-items-center justify-content-between syllabus-item"
+                className="list-group-item list-group-item-action flex items-center justify-between syllabus-item"
                 onClick={() => trackMatomoEvent(remixClient, { 
                   category: 'learneth', 
                   action: 'step_slide_in', 
@@ -308,8 +308,8 @@ export default function StepListPage(): JSX.Element {
                   isClick: true 
                 })}
               >
-                <span className="text-truncate">{step.name}</span>
-                <span className="d-flex align-items-center text-muted">
+                <span className="truncate">{step.name}</span>
+                <span className="flex items-center text-muted">
                   <span className="small mr-2">{stepMinutes(step)}</span>
                   <i className="fas fa-chevron-right opacity-75" aria-hidden="true"></i>
                 </span>

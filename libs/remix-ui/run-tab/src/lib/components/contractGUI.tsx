@@ -4,8 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import * as remixLib from '@remix-project/remix-lib'
 import { ContractGUIProps } from '../types'
 import { CopyToClipboard } from '@remix-ui/clipboard'
-import { CustomTooltip, ProxyAddressToggle, ProxyDropdownMenu, shortenDate, shortenProxyAddress, unavailableProxyLayoutMsg, upgradeReportMsg } from '@remix-ui/helper'
-import { Dropdown } from 'react-bootstrap'
+import { CustomTooltip, Dropdown, ProxyAddressToggle, ProxyDropdownMenu, shortenDate, shortenProxyAddress, unavailableProxyLayoutMsg, upgradeReportMsg } from '@remix-ui/helper'
 import { getCompatibleChains, isChainCompatible, isChainCompatibleWithAnyFork } from '../actions/evmmap'
 
 const txFormat = remixLib.execution.txFormat
@@ -337,9 +336,9 @@ export function ContractGUI(props: ContractGUIProps) {
                 : buttonOptions.title
           }
         >
-          <div className="d-flex p-0 wrapperElement" onClick={handleActionClick} data-id={`${buttonOptions.dataId}-wrapper`} data-bs-title={`${buttonOptions.title}-wrapper`}>
+          <div className="flex p-0 wrapperElement" onClick={handleActionClick} data-id={`${buttonOptions.dataId}-wrapper`} data-bs-title={`${buttonOptions.title}-wrapper`}>
             <button
-              className={`udapp_instanceButton text-nowrap overflow-hidden text-truncate ${props.widthClass} btn btn-sm ${buttonOptions.classList}`}
+              className={`udapp_instanceButton whitespace-nowrap overflow-hidden truncate ${props.widthClass} btn btn-sm ${buttonOptions.classList}`}
               data-id={`${buttonOptions.dataId}`}
               data-bs-title={`${buttonOptions.title}`}
               disabled={(toggleUpgradeImp && !proxyAddress) || props.disabled || (props.inputs !== '' && basicInput === '')}
@@ -372,7 +371,7 @@ export function ContractGUI(props: ContractGUIProps) {
       <div className="udapp_contractActionsContainerMulti" style={{ display: toggleContainer ? 'flex' : 'none' }}>
         <div className="udapp_contractActionsContainerMultiInner text-dark">
           <div onClick={switchMethodViewOff} className="udapp_multiHeader">
-            <div className="udapp_multiTitle run-instance-multi-title pt-3">{title}</div>
+            <div className="udapp_multiTitle run-instance-multi-title pt-4">{title}</div>
             <i data-id="udapp-instance-multi-caret" className="fas fa-angle-up udapp_methCaret"></i>
           </div>
           <div>
@@ -380,7 +379,7 @@ export function ContractGUI(props: ContractGUIProps) {
               return (
                 <div className="udapp_multiArg" key={index}>
                   <label htmlFor={inp.name}> {inp.name}: </label>
-                  <CustomTooltip placement="left-end" tooltipId="udappContractActionsTooltip" tooltipClasses="text-nowrap" tooltipText={inp.name}>
+                  <CustomTooltip placement="left-end" tooltipId="udappContractActionsTooltip" tooltipClasses="whitespace-nowrap" tooltipText={inp.name}>
                     <input
                       ref={(el) => {
                         multiFields.current[index] = el
@@ -395,7 +394,7 @@ export function ContractGUI(props: ContractGUIProps) {
               )
             })}
           </div>
-          <div className="d-flex udapp_group udapp_multiArg">
+          <div className="flex udapp_group udapp_multiArg">
             <CopyToClipboard tip={intl.formatMessage({ id: 'udapp.copyCalldata' })} icon="fa-clipboard" direction={'bottom'} getContent={getEncodedCall}>
               <button className="btn remixui_copyButton">
                 <i id="copyCalldata" className="m-0 remixui_copyIcon far fa-copy" aria-hidden="true"></i>
@@ -410,15 +409,15 @@ export function ContractGUI(props: ContractGUIProps) {
                 </label>
               </button>
             </CopyToClipboard>
-            <CustomTooltip placement={'auto-end'} tooltipClasses="text-nowrap" tooltipId="remixUdappInstanceButtonTooltip" tooltipText={buttonOptions.title}>
+            <CustomTooltip placement={'auto-end'} tooltipClasses="whitespace-nowrap" tooltipId="remixUdappInstanceButtonTooltip" tooltipText={buttonOptions.title}>
               <div onClick={handleExpandMultiClick}>
                 <button
                   type="button"
                   data-id={buttonOptions.dataId}
-                  className={`udapp_instanceButton btn ${buttonOptions.classList} text-center d-flex justify-content-center align-items-center`}
+                  className={`udapp_instanceButton btn ${buttonOptions.classList} text-center flex justify-center items-center`}
                   disabled={props.disabled || (props.inputs !== '' && basicInput === '')}
                 >
-                  <div className="text-center d-flex justify-content-center align-items-center">
+                  <div className="text-center flex justify-center items-center">
                     {buttonOptions.content}
                   </div>
                 </button>
@@ -429,8 +428,8 @@ export function ContractGUI(props: ContractGUIProps) {
       </div>
       {props.deployOption && (props.deployOption || []).length > 0 ? (
         <>
-          <div className="d-flex justify-content-between mt-3">
-            <div className="d-flex py-1 align-items-center form-check">
+          <div className="flex justify-between mt-4">
+            <div className="flex py-1 items-center form-check">
               <input
                 id="deployWithProxy"
                 data-id="contractGUIDeployWithProxy"
@@ -439,7 +438,7 @@ export function ContractGUI(props: ContractGUIProps) {
                 onChange={(e) => handleDeployProxySelect(e.target.checked)}
                 checked={deployState.deploy}
               />
-              <label htmlFor="deployWithProxy" data-id="contractGUIDeployWithProxyLabel" className="m-0 form-check-label w-100 form-check-label udapp_checkboxAlign">
+              <label htmlFor="deployWithProxy" data-id="contractGUIDeployWithProxyLabel" className="m-0 form-check-label w-full form-check-label udapp_checkboxAlign">
                 <FormattedMessage id="udapp.deployWithProxy" />
               </label>
             </div>
@@ -452,12 +451,12 @@ export function ContractGUI(props: ContractGUIProps) {
             </div>
           </div>
           {props.initializerOptions && props.initializerOptions.initializeInputs ? (
-            <div className={`ps-4 flex-column ${toggleDeployProxy ? 'd-flex' : 'd-none'}`}>
-              <div className={`flex-column 'd-flex'}`}>
+            <div className={`ps-6 flex-col ${toggleDeployProxy ? 'flex' : 'hidden'}`}>
+              <div className={`flex-col 'flex'}`}>
                 {props.initializerOptions.inputs.inputs.map((inp, index) => {
                   return (
                     <div className="mb-2" key={index}>
-                      <label className="mt-2 text-start d-block" htmlFor={inp.name}>
+                      <label className="mt-2 text-left block" htmlFor={inp.name}>
                         {' '}
                         {inp.name}:{' '}
                       </label>
@@ -476,8 +475,8 @@ export function ContractGUI(props: ContractGUIProps) {
               </div>
             </div>
           ) : null}
-          <div className="d-flex justify-content-between">
-            <div className="d-flex py-1 align-items-center form-check">
+          <div className="flex justify-between">
+            <div className="flex py-1 items-center form-check">
               <input
                 id="upgradeImplementation"
                 data-id="contractGUIUpgradeImplementation"
@@ -494,7 +493,7 @@ export function ContractGUI(props: ContractGUIProps) {
               <i className={!toggleUpgradeImp ? 'fas fa-angle-right pt-2' : 'fas fa-angle-down'} aria-hidden="true"></i>
             </span>
           </div>
-          <div className={`ps-4 flex-column ${toggleUpgradeImp ? 'd-flex' : 'd-none'}`}>
+          <div className={`ps-6 flex-col ${toggleUpgradeImp ? 'flex' : 'hidden'}`}>
             <div data-id="proxy-dropdown-items">
               <Dropdown onToggle={toggleDropdown} show={showDropdown}>
                 <Dropdown.Toggle
@@ -502,15 +501,15 @@ export function ContractGUI(props: ContractGUIProps) {
                   as={ProxyAddressToggle}
                   address={proxyAddress}
                   onChange={handleAddressChange}
-                  className="d-inline-block border border-dark bg-dark"
+                  className="inline-block border border-dark bg-dark"
                 />
 
                 {props.proxy.deployments.length > 0 && (
-                  <Dropdown.Menu as={ProxyDropdownMenu} className="w-100 form-select" style={{ overflow: 'hidden' }}>
+                  <Dropdown.Menu as={ProxyDropdownMenu} className="w-full form-select" style={{ overflow: 'hidden' }}>
                     {props.proxy.deployments.map((deployment, index) => (
                       <CustomTooltip
                         placement={'right'}
-                        tooltipClasses="text-nowrap"
+                        tooltipClasses="whitespace-nowrap"
                         tooltipId={`proxyAddressTooltip${index}`}
                         tooltipText={<FormattedMessage id="udapp.tooltipText13" values={{ date: shortenDate(deployment.date) }} />}
                         key={index}
@@ -526,7 +525,7 @@ export function ContractGUI(props: ContractGUIProps) {
                             {proxyAddress === deployment.address ? (
                               <span>&#10003; {deployment.contractName + ' ' + shortenProxyAddress(deployment.address)} </span>
                             ) : (
-                              <span className="ps-3">{deployment.contractName + ' ' + shortenProxyAddress(deployment.address)}</span>
+                              <span className="ps-4">{deployment.contractName + ' ' + shortenProxyAddress(deployment.address)}</span>
                             )}
                           </span>
                         </Dropdown.Item>
@@ -536,10 +535,10 @@ export function ContractGUI(props: ContractGUIProps) {
                 )}
               </Dropdown>
             </div>
-            <div className="d-flex">
+            <div className="flex">
               <div className="mb-2">
                 {proxyAddressError && (
-                  <span className="text-lowercase text-danger" data-id="errorMsgProxyAddress" style={{ fontSize: '.8em' }}>
+                  <span className="lowercase text-danger" data-id="errorMsgProxyAddress" style={{ fontSize: '.8em' }}>
                     {proxyAddressError}
                   </span>
                 )}

@@ -310,13 +310,13 @@ const RemixApp = (props: IRemixAppUi) => {
               <OriginWarning></OriginWarning>
               <MatomoDialog hide={!appReady} managePreferencesFn={() => setShowManagePreferencesDialog(true)}></MatomoDialog>
               {showManagePreferencesDialog && <ManagePreferencesDialog></ManagePreferencesDialog>}
-              <div className="d-flex flex-column col-12 vh-100">
+              <div className="flex flex-col w-full h-screen">
                 {!props.app.desktopClientMode && (
                   <div className='top-bar'>
                     {props.app.topBar.render()}
                   </div>
                 )}
-                <div className={`remixIDE ${appReady ? '' : 'd-none'}`} data-id="remixIDE">
+                <div className={`remixIDE ${appReady ? '' : 'hidden'}`} data-id="remixIDE">
                   {showAiChatHistory ? <div className={`position-absolute z-3 ${themeTracker.name.toLowerCase() === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark'} rounded-3 p-1`} style={floatingChatStyle}>
                     <FloatingChatHistory
                       conversations={props.app.remixAiAssistant.conversations}
@@ -342,7 +342,7 @@ const RemixApp = (props: IRemixAppUi) => {
                     ref={sidePanelRef}
                     id="side-panel"
                     data-id="remixIdeSidePanel"
-                    className={`sidepanel border-end border-start ${hideSidePanel ? 'd-none' : ''}`}
+                    className={`sidepanel border-end border-start ${hideSidePanel ? 'hidden' : ''}`}
                   >
                     {props.app.sidePanel.render()}
                   </div>
@@ -357,10 +357,10 @@ const RemixApp = (props: IRemixAppUi) => {
                     layoutPosition='left'
                     coeff={coeff}
                   ></DragBar>
-                  <div id="main-panel" data-id="remixIdeMainPanel" className="mainpanel d-flex">
+                  <div id="main-panel" data-id="remixIdeMainPanel" className="mainpanel flex">
                     <RemixUIMainPanel layout={props.app.layout}></RemixUIMainPanel>
                   </div>
-                  <div id="right-side-panel" ref={pinnedPanelRef} data-id="remixIdePinnedPanel" className={`flex-row-reverse pinnedpanel border-end border-start ${hidePinnedPanel ? 'd-none' : 'd-flex'}`}>
+                  <div id="right-side-panel" ref={pinnedPanelRef} data-id="remixIdePinnedPanel" className={`flex-row-reverse pinnedpanel border-end border-start ${hidePinnedPanel ? 'hidden' : 'flex'}`}>
                     {props.app.rightSidePanel.render()}
                   </div>
                   {

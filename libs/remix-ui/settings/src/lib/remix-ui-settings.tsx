@@ -392,28 +392,28 @@ export const RemixUiSettings = (props: RemixUiSettingsProps) => {
   return (
     <ThemeContext.Provider value={state.themeQuality}>
       {settingsState.toaster.value ? <Toaster message={settingsState.toaster.value as string} /> : null}
-      <div className="container-fluid bg-light h-100 d-flex flex-column">
-        <div className='pt-5'></div>
-        <div className='d-flex flex-row pb-4 gap-4'>
-          <div data-id="settings-sidebar-header" className="ps-3 remix-settings-sidebar" style={{ width: '24em' }}>
-            <h3 className={`fw-semibold ${state.themeQuality.name === 'dark' ? 'text-white' : 'text-black'}`} style={{ fontSize: '1.5rem' }}><FormattedMessage id="settings.displayName" /></h3>
+      <div className="w-full bg-light h-full flex flex-col">
+        <div className='pt-12'></div>
+        <div className='flex flex-row pb-6 gap-6'>
+          <div data-id="settings-sidebar-header" className="ps-4 remix-settings-sidebar" style={{ width: '24em' }}>
+            <h3 className={`font-semibold ${state.themeQuality.name === 'dark' ? 'text-white' : 'text-black'}`} style={{ fontSize: '1.5rem' }}><FormattedMessage id="settings.displayName" /></h3>
           </div>
-          <div className='d-flex flex-grow-1 remix-settings-search' style={{ maxWidth: '53.5em', minHeight: '4em' }}>
+          <div className='flex grow remix-settings-search' style={{ maxWidth: '53.5em', minHeight: '4em' }}>
             <span className="input-group-text rounded-0 border-end-0 pe-0" style={{ backgroundColor: state.themeQuality.name === 'dark' ? 'var(--custom-onsurface-layer-4)' : 'var(--bs-body-bg)' }}><i className="fa fa-search"></i></span>
-            <input type="text" className="form-control shadow-none h-100 rounded-0 border-start-0 no-outline w-100" placeholder="Search settings" style={{ minWidth: '21.5em' }} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <input type="text" className="form-control shadow-none h-full rounded-0 border-start-0 no-outline w-full" placeholder="Search settings" style={{ minWidth: '21.5em' }} value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </div>
         {filteredSections.length === 0 ? <div className="text-info text-center cursor-pointer">No match found</div> :
-          <div className="d-flex flex-wrap align-items-stretch flex-fill gap-4" style={{ minHeight: 0, overflow: 'hidden' }}>
+          <div className="flex flex-wrap items-stretch flex-1 gap-6" style={{ minHeight: 0, overflow: 'hidden' }}>
             {/* Sidebar */}
             <div
-              className="flex-column bg-transparent p-0 px-3 remix-settings-sidebar overflow-auto"
+              className="flex-col bg-transparent p-0 px-4 remix-settings-sidebar overflow-auto"
               style={{ width: '25em', height: '100%' }}
             >
               <ul className="list-unstyled">
                 {filteredSections.map((section, index) => (
                   <li
-                    className={`nav-item ${index !== filteredSections.length - 1 ? 'border-bottom' : ''} px-0 py-3 ${selected === section.key ? state.themeQuality.name === 'dark' ? 'active text-white' : 'active text-black' : 'text-secondary'}`}
+                    className={`nav-item ${index !== filteredSections.length - 1 ? 'border-bottom' : ''} px-0 py-4 ${selected === section.key ? state.themeQuality.name === 'dark' ? 'active text-white' : 'active text-black' : 'text-secondary'}`}
                     key={index}
                     style={{ cursor: 'pointer' }}
                   >
@@ -425,7 +425,7 @@ export const RemixUiSettings = (props: RemixUiSettingsProps) => {
                         setFilteredSection(section)
                       }}
                     >
-                      <h5 className={`fw-semibold mb-2 ${selected === section.key ? state.themeQuality.name === 'dark' ? 'active text-white' : 'active text-black' : 'text-secondary'}`} style={{ fontSize: '1.1rem' }}><FormattedMessage id={section.label} /></h5>
+                      <h5 className={`font-semibold mb-2 ${selected === section.key ? state.themeQuality.name === 'dark' ? 'active text-white' : 'active text-black' : 'text-secondary'}`} style={{ fontSize: '1.1rem' }}><FormattedMessage id={section.label} /></h5>
                       {selected !== section.key && <span style={{ fontSize: '0.85rem' }}><FormattedMessage id={section.description} /></span>}
                     </a>
                   </li>
@@ -434,10 +434,10 @@ export const RemixUiSettings = (props: RemixUiSettingsProps) => {
             </div>
             {/* Main Content */}
             <div
-              className="flex-column p-0 flex-grow-1 flex-shrink-1 mw-50"
+              className="flex-col p-0 grow flex-shrink-1 mw-50"
               style={{ minWidth: 0, flexBasis: '27.3em', height: '100%' }}
             >
-              <div className="remix-settings-main h-100 overflow-auto" style={{ maxWidth: '53.5em' }}>
+              <div className="remix-settings-main h-full overflow-auto" style={{ maxWidth: '53.5em' }}>
                 <SettingsSectionUI plugin={props.plugin} section={filteredSection} state={settingsState} dispatch={dispatch} />
               </div>
             </div>

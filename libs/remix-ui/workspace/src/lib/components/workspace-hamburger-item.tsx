@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
-import { CustomTooltip, CustomMenu, CustomIconsToggle } from '@remix-ui/helper'
-import { Dropdown, NavDropdown } from 'react-bootstrap'
+import { CustomIconsToggle, CustomMenu, CustomTooltip, Dropdown, NavDropdown } from '@remix-ui/helper'
 import { FormattedMessage } from 'react-intl'
 import { appPlatformTypes, platformContext } from '@remix-ui/app'
 import { TrackingContext } from '@remix-ide/tracking'
@@ -26,7 +25,7 @@ export function HamburgerMenuItem(props: HamburgerMenuItemProps) {
     <>
       {props.platforms.includes(platform) && !hideOption?(
         <Dropdown.Item>
-          <CustomTooltip placement="right" tooltipId={uid + 'Tooltip'} tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id={'filePanel.workspace.' + props.kind} />}>
+          <CustomTooltip placement="right" tooltipId={uid + 'Tooltip'} tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id={'filePanel.workspace.' + props.kind} />}>
             <div
               data-id={uid}
               key={uid + '-fe-ws'}
@@ -57,7 +56,7 @@ export function NavHamburgerMenuItem(props: HamburgerMenuItemProps) {
   return (
     <>
       <NavDropdown.Item>
-        <CustomTooltip placement="right" tooltipId={uid + 'Tooltip'} tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id={'filePanel.workspace.' + props.kind} />}>
+        <CustomTooltip placement="right" tooltipId={uid + 'Tooltip'} tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id={'filePanel.workspace.' + props.kind} />}>
           <div
             data-id={uid}
             key={uid + '-fe-ws'}

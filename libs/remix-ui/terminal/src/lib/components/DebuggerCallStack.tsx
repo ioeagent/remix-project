@@ -316,14 +316,14 @@ export const DebuggerCallStack = ({ plugin }: DebuggerCallStackProps) => {
 
   if (!selectedScope) {
     return (
-      <div className="debugger-call-stack p-3">
+      <div className="debugger-call-stack p-4">
         <div className="text-muted">Select a call from Call Trace to view execution details</div>
       </div>
     )
   }
 
   return (
-    <div className="debugger-call-stack p-3 pt-0">
+    <div className="debugger-call-stack p-4 pt-0">
       <div className="call-stack-list">
         {renderExecutionItem(selectedScope, 0)}
       </div>

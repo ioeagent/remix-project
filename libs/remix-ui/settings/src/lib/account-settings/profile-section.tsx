@@ -165,7 +165,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
 
   if (loading) {
     return (
-      <div className="p-3">
+      <div className="p-4">
         <div className="spinner-border spinner-border-sm" role="status">
           <span className="sr-only">Loading...</span>
         </div>
@@ -183,23 +183,23 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
   return (
     <div>
       {error && (
-        <div className="alert alert-danger p-2 mb-3" role="alert">
+        <div className="alert alert-danger p-2 mb-4" role="alert">
           <i className="fas fa-exclamation-circle me-2"></i>
           {error}
         </div>
       )}
 
       {!isEditable && loginProvider && (
-        <div className="alert alert-info p-2 mb-3" role="alert">
+        <div className="alert alert-info p-2 mb-4" role="alert">
           <i className="fas fa-info-circle me-2"></i>
           Profile editing is only available for email login. You are currently logged in with {loginProvider}.
         </div>
       )}
 
-      <div className="bg-light rounded p-3">
-        <div className="row">
-          <div className="col-md-3 mb-3 mb-md-0 text-center">
-            <div className="mb-2 position-relative d-inline-block">
+      <div className="bg-light rounded p-4">
+        <div className="flex flex-wrap">
+          <div className="md:w-1/4 mb-4 mb-md-0 text-center">
+            <div className="mb-2 position-relative inline-block">
               {(avatarPreview || editedProfile?.avatar_url || displayProfile.avatar_url) ? (
                 <img
                   src={avatarPreview || editedProfile?.avatar_url || displayProfile.avatar_url}
@@ -212,7 +212,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
                 />
               ) : (
                 <div
-                  className="rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white"
+                  className="rounded-circle flex items-center justify-center bg-secondary text-white"
                   style={{ width: '100px', height: '100px', fontSize: '0.7rem' }}
                   title="Avatar not available"
                 >
@@ -223,7 +223,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
             <div>
               <button
                 type="button"
-                className="btn btn-sm btn-secondary d-flex align-items-center justify-content-center mx-auto"
+                className="btn btn-sm btn-secondary flex items-center justify-center mx-auto"
                 onClick={handleUploadClick}
                 disabled={!isEditable}
                 style={{ gap: '0.25rem' }}
@@ -242,8 +242,8 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
             </div>
           </div>
 
-          <div className="col-md-9">
-            <div className="mb-3">
+          <div className="md:w-3/4">
+            <div className="mb-4">
               <label className="form-label small font-weight-bold mb-1">Username</label>
               <input
                 type="text"
@@ -256,7 +256,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
               />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-4">
               <label className="form-label small font-weight-bold mb-1">Email</label>
               <input
                 type="email"
@@ -270,7 +270,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
             </div>
 
             {hasChanges && (
-              <div className="d-flex gap-2">
+              <div className="flex gap-2">
                 <button
                   className="btn btn-sm btn-primary"
                   onClick={handleSave}

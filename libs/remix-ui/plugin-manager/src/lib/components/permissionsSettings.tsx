@@ -73,7 +73,7 @@ function PermisssionsSettings() {
       <>
         {Object.keys(permissions[targetPlugin]).map((funcName) => {
           return Object.keys(permissions[targetPlugin][funcName]).map((pluginName, index) => (
-            <div className="mb-3 remixui_permissionKey" key={pluginName}>
+            <div className="mb-4 remixui_permissionKey" key={pluginName}>
               {permissions && Object.keys(permissions).length > 0 ? (
                 <>
                   <div className="remixui_checkbox">
@@ -86,7 +86,7 @@ function PermisssionsSettings() {
                         aria-describedby={`module ${pluginName} asks permission for ${funcName}`}
                       />
                       <label
-                        className="ms-4"
+                        className="ms-6"
                         htmlFor={`permission-checkbox-${targetPlugin}-${funcName}-${targetPlugin}`}
                         data-id={`permission-label-${targetPlugin}-${funcName}-${targetPlugin}`}
                       >
@@ -147,7 +147,7 @@ function PermisssionsSettings() {
         <CustomTooltip
           placement={'top'}
           tooltipId="pmPermissions"
-          tooltipClasses="text-nowrap"
+          tooltipClasses="whitespace-nowrap"
           tooltipText={<FormattedMessage id="pluginManager.managePluginsPermissions" />}
           key={'keypmPermissions'}
         >

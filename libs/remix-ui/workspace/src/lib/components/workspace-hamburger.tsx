@@ -1,8 +1,8 @@
 import { appPlatformTypes } from '@remix-ui/app'
 import React from 'react'
-import { Dropdown } from 'react-bootstrap'
 import { HamburgerMenuItem, HamburgerSubMenuItem } from './workspace-hamburger-item'
 import { WorkspaceMetadata } from '../types'
+import { Dropdown } from '@remix-ui/helper'
 
 export interface HamburgerMenuProps {
   selectedWorkspace: WorkspaceMetadata

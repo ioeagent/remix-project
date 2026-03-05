@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Dropdown } from 'react-bootstrap'
 import './index.scss'
+import { Dropdown } from '@remix-ui/helper'
 
 function BackButton({ entity }: any) {
   const location = useLocation()
@@ -15,22 +15,22 @@ function BackButton({ entity }: any) {
 
   return (
     <div className="learneth-top-nav p-2">
-      <div className="d-flex justify-content-between align-items-center">
-        <Link to="/home" className="btn nav-button d-flex align-items-center">
+      <div className="flex justify-between items-center">
+        <Link to="/home" className="btn nav-button flex items-center">
           <i className="fas fa-chevron-left"></i>
           <span>Tutorials list</span>
         </Link>
 
         {isDetailPage && entity?.steps && (
           <Dropdown>
-            <Dropdown.Toggle className="btn nav-button d-flex align-items-center" id="syllabus-dropdown">
+            <Dropdown.Toggle className="btn nav-button flex items-center" id="syllabus-dropdown">
               <i className="fas fa-list-ul me-2"></i>
               <span>Syllabus</span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="syllabus-dropdown-menu">
-              <div className="px-3 pt-2 pb-1 d-flex justify-content-between">
-                <h6 className="fw-bold mb-0">Syllabus</h6>
+              <div className="px-4 pt-2 pb-1 flex justify-between">
+                <h6 className="font-bold mb-0">Syllabus</h6>
                 <span className="small text-muted">{entity.steps.length} chapters</span>
               </div>
               <Dropdown.Divider />
@@ -48,7 +48,7 @@ function BackButton({ entity }: any) {
       {isDetailPage && currentStep && (
         <>
           <hr className="nav-divider my-2" />
-          <div className="chapter-nav d-flex justify-content-between align-items-center">
+          <div className="chapter-nav flex justify-between items-center">
             <Link 
               to={`/detail?id=${entity.id}&stepId=${stepId - 1}`} 
               className={`btn chapter-arrow ${stepId === 0 ? 'disabled' : ''}`}

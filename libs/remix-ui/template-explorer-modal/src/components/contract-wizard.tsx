@@ -151,30 +151,30 @@ export function ContractWizard () {
   }
 
   return (
-    <section className="container-fluid">
-      <div className="row g-3">
-        <div className="col-12 d-flex align-items-center justify-content-between">
-          {state.manageCategory === 'Template' ? <div className="d-flex align-items-center gap-2">
+    <section className="w-full">
+      <div className="flex flex-wrap g-3">
+        <div className="w-full flex items-center justify-between">
+          {state.manageCategory === 'Template' ? <div className="flex items-center gap-2">
             {showEditModal ? <input data-id="contract-wizard-workspace-name-input" className="form-control form-control-sm" value={uniqueWorkspaceName} onChange={(e) => {
               setUniqueWorkspaceName(e.target.value)
-            }} /> : <span data-id="contract-wizard-workspace-name-span" className={`fw-semibold fs-6 ${theme?.name === 'Light' ? 'text-dark' : 'text-white'}`}>
+            }} /> : <span data-id="contract-wizard-workspace-name-span" className={`font-semibold text-base ${theme?.name === 'Light' ? 'text-dark' : 'text-white'}`}>
               {uniqueWorkspaceName}
             </span>}
             <i data-id="contract-wizard-edit-icon" className={`${showEditModal ? 'fas fa-lock ms-2' : " ms-2 fas fa-edit"}`} onClick={() => setShowEditModal(!showEditModal)}></i>
-          </div> : <div className="w-50"></div>}
+          </div> : <div className="w-1/2"></div>}
           <ContractTagSelector switching={switching} />
         </div>
 
-        <div data-id="contract-wizard-container" className="col-12 col-lg-3">
-          <div data-id="contract-wizard-settings-container" className="border rounded p-3 h-100">
-            <div className="mb-3">
-              <div className="fw-semibold mb-2">Contract settings</div>
-              <label data-id="contract-wizard-token-name-label" className="form-label text-uppercase small mb-1">Token name</label>
+        <div data-id="contract-wizard-container" className="w-full lg:w-1/4">
+          <div data-id="contract-wizard-settings-container" className="border rounded p-4 h-full">
+            <div className="mb-4">
+              <div className="font-semibold mb-2">Contract settings</div>
+              <label data-id="contract-wizard-token-name-label" className="form-label uppercase small mb-1">Token name</label>
               <input data-id="contract-wizard-token-name-input" className="form-control form-control-sm" value={state.tokenName} onChange={(e) => updateContractName(e.target.value)} />
             </div>
 
-            <div className="mb-3">
-              <div data-id="contract-wizard-features-title" className="text-uppercase small fw-semibold mb-2">Features</div>
+            <div className="mb-4">
+              <div data-id="contract-wizard-features-title" className="uppercase small font-semibold mb-2">Features</div>
               <div className="form-check mb-1">
                 <input data-id="contract-wizard-mintable-checkbox" className="form-check-input" type="checkbox" id="featMintable" checked={strategy.contractOptions.mintable} onChange={() => {
                   toggleContractOption('mintable')}
@@ -195,8 +195,8 @@ export function ContractWizard () {
               </div>}
             </div>
 
-            <div className="mb-3">
-              <div className="text-uppercase small fw-semibold mb-2">Access control</div>
+            <div className="mb-4">
+              <div className="uppercase small font-semibold mb-2">Access control</div>
               <div className="form-check mb-1">
                 <input data-id="contract-wizard-access-ownable-radio" className="form-check-input" type="radio" name="accessControl" id="accessOwnable" checked={strategy.contractAccessControl==='ownable'} onChange={() => switchAccessControl('ownable')} />
                 <label className="form-check-label" htmlFor="accessOwnable">Ownable</label>
@@ -211,8 +211,8 @@ export function ContractWizard () {
               </div>
             </div>
 
-            <div className="mb-3">
-              <div className="text-uppercase small fw-semibold mb-2">Upgradability</div>
+            <div className="mb-4">
+              <div className="uppercase small font-semibold mb-2">Upgradability</div>
               <div className="form-check mb-1">
                 <input data-id="contract-wizard-upgradability-uups-checkbox" className="form-check-input" type="checkbox" id="featUups" checked={strategy.contractUpgradability.uups} onChange={() => {
                   dispatch({ type: ContractWizardAction.CONTRACT_UPGRADABILITY_UPDATE, payload: { ...strategy.contractUpgradability, uups: !strategy.contractUpgradability.uups } })
@@ -228,8 +228,8 @@ export function ContractWizard () {
           </div>
         </div>
 
-        <div className="col-12 col-lg-9">
-          <div className="border rounded p-0 h-100">
+        <div className="w-full lg:w-3/4">
+          <div className="border rounded p-0 h-full">
             <CodeMirror
               data-id="contract-wizard-editor"
               value={strategy.contractCode as string}
@@ -248,16 +248,16 @@ export function ContractWizard () {
               }}
               extensions={[javascript({ typescript: true }),vscodeDark, darkTheme]}
             />
-            <div className="d-flex mt-5 justify-content-between align-items-center gap-3 mb-2">
+            <div className="flex mt-12 justify-between items-center gap-4 mb-2">
               {state.manageCategory === 'Template' ? <div className="form-check ms-2">
                 <>
                   <input data-id="contract-wizard-initialize-as-git-repo-checkbox" className="form-check-input" type="checkbox" id="initGit" checked={state.initializeAsGitRepo}
                     onChange={(e) => dispatch({ type: ContractWizardAction.INITIALIZE_AS_GIT_REPO_UPDATE, payload: e.target.checked })} />
                   <label className="form-check-label" htmlFor="initGit">Initialize as a Git repository</label>
                 </>
-              </div> : <div className="w-50"></div>}
+              </div> : <div className="w-1/2"></div>}
 
-              <button data-id="contract-wizard-validate-workspace-button" className="btn btn-primary btn-sm me-2 justify-content-end" onClick={async () => {
+              <button data-id="contract-wizard-validate-workspace-button" className="btn btn-primary btn-sm me-2 justify-end" onClick={async () => {
                 if (state.manageCategory === 'Files') {
                   await validateAndCreateContractFile()
                 } else {

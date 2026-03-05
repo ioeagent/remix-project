@@ -57,7 +57,7 @@ export function RemixUiSolidityUmlGen({ updatedSvg, loading, fileName, themeDark
     return (
       <>
         <div className="position-absolute bg-transparent mt-2" id="buttons" style={{ zIndex: 3, top: '10', right: '2em' }}>
-          <div className="py-2 px-2 d-flex justify-content-center align-items-center">
+          <div className="py-2 px-2 flex justify-center items-center">
             <UmlDownload download={download} />
             <CustomTooltip
               tooltipText="Zoom in"
@@ -93,22 +93,22 @@ export function RemixUiSolidityUmlGen({ updatedSvg, loading, fileName, themeDark
   }
 
   const DefaultInfo = () => (
-    <div className="d-flex flex-column justify-content-center align-items-center mt-5 ms-5">
-      <h3 className="h3 align-self-start text-dark">
+    <div className="flex flex-col justify-center items-center mt-12 ms-12">
+      <h3 className="h3 self-start text-dark">
         <p>
           <FormattedMessage id="solUmlGen.text1" />
         </p>
       </h3>
-      <ul className="ms-3 justify-content-start align-self-start">
+      <ul className="ms-4 justify-start self-start">
         <li>
-          <h5 className="h5 align-self-start text-dark">
+          <h5 className="h5 self-start text-dark">
             <p>
               <FormattedMessage id="solUmlGen.text2" />
             </p>
           </h5>
         </li>
         <li>
-          <h5 className="h5 align-self-start text-dark">
+          <h5 className="h5 self-start text-dark">
             <p>
               <FormattedMessage id="solUmlGen.clickOn" />{' '}
               <b>
@@ -122,7 +122,7 @@ export function RemixUiSolidityUmlGen({ updatedSvg, loading, fileName, themeDark
   )
   const Display = () => {
     return (
-      <div id="umlImageHolder" className="w-100 px-2 py-2 d-flex">
+      <div id="umlImageHolder" className="w-full px-2 py-2 flex">
         {validSvg && showViewer ? (
           <MagnifierContainer>
             <TransformWrapper initialScale={1}>
@@ -137,7 +137,7 @@ export function RemixUiSolidityUmlGen({ updatedSvg, loading, fileName, themeDark
             </TransformWrapper>
           </MagnifierContainer>
         ) : loading ? (
-          <div className="justify-content-center align-items-center d-flex  mx-auto my-auto">
+          <div className="justify-center items-center flex  mx-auto my-auto">
             <i className="fas fa-spinner fa-spin fa-4x"></i>
           </div>
         ) : (

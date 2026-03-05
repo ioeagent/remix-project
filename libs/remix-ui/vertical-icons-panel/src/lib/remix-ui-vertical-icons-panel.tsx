@@ -72,8 +72,8 @@ const RemixUiVerticalIconsPanel = ({ verticalIconsPlugin, icons }: RemixUiVertic
   if (appContext.appState.connectedToDesktop !== desktopConnectionType.disabled) {
     return (
       <>
-        <div id="iconsP" className="h-100">
-          <div className="remixui_icons d-flex flex-column remixui_icons_height" ref={iconPanelRef}>
+        <div id="iconsP" className="h-full">
+          <div className="remixui_icons flex flex-col remixui_icons_height" ref={iconPanelRef}>
             <Home disableClick={true} verticalIconPlugin={verticalIconsPlugin} />
           </div>
         </div>
@@ -82,8 +82,8 @@ const RemixUiVerticalIconsPanel = ({ verticalIconsPlugin, icons }: RemixUiVertic
   }
 
   return (
-    <div id="iconsP" className="h-100">
-      <div className="remixui_icons d-flex flex-column remixui_icons_height" ref={iconPanelRef}>
+    <div id="iconsP" className="h-full">
+      <div className="remixui_icons flex flex-col remixui_icons_height" ref={iconPanelRef}>
         {/* <Home verticalIconPlugin={verticalIconsPlugin} /> */}
         <div className={scrollableRef.current && scrollableRef.current.scrollHeight > scrollableRef.current.clientHeight ? 'remixui_default-icons-container remixui_requiredSection' : activateScroll && activateScroll.scrollState ? 'remixui_default-icons-container remixui_requiredSection' : 'remixui_requiredSection'}>
           <IconList theme={theme} icons={icons.filter((p) => p.isRequired && p.profile.name !== 'pluginManager')} verticalIconsPlugin={verticalIconsPlugin} itemContextAction={itemContextAction} />
@@ -100,7 +100,7 @@ const RemixUiVerticalIconsPanel = ({ verticalIconsPlugin, icons }: RemixUiVertic
           />
           <IconList theme={theme} icons={icons.filter((p) => p.profile.name === 'settings' || p.profile.name === 'pluginManager')} verticalIconsPlugin={verticalIconsPlugin} itemContextAction={itemContextAction} />
         </div>
-        <div className="remixui_default-icons-container border-0 pb-3">
+        <div className="remixui_default-icons-container border-0 pb-4">
           {scrollableRef.current && scrollableRef.current.scrollHeight > scrollableRef.current.clientHeight ? <Chevron divElementRef={scrollableRef} direction="down" cssRule={'fa fa-chevron-down remixui_icon-chevron my-0'} /> : null}
           {Registry.getInstance().get('platform').api.isDesktop() ? (
             online ? (

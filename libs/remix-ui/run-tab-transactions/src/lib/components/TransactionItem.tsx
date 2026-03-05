@@ -52,15 +52,15 @@ export const TransactionItem = ({ transaction }: { transaction: Transaction }) =
 
   return (
     <div className="transaction-item my-2 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
-      <div className="d-flex align-items-center justify-content-between w-100 p-3 text-nowrap text-truncate overflow-hidden">
-        <div className='d-flex'>
+      <div className="flex items-center justify-between w-full p-4 whitespace-nowrap truncate overflow-hidden">
+        <div className='flex'>
           {isSuccess ? (
-            <i className="fas fa-check-circle align-self-center me-2 text-success"></i>
+            <i className="fas fa-check-circle self-center me-2 text-success"></i>
           ) : (
-            <i className="fas fa-times-circle align-self-center me-2 text-danger"></i>
+            <i className="fas fa-times-circle self-center me-2 text-danger"></i>
           )}
-          <div className='d-flex flex-column align-items-start'>
-            <div className="text-truncate text-secondary d-flex align-items-center">
+          <div className='flex flex-col items-start'>
+            <div className="truncate text-secondary flex items-center">
               <span>{transaction?.record?.contractName || transaction?.record?.name || transaction?.record?.type}</span>
             </div>
             <div className="font-sm" style={{ color: 'var(--bs-tertiary-color)', position: 'relative' }}>
@@ -71,8 +71,8 @@ export const TransactionItem = ({ transaction }: { transaction: Transaction }) =
             </div>
           </div>
         </div>
-        <div className='d-flex' style={{ color: 'var(--bs-tertiary-color)' }}>
-          <div className='d-flex flex-column align-items-end'>
+        <div className='flex' style={{ color: 'var(--bs-tertiary-color)' }}>
+          <div className='flex flex-col items-end'>
             <span
               className={`badge ${tag === 'payable' ? 'text-danger' : tag === 'call' ? 'text-info' : tag === 'deploy' ? 'text-success' : 'text-warning'}`}
               style={{ backgroundColor: tag === 'payable' ? '#FF777714' : tag === 'call' ? '#64C4FF14' : tag === 'deploy' ? '#00ff0014' : '#FFB96414' }}
@@ -83,7 +83,7 @@ export const TransactionItem = ({ transaction }: { transaction: Transaction }) =
           </div>
           <i
             ref={kebabIconRef}
-            className="fas fa-ellipsis-v align-self-center p-2 mx-1"
+            className="fas fa-ellipsis-v self-center p-2 mx-1"
             style={{ cursor: 'pointer' }}
             onClick={handleKebabClick}
           ></i>

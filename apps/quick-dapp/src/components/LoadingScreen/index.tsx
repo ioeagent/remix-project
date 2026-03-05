@@ -8,7 +8,7 @@ const LoadingScreen: React.FC = () => {
 
   return loading ? (
     <div
-      className="w-100 h-100 position-fixed bg-dark z-3"
+      className="w-full h-full position-fixed bg-dark z-3"
       style={{
         top: 0,
         opacity: 0.8

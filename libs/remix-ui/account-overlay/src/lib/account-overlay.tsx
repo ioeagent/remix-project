@@ -46,12 +46,12 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
 
   if (!isAuthenticated) {
     return (
-      <div className="account-overlay d-flex flex-column align-items-center justify-content-center h-100 p-4">
-        <i className="fas fa-user-circle fa-4x mb-3 text-muted"></i>
-        <h4 className="mb-3">
+      <div className="account-overlay flex flex-col items-center justify-center h-full p-6">
+        <i className="fas fa-user-circle fa-4x mb-4 text-muted"></i>
+        <h4 className="mb-4">
           <FormattedMessage id="account.notLoggedIn" defaultMessage="Not Logged In" />
         </h4>
-        <p className="text-muted text-center mb-4">
+        <p className="text-muted text-center mb-6">
           <FormattedMessage
             id="account.loginPrompt"
             defaultMessage="Please log in to access your account settings, credits, and billing information."
@@ -75,11 +75,11 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
   }
 
   return (
-    <div className="account-overlay d-flex h-100">
+    <div className="account-overlay flex h-full">
       {/* Sidebar Navigation */}
-      <div className="account-sidebar border-end d-flex flex-column" style={{ width: '220px', minWidth: '220px' }}>
-        <div className="p-3 border-bottom">
-          <div className="d-flex align-items-center">
+      <div className="account-sidebar border-end flex flex-col" style={{ width: '220px', minWidth: '220px' }}>
+        <div className="p-4 border-bottom">
+          <div className="flex items-center">
             {user?.picture ? (
               <img
                 src={user.picture}
@@ -89,17 +89,17 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
               />
             ) : (
               <div
-                className="rounded-circle bg-secondary d-flex align-items-center justify-content-center mr-2"
+                className="rounded-circle bg-secondary flex items-center justify-center mr-2"
                 style={{ width: '40px', height: '40px' }}
               >
                 <i className="fas fa-user text-white"></i>
               </div>
             )}
             <div className="ml-2 overflow-hidden">
-              <div className="font-weight-bold text-truncate" style={{ maxWidth: '140px' }}>
+              <div className="font-weight-bold truncate" style={{ maxWidth: '140px' }}>
                 {getUserDisplayName()}
               </div>
-              <small className="text-muted text-truncate d-block" style={{ maxWidth: '140px' }}>
+              <small className="text-muted truncate block" style={{ maxWidth: '140px' }}>
                 {user?.email}
               </small>
             </div>
@@ -107,8 +107,8 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
         </div>
 
         {/* Credit Balance Summary */}
-        <div className="p-3 border-bottom" style={{ background: 'var(--bs-secondary-bg)' }}>
-          <div className="d-flex align-items-center justify-content-between">
+        <div className="p-4 border-bottom" style={{ background: 'var(--bs-secondary-bg)' }}>
+          <div className="flex items-center justify-between">
             <span className="text-muted small">Credits</span>
             <span className="font-weight-bold">
               🪙 {credits?.balance?.toLocaleString() || 0}
@@ -117,11 +117,11 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
         </div>
 
         {/* Navigation Tabs */}
-        <nav className="flex-grow-1 overflow-auto py-2">
+        <nav className="grow overflow-auto py-2">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`account-nav-item d-flex align-items-center w-100 border-0 px-3 py-2 ${activeTab === tab.id ? 'active' : ''}`}
+              className={`account-nav-item flex items-center w-full border-0 px-4 py-2 ${activeTab === tab.id ? 'active' : ''}`}
               onClick={() => setActiveTab(tab.id)}
               style={{ background: 'transparent', textAlign: 'left' }}
             >
@@ -132,9 +132,9 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
         </nav>
 
         {/* Footer with logout */}
-        <div className="p-3 border-top">
+        <div className="p-4 border-top">
           <button
-            className="btn btn-outline-secondary btn-sm w-100"
+            className="btn btn-outline-secondary btn-sm w-full"
             onClick={() => {
               plugin.call('auth', 'logout')
               plugin.call('overlay', 'hideOverlay')
@@ -147,10 +147,10 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="account-content flex-grow-1 overflow-auto p-4">
+      <div className="account-content grow overflow-auto p-6">
         {activeTab === 'profile' && (
           <div className="account-section">
-            <h3 className="mb-4">
+            <h3 className="mb-6">
               <i className="fas fa-user mr-2"></i>
               Profile
             </h3>
@@ -160,7 +160,7 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
 
         {activeTab === 'credits' && (
           <div className="account-section">
-            <h3 className="mb-4">
+            <h3 className="mb-6">
               <i className="fas fa-coins mr-2"></i>
               Credits Balance
             </h3>
@@ -170,7 +170,7 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
 
         {activeTab === 'billing' && (
           <div className="account-section">
-            <h3 className="mb-4">
+            <h3 className="mb-6">
               <i className="fas fa-credit-card mr-2"></i>
               Billing & Subscriptions
             </h3>
@@ -185,11 +185,11 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
 
         {activeTab === 'accounts' && (
           <div className="account-section">
-            <h3 className="mb-4">
+            <h3 className="mb-6">
               <i className="fas fa-link mr-2"></i>
               Connected Accounts
             </h3>
-            <p className="text-muted mb-4">
+            <p className="text-muted mb-6">
               Link multiple authentication providers to access your account from anywhere.
               All linked accounts share the same credits and subscriptions.
             </p>

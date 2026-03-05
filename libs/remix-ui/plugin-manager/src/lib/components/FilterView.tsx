@@ -27,8 +27,8 @@ const FilterView = ({ categoryMap, selectedCategories, setSelectedCategories }: 
   }
 
   return (
-    <div data-id="filter-panel" className="my-2 bg-light border rounded p-3">
-      <div className="d-flex justify-content-between align-items-center mb-2">
+    <div data-id="filter-panel" className="my-2 bg-light border rounded p-4">
+      <div className="flex justify-between items-center mb-2">
         <span className="font-weight-bold">Filters</span>
         <button onClick={clearFilters} className="btn btn-sm btn-link text-primary p-0 clear-filters-btn" data-id="clear-filters-btn">
           <span className="clear-x me-1" aria-hidden>&times;</span>
@@ -36,7 +36,7 @@ const FilterView = ({ categoryMap, selectedCategories, setSelectedCategories }: 
         </button>
       </div>
       <div className="border-bottom">
-        <button className="d-flex justify-content-between align-items-center w-100 py-2 btn btn-transparent text-secondary p-0" onClick={() => setIsOpen(!isOpen)}>
+        <button className="flex justify-between items-center w-full py-2 btn btn-transparent text-secondary p-0" onClick={() => setIsOpen(!isOpen)}>
           <span className="font-size-12">CATEGORY</span>
           <span className={`chevron-icon ${isOpen ? 'open' : ''}`}><ChevronRight /></span>
         </button>

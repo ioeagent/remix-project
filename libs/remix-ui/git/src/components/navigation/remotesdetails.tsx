@@ -44,8 +44,8 @@ export const RemotesDetailsNavigation = (props: RemotesDetailsNavigationProps) =
 
   return (
     <>
-      <div className="d-flex flex-row w-100 mb-2 mt-2">
-        <div data-id={`remote-detail-${remote.name}${isDefault() ? '-default' : ''}`} onClick={() => handleClick()} role={'button'} className='pointer long-and-truncated d-flex flex-row commit-navigation'>
+      <div className="flex flex-row w-full mb-2 mt-2">
+        <div data-id={`remote-detail-${remote.name}${isDefault() ? '-default' : ''}`} onClick={() => handleClick()} role={'button'} className='pointer long-and-truncated flex flex-row commit-navigation'>
           {
             activePanel === eventKey ? <FontAwesomeIcon className='' icon={faCaretDown}></FontAwesomeIcon> : <FontAwesomeIcon className='' icon={faCaretRight}></FontAwesomeIcon>
           }

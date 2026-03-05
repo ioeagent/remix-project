@@ -184,8 +184,8 @@ export const Renderer = ({ message, opt, plugin, context }: RendererProps) => {
           <div className="close" data-id="renderer" onClick={handleClose}>
             <i className="fas fa-times"></i>
           </div>
-          <div className="d-flex pt-1 flex-row-reverse">
-            <span className="ms-3 pt-1 py-1" >
+          <div className="flex pt-1 flex-row-reverse">
+            <span className="ms-4 pt-1 py-1" >
               <CopyToClipboard content={messageText} className={` p-0 m-0 far fa-copy ${classList}`} direction={'top'} />
             </span>
             <span

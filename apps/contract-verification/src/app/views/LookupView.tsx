@@ -83,18 +83,18 @@ export const LookupView = () => {
       <form onSubmit={handleLookup}>
         <SearchableChainDropdown label={<FormattedMessage id="contract-verification.searchableChainDropdownLabel" defaultMessage="Chain" />} id="network-dropdown" selectedChain={selectedChain} setSelectedChain={setSelectedChain} />
         <ContractAddressInput label={<FormattedMessage id="contract-verification.contractAddressInput" defaultMessage="Contract Address" />} id="contract-address" contractAddress={contractAddress} setContractAddress={setContractAddress} contractAddressError={contractAddressError} setContractAddressError={setContractAddressError} />
-        <button type="submit" className="btn w-100 btn-primary" disabled={submitDisabled}>
+        <button type="submit" className="btn w-full btn-primary" disabled={submitDisabled}>
           <FormattedMessage id="contract-verification.lookupButton" defaultMessage="Lookup" />
         </button>
       </form>
-      <div className="pt-3">
+      <div className="pt-4">
         {chainSettings &&
           VERIFIERS.map((verifierId) => {
             if (!validConfiguration(chainSettings, verifierId)) {
               return (
-                <div key={verifierId} className="pt-4">
+                <div key={verifierId} className="pt-6">
                   <div>
-                    <span className="fw-bold text-secondary">{verifierId}</span>{' '}
+                    <span className="font-bold text-secondary">{verifierId}</span>{' '}
                     <CustomTooltip tooltipText="Configure the API in the settings">
                       <span className="text-secondary" style={{ textDecoration: 'underline dotted', cursor: 'pointer' }} onClick={() => navigate('/settings')}>
                         Enable?
@@ -107,9 +107,9 @@ export const LookupView = () => {
 
             if (verifierId === 'Sourcify' && !sourcifySupported) {
               return (
-                <div key={verifierId} className="pt-4">
+                <div key={verifierId} className="pt-6">
                   <div>
-                    <span className="fw-bold text-secondary">{verifierId}</span>{' '}
+                    <span className="font-bold text-secondary">{verifierId}</span>{' '}
                     <CustomTooltip tooltipText={`The configured Sourcify server (${chainSettings.verifiers['Sourcify'].apiUrl}) does not support chain ${selectedChain?.chainId}`}>
                       <span className="text-secondary w-auto" style={{ textDecoration: 'underline dotted', cursor: 'pointer' }} onClick={() => navigate('/settings')}>
                         Unsupported
@@ -121,13 +121,13 @@ export const LookupView = () => {
             }
 
             return (
-              <div key={verifierId} className="pt-4">
-                <div className="d-flex align-items-center">
-                  <span className="fw-bold">{verifierId}&nbsp;</span>
-                  <span className="text-secondary d-inline-block text-truncate mw-100">{chainSettings.verifiers[verifierId].apiUrl}</span>
+              <div key={verifierId} className="pt-6">
+                <div className="flex items-center">
+                  <span className="font-bold">{verifierId}&nbsp;</span>
+                  <span className="text-secondary inline-block truncate max-w-full">{chainSettings.verifiers[verifierId].apiUrl}</span>
                 </div>
                 {!!loadingVerifiers[verifierId] && (
-                  <div className="pt-2 d-flex justify-content-center">
+                  <div className="pt-2 flex justify-center">
                     <i className="fas fa-spinner fa-spin fa-2x"></i>
                   </div>
                 )}
@@ -135,13 +135,13 @@ export const LookupView = () => {
                   <div>
                     <div className="pt-2">
                       Status:{' '}
-                      <span className="fw-bold" style={{ textTransform: 'capitalize' }}>
+                      <span className="font-bold" style={{ textTransform: 'capitalize' }}>
                         {lookupResults[verifierId].status}
                       </span>{' '}
                       {!!lookupResults[verifierId].lookupUrl && verifierId === 'Blockscout' ? <CopyToClipboard tip="Copy code URL" content={lookupResults[verifierId].lookupUrl} direction="top" /> : !!lookupResults[verifierId].lookupUrl && <a href={lookupResults[verifierId].lookupUrl} target="_blank" className="fa fas fa-arrow-up-right-from-square"></a>}
                     </div>
                     {!!lookupResults[verifierId].sourceFiles && lookupResults[verifierId].sourceFiles.length > 0 && (
-                      <div className="pt-2 d-flex flex-row justify-content-center">
+                      <div className="pt-2 flex flex-row justify-center">
                         <button className="btn btn-secondary bg-transparent text-body" onClick={() => handleOpenInRemix(lookupResults[verifierId])}>
                           <i className="fas fa-download"></i> Open in Remix
                         </button>

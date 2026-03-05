@@ -129,7 +129,7 @@ export const CreditsBalance: React.FC<CreditsBalanceProps> = ({ plugin }) => {
 
   if (loading) {
     return (
-      <div className="p-3">
+      <div className="p-4">
         <div className="spinner-border spinner-border-sm" role="status">
           <span className="sr-only">Loading...</span>
         </div>
@@ -145,21 +145,21 @@ export const CreditsBalance: React.FC<CreditsBalanceProps> = ({ plugin }) => {
   return (
     <div>
       <div className="mb-2">
-        <div className="row">
-          <div className="col-md-4 mb-2">
-            <div className="text-center p-3 bg-light rounded">
+        <div className="flex flex-wrap">
+          <div className="md:w-1/3 mb-2">
+            <div className="text-center p-4 bg-light rounded">
               <div className="h4 mb-0 font-weight-bold text-primary">{credits.balance.toLocaleString()}</div>
               <small className="text-muted">Total Credits</small>
             </div>
           </div>
-          <div className="col-md-4 mb-2">
-            <div className="text-center p-3 bg-light rounded">
+          <div className="md:w-1/3 mb-2">
+            <div className="text-center p-4 bg-light rounded">
               <div className="h4 mb-0 text-success">{credits.free_credits.toLocaleString()}</div>
               <small className="text-muted">Free Credits</small>
             </div>
           </div>
-          <div className="col-md-4 mb-2">
-            <div className="text-center p-3 bg-light rounded">
+          <div className="md:w-1/3 mb-2">
+            <div className="text-center p-4 bg-light rounded">
               <div className="h4 mb-0 text-info">{credits.paid_credits.toLocaleString()}</div>
               <small className="text-muted">Paid Credits</small>
             </div>
@@ -173,7 +173,7 @@ export const CreditsBalance: React.FC<CreditsBalanceProps> = ({ plugin }) => {
 
       {transactions && transactions.length > 0 && (
         <div>
-          <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="flex justify-between items-center mb-4">
             <h6 className="font-weight-bold mb-0">
               <i className="fas fa-history mr-2"></i>
               Recent Transactions
@@ -190,9 +190,9 @@ export const CreditsBalance: React.FC<CreditsBalanceProps> = ({ plugin }) => {
           <div className="list-group" style={{ maxHeight: showAllTransactions ? 'none' : '300px', overflowY: 'auto' }}>
             {(showAllTransactions ? transactions : transactions.slice(0, 5)).map((tx) => (
               <div key={tx.id} className="list-group-item">
-                <div className="d-flex justify-content-between align-items-start">
-                  <div className="flex-grow-1">
-                    <div className="d-flex align-items-center mb-1">
+                <div className="flex justify-between items-start">
+                  <div className="grow">
+                    <div className="flex items-center mb-1">
                       <span className={`badge ${tx.amount > 0 ? 'badge-success' : 'badge-danger'} mr-2`}>
                         {tx.amount > 0 ? '+' : ''}{tx.amount}
                       </span>

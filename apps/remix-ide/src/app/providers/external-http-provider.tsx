@@ -32,7 +32,7 @@ export class ExternalHttpProvider extends AbstractProvider {
               )
             }}
           />
-          <div className="border p-1 mt-2 mb-3">geth --http --http.corsdomain https://remix.ethereum.org</div>
+          <div className="border p-1 mt-2 mb-4">geth --http --http.corsdomain https://remix.ethereum.org</div>
           <FormattedMessage
             id="udapp.externalHttpProviderText2"
             values={{
@@ -43,10 +43,10 @@ export class ExternalHttpProvider extends AbstractProvider {
               )
             }}
           />
-          <div className="border p-1 mt-2 mb-3">
+          <div className="border p-1 mt-2 mb-4">
             geth --http --http.corsdomain="{window.origin}" --http.api web3,eth,debug,net --vmdebug --datadir {thePath} --dev console
           </div>
-          <div className='alert-warning p-1 mb-3 px-2'>
+          <div className='alert-warning p-1 mb-4 px-2'>
             <FormattedMessage id="udapp.externalHttpProviderText3" values={{ b: (chunks) => <b><p className='pt-2'>{chunks}</p></b> }} />
           </div>
           <FormattedMessage
@@ -59,7 +59,7 @@ export class ExternalHttpProvider extends AbstractProvider {
               )
             }}
           />
-          <label className='pt-4 mb-0'>
+          <label className='pt-6 mb-0'>
             External HTTP Provider Endpoint
           </label>
         </div>

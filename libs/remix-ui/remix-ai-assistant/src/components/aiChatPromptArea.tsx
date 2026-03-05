@@ -62,7 +62,7 @@ export default function AiChatPromptArea(props: AiChatPromptAreaProps) {
           style={{ borderRadius: '8px', top: props.modelOpt.top, left: props.modelOpt.left, zIndex: 1000, minWidth: '300px', maxWidth: '400px' }}
           ref={props.menuRef}
         >
-          <div className="text-uppercase ms-2 mb-2 small">AI Model</div>
+          <div className="uppercase ms-2 mb-2 small">AI Model</div>
           <GroupListMenu
             setChoice={props.handleModelSelection}
             setShowOptions={props.setShowModelSelector}
@@ -91,7 +91,7 @@ export default function AiChatPromptArea(props: AiChatPromptAreaProps) {
           />
           {props.mcpEnabled && (
             <div className="border-top mt-2 pt-2">
-              <div className="text-uppercase ms-2 mb-2 small">MCP Enhancement</div>
+              <div className="uppercase ms-2 mb-2 small">MCP Enhancement</div>
               <div className="form-check ms-2 mb-2">
                 <input
                   className="form-check-input"
@@ -113,10 +113,10 @@ export default function AiChatPromptArea(props: AiChatPromptAreaProps) {
       )}
       {props.showOllamaModelSelector && props.selectedModel?.provider === 'ollama' && (
         <div
-          className="pt-2 mb-2 z-3 bg-light border border-text w-75 position-absolute"
+          className="pt-2 mb-2 z-3 bg-light border border-text w-3/4 position-absolute"
           style={{ borderRadius: '8px' }}
         >
-          <div className="text-uppercase ml-2 mb-2 small">Ollama Model</div>
+          <div className="uppercase ml-2 mb-2 small">Ollama Model</div>
           <GroupListMenu
             setChoice={props.handleOllamaModelSelection}
             setShowOptions={props.setShowOllamaModelSelector}

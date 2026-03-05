@@ -37,7 +37,7 @@ module.exports = {
   'Verify main panel is hidden when right panel is maximized #group1': function (browser: NightwatchBrowser) {
     browser
       .waitForElementVisible('#right-side-panel.right-panel-maximized')
-      .assert.hasClass('.mainpanel', 'd-none')
+      .assert.hasClass('.mainpanel', 'hidden')
   },
   'Verify terminal panel is hidden when right panel is maximized #group1': function (browser: NightwatchBrowser) {
     browser
@@ -79,7 +79,7 @@ module.exports = {
   'Verify main panel is visible again when right panel is minimized #group1': function (browser: NightwatchBrowser) {
     browser
       .waitForElementVisible('.mainpanel')
-      .assert.not.hasClass('.mainpanel', 'd-none')
+      .assert.not.hasClass('.mainpanel', 'hidden')
   },
   'Verify terminal panel is visible again when right panel is minimized #group1': function (browser: NightwatchBrowser) {
     browser
@@ -105,7 +105,7 @@ module.exports = {
       .waitForElementVisible('#right-side-panel')
       .waitForElementVisible('#side-panel')
       .waitForElementVisible('.mainpanel')
-      .assert.not.hasClass('.mainpanel', 'd-none')
+      .assert.not.hasClass('.mainpanel', 'hidden')
   },
   'Test auto-restore on file change when panel is maximized #group1': function (browser: NightwatchBrowser) {
     browser
@@ -114,7 +114,7 @@ module.exports = {
       .click('*[data-id="maximizeRightSidePanel"]')
       .waitForElementVisible('#right-side-panel.right-panel-maximized')
       .pause(1000)
-      .assert.hasClass('.mainpanel', 'd-none')
+      .assert.hasClass('.mainpanel', 'hidden')
       .openFile('contracts/2_Owner.sol')
       .pause(2000)
       .waitForElementVisible('#right-side-panel')
@@ -124,7 +124,7 @@ module.exports = {
         browser.assert.ok(result.value, 'Panel should auto-restore after file change')
       })
       .waitForElementVisible('.mainpanel')
-      .assert.not.hasClass('.mainpanel', 'd-none')
+      .assert.not.hasClass('.mainpanel', 'hidden')
   },
   'Test panel maximization persists with different plugin #group1': function (browser: NightwatchBrowser) {
     browser
@@ -139,7 +139,7 @@ module.exports = {
       .checkElementStyle('#right-side-panel', 'border-left-style', 'none')
       .checkElementStyle('#right-side-panel', 'border-right-style', 'none')
       .waitForElementNotVisible('#side-panel')
-      .assert.hasClass('.mainpanel', 'd-none')
+      .assert.hasClass('.mainpanel', 'hidden')
   },
   'Test maximize panel with terminal open #group1': function (browser: NightwatchBrowser) {
     browser
@@ -166,14 +166,14 @@ module.exports = {
       .assert.not.hasClass('#right-side-panel', 'right-panel-maximized')
       .waitForElementVisible('#side-panel')
       .waitForElementVisible('.mainpanel')
-      .assert.not.hasClass('.mainpanel', 'd-none')
+      .assert.not.hasClass('.mainpanel', 'hidden')
       .refreshPage()
       .waitForElementVisible('#right-side-panel')
       .pause(1000)
       .assert.not.hasClass('#right-side-panel', 'right-panel-maximized')
       .waitForElementVisible('#side-panel')
       .waitForElementVisible('.mainpanel')
-      .assert.not.hasClass('.mainpanel', 'd-none')
+      .assert.not.hasClass('.mainpanel', 'hidden')
   },
   'Maximize bottom panel #group2': function (browser: NightwatchBrowser) {
     browser
@@ -193,7 +193,7 @@ module.exports = {
         let allOtherWrapsHidden = true
         wraps.forEach((wrap: HTMLElement) => {
           if (!wrap.classList.contains('terminal-wrap')) {
-            if (!wrap.classList.contains('d-none')) {
+            if (!wrap.classList.contains('hidden')) {
               allOtherWrapsHidden = false
             }
           }
@@ -229,7 +229,7 @@ module.exports = {
         const wraps = mainView.querySelectorAll('[class*="-wrap"]')
         let allWrapsVisible = true
         wraps.forEach((wrap: HTMLElement) => {
-          if (wrap.classList.contains('d-none')) {
+          if (wrap.classList.contains('hidden')) {
             allWrapsVisible = false
           }
         })
@@ -258,7 +258,7 @@ module.exports = {
         const wraps = mainView.querySelectorAll('[class*="-wrap"]')
         let allWrapsVisible = true
         wraps.forEach((wrap: HTMLElement) => {
-          if (wrap.classList.contains('d-none')) {
+          if (wrap.classList.contains('hidden')) {
             allWrapsVisible = false
           }
         })
@@ -304,7 +304,7 @@ module.exports = {
         let allNonTerminalWrapsHidden = true
         wraps.forEach((wrap: HTMLElement) => {
           if (!wrap.classList.contains('terminal-wrap')) {
-            if (!wrap.classList.contains('d-none')) {
+            if (!wrap.classList.contains('hidden')) {
               allNonTerminalWrapsHidden = false
             }
           }
@@ -317,14 +317,14 @@ module.exports = {
       .click('*[data-id="hideBottomPanel"]')
       .pause(500)
       .waitForElementNotVisible('.terminal-wrap')
-      .assert.hasClass('.terminal-wrap', 'd-none')
+      .assert.hasClass('.terminal-wrap', 'hidden')
       .execute(function () {
         const mainView = document.querySelector('.mainview')
         const wraps = mainView.querySelectorAll('[class*="-wrap"]')
         let allNonTerminalWrapsVisible = true
         wraps.forEach((wrap: HTMLElement) => {
           if (!wrap.classList.contains('terminal-wrap')) {
-            if (wrap.classList.contains('d-none')) {
+            if (wrap.classList.contains('hidden')) {
               allNonTerminalWrapsVisible = false
             }
           }

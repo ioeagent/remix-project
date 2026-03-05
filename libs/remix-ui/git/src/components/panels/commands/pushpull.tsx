@@ -171,16 +171,16 @@ export const PushPull = () => {
 
   return (
     <>
-      {disabled? <div data-id='disabled' className='text-sm w-100 alert alert-warning mt-1'>
+      {disabled? <div data-id='disabled' className='text-sm w-full alert alert-warning mt-1'>
         You cannot push or pull because you haven't connected to or selected a remote.
       </div>: null}
-      <div className="btn-group w-100 mt-2" role="group">
+      <div className="btn-group w-full mt-2" role="group">
 
         <GitUIButton data-id='sourcecontrol-pull' disabledCondition={pushPullIsDisabled()} type="button" onClick={async () => pull()} className="btn btn-primary me-1">Pull</GitUIButton>
         <GitUIButton data-id='sourcecontrol-push' disabledCondition={pushPullIsDisabled()} type="button" onClick={async () => push()} className="btn btn-primary">Push</GitUIButton>
       </div>
 
-      <label className="pt-3 text-uppercase">Local Branch</label>
+      <label className="pt-4 uppercase">Local Branch</label>
       <Select
         id='commands-local-branch-select'
         options={localBranchOptions}
@@ -193,7 +193,7 @@ export const PushPull = () => {
         placeholder="Type to search for a branch..."
       />
 
-      <label className="pt-3 text-uppercase">Remote Branch</label>
+      <label className="pt-4 uppercase">Remote Branch</label>
       <Select
         id='commands-remote-branch-select'
         options={remoteBranchOptions}
@@ -206,7 +206,7 @@ export const PushPull = () => {
         placeholder="Type to search for a branch..."
       />
 
-      <label className="pt-3 text-uppercase">Remote</label>
+      <label className="pt-4 uppercase">Remote</label>
       <Select
         id='commands-remote-origin-select'
         options={localRemotesOptions}
@@ -219,7 +219,7 @@ export const PushPull = () => {
         placeholder="Type to search for a branch..."
       />
 
-      <div className="pt-3 d-flex align-items-center remixui_compilerConfig form-check">
+      <div className="pt-4 flex items-center remixui_compilerConfig form-check">
         <input checked={force} onChange={e => onForceChange(e)} className="form-check-input" type="checkbox" data-id="compilerContainerAutoCompile" id="forcepush" />
         <label className="form-check-label ms-1" htmlFor="forcepush">Force push</label>
       </div>

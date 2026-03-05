@@ -7,19 +7,19 @@ export function VersionList ({ currentVersion, versionList, downloadList, setVer
   const versionListKeys = Object.keys(versionList)
   return (
     <Dropdown>
-      <Dropdown.Toggle as={CircomVersionMenuToggle} id="circomVersionList" className="btn btn-light btn-block w-100 d-inline-block border form-select">
+      <Dropdown.Toggle as={CircomVersionMenuToggle} id="circomVersionList" className="btn btn-light btn-block w-full inline-block border form-select">
         <div className="font-sm" style={{ flexGrow: 1, overflow: 'hidden', display:'flex', justifyContent:'left' }}>
           { versionList[currentVersion].name }
         </div>
       </Dropdown.Toggle>
 
-      <Dropdown.Menu as={CircomVersionMenu} className="w-100 form-select overflow-hidden">
+      <Dropdown.Menu as={CircomVersionMenu} className="w-full form-select overflow-hidden">
         {
           versionListKeys.reverse().map((version, index) => (
             <Dropdown.Item key={index} onClick={() => {
               setVersion(version)
             }}>
-              <div className='d-flex w-100 justify-content-between'>
+              <div className='flex w-full justify-between'>
                 <div>
                   <span className={`fas fa-check text-success me-2 ${currentVersion === version ? 'visible' : 'invisible'}`}></span>
                   <span>
@@ -57,7 +57,7 @@ const CircomVersionMenuToggle = React.forwardRef(
       }}
       className={className.replace('dropdown-toggle', '')}
     >
-      <div className="d-flex">
+      <div className="flex">
         {children}
         <div>
           <i className="fad fa-sort-circle"></i>

@@ -50,7 +50,7 @@ export function ValueUI(props: ValueProps) {
         <FormattedMessage id="udapp.value" />
       </label>
       <div className="input-group udapp_gasValueContainer">
-        <CustomTooltip placement={'top-start'} tooltipClasses="text-nowrap" tooltipId="remixValueTooltip" tooltipText={<FormattedMessage id="udapp.tooltipText5" />}>
+        <CustomTooltip placement={'top-start'} tooltipClasses="whitespace-nowrap" tooltipId="remixValueTooltip" tooltipText={<FormattedMessage id="udapp.tooltipText5" />}>
           <input
             ref={inputValue}
             type="number"

@@ -12,17 +12,17 @@ export function VerificationSettingsUI(props: VerificationSettingsProps) {
   const { isVerifyChecked, onVerifyCheckedChange } = props
 
   return (
-    <div className="d-flex align-items-center justify-content-between pb-2">
-      <div className='d-flex align-items-center'>
-        <span className="fw-light">Verify Contract on Explorers</span>
+    <div className="flex items-center justify-between pb-2">
+      <div className='flex items-center'>
+        <span className="font-light">Verify Contract on Explorers</span>
       </div>
       <div className="toggle-container">
         <CustomTooltip
           placement={'left'}
-          tooltipClasses="text-wrap text-start"
+          tooltipClasses="text-wrap text-left"
           tooltipId="remixVerifyContractTooltip"
           tooltipText={
-            <span className="text-start">
+            <span className="text-left">
               <FormattedMessage
                 id="udapp.remixVerifyContractTooltip"
                 defaultMessage="Automatically verify contract on multiple explorers after deployment. Etherscan API Key can be set in the global Settings panel."

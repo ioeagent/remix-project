@@ -16,15 +16,15 @@ export function GitCloneScreen() {
   const type = url !== '' && (url.startsWith('https://') || url.startsWith('git@')) ? true : false
   return (
     <>
-      <section className="d-flex flex-column gap-3 bg-light h-75">
-        <div className={`pt-3 mx-3 form-label fs-6 ${theme?.name === 'Dark' ? 'text-white-force' : 'text-dark'}`}>
+      <section className="flex flex-col gap-4 bg-light h-3/4">
+        <div className={`pt-4 mx-4 form-label text-base ${theme?.name === 'Dark' ? 'text-white-force' : 'text-dark'}`}>
           Paste a valid git repository URL and press 'Clone' to start the process.
         </div>
-        <div className="pt-1 mx-3 d-flex flex-row align-items-center text-dark">
+        <div className="pt-1 mx-4 flex flex-row items-center text-dark">
           <input data-id="git-clone-screen-url-input" type="text" className="form-control form-control-lg" value={url} onChange={(e) => setUrl(e.target.value)} />
         </div>
-        <div className="pt-3 mx-3">
-          <button className="btn btn-primary btn-lg w-100" onClick={handleClone} disabled={!type}>
+        <div className="pt-4 mx-4">
+          <button className="btn btn-primary btn-lg w-full" onClick={handleClone} disabled={!type}>
             Clone
           </button>
         </div>

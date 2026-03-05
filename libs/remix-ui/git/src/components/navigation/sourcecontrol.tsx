@@ -25,8 +25,8 @@ export const SourceControlNavigation = ({ eventKey, activePanel, callback }) => 
 
   return (
     <>
-      <div className={'d-flex align-items-center justify-content-between ' + (activePanel === eventKey ? 'bg-light' : '')}>
-        <span data-id='sourcecontrol-panel' onClick={() => handleClick()} role={'button'} className='nav d-flex justify-content-start align-items-center w-75 ms-1'
+      <div className={'flex items-center justify-between ' + (activePanel === eventKey ? 'bg-light' : '')}>
+        <span data-id='sourcecontrol-panel' onClick={() => handleClick()} role={'button'} className='nav flex justify-start items-center w-3/4 ms-1'
         >
           {
             activePanel === eventKey ? <FontAwesomeIcon className='' icon={faCaretDown}></FontAwesomeIcon> : <FontAwesomeIcon className='' icon={faCaretRight}></FontAwesomeIcon>

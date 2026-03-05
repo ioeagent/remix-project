@@ -246,7 +246,7 @@ const Model: ModelType = {
         yield put({
           type: 'remixide/save',
           payload: {
-            errors: [...errors, "The `Solidity Compiler` is not yet activated.<br>Please activate it using the `SOLIDITY` button in the `Featured Plugins` section of the homepage.<img class='img-thumbnail mt-3' src='assets/activatesolidity.png'>"],
+            errors: [...errors, "The `Solidity Compiler` is not yet activated.<br>Please activate it using the `SOLIDITY` button in the `Featured Plugins` section of the homepage.<img class='img-thumbnail mt-4' src='assets/activatesolidity.png'>"],
           },
         });
         trackMatomoEvent(remixClient, { category: 'learneth', action: 'test_solidity_compiler_error', name: err.message, isClick: false })

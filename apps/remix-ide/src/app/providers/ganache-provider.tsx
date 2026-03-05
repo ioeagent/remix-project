@@ -22,13 +22,13 @@ export class GanacheProvider extends AbstractProvider {
       <div>
         {' '}
         <FormattedMessage id="udapp.ganacheProviderText1" />
-        <div className="p-1 ps-3">
+        <div className="p-1 ps-4">
           <b>yarn global add ganache</b>
         </div>
-        <div className="p-1 ps-3">
+        <div className="p-1 ps-4">
           <b>ganache</b>
         </div>
-        <div className="pt-2 pb-4">
+        <div className="pt-2 pb-6">
           <FormattedMessage
             id="udapp.ganacheProviderText2"
             values={{

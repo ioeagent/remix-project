@@ -16,7 +16,7 @@ export function DelegationAuthorizationPrompt ({
   }
 
   return (
-    <div className="w-100" data-id="createDelegationAuthorizationModal">
+    <div className="w-full" data-id="createDelegationAuthorizationModal">
       <span>{intl.formatMessage({ id: 'udapp.createDelegationDescription' }, {
         a: (chunks) => (
           <a href='https://eip7702.io/' target="_blank" rel="noreferrer">
@@ -24,7 +24,7 @@ export function DelegationAuthorizationPrompt ({
           </a>
         )
       })}</span>
-      <label className="mt-3">Authorization Address</label>
+      <label className="mt-4">Authorization Address</label>
       <input
         className='border form-control'
         data-id="create-delegation-authorization-input"

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Dropdown } from 'react-bootstrap'
-import { AddressToggle, CustomMenu, CustomToggle, extractNameFromKey, getMultiValsString, ProxyAddressToggle, ProxyDropdownMenu, shortenDate, shortenProxyAddress } from '@remix-ui/helper'
+import { AddressToggle, CustomMenu, CustomToggle, Dropdown, ProxyAddressToggle, ProxyDropdownMenu, extractNameFromKey, getMultiValsString, shortenDate, shortenProxyAddress } from '@remix-ui/helper'
 import { CopyToClipboard } from '@remix-ui/clipboard'
 import { DeployAppContext } from '../contexts'
 import { Provider } from '@remix-ui/run-tab-environment'
@@ -254,8 +253,8 @@ function DeployPortraitView() {
   return (
     <>
       <div className="card mx-2" style={{ backgroundColor: 'var(--custom-onsurface-layer-1)', '--theme-text-color': themeQuality === 'dark' ? 'white' : 'black' } as React.CSSProperties}>
-        <div className="p-3 d-flex align-items-center justify-content-between" onClick={() => setIsExpanded(!isExpanded)} style={{ cursor: 'pointer' }}>
-          <div className='d-flex align-items-center gap-2'>
+        <div className="p-4 flex items-center justify-between" onClick={() => setIsExpanded(!isExpanded)} style={{ cursor: 'pointer' }}>
+          <div className='flex items-center gap-2'>
             <h6 className="my-auto" style={{ color: themeQuality === 'dark' ? 'white' : 'black', margin: 0 }}>
               <FormattedMessage id="udapp.deploy" defaultMessage="Deploy" />
             </h6>
@@ -264,17 +263,17 @@ function DeployPortraitView() {
           <i className={`fas fa-chevron-${isExpanded ? 'down' : 'right'}`} style={{ color: 'var(--bs-tertiary-color)' }}></i>
         </div>
         {isExpanded && (
-          <div className="px-3 pb-3">
+          <div className="px-4 pb-4">
             {/* Contract Selection */}
-            <div className="d-flex pb-3">
-              <Dropdown className="w-100">
-                <div className='d-flex align-items-center justify-content-between'>
-                  <Dropdown.Toggle as={AddressToggle} className="w-100 d-inline-block border form-control" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }} data-id="contractDropdownToggle">
-                    <div className="d-flex align-items-center">
-                      <div className="me-auto text-nowrap text-truncate overflow-hidden font-sm w-100">
-                        <div className="d-flex align-items-center justify-content-between w-100">
-                          <div className='d-flex flex-column align-items-start'>
-                            <div className="text-truncate" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>
+            <div className="flex pb-4">
+              <Dropdown className="w-full">
+                <div className='flex items-center justify-between'>
+                  <Dropdown.Toggle as={AddressToggle} className="w-full inline-block border form-control" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }} data-id="contractDropdownToggle">
+                    <div className="flex items-center">
+                      <div className="me-auto whitespace-nowrap truncate overflow-hidden font-sm w-full">
+                        <div className="flex items-center justify-between w-full">
+                          <div className='flex flex-col items-start'>
+                            <div className="truncate" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>
                               <span>{ (selectedContract?.name) || 'Contract' }</span>
                             </div>
                             <div style={{ color: 'var(--bs-tertiary-color)' }}>
@@ -283,7 +282,7 @@ function DeployPortraitView() {
                           </div>
                           {selectedContract && !selectedContract?.isCompiled && !selectedContract?.isCompiling && (
                             <div
-                              className="btn btn-primary d-flex align-items-center justify-content-center"
+                              className="btn btn-primary flex items-center justify-center"
                               data-id="compile-action"
                               role="button"
                               tabIndex={0}
@@ -373,13 +372,13 @@ function DeployPortraitView() {
                 </div>
 
                 {widgetState.contracts.contractList.length > 0 && (
-                  <Dropdown.Menu as={CustomMenu} className="w-100 custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', '--theme-text-color': themeQuality === 'dark' ? 'white' : 'black', padding: 0 } as React.CSSProperties} data-id="contractDropdownMenu">
+                  <Dropdown.Menu as={CustomMenu} className="w-full custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', '--theme-text-color': themeQuality === 'dark' ? 'white' : 'black', padding: 0 } as React.CSSProperties} data-id="contractDropdownMenu">
                     {widgetState.contracts.contractList.map((contract, index) => (
-                      <Dropdown.Item key={`${contract.filePath}:${contract.name}`} className="d-flex align-items-center contract-dropdown-item-hover" onClick={() => dispatch({ type: 'SET_SELECTED_CONTRACT_INDEX', payload: index })} data-id={`contractDropdownItem-${contract.name}`}>
-                        <div className="me-auto text-nowrap text-truncate overflow-hidden font-sm w-100">
-                          <div className="d-flex align-items-center justify-content-between w-100">
-                            <div className='d-flex flex-column align-items-start'>
-                              <div className="text-truncate" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>
+                      <Dropdown.Item key={`${contract.filePath}:${contract.name}`} className="flex items-center contract-dropdown-item-hover" onClick={() => dispatch({ type: 'SET_SELECTED_CONTRACT_INDEX', payload: index })} data-id={`contractDropdownItem-${contract.name}`}>
+                        <div className="me-auto whitespace-nowrap truncate overflow-hidden font-sm w-full">
+                          <div className="flex items-center justify-between w-full">
+                            <div className='flex flex-col items-start'>
+                              <div className="truncate" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>
                                 <span>{contract.name}</span>
                               </div>
                               <div style={{ color: 'var(--bs-tertiary-color)' }}>
@@ -421,9 +420,9 @@ function DeployPortraitView() {
             {/* Proxy Options */}
             { selectedContract?.isUpgradeable && (
               <>
-                <div className="d-flex align-items-center justify-content-between">
-                  <div className='d-flex align-items-center'>
-                    <span className="fw-light" data-id="contractGUIDeployWithProxyLabel">Deploy with Proxy</span>
+                <div className="flex items-center justify-between">
+                  <div className='flex items-center'>
+                    <span className="font-light" data-id="contractGUIDeployWithProxyLabel">Deploy with Proxy</span>
                   </div>
                   <div className="toggle-container">
                     <div
@@ -442,9 +441,9 @@ function DeployPortraitView() {
                     </div>
                   </div>
                 </div>
-                <div className="d-flex align-items-center justify-content-between pb-2">
-                  <div className='d-flex align-items-center'>
-                    <span className="fw-light" data-id="contractGUIUpgradeImplementationLabel">Upgrade with Proxy</span>
+                <div className="flex items-center justify-between pb-2">
+                  <div className='flex items-center'>
+                    <span className="font-light" data-id="contractGUIUpgradeImplementationLabel">Upgrade with Proxy</span>
                   </div>
                   <div className="toggle-container">
                     <div
@@ -469,7 +468,7 @@ function DeployPortraitView() {
             {/* Proxy Dropdown - Only show when upgrading with proxy */}
             {
               selectedContract?.isUpgradeable && upgradeWithProxy && (
-                <div className='border-top my-3 pt-3'>
+                <div className='border-top my-4 pt-4'>
                   <div data-id="proxy-dropdown-items">
                     <Dropdown onToggle={toggleProxyDropdown} show={showProxyDropdown}>
                       <Dropdown.Toggle
@@ -477,12 +476,12 @@ function DeployPortraitView() {
                         as={ProxyAddressToggle}
                         address={proxyAddress}
                         onChange={handleProxyAddressChange}
-                        className="d-inline-block border border-dark"
+                        className="inline-block border border-dark"
                         style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', width: '100%' }}
                       />
 
                       {proxyDeployments.length > 0 && (
-                        <Dropdown.Menu as={ProxyDropdownMenu} className="w-100 form-select" style={{ overflow: 'hidden', backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+                        <Dropdown.Menu as={ProxyDropdownMenu} className="w-full form-select" style={{ overflow: 'hidden', backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
                           {proxyDeployments.map((deployment, index) => (
                             <Dropdown.Item
                               key={index}
@@ -490,7 +489,7 @@ function DeployPortraitView() {
                                 switchProxyAddress(deployment.address)
                               }}
                               data-id={`proxyAddress${index}`}
-                              className="d-flex align-items-center px-2"
+                              className="flex items-center px-2"
                               style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}
                             >
                               <span style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>
@@ -516,26 +515,26 @@ function DeployPortraitView() {
             {/* Proxy Options Parameters - Only show when deploying with proxy */}
             {
               selectedContract?.isUpgradeable && selectedContract?.deployOptions && selectedContract.deployOptions.inputs && selectedContract.deployOptions.inputs.length > 0 && deployWithProxy && (
-                <div className='border-top mt-3'>
+                <div className='border-top mt-4'>
                   {
                     selectedContract.deployOptions.inputs.map((input, index) => {
                       const isExpanded = expandedProxyInputs.has(index)
                       const currentValue = proxyInputValues[index] || ''
                       return (
-                        <div key={index} className="my-3">
-                          <div className="d-flex gap-2">
+                        <div key={index} className="my-4">
+                          <div className="flex gap-2">
                             <div
                               className='btn border-0 p-0'
                               style={{ minWidth: '120px', cursor: 'pointer' }}
                               onClick={() => toggleProxyInputExpansion(index)}
                             >
-                              <div className='d-flex flex-column align-items-start'>
+                              <div className='flex flex-col items-start'>
                                 <span className="small" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>{input.name}</span>
                                 <span className="text-secondary font-weight-light" style={{ fontSize: '0.7rem' }}>{input.type}</span>
                               </div>
                             </div>
                             {!isExpanded && (
-                              <div className="position-relative flex-fill input-with-copy-hover">
+                              <div className="position-relative flex-1 input-with-copy-hover">
                                 <input
                                   data-id={`proxyInput-${index}`}
                                   type="text"
@@ -593,26 +592,26 @@ function DeployPortraitView() {
             {/* Constructor Parameters */}
             {
               constructorInterface?.type === 'constructor' && constructorInterface?.inputs.length > 0 && (
-                <div className='border-top pb-3'>
+                <div className='border-top pb-4'>
                   {
                     constructorInterface?.inputs.map((input, index) => {
                       const isExpanded = expandedInputs.has(index)
                       const currentValue = inputValues[index] || ''
                       return (
-                        <div key={index} className="my-3">
-                          <div className="d-flex gap-2">
+                        <div key={index} className="my-4">
+                          <div className="flex gap-2">
                             <div
                               className='btn border-0 p-0'
                               style={{ minWidth: '120px', cursor: 'pointer' }}
                               onClick={() => toggleInputExpansion(index)}
                             >
-                              <div className='d-flex flex-column align-items-start'>
+                              <div className='flex flex-col items-start'>
                                 <span className="small" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>{input.name}</span>
                                 <span className="text-secondary font-weight-light" style={{ fontSize: '0.7rem' }}>{input.type}</span>
                               </div>
                             </div>
                             {!isExpanded && (
-                              <div className="position-relative flex-fill input-with-copy-hover">
+                              <div className="position-relative flex-1 input-with-copy-hover">
                                 <input
                                   type="text"
                                   className="form-control form-control-sm border-0"
@@ -661,15 +660,15 @@ function DeployPortraitView() {
                     })
                   }
                   {/* Call Data and Parameters */}
-                  <div className="d-flex align-items-center justify-content-between gap-2">
+                  <div className="flex items-center justify-between gap-2">
                     <CopyToClipboard tip="Copy Call Data" icon="fa-clipboard" direction="bottom" getContent={getEncodedCall}>
-                      <button className="btn btn-sm flex-fill border-0" style={{ minWidth: '120px', backgroundColor: 'var(--custom-onsurface-layer-3)' }}>
+                      <button className="btn btn-sm flex-1 border-0" style={{ minWidth: '120px', backgroundColor: 'var(--custom-onsurface-layer-3)' }}>
                         <span className="text-secondary">Call data</span>
                         <i className="far fa-copy ms-1 text-secondary"></i>
                       </button>
                     </CopyToClipboard>
                     <CopyToClipboard tip="Copy Parameters" icon="fa-clipboard" direction="bottom" getContent={getEncodedParams}>
-                      <button className="btn btn-sm flex-fill border-0" style={{ minWidth: '120px', backgroundColor: 'var(--custom-onsurface-layer-3)' }}>
+                      <button className="btn btn-sm flex-1 border-0" style={{ minWidth: '120px', backgroundColor: 'var(--custom-onsurface-layer-3)' }}>
                         <span className="text-secondary">Parameters</span>
                         <i className="far fa-copy ms-1 text-secondary"></i>
                       </button>
@@ -679,13 +678,13 @@ function DeployPortraitView() {
               )}
 
             {/* Value and Gas Limit */}
-            <div className='border-top pt-3'>
+            <div className='border-top pt-4'>
               {/* Value */}
-              <div className="d-flex align-items-center gap-3 mb-3">
+              <div className="flex items-center gap-4 mb-4">
                 <label className="mb-2" style={{ fontSize: '0.9rem', minWidth: '75px', color: themeQuality === 'dark' ? 'white' : 'black' }}>
                   <FormattedMessage id="udapp.value" defaultMessage="Value" />
                 </label>
-                <div className="position-relative flex-fill">
+                <div className="position-relative flex-1">
                   <input
                     id='value'
                     data-id='udapp_value'
@@ -721,11 +720,11 @@ function DeployPortraitView() {
               </div>
 
               {/* Gas Limit */}
-              <div className="d-flex align-items-center gap-3 mb-3">
+              <div className="flex items-center gap-4 mb-4">
                 <label className="mb-2" style={{ fontSize: '0.9rem', minWidth: '75px', color: themeQuality === 'dark' ? 'white' : 'black' }}>
                   <FormattedMessage id="udapp.gasLimit" defaultMessage="Gas limit" />
                 </label>
-                <div className="position-relative flex-fill">
+                <div className="position-relative flex-1">
                   <span
                     className="p-1 pt-0 rounded"
                     style={{
@@ -774,7 +773,7 @@ function DeployPortraitView() {
                 <button
                   onClick={handleDeployClick}
                   data-id="deployButton"
-                  className="btn btn-primary w-100 py-2"
+                  className="btn btn-primary w-full py-2"
                   style={{ fontSize: '1rem', fontWeight: '500' }}
                 >
                   <FormattedMessage id="udapp.deploy" defaultMessage="Deploy" />

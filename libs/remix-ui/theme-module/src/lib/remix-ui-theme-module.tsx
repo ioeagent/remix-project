@@ -18,7 +18,7 @@ export function RemixUiThemeModule({ themeModule }: RemixUiThemeModuleProps) {
 
   return (
     <div className="border-top">
-      <div className="card-body pt-3 pb-2">
+      <div className="card-body pt-4 pb-2">
         <h6 className="card-title">
           <FormattedMessage id="settings.themes" />
         </h6>

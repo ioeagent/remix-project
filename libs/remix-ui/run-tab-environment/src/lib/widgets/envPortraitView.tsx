@@ -310,8 +310,8 @@ function EnvironmentPortraitView() {
   return (
     <>
       <div className='card mx-2 mb-2' style={{ backgroundColor: 'var(--custom-onsurface-layer-1)', '--theme-text-color': themeQuality === 'dark' ? 'white' : 'black' } as React.CSSProperties}>
-        <div className="d-flex align-items-center justify-content-between p-3">
-          <div className="d-flex align-items-center">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center">
             <h6 className="my-auto" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>{intl.formatMessage({ id: 'udapp.environment' })}</h6>
           </div>
           <div className="toggle-container">
@@ -330,8 +330,8 @@ function EnvironmentPortraitView() {
         {widgetState.fork.isVisible.forkUI && <ForkUI />}
         {widgetState.fork.isVisible.resetUI && <ResetUI />}
         {!widgetState.fork.isVisible.forkUI && !widgetState.fork.isVisible.resetUI && (
-          <div className="d-flex p-3 pt-0">
-            <Dropdown className="w-100" show={isEnvironmentDropdownOpen} onToggle={(isOpen) => {
+          <div className="flex p-4 pt-0">
+            <Dropdown className="w-full" show={isEnvironmentDropdownOpen} onToggle={(isOpen) => {
               if (isOpen && isSubCategoryDropdownOpen) setIsSubCategoryDropdownOpen(false)
               setIsEnvironmentDropdownOpen(isOpen)
               if (!isOpen) setIsSubCategoryDropdownOpen(false)
@@ -339,7 +339,7 @@ function EnvironmentPortraitView() {
               <Dropdown.Toggle
                 as={EnvironmentToggle}
                 data-id="settingsSelectEnvOptions"
-                className="w-100 d-inline-block border form-control"
+                className="w-full inline-block border form-control"
                 environmentUI={<EnvCategoryUI
                   isOpen={isSubCategoryDropdownOpen}
                   onToggle={(isOpen: boolean) => {
@@ -350,13 +350,13 @@ function EnvironmentPortraitView() {
                 style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', cursor: 'pointer' }}
               >
                 <div style={{ flexGrow: 1, overflow: 'hidden', display:'flex', justifyContent:'left' }}>
-                  <div className="text-truncate text-secondary">
+                  <div className="truncate text-secondary">
                     <span data-id={`selected-provider-${widgetState.providers.selectedProvider}`}> { selectedProvider?.category || selectedProvider?.displayName || 'Remix VM' }</span>
                   </div>
                 </div>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu as={CustomMenu} className="w-100 custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', zIndex: 1, padding: 0 }}>
+              <Dropdown.Menu as={CustomMenu} className="w-full custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', zIndex: 1, padding: 0 }}>
                 {
                   uniqueDropdownItems.map((provider, index) => {
                     return (
@@ -369,14 +369,14 @@ function EnvironmentPortraitView() {
             </Dropdown>
           </div>)}
         {!widgetState.fork.isVisible.resetUI && (
-          <div className="d-flex px-3">
-            <Dropdown className="w-100" onToggle={(isOpen) => setIsAccountDropdownOpen(isOpen)}>
-              <Dropdown.Toggle as={AddressToggle} data-id="runTabSelectAccount" className={`w-100 d-inline-block border form-control selected-account-hover ${isAccountDropdownOpen ? 'dropdown-open' : ''}`} style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
-                <div className="d-flex align-items-center">
-                  <div className="me-auto text-nowrap text-truncate overflow-hidden font-sm w-100">
-                    <div className="d-flex align-items-center justify-content-between w-100">
-                      <div className='d-flex flex-column align-items-start'>
-                        <div className="text-truncate text-dark d-flex align-items-center">
+          <div className="flex px-4">
+            <Dropdown className="w-full" onToggle={(isOpen) => setIsAccountDropdownOpen(isOpen)}>
+              <Dropdown.Toggle as={AddressToggle} data-id="runTabSelectAccount" className={`w-full inline-block border form-control selected-account-hover ${isAccountDropdownOpen ? 'dropdown-open' : ''}`} style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+                <div className="flex items-center">
+                  <div className="me-auto whitespace-nowrap truncate overflow-hidden font-sm w-full">
+                    <div className="flex items-center justify-between w-full">
+                      <div className='flex flex-col items-start'>
+                        <div className="truncate text-dark flex items-center">
                           {editingAccountId === 'selected' ? (
                             <input
                               ref={editingInputRef}
@@ -438,15 +438,15 @@ function EnvironmentPortraitView() {
                 onDeleteAccount={handleDeleteAccount}
               />
 
-              <Dropdown.Menu as={CustomMenu} className="w-100 custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', padding: 0 }}>
+              <Dropdown.Menu as={CustomMenu} className="w-full custom-dropdown-items overflow-hidden" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)', padding: 0 }}>
                 {
                   widgetState.accounts.defaultAccounts.map((account, index) => {
                     const accountId = `account-${index}`
                     return (
                       <div key={index}>
-                        <Dropdown.Item data-id={account.account} className="d-flex align-items-center justify-content-between py-1 px-2 account-item-hover" onClick={() => handleAccountSelection(account)} style={{ cursor: 'pointer' }}>
-                          <div className='d-flex flex-column align-items-start'>
-                            <div className="text-truncate text-dark d-flex align-items-center">
+                        <Dropdown.Item data-id={account.account} className="flex items-center justify-between py-1 px-2 account-item-hover" onClick={() => handleAccountSelection(account)} style={{ cursor: 'pointer' }}>
+                          <div className='flex flex-col items-start'>
+                            <div className="truncate text-dark flex items-center">
                               {editingAccountId === accountId ? (
                                 <input
                                   ref={editingInputRef}
@@ -499,11 +499,11 @@ function EnvironmentPortraitView() {
             </Dropdown>
           </div>)}
         {enableDelegationAuthorization && delegationAddress && (
-          <div className="px-3">
-            <div className="alert alert-info d-flex align-items-center justify-content-between p-2 mt-2 mb-0 rounded" style={{ fontSize: '0.85rem' }}>
-              <div className="d-flex align-items-center small">
+          <div className="px-4">
+            <div className="alert alert-info flex items-center justify-between p-2 mt-2 mb-0 rounded" style={{ fontSize: '0.85rem' }}>
+              <div className="flex items-center small">
                 <span className="me-2">Delegation:</span>
-                <span className="text-truncate" style={{ maxWidth: '150px' }}>{shortenAddress(delegationAddress)}</span>
+                <span className="truncate" style={{ maxWidth: '150px' }}>{shortenAddress(delegationAddress)}</span>
                 <CopyToClipboard tip="Copy address" icon="fa-copy" direction="top" getContent={() => delegationAddress}>
                   <i className="fa-solid fa-copy small ms-1" style={{ cursor: 'pointer' }}></i>
                 </CopyToClipboard>
@@ -517,7 +517,7 @@ function EnvironmentPortraitView() {
             </div>
           </div>
         )}
-        <div className="mx-auto py-3" style={{ color: 'var(--bs-tertiary-color)' }}>
+        <div className="mx-auto py-4" style={{ color: 'var(--bs-tertiary-color)' }}>
           <span className="small me-1">Deployed Contracts</span><span className="small me-2 text-primary">{ widgetState.deployedContractsCount }</span>
           <span className="small me-1">Transactions recorded</span><span className="small text-primary">{ widgetState.transactionRecorderCount }</span>
         </div>

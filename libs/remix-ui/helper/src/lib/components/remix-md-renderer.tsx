@@ -69,22 +69,22 @@ export function RemixMdRenderer({ markDownContent, theme }: { markDownContent: s
         ),
         // Headings
         h1: ({ node, ...props }) => (
-          <h1 className="ai-heading ai-h1 fs-5 mb-1" {...props} />
+          <h1 className="ai-heading ai-h1 text-lg mb-1" {...props} />
         ),
         h2: ({ node, ...props }) => (
-          <h2 className="ai-heading ai-h2 fs-5 mb-1" {...props} />
+          <h2 className="ai-heading ai-h2 text-lg mb-1" {...props} />
         ),
         h3: ({ node, ...props }) => (
-          <h3 className="ai-heading ai-h3 fs-5 mb-1" {...props} />
+          <h3 className="ai-heading ai-h3 text-lg mb-1" {...props} />
         ),
         h4: ({ node, ...props }) => (
-          <h4 className="ai-heading ai-h4 fs-6 mb-1" {...props} />
+          <h4 className="ai-heading ai-h4 text-base mb-1" {...props} />
         ),
         h5: ({ node, ...props }) => (
-          <h5 className="ai-heading ai-h5 fs-6 mb-1" {...props} />
+          <h5 className="ai-heading ai-h5 text-base mb-1" {...props} />
         ),
         h6: ({ node, ...props }) => (
-          <h6 className="ai-heading ai-h6 fs-6 mb-1" {...props} />
+          <h6 className="ai-heading ai-h6 text-base mb-1" {...props} />
         ),
         // Lists
         ul: ({ node, ...props }) => (

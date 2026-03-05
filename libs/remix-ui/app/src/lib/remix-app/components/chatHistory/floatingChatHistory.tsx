@@ -88,14 +88,14 @@ export const FloatingChatHistory: React.FC<FloatingChatHistoryProps> = ({
 
   return (
     <div
-      className={`d-flex flex-column h-100 ${isFloating ? 'border-end' : isMaximized ? 'border-end' : 'w-100'}`}
+      className={`flex flex-col h-full ${isFloating ? 'border-end' : isMaximized ? 'border-end' : 'w-full'}`}
       style={sidebarStyle}
       data-id="chat-history-sidebar-maximized"
     >
       {/* Header */}
-      <div className="p-3">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h6 className={`mb-0 fw-normal ${theme.toLowerCase() === 'dark' ? 'text-secondary' : ''} sidebar-title`} data-id="floating-chat-heading">
+      <div className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h6 className={`mb-0 font-normal ${theme.toLowerCase() === 'dark' ? 'text-secondary' : ''} sidebar-title`} data-id="floating-chat-heading">
             {isMaximized ? 'Your chats' : 'Chat history'} <span className="text-muted">{filteredConversations.length}</span>
           </h6>
         </div>
@@ -115,7 +115,7 @@ export const FloatingChatHistory: React.FC<FloatingChatHistoryProps> = ({
           <i className={`fas ${isSearching ? 'fa-spinner fa-spin' : 'fa-search'} position-absolute`} style={{ left: '20px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, pointerEvents: 'none', color: theme.toLowerCase() === 'dark' ? '#FFF' : '#333446' }}></i>
           <input
             type="text"
-            className={`form-control ps-5 ${theme.toLowerCase() === 'dark' ? 'search-input-dark' : 'search-input-light'}`}
+            className={`form-control ps-12 ${theme.toLowerCase() === 'dark' ? 'search-input-dark' : 'search-input-light'}`}
             style={{ backgroundColor: theme.toLowerCase() === 'dark' ? '#333446' : 'var(--light-background-color)', color: theme.toLowerCase() === 'dark' ? '#FFF' : '#333446' }}
             placeholder="Search conversations..."
             value={searchQuery}
@@ -125,7 +125,7 @@ export const FloatingChatHistory: React.FC<FloatingChatHistoryProps> = ({
         </div>
 
         {/* Archive Toggle */}
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="flex justify-between items-center">
           <button
             className={`btn btn-sm btn-archive-toggle ${showArchived ? 'active' : ''}`}
             onClick={onToggleArchived}
@@ -140,7 +140,7 @@ export const FloatingChatHistory: React.FC<FloatingChatHistoryProps> = ({
 
       {/* Conversation List */}
       <div
-        className="sidebar-body flex-grow-1 overflow-y-auto p-2"
+        className="sidebar-body grow overflow-y-auto p-2"
         style={{
           backgroundColor: theme.toLowerCase() === 'dark' ? '#1e1e2e' : 'var(--light-background-color)',
           overflowX: 'hidden',
@@ -150,7 +150,7 @@ export const FloatingChatHistory: React.FC<FloatingChatHistoryProps> = ({
         }}
       >
         {filteredConversations.length === 0 ? (
-          <div className="text-center text-muted mt-4">
+          <div className="text-center text-muted mt-6">
             {searchQuery ? (
               <>
                 <i className="fas fa-search fa-2x mb-2"></i>

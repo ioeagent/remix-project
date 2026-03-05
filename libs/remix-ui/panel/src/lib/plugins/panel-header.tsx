@@ -60,11 +60,11 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
   const FilePanelHeading = () => {
 
     return (
-      <section className="px-1 pt-2 pb-0 d-flex flex-row align-items-center">
-        <div className="bg-light rounded-4 p-3">
-          <i className="far fa-copy fs-3"></i>
+      <section className="px-1 pt-2 pb-0 flex flex-row items-center">
+        <div className="bg-light rounded-4 p-4">
+          <i className="far fa-copy text-2xl"></i>
         </div>
-        <div className="d-flex flex-column ms-4">
+        <div className="flex flex-col ms-6">
           <h6>File Explorer</h6>
           <div className="">Create and manage your files.</div>
         </div>
@@ -75,11 +75,11 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
   const RemixAiPanelHeading = () => {
 
     return (
-      <section className="px-1 pt-2 pb-0 d-flex flex-row align-items-center">
-        <div className="bg-light rounded-4 p-3">
-          <i className="fa-kit fa-remixai fs-3"></i>
+      <section className="px-1 pt-2 pb-0 flex flex-row items-center">
+        <div className="bg-light rounded-4 p-4">
+          <i className="fa-kit fa-remixai text-2xl"></i>
         </div>
-        <div className="d-flex flex-column ms-4">
+        <div className="flex flex-col ms-6">
           <h6>RemixAI Assistant</h6>
           <div className="">AI code assistant for Remix IDE.</div>
         </div>
@@ -103,13 +103,13 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
   }, [props.sourcePlugin, props.isMaximized, plugin?.profile.name, appContext])
 
   return (
-    <header className="d-flex flex-column">
-      <div className="swapitHeader ps-3 pe-2 pt-2 pb-0 d-flex flex-row">
+    <header className="flex flex-col">
+      <div className="swapitHeader ps-4 pe-2 pt-2 pb-0 flex flex-row">
         <h6 className="pt-0 mb-1" data-id="sidePanelSwapitTitle">
           {plugin?.profile?.name && <FormattedMessage id={`${plugin.profile.name}.displayName`} defaultMessage={plugin?.profile?.displayName || plugin?.profile?.name} />}
         </h6>
-        <div className="d-flex flex-row">
-          <div className="d-flex flex-row">
+        <div className="flex flex-row">
+          <div className="flex flex-row">
             { plugin?.profile?.maintainedBy?.toLowerCase() === 'remix' ? (
               <CustomTooltip placement="auto" tooltipId="maintainedByTooltipRemix" tooltipText={<FormattedMessage id="home.maintainedByRemix" />}>
                 <i className="text-success mt-1 px-1 fa-solid fa-shield-halved"></i>
@@ -123,8 +123,8 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
                 </CustomTooltip>)
             }
           </div>
-          <div className="swapitHeaderInfoSection d-flex justify-content-between" data-id="swapitHeaderInfoSectionId" onClick={toggleClass}>
-            <CustomTooltip placement="auto-end" tooltipText={<FormattedMessage id="panel.pluginInfo" />} tooltipId="pluginInfoTooltip" tooltipClasses="text-nowrap">
+          <div className="swapitHeaderInfoSection flex justify-between" data-id="swapitHeaderInfoSectionId" onClick={toggleClass}>
+            <CustomTooltip placement="auto-end" tooltipText={<FormattedMessage id="panel.pluginInfo" />} tooltipId="pluginInfoTooltip" tooltipClasses="whitespace-nowrap">
               {tooltipChild}
             </CustomTooltip>
           </div>
@@ -134,9 +134,9 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
                 <>
                   <RenderIf condition={plugin.pinned}>
                     <>
-                      <div className='d-flex' data-id="movePluginToLeft" data-pinnedplugin={`movePluginToLeft-${plugin.profile.name}`} onClick={unPinPlugin}>
-                        <CustomTooltip placement="auto-end" tooltipId="unPinnedMsg" tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id="panel.unPinnedMsg" />}>
-                          <div className="codicon codicon-layout-sidebar-left-dock ms-2 fs-6 fw-bold lh-1" style={{ marginTop: '2px' }}></div>
+                      <div className='flex' data-id="movePluginToLeft" data-pinnedplugin={`movePluginToLeft-${plugin.profile.name}`} onClick={unPinPlugin}>
+                        <CustomTooltip placement="auto-end" tooltipId="unPinnedMsg" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="panel.unPinnedMsg" />}>
+                          <div className="codicon codicon-layout-sidebar-left-dock ms-2 text-base font-bold leading-none" style={{ marginTop: '2px' }}></div>
                         </CustomTooltip>
                       </div>
                       <CustomTooltip placement="bottom-end" tooltipText={props.isMaximized ? "Minimize Panel" : "Maximize Panel"}>
@@ -150,7 +150,7 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
                       </CustomTooltip>
                       <CustomTooltip placement="bottom-end" tooltipText="Hide Panel">
                         <div
-                          className="codicon codicon-close ms-2 fs-5 fw-bold"
+                          className="codicon codicon-close ms-2 text-lg font-bold"
                           onClick={togglePanelHandler}
                           data-id="hideRightSidePanel"
                         ></div>
@@ -158,9 +158,9 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
                     </>
                   </RenderIf>
                   <RenderIfNot condition={plugin.pinned || plugin.profile.name === 'debugger'}>
-                    <div className='d-flex' data-id="movePluginToRight" data-pinnedplugin={`movePluginToRight-${plugin.profile.name}`} onClick={pinPlugin}>
-                      <CustomTooltip placement="auto-end" tooltipId="pinnedMsg" tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id="panel.pinnedMsg" />}>
-                        <div className="codicon codicon-layout-sidebar-right-dock ms-2 fs-6 fw-bold lh-1" style={{ marginTop: '2px' }}></div>
+                    <div className='flex' data-id="movePluginToRight" data-pinnedplugin={`movePluginToRight-${plugin.profile.name}`} onClick={pinPlugin}>
+                      <CustomTooltip placement="auto-end" tooltipId="pinnedMsg" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="panel.pinnedMsg" />}>
+                        <div className="codicon codicon-layout-sidebar-right-dock ms-2 text-base font-bold leading-none" style={{ marginTop: '2px' }}></div>
                       </CustomTooltip>
                     </div>
                   </RenderIfNot>
@@ -170,14 +170,14 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
           }
         </div>
       </div>
-      <div className={`mx-3 mb-2 flex-column ${toggleExpander ? 'd-flex' : 'd-none'}`}>
-        <div className="bg-light p-3 rounded">
+      <div className={`mx-4 mb-2 flex-col ${toggleExpander ? 'flex' : 'hidden'}`}>
+        <div className="bg-light p-4 rounded">
           <div className="border-bottom pb-2 mb-2 font-weight-bold card-title">
             <FormattedMessage id="panel.pluginDetails" defaultMessage="Plugin details" />
           </div>
 
           {plugin?.profile?.maintainedBy && (
-            <div className="d-flex align-items-center mb-3">
+            <div className="flex items-center mb-4">
               <span className={`font-weight-bold ${plugin.profile.maintainedBy.toLowerCase() === 'remix' ? 'text-success' : ''}`}>
                 Maintained by {plugin.profile.maintainedBy}
               </span>
@@ -186,8 +186,8 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
           )}
 
           {plugin?.profile?.description && (
-            <div className="mb-3">
-              <label className="text-body-secondary d-block mb-1">
+            <div className="mb-4">
+              <label className="text-body-secondary block mb-1">
                 <FormattedMessage id="panel.description" />
               </label>
               <span className="small">{plugin.profile.description}</span>
@@ -195,7 +195,7 @@ const RemixUIPanelHeader = (props: RemixPanelProps) => {
           )}
 
           {plugin?.profile?.repo && (
-            <span className="d-flex flex-row align-items-center d-block mb-1">
+            <span className="flex flex-row items-center block mb-1">
               <a href={plugin?.profile?.repo} target="_blank" rel="noreferrer">
                 <FormattedMessage id="panel.makeAnissue" />
               </a>

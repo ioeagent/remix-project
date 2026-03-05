@@ -36,10 +36,10 @@ export const SettingsView = () => {
       {selectedChain && (
         <div>
           <div className="p-2 my-2 border">
-            <span className="fw-bold">Sourcify - {selectedChain.name}</span>
+            <span className="font-bold">Sourcify - {selectedChain.name}</span>
             <ConfigInput label="API URL" id="sourcify-api-url" secret={false} initialValue={chainSettings.verifiers['Sourcify']?.apiUrl ?? ''} saveResult={(result) => handleChange('Sourcify', 'apiUrl', result)} />
             <CustomTooltip tooltipText="Use Sourcify API v1 instead of v2. Necessary for alternative Sourcify instances that did not upgrade.">
-              <div className="d-flex py-1 align-items-center custom-control custom-checkbox">
+              <div className="flex py-1 items-center custom-control custom-checkbox">
                 <input
                   className="form-check-input ms-1"
                   type="checkbox"
@@ -56,17 +56,17 @@ export const SettingsView = () => {
             <ConfigInput label="Jobs URL" id="sourcify-receipts-url" secret={false} initialValue={chainSettings.verifiers['Sourcify']?.receiptsUrl ?? ''} saveResult={(result) => handleChange('Sourcify', 'receiptsUrl', result)} />
           </div>
           <div className="p-2 my-2 border">
-            <span className="fw-bold">Etherscan - {selectedChain.name}</span>
+            <span className="font-bold">Etherscan - {selectedChain.name}</span>
             <ConfigInput label="API Key" id="etherscan-api-key" secret={true} initialValue={chainSettings.verifiers['Etherscan']?.apiKey ?? ''} saveResult={(result) => handleChange('Etherscan', 'apiKey', result)} />
             <ConfigInput label="API URL" id="etherscan-api-url" secret={false} initialValue={chainSettings.verifiers['Etherscan']?.apiUrl ?? ''} saveResult={(result) => handleChange('Etherscan', 'apiUrl', result)} />
             <ConfigInput label="Explorer URL" id="etherscan-explorer-url" secret={false} initialValue={chainSettings.verifiers['Etherscan']?.explorerUrl ?? ''} saveResult={(result) => handleChange('Etherscan', 'explorerUrl', result)} />
           </div>
           <div className="p-2 my-2 border">
-            <span className="fw-bold">Blockscout - {selectedChain.name}</span>
+            <span className="font-bold">Blockscout - {selectedChain.name}</span>
             <ConfigInput label="Instance URL" id="blockscout-api-url" secret={false} initialValue={chainSettings.verifiers['Blockscout']?.apiUrl ?? ''} saveResult={(result) => handleChange('Blockscout', 'apiUrl', result)} />
           </div>
           <div className="p-2 my-2 border">
-            <span className="fw-bold">Routescan - {selectedChain.name}</span>
+            <span className="font-bold">Routescan - {selectedChain.name}</span>
             <ConfigInput label="API Key (optional)" id="routescan-api-key" secret={true} initialValue={chainSettings.verifiers['Routescan']?.apiKey ?? ''} saveResult={(result) => handleChange('Routescan', 'apiKey', result)} />
             <ConfigInput label="API URL" id="routescan-api-url" secret={false} initialValue={chainSettings.verifiers['Routescan']?.apiUrl ?? ''} saveResult={(result) => handleChange('Routescan', 'apiUrl', result)} />
             <ConfigInput label="Explorer URL" id="routescan-explorer-url" secret={false} initialValue={chainSettings.verifiers['Routescan']?.explorerUrl ?? ''} saveResult={(result) => handleChange('Routescan', 'explorerUrl', result)} />

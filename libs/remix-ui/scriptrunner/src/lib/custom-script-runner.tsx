@@ -79,7 +79,7 @@ export const CustomScriptRunner = (props: ScriptRunnerUIProps) => {
 
   if (loading) {
     return <div style={{ padding: '20px', maxWidth: '400px', margin: 'auto' }}>
-      <div className="text-center py-5">
+      <div className="text-center py-12">
         <i className="fas fa-spinner fa-pulse fa-2x"></i>
       </div>
     </div>
@@ -130,7 +130,7 @@ export const CustomScriptRunner = (props: ScriptRunnerUIProps) => {
           </div>
         </CustomTooltip>
         <button
-          className="btn btn-primary w-100 mt-1"
+          className="btn btn-primary w-full mt-1"
           onClick={handleAddDependency}>
                     Add
         </button>
@@ -138,7 +138,7 @@ export const CustomScriptRunner = (props: ScriptRunnerUIProps) => {
       <ul>
         {dependencies.map((dependency, index) => (
           <li key={index} style={{ marginBottom: '5px' }}>
-            <div className="d-flex align-items-baseline justify-content-between">
+            <div className="flex items-baseline justify-between">
               {dependency.name} - {dependency.version}
               <button
                 onClick={() => handleRemoveDependency(index)}
@@ -152,15 +152,15 @@ export const CustomScriptRunner = (props: ScriptRunnerUIProps) => {
         ))}
       </ul>
       {dependencies.length > 0 && (
-        <button className="btn btn-primary w-100" onClick={handleSaveToFile} style={{ marginTop: '20px' }}>
+        <button className="btn btn-primary w-full" onClick={handleSaveToFile} style={{ marginTop: '20px' }}>
                     Save config
         </button>
       )}
-      <button className="btn btn-primary w-100" onClick={openConfig} style={{ marginTop: '20px' }}>
+      <button className="btn btn-primary w-full" onClick={openConfig} style={{ marginTop: '20px' }}>
                 Open config
       </button>
       {dependencies.length > 0 && (
-        <button className="btn btn-success w-100" onClick={activateCustomConfig} style={{ marginTop: '20px' }}>
+        <button className="btn btn-success w-full" onClick={activateCustomConfig} style={{ marginTop: '20px' }}>
                     Activate
         </button>)}
     </div>

@@ -6,7 +6,7 @@ import { CustomTooltip } from '@remix-ui/helper'
 import { ThemeContext } from '../themeContext'
 import { TrackingContext } from '@remix-ide/tracking'
 import { HomeTabEvent, MatomoEvent } from '@remix-api'
-import { Placement } from 'react-bootstrap/esm/types'
+import type { Placement } from '@remix-ui/helper'
 import { DesktopDownload } from 'libs/remix-ui/desktop-download' // eslint-disable-line @nrwl/nx/enforce-module-boundaries
 
 type HometabIconSection = {
@@ -86,12 +86,12 @@ function HomeTabTitle() {
   }
 
   return (
-    <div className="card mb-3 p-5 rounded overflow-hidden border">
+    <div className="card mb-4 p-12 rounded overflow-hidden border">
       <img src="assets/img/remix-link-illustration.svg" className="home-tab-banner" alt="Remix Logo" style={{ position: 'absolute', top: '-200px', left: '125px', width: 400, height: 400, zIndex: 0 }} />
       <div style={{ backgroundColor: 'var(--bs-body-bg)', opacity: 0.8, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}></div>
       <div style={{ zIndex: 2 }}>
-        <div className="mb-0 d-flex align-items-center">
-          <div className="ms-2 d-flex">
+        <div className="mb-0 flex items-center">
+          <div className="ms-2 flex">
             <div onClick={() => playRemi()}>
               <svg id="Ebene_2" data-name="Ebene 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 100" style={{ height: '40px' }}>
                 <path fill={`${isDark ? 'white' : 'black'}`} d="M91.84,35a.09.09,0,0,1-.1-.07,41,41,0,0,0-79.48,0,.09.09,0,0,1-.1.07C9.45,35,1,35.35,1,42.53c0,8.56,1,16,6,20.32,2.16,1.85,5.81,2.3,9.27,2.22a44.4,44.4,0,0,0,6.45-.68.09.09,0,0,0,.06-.15A34.81,34.81,0,0,1,17,45c0-.1,0-.21,0-.31a35,35,0,0,1,70,0c0,.1,0,.21,0,.31a34.81,34.81,0,0,1-5.78,19.24.09.09,0,0,0,.06.15,44.4,44.4,0,0,0,6.45.68c3.46.08,7.11-.37,9.27-2.22,5-4.27,6-11.76,6-20.32C103,35.35,94.55,35,91.84,35Z" />
@@ -101,21 +101,21 @@ function HomeTabTitle() {
             </div>
             <audio id="remiAudio" muted={false} src="assets/audio/remiGuitar-single-power-chord-A-minor.mp3" ref={remiAudioEl}></audio>
           </div>
-          <span className={`h-80 text-uppercase ps-2 ${isDark ? 'text-white' : 'text-black'}`} style={{ fontSize: 'xx-large', fontFamily: 'Noah, sans-serif' }}>
+          <span className={`h-80 uppercase ps-2 ${isDark ? 'text-white' : 'text-black'}`} style={{ fontSize: 'xx-large', fontFamily: 'Noah, sans-serif' }}>
         Remix
           </span>
         </div>
-        <div className={`${isDark ? 'text-white' : 'text-black'} mb-3`} style={{ fontSize: '0.7rem' }}><FormattedMessage id="home.projectTemplates"/> <span className="text-primary"><FormattedMessage id="home.projectTemplates2"/></span></div>
-        <div className="d-flex mb-3">
-          <span className="d-flex flex-nowrap align-self-end">
+        <div className={`${isDark ? 'text-white' : 'text-black'} mb-4`} style={{ fontSize: '0.7rem' }}><FormattedMessage id="home.projectTemplates"/> <span className="text-primary"><FormattedMessage id="home.projectTemplates2"/></span></div>
+        <div className="flex mb-4">
+          <span className="flex flex-nowrap self-end">
             {iconButtons.map((button, index) => (
               <CustomTooltip
                 key={index}
                 placement={button.placement}
                 tooltipId="overlay-tooltip"
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
                 tooltipText={button.textToolip}
-                tooltipTextClasses="border bg-light text-dark p-1 pe-3"
+                tooltipTextClasses="border bg-light text-dark p-1 pe-4"
               >
                 <button
                   key={index}
@@ -128,7 +128,7 @@ function HomeTabTitle() {
                       isClick: true
                     })
                   }}
-                  className={button.customIcon ? `border-0 h-100 px-1 btn text-dark d-flex align-items-center` : `border-0 h-100 px-1 btn fab ${button.iconClass} text-dark`}
+                  className={button.customIcon ? `border-0 h-full px-1 btn text-dark flex items-center` : `border-0 h-full px-1 btn fab ${button.iconClass} text-dark`}
                 >
                   {button.customIcon}
                 </button>
@@ -136,21 +136,21 @@ function HomeTabTitle() {
             ))}
           </span>
         </div>
-        <div className="d-flex flex-row flex-wrap justify-content-between">
-          <a className="btn btn-secondary bg-dark text-decoration-none col-md-5" style={{ fontSize: '0.7rem', minWidth: '125px', color: isDark ? 'white' : 'black' }} href="https://remix-ide.readthedocs.io/en/latest" target="_blank" onClick={() => trackMatomoEvent({
+        <div className="flex flex-row flex-wrap justify-between">
+          <a className="btn btn-secondary bg-dark no-underline md:w-5/12" style={{ fontSize: '0.7rem', minWidth: '125px', color: isDark ? 'white' : 'black' }} href="https://remix-ide.readthedocs.io/en/latest" target="_blank" onClick={() => trackMatomoEvent({
             category: 'hometab',
             action: 'titleCard',
             name: 'documentation',
             isClick: true
           })}><FormattedMessage id="home.documentation" /></a>
-          <a className="btn btn-secondary bg-dark text-decoration-none col-md-5" style={{ fontSize: '0.7rem', minWidth: '125px', color: isDark ? 'white' : 'black' }} href="https://remix.live" target="_blank" onClick={() => trackMatomoEvent({
+          <a className="btn btn-secondary bg-dark no-underline md:w-5/12" style={{ fontSize: '0.7rem', minWidth: '125px', color: isDark ? 'white' : 'black' }} href="https://remix.live" target="_blank" onClick={() => trackMatomoEvent({
             category: 'hometab',
             action: 'titleCard',
             name: 'webSite',
             isClick: true
           })}><FormattedMessage id="home.website" /></a>
         </div>
-        <DesktopDownload className='mt-3' compact trackingContext="hometab" />
+        <DesktopDownload className='mt-4' compact trackingContext="hometab" />
       </div>
     </div>
   )

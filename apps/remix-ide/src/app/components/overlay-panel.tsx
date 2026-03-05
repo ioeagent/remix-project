@@ -103,7 +103,7 @@ export class OverlayPanel extends AbstractPanel {
 
     return (
       <div
-        className={`overlay-panel ${appState?.showOverlayPanel ? 'd-flex' : 'd-none'}`}
+        className={`overlay-panel ${appState?.showOverlayPanel ? 'flex' : 'hidden'}`}
         style={{
           position: 'fixed',
           inset: 0,
@@ -113,16 +113,16 @@ export class OverlayPanel extends AbstractPanel {
         }}
         data-id="overlayPanelContainer"
       >
-        <div className="d-flex flex-column w-100 h-100" style={{ background: 'var(--bs-body-bg)' }}>
+        <div className="flex flex-col w-full h-full" style={{ background: 'var(--bs-body-bg)' }}>
           {/* Header with close button */}
           <div
-            className="d-flex align-items-center justify-content-between px-3 py-2 border-bottom"
+            className="flex items-center justify-between px-4 py-2 border-bottom"
             style={{
               backgroundColor: 'var(--bs-secondary-bg)',
               minHeight: '48px'
             }}
           >
-            <div className="d-flex align-items-center">
+            <div className="flex items-center">
               {activePlugin?.profile?.icon && (
                 <img
                   src={activePlugin.profile.icon}
@@ -146,7 +146,7 @@ export class OverlayPanel extends AbstractPanel {
           </div>
 
           {/* Content area */}
-          <div className="flex-grow-1 overflow-auto" style={{ background: 'var(--bs-body-bg)' }}>
+          <div className="grow overflow-auto" style={{ background: 'var(--bs-body-bg)' }}>
             <RemixPluginPanel
               header={<></>}
               plugins={state.plugins}

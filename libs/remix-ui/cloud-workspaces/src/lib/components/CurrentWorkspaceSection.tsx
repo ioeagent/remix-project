@@ -290,7 +290,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
         {/* Local workspace name */}
         <div className="small mb-1">
           <span className="text-muted">Local: </span>
-          <span className="fw-bold text-truncate" title={status.workspaceName}>
+          <span className="font-bold truncate" title={status.workspaceName}>
             {status.workspaceName}
           </span>
         </div>
@@ -299,7 +299,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
         <div className="small mb-2">
           <span className="text-muted">Cloud: </span>
           {isEditingName ? (
-            <div className="d-inline-flex align-items-center">
+            <div className="inline-flex items-center">
               <input
                 type="text"
                 className="form-control form-control-sm py-0"
@@ -332,8 +332,8 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
             </div>
           ) : (
             <>
-              <span className="text-truncate" title={status.remoteId || ''}>
-                {status.remoteId || <span className="text-muted fst-italic">
+              <span className="truncate" title={status.remoteId || ''}>
+                {status.remoteId || <span className="text-muted italic">
                   <FormattedMessage id="cloudWorkspaces.notLinked" defaultMessage="Not linked" />
                 </span>}
               </span>
@@ -357,7 +357,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
 
         {/* Status indicators */}
         {status.remoteId && status.ownedByCurrentUser && (
-          <div className="d-flex flex-wrap gap-2 mb-2" style={{ fontSize: '0.7rem' }}>
+          <div className="flex flex-wrap gap-2 mb-2" style={{ fontSize: '0.7rem' }}>
             <span className="text-muted">
               <i className="fas fa-cloud-upload-alt me-1"></i>
               <FormattedMessage id="cloudWorkspaces.lastSaved" defaultMessage="Saved" />: {formatRelativeTime(status.lastSaved)}
@@ -409,7 +409,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
               />
             </p>
             <button
-              className="btn btn-primary w-100"
+              className="btn btn-primary w-full"
               onClick={handleEnableCloud}
               disabled={status.isLinking || status.isSaving}
               style={{ fontSize: '0.85rem' }}
@@ -426,7 +426,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
 
         {/* Action buttons - only show when linked */}
         {status.remoteId && status.ownedByCurrentUser && (
-          <div className="d-flex gap-1">
+          <div className="flex gap-1">
             <CustomTooltip
               placement="top"
               tooltipText={
@@ -436,7 +436,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
               }
             >
               <button
-                className="btn btn-sm btn-primary flex-grow-1"
+                className="btn btn-sm btn-primary grow"
                 onClick={handleSaveToCloud}
                 disabled={status.isSaving || status.isBackingUp || status.isRestoring || !status.canSave}
                 style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
@@ -459,7 +459,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
               }
             >
               <button
-                className="btn btn-sm btn-secondary flex-grow-1"
+                className="btn btn-sm btn-secondary grow"
                 onClick={handleCreateBackup}
                 disabled={status.isSaving || status.isBackingUp || status.isRestoring || !status.canSave}
                 style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
@@ -480,7 +480,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
                 tooltipText={intl.formatMessage({ id: 'cloudWorkspaces.restoreAutosaveTip', defaultMessage: 'Restore from last cloud save' })}
               >
                 <button
-                  className="btn btn-sm btn-success flex-grow-1"
+                  className="btn btn-sm btn-success grow"
                   onClick={handleRestoreAutosave}
                   disabled={status.isSaving || status.isBackingUp || status.isRestoring}
                   style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
@@ -499,9 +499,9 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
 
         {/* Autosave toggle - only show when linked */}
         {status.remoteId && status.ownedByCurrentUser && (
-          <div className="mt-2 d-flex align-items-center justify-content-between px-1">
+          <div className="mt-2 flex items-center justify-between px-1">
             <span
-              className="small text-muted mb-0 d-flex align-items-center"
+              className="small text-muted mb-0 flex items-center"
               style={{ fontSize: '0.75rem' }}
             >
               <i className={`fas ${status.autosaveEnabled ? 'fa-cloud-upload-alt text-success' : 'fa-cloud text-muted'} me-1`}></i>
@@ -520,9 +520,9 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
 
         {/* Encryption toggle - only show when linked */}
         {status.remoteId && status.ownedByCurrentUser && (
-          <div className="mt-2 d-flex align-items-center justify-content-between px-1">
+          <div className="mt-2 flex items-center justify-between px-1">
             <span
-              className="small text-muted mb-0 d-flex align-items-center"
+              className="small text-muted mb-0 flex items-center"
               style={{ fontSize: '0.75rem' }}
             >
               <i className={`fas ${status.encryptionEnabled ? 'fa-lock text-warning' : 'fa-lock-open text-muted'} me-1`}></i>
@@ -536,7 +536,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
                 </CustomTooltip>
               )}
             </span>
-            <div className="d-flex align-items-center gap-1">
+            <div className="flex items-center gap-1">
               {status.encryptionEnabled && (
                 <CustomTooltip
                   placement="top"
@@ -587,7 +587,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
 
       {/* Passphrase Modal */}
       {showPassphraseModal && (
-        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setShowPassphraseModal(false)}>
+        <div className="modal block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setShowPassphraseModal(false)}>
           <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content">
               <div className="modal-header py-2">
@@ -599,7 +599,7 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
               </div>
               <div className="modal-body">
                 {/* Warning */}
-                <div className="alert alert-danger py-2 mb-3" style={{ fontSize: '0.8rem' }}>
+                <div className="alert alert-danger py-2 mb-4" style={{ fontSize: '0.8rem' }}>
                   <i className="fas fa-exclamation-triangle me-1"></i>
                   <strong><FormattedMessage id="cloudWorkspaces.warning" defaultMessage="Warning" />:</strong>{' '}
                   <FormattedMessage
@@ -609,9 +609,9 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
                 </div>
 
                 {/* Generate button */}
-                <div className="mb-3">
+                <div className="mb-4">
                   <button
-                    className="btn btn-outline-primary btn-sm w-100"
+                    className="btn btn-outline-primary btn-sm w-full"
                     onClick={handleGeneratePassphrase}
                   >
                     <i className="fas fa-random me-1"></i>
@@ -621,9 +621,9 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
 
                 {/* Generated passphrase display */}
                 {generatedPassphrase && (
-                  <div className="mb-3 p-2 bg-light rounded border">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <code className="text-break" style={{ fontSize: '0.85rem' }}>{generatedPassphrase}</code>
+                  <div className="mb-4 p-2 bg-light rounded border">
+                    <div className="flex justify-between items-center">
+                      <code className="break-words" style={{ fontSize: '0.85rem' }}>{generatedPassphrase}</code>
                       <button
                         className="btn btn-sm btn-outline-secondary ms-2"
                         onClick={handleCopyPassphrase}
@@ -631,14 +631,14 @@ export const CurrentWorkspaceSection: React.FC<CurrentWorkspaceSectionProps> = (
                         <i className={`fas ${isCopied ? 'fa-check text-success' : 'fa-copy'}`}></i>
                       </button>
                     </div>
-                    <small className="text-muted d-block mt-1">
+                    <small className="text-muted block mt-1">
                       <FormattedMessage id="cloudWorkspaces.copyAndSave" defaultMessage="Copy and save this passphrase securely" />
                     </small>
                   </div>
                 )}
 
                 {/* Manual entry */}
-                <div className="mb-3">
+                <div className="mb-4">
                   <label className="form-label small text-muted">
                     <FormattedMessage id="cloudWorkspaces.orEnterOwn" defaultMessage="Or enter your own passphrase (min 8 characters):" />
                   </label>

@@ -1,9 +1,8 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import React, { useContext, useState, useEffect } from 'react'
-import { Button, Dropdown } from 'react-bootstrap'
 import { TopbarContext } from '../context/topbarContext'
 import { appPlatformTypes, platformContext } from '@remix-ui/app'
-import { CustomTooltip } from '@remix-ui/helper'
+import { Button, CustomTooltip, Dropdown } from '@remix-ui/helper'
 import path from 'path'
 
 interface ElectronWorkspaceMenuProps {
@@ -57,7 +56,7 @@ export const ElectronWorkspaceMenu: React.FC<ElectronWorkspaceMenuProps> = ({
               return (
                 <div
                   key={index}
-                  className="d-flex align-items-center mb-1 px-1 py-1 rounded"
+                  className="flex items-center mb-1 px-1 py-1 rounded"
                   style={{
                     cursor: 'pointer'
                   }}
@@ -68,7 +67,7 @@ export const ElectronWorkspaceMenu: React.FC<ElectronWorkspaceMenuProps> = ({
                     e.currentTarget.style.backgroundColor = 'transparent'
                   }}
                 >
-                  <div className="flex-grow-1 d-flex align-items-center">
+                  <div className="grow flex items-center">
                     <CustomTooltip
                       placement="top"
                       tooltipId="recent-folder-open-tooltip"
@@ -76,7 +75,7 @@ export const ElectronWorkspaceMenu: React.FC<ElectronWorkspaceMenuProps> = ({
                     >
                       <Button
                         variant="link"
-                        className="flex-grow-1 d-flex align-items-center py-1 px-2 text-start text-truncate"
+                        className="grow flex items-center py-1 px-2 text-left truncate"
                         onClick={(e) => {
                           openRecentFolder(folder)
                           setShowMain(false)
@@ -90,7 +89,7 @@ export const ElectronWorkspaceMenu: React.FC<ElectronWorkspaceMenuProps> = ({
                         }}
                       >
                         <i className="fas fa-folder me-2"></i>
-                        <span className="text-truncate">{folderName}</span>
+                        <span className="truncate">{folderName}</span>
                       </Button>
                     </CustomTooltip>
                     <CustomTooltip
@@ -201,7 +200,7 @@ export const ElectronWorkspaceMenu: React.FC<ElectronWorkspaceMenuProps> = ({
         </>
       )}
 
-      <div className="d-grid gap-2">
+      <div className="grid gap-2">
         <Dropdown.Item
           data-id="workspaceOpenFolder"
           onClick={(e) => {
@@ -213,7 +212,7 @@ export const ElectronWorkspaceMenu: React.FC<ElectronWorkspaceMenuProps> = ({
             color: 'inherit',
           }}
         >
-          <button className="w-100 btn btn-primary font-weight-light text-decoration-none mb-2 rounded-lg">
+          <button className="w-full btn btn-primary font-weight-light no-underline mb-2 rounded-lg">
             <i className="fas fa-folder-open me-2"></i>
             Open Folder
           </button>
@@ -229,7 +228,7 @@ export const ElectronWorkspaceMenu: React.FC<ElectronWorkspaceMenuProps> = ({
             color: 'inherit',
           }}
         >
-          <button className="w-100 btn btn-outline-primary font-weight-light text-decoration-none mb-2 rounded-lg">
+          <button className="w-full btn btn-outline-primary font-weight-light no-underline mb-2 rounded-lg">
             <i className="fas fa-plus me-2"></i>
             Create New Project
           </button>

@@ -1,8 +1,8 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { Button, Dropdown } from '@remix-ui/helper';
 import BasicLogo from '../components/BasicLogo'
 import '../css/topbar.css'
-import { Button, Dropdown } from 'react-bootstrap'
 import { CustomToggle, CustomTopbarMenu } from 'libs/remix-ui/helper/src/lib/components/custom-dropdown'
 import { WorkspaceMetadata } from 'libs/remix-ui/workspace/src/lib/types'
 import { AppContext, platformContext } from 'libs/remix-ui/app/src/lib/remix-app/context/context'
@@ -367,7 +367,7 @@ export function RemixUiTopbar() {
     global.modal(
       intl.formatMessage({ id: 'filePanel.workspace.deleteAll' }),
       <>
-        <div className="d-flex flex-column">
+        <div className="flex flex-col">
           <span className="pb-1">{intl.formatMessage({ id: 'filePanel.workspace.deleteAllConfirm1' })}</span>
           <span>{intl.formatMessage({ id: 'filePanel.workspace.deleteAllConfirm2' })}</span>
         </div>
@@ -391,7 +391,7 @@ export function RemixUiTopbar() {
 
   const renameModalMessage = (workspaceName?: string) => {
     return (
-      <div className='d-flex flex-column'>
+      <div className='flex flex-col'>
         <label><FormattedMessage id="filePanel.name" /></label>
         <input type="text" data-id="modalDialogCustomPromptTextRename" defaultValue={workspaceName || currentMenuItemName} ref={workspaceRenameInput} className="form-control" />
       </div>
@@ -429,7 +429,7 @@ export function RemixUiTopbar() {
       <>
         {props.isGitRepo ? (
           <div
-            className="d-flex flex-row-reverse justify-content-end"
+            className="flex flex-row-reverse justify-end"
           >
             <span
             >
@@ -438,9 +438,9 @@ export function RemixUiTopbar() {
           </div>
         ) : (
           <div
-            className="d-flex justify-content-between"
+            className="flex justify-between"
           >
-            <span>{currentWorkspace === props.mName ? <span>&#10003; {props.mName} </span> : <span className="ps-3">{props.mName}</span>}</span>
+            <span>{currentWorkspace === props.mName ? <span>&#10003; {props.mName} </span> : <span className="ps-4">{props.mName}</span>}</span>
           </div>
         )}
       </>
@@ -471,13 +471,13 @@ export function RemixUiTopbar() {
         {global.fs.browser.workspaces.map(({ name, isGitRepo }, index) => (
           <div
             key={index}
-            className="d-flex justify-content-between w-100"
+            className="flex justify-between w-full"
           >
             <Dropdown.Item
               key={index}
               onClick={() => { switchWorkspace(name) }}
               data-id={`dropdown-item-${name}`}
-              className="text-truncate"
+              className="truncate"
               style={{ width: '90%' }}
             >
               <IsGitRepoDropDownMenuItem isGitRepo={isGitRepo} mName={name} />
@@ -518,15 +518,15 @@ export function RemixUiTopbar() {
 
   return (
     <section
-      className="h-100 d-flex bg-light border flex-nowrap px-2"
+      className="h-full flex bg-light border flex-nowrap px-2"
     >
-      <div className="d-flex flex-row align-items-center justify-content-between w-100">
+      <div className="flex flex-row items-center justify-between w-full">
         <div
-          className="d-flex flex-row align-items-center m-1"
+          className="flex flex-row items-center m-1"
           style={{ minWidth: '33%' }}
         >
           <div
-            className="d-flex align-items-center justify-content-between me-3 cursor-pointer"
+            className="flex items-center justify-between me-4 cursor-pointer"
             onClick={async () => {
               await plugin.call('tabs', 'focus', 'home')
               trackMatomoEvent({ category: 'topbar', action: 'header', name: 'Home', isClick: true })
@@ -545,7 +545,7 @@ export function RemixUiTopbar() {
               <BasicLogo />
             </div>
             <div
-              className="text-primary ms-2 font-weight-light text-uppercase cursor-pointer"
+              className="text-primary ms-2 font-weight-light uppercase cursor-pointer"
               style={{ fontSize: '1.2rem' }}
               onClick={async () => {
                 await plugin.call('tabs', 'focus', 'home')
@@ -556,7 +556,7 @@ export function RemixUiTopbar() {
             </div>
           </div>
           <span
-            className="btn btn-sm border border-secondary text-decoration-none font-weight-light"
+            className="btn btn-sm border border-secondary no-underline font-weight-light"
             onClick={() => {
               window.open(latestReleaseNotesUrl, '_blank')
             }}
@@ -568,7 +568,7 @@ export function RemixUiTopbar() {
             {currentReleaseVersion}
           </span>
         </div>
-        <div className="m-1 justify-content-center d-flex align-self-center " style={{ minWidth: '33%' }}>
+        <div className="m-1 justify-center flex self-center " style={{ minWidth: '33%' }}>
           <WorkspacesDropdown
             menuItems={menuItems}
             toggleDropdown={toggleDropdown}
@@ -592,10 +592,10 @@ export function RemixUiTopbar() {
             connectToLocalhost={() => switchWorkspace(LOCALHOST)}
             openTemplateExplorer={openTemplateExplorer}
           />
-          <div className="d-flex ms-4 gap-2 align-items-center" >
+          <div className="flex ms-6 gap-2 items-center" >
             <CustomTooltip placement="bottom-start" tooltipText={`Toggle Left Side Panel`}>
               <div
-                className={`codicon codicon-layout-sidebar-left${leftPanelHidden ? '-off' : ''} fs-5`}
+                className={`codicon codicon-layout-sidebar-left${leftPanelHidden ? '-off' : ''} text-lg`}
                 data-id="toggleLeftSidePanelIcon"
                 onClick={() => {
                   if (leftPanelHidden) trackMatomoEvent({ category: 'topbar', action: 'leftSidePanel', name: 'showLeftSidePanelClicked', isClick: true })
@@ -607,7 +607,7 @@ export function RemixUiTopbar() {
             </CustomTooltip>
             <CustomTooltip placement="bottom-start" tooltipText={`Toggle Bottom Panel`}>
               <div
-                className={`codicon codicon-layout-panel${bottomPanelHidden ? '-off' : ''} fs-5`}
+                className={`codicon codicon-layout-panel${bottomPanelHidden ? '-off' : ''} text-lg`}
                 data-id="toggleBottomPanelIcon"
                 onClick={() => {
                   if (bottomPanelHidden) trackMatomoEvent({ category: 'topbar', action: 'terminalPanel', name: 'showTerminalPanelClicked', isClick: true })
@@ -619,7 +619,7 @@ export function RemixUiTopbar() {
             </CustomTooltip>
             <CustomTooltip placement="bottom-start" tooltipText={`Toggle Right Side Panel`}>
               <div
-                className={`codicon codicon-layout-sidebar-right${rightPanelHidden ? '-off' : ''} fs-5`}
+                className={`codicon codicon-layout-sidebar-right${rightPanelHidden ? '-off' : ''} text-lg`}
                 data-id="toggleRightSidePanelIcon"
                 onClick={() => {
                   if (rightPanelHidden) trackMatomoEvent({ category: 'topbar', action: 'rightSidePanel', name: 'showRightSidePanelClicked', isClick: true })
@@ -632,7 +632,7 @@ export function RemixUiTopbar() {
           </div>
         </div>
         <div
-          className="d-flex flex-row align-items-center justify-content-end flex-nowrap"
+          className="flex flex-row items-center justify-end flex-nowrap"
           style={{ minWidth: '33%' }}
         >
           <>
@@ -649,17 +649,17 @@ export function RemixUiTopbar() {
                 plugin={plugin}
                 variant="compact"
                 showCredits={true}
-                className="ms-3"
+                className="ms-4"
                 cloneGitRepository={showCloneModal}
                 publishToGist={publishToGist}
               />
             )}
           </>
-          <NotificationBell className="ms-3" />
+          <NotificationBell className="ms-4" />
           {feedbackFormUrl && (
             <CustomTooltip placement="bottom" tooltipText="Send Feedback">
               <span
-                className="btn btn-sm btn-primary d-flex align-items-center gap-1 ms-3"
+                className="btn btn-sm btn-primary flex items-center gap-1 ms-4"
                 style={{ cursor: 'pointer', padding: '0.25rem 0.6rem' }}
                 onClick={() => {
                   setFeedbackPanelOpen(true)
@@ -674,7 +674,7 @@ export function RemixUiTopbar() {
           )}
           <span
             style={{ fontSize: '1.5rem', cursor: 'pointer' }}
-            className="ms-3"
+            className="ms-4"
             onClick={async () => {
               const isActive = await plugin.call('manager', 'isActive', 'settings')
               if (!isActive) await plugin.call('manager', 'activatePlugin', 'settings')

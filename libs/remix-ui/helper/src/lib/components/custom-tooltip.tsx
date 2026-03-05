@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react'
-import { OverlayTrigger, Popover } from 'react-bootstrap'
+
 import { CustomTooltipType } from '../../types/customtooltip'
+import { OverlayTrigger, Popover } from '@remix-ui/helper'
 
 export function CustomTooltip({ children, placement, tooltipId, tooltipClasses, tooltipText, tooltipTextClasses, delay, hide, show }: CustomTooltipType) {
   // Global tooltip disable flag for E2E tests
@@ -39,7 +40,7 @@ export function CustomTooltip({ children, placement, tooltipId, tooltipClasses, 
           <Popover.Body
             id={!tooltipId ? `${tooltipText}Tooltip` : tooltipId}
             style={{ minWidth: 'fit-content' }}
-            className={'text-wrap p-1 px-2 bg-body w-100' + tooltipClasses}
+            className={'text-wrap p-1 px-2 bg-body w-full' + tooltipClasses}
           >
             {typeof tooltipText === 'string' ? <span className={'text-wrap p-1 px-2 bg-body ' + { tooltipTextClasses }}>{tooltipText}</span> : tooltipText}
           </Popover.Body>

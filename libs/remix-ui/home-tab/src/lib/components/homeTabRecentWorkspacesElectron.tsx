@@ -80,28 +80,28 @@ function HomeTabRecentWorkspacesElectron({ plugin }: HomeTabFileProps) {
   }
 
   return (
-    <div className="justify-content-start d-flex flex-column my-5" id="hTFileSection">
-      <div className="d-flex flex-column mb-5 remixui_recentworkspace">
-        <label style={{ fontSize: '1rem' }} className="mt-1 mb-3">
+    <div className="justify-start flex flex-col my-12" id="hTFileSection">
+      <div className="flex flex-col mb-12 remixui_recentworkspace">
+        <label style={{ fontSize: '1rem' }} className="mt-1 mb-4">
           Recent Projects
         </label>
-        <div className="d-flex flex-column ps-2">
+        <div className="flex flex-col ps-2">
           <div className={showAll ? "overflow-auto" : ""} style={{ maxHeight: showAll ? '300px' : 'auto' }}>
             {
               Array.isArray(state.recentFolders) && state.recentFolders.slice(0, showAll ? state.recentFolders.length : 3).map((folderPath: string, index) => {
                 const workspaceName = getWorkspaceName(folderPath)
 
                 return (
-                  <div key={index} className="d-flex flex-row align-items-center mb-2">
+                  <div key={index} className="flex flex-row items-center mb-2">
                     { loadingWorkspace === folderPath ? <i className="fad fa-spinner fa-spin me-2"></i> : <i className="fas fa-folder-tree me-2"></i> }
-                    <div className="d-flex flex-row justify-content-between w-100 flex-wrap">
-                      <a className="cursor-pointer text-decoration-none d-inline-block" href="#" onClick={(e) => {
+                    <div className="flex flex-row justify-between w-full flex-wrap">
+                      <a className="cursor-pointer no-underline inline-block" href="#" onClick={(e) => {
                         e.preventDefault()
                         handleOpenRecentWorkspace(folderPath)
                       }}>
                         <span>{workspaceName}</span>
                       </a>
-                      <div className="d-flex">
+                      <div className="flex">
                         <CustomTooltip tooltipText="Open in new window" placement="top">
                           <i className="fas fa-clone me-2 cursor-pointer" onClick={() => handleOpenInNewWindow(folderPath)}></i>
                         </CustomTooltip>
@@ -123,7 +123,7 @@ function HomeTabRecentWorkspacesElectron({ plugin }: HomeTabFileProps) {
             <div className="text-center mt-2">
               <a
                 href="#"
-                className="text-decoration-none small"
+                className="no-underline small"
                 onClick={(e) => {
                   e.preventDefault()
                   setShowAll(!showAll)

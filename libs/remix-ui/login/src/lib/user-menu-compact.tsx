@@ -67,7 +67,7 @@ export const UserMenuCompact: React.FC<UserMenuCompactProps> = ({
   return (
     <div className={`position-relative ${className}`}>
       <button
-        className="btn btn-sm d-flex flex-nowrap align-items-center user-menu-compact-button"
+        className="btn btn-sm flex flex-nowrap items-center user-menu-compact-button"
         onClick={() => setShowDropdown(!showDropdown)}
         data-id="user-menu-compact"
         title={getUserDisplayName()}
@@ -144,7 +144,7 @@ export const UserMenuCompact: React.FC<UserMenuCompactProps> = ({
               <div className="user-menu-git-section">
                 {isGitHubConnected ? (
                   <>
-                    <div className="dropdown-item-text small text-muted d-flex align-items-center">
+                    <div className="dropdown-item-text small text-muted flex items-center">
                       <i className="fab fa-github me-2"></i>
                       <span>{gitHubUser.login}</span>
                       {gitHubUser.avatar_url && (
@@ -277,7 +277,7 @@ export const UserMenuCompact: React.FC<UserMenuCompactProps> = ({
                 return (
                   <div className="user-menu-item user-menu-theme-toggle">
                     <i className="fas fa-palette user-menu-item-icon"></i>
-                    <span className="flex-grow-1">{isDarkMode ? 'Dark Mode' : 'Light Mode'}</span>
+                    <span className="grow">{isDarkMode ? 'Dark Mode' : 'Light Mode'}</span>
                     <ToggleSwitch
                       id="user-menu-theme-toggle"
                       isOn={isDarkMode}

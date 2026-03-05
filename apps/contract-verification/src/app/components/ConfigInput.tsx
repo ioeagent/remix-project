@@ -38,11 +38,11 @@ export const ConfigInput: React.FC<ConfigInputProps> = ({ label, id, secret, ini
 
   return (
     <div className="small mb-0">
-      <label className='mt-3' htmlFor={id}>{label}</label>
-      <div className="d-flex flex-row justify-content-start">
+      <label className='mt-4' htmlFor={id}>{label}</label>
+      <div className="flex flex-row justify-start">
         <input
           type={secret ? 'password' : 'text'}
-          className={`form-control small w-100 ${!enabled ? 'bg-transparent ps-0 border-0' : ''}`}
+          className={`form-control small w-full ${!enabled ? 'bg-transparent ps-0 border-0' : ''}`}
           id={id}
           placeholder={intl.formatMessage({ id: "contract-verification.configInputPlaceholderText" }, { label })}
           value={value}

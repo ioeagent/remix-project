@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef, useContext, ChangeEvent, useReducer} from 'react' // eslint-disable-line
 import { FormattedMessage, useIntl } from 'react-intl'
-import { Dropdown } from 'react-bootstrap'
-import { CustomIconsToggle, CustomMenu, CustomToggle, CustomTooltip, extractNameFromKey, extractParentFromKey } from '@remix-ui/helper'
+import { CustomIconsToggle, CustomMenu, CustomToggle, CustomTooltip, Dropdown, extractNameFromKey, extractParentFromKey } from '@remix-ui/helper'
 import { CopyToClipboard } from '@remix-ui/clipboard'
 import {FileExplorer} from './components/file-explorer' // eslint-disable-line
 import {ModalDialog, ValidationResult} from '@remix-ui/modal-dialog' // eslint-disable-line
@@ -423,7 +422,7 @@ export function Workspace() {
     global.modal(
       intl.formatMessage({ id: 'filePanel.workspace.deleteAll' }),
       <>
-        <div className="d-flex flex-column">
+        <div className="flex flex-col">
           <span className="pb-1">{intl.formatMessage({ id: 'filePanel.workspace.deleteAllConfirm1' })}</span>
           <span>{intl.formatMessage({ id: 'filePanel.workspace.deleteAllConfirm2' })}</span>
         </div>
@@ -790,7 +789,7 @@ export function Workspace() {
           <FormattedMessage id="filePanel.deleteMsg" /> {path.length > 1 ? <FormattedMessage id="filePanel.theseItems" /> : <FormattedMessage id="filePanel.thisItem" />}?
         </div>
         {path.map((item, i) => (
-          <li className="ms-3" key={i}>{item}</li>
+          <li className="ms-4" key={i}>{item}</li>
         ))}
       </div>
     )
@@ -920,7 +919,7 @@ export function Workspace() {
 
   const renameModalMessage = (workspaceName?: string) => {
     return (
-      <div className='d-flex flex-column'>
+      <div className='flex flex-col'>
         <label><FormattedMessage id="filePanel.name" /></label>
         <input type="text" data-id="modalDialogCustomPromptTextRename" defaultValue={workspaceName || currentWorkspace} ref={workspaceRenameInput} className="form-control" />
       </div>
@@ -957,16 +956,16 @@ export function Workspace() {
     return (
       <>
         {props.isGitRepo ? (
-          <div className="d-flex justify-content-between">
+          <div className="flex justify-between">
             <span>
-              {currentWorkspace === props.mName ? <span>&#10003; {props.mName} </span> : <span className="ps-3">{props.mName}</span>}
+              {currentWorkspace === props.mName ? <span>&#10003; {props.mName} </span> : <span className="ps-4">{props.mName}</span>}
               {props.remoteId && <i className="fas fa-cloud ms-2" style={{ color: 'var(--info)', fontSize: '0.8em' }} title="Connected to cloud"></i>}
             </span>
             <i className="fas fa-code-branch pt-1"></i>
           </div>
         ) : (
           <span>
-            {currentWorkspace === props.mName ? <span>&#10003; {props.mName} </span> : <span className="ps-3">{props.mName}</span>}
+            {currentWorkspace === props.mName ? <span>&#10003; {props.mName} </span> : <span className="ps-4">{props.mName}</span>}
             {props.remoteId && <i className="fas fa-cloud ms-2" style={{ color: 'var(--info)', fontSize: '0.8em' }} title="Connected to cloud"></i>}
           </span>
         )}
@@ -1031,7 +1030,7 @@ export function Workspace() {
       <Dropdown.Toggle
         as={CustomToggle}
         id="dropdown-custom-components"
-        className="btn btn-light btn-block w-100 d-inline-block border form-select mt-1"
+        className="btn btn-light btn-block w-full inline-block border form-select mt-1"
         icon={selectedWorkspace && selectedWorkspace.isGitRepo && !(currentWorkspace === LOCALHOST) ? 'far fa-code-branch' : null}
       >
         {selectedWorkspace ? selectedWorkspace.name === LOCALHOST ? togglerText : selectedWorkspace.name : currentWorkspace === LOCALHOST ? formatNameForReadonly('localhost') : NO_WORKSPACE}
@@ -1057,8 +1056,8 @@ export function Workspace() {
   }
 
   return (
-    <div className="d-flex flex-column h-100">
-      <div className="w-100 px-2 mt-3">
+    <div className="flex flex-col h-full">
+      <div className="w-full px-2 mt-4">
         <div>
           <FileExplorerMenu
             title={''}
@@ -1077,7 +1076,7 @@ export function Workspace() {
       </div>
       <div
         ref={fileExplorerRef}
-        className="remixui_container overflow-auto h-100"
+        className="remixui_container overflow-auto h-full"
         style={{
           display: 'flex',
           flex: '1 1 auto',
@@ -1088,17 +1087,17 @@ export function Workspace() {
           handleContextMenu(e.pageX, e.pageY, ROOT_PATH, 'workspace', 'workspace')
         }}
       >
-        <div className="d-flex flex-column w-100 remixui_fileexplorer" data-id="remixUIWorkspaceExplorer" onClick={resetFocus}>
+        <div className="flex flex-col w-full remixui_fileexplorer" data-id="remixUIWorkspaceExplorer" onClick={resetFocus}>
           <ElectronMenu createWorkspace={createWorkspace} clone={cloneGitRepository}></ElectronMenu>
           <div
-            className="h-100 remixui_fileExplorerTree mt-2 mb-2"
+            className="h-full remixui_fileExplorerTree mt-2 mb-2"
             onFocus={() => {
               toggleDropdown(false)
             }}
           >
-            <div className="h-100">
+            <div className="h-full">
               {(global.fs.browser.isRequestingWorkspace || global.fs.browser.isRequestingCloning) && (
-                <div className="text-center py-5">
+                <div className="text-center py-12">
                   <i className="fas fa-spinner fa-pulse fa-2x"></i>
                 </div>
               )}
@@ -1174,7 +1173,7 @@ export function Workspace() {
 
               )}
               {global.fs.localhost.isRequestingLocalhost && (
-                <div className="text-center py-5">
+                <div className="text-center py-12">
                   <i className="fas fa-spinner fa-pulse fa-2x"></i>
                 </div>
               )}
@@ -1253,13 +1252,13 @@ export function Workspace() {
         </div>
       </div>
       { (selectedWorkspace && selectedWorkspace.isGitRepo) && (
-        <div className={`bg-light border-top d-flex justify-content-between align-items-center`} data-id="workspaceGitPanel" style={{
+        <div className={`bg-light border-top flex justify-between items-center`} data-id="workspaceGitPanel" style={{
           minHeight: '4rem',
           marginBottom: '0 !important',
           flexShrink: 0
         }}>
-          <div className="d-flex justify-content-between p-1 w-100 mb-2">
-            <div className="text-uppercase text-dark pt-1 px-1">GIT</div>
+          <div className="flex justify-between p-1 w-full mb-2">
+            <div className="uppercase text-dark pt-1 px-1">GIT</div>
             { selectedWorkspace.hasGitSubmodules?
               <>
                 <div className="pe-1">
@@ -1267,7 +1266,7 @@ export function Workspace() {
                     <CustomTooltip
                       placement="top"
                       tooltipId="updatingSubmodules"
-                      tooltipClasses="text-nowrap"
+                      tooltipClasses="whitespace-nowrap"
                       tooltipText={"Updating submodules"}
                     >
                       <button style={{ height: 30, minWidth: "9rem" }} className='btn btn-sm border text-dark'>
@@ -1278,7 +1277,7 @@ export function Workspace() {
                     <CustomTooltip
                       placement="top"
                       tooltipId="updateSubmodules"
-                      tooltipClasses="text-nowrap"
+                      tooltipClasses="whitespace-nowrap"
                       tooltipText={<FormattedMessage id="filePanel.updateSubmodules" />}
                     >
                       <button style={{ height: 30, minWidth: "9rem" }} onClick={updateSubModules} data-id='updatesubmodules' className={`btn btn-sm border  ${highlightUpdateSubmodules ? 'text-warning' : 'text-dark'}`}>
@@ -1293,7 +1292,7 @@ export function Workspace() {
             <CustomTooltip
               placement="right"
               tooltipId="branchesDropdown"
-              tooltipClasses="text-nowrap"
+              tooltipClasses="whitespace-nowrap"
               tooltipText={'Current branch: ' + (currentBranch && currentBranch.name) || 'Branches'}
               hide={showBranches}
             >
@@ -1302,14 +1301,14 @@ export function Workspace() {
                   <Dropdown.Toggle
                     as={CustomToggle}
                     id="dropdown-custom-components"
-                    className="btn btn-sm btn-light d-inline-block border form-select h-100 p-0 ps-2 pe-2 text-dark"
+                    className="btn btn-sm btn-light inline-block border form-select h-full p-0 ps-2 pe-2 text-dark"
                     icon={null}
                   >
                     {global.fs.browser.isRequestingCloning ? <i className="fad fa-spinner fa-spin"></i> : (currentBranch && currentBranch.name) || '-none-'}
                   </Dropdown.Toggle>
                   <Dropdown.Menu as={CustomMenu} className="form-select branches-dropdown" style={{ width: `${fileExplorerWidth * 0.7}px` }}>
                     <div data-id="custom-dropdown-menu">
-                      <div className="d-flex text-dark" style={{ fontSize: 14, fontWeight: 'bold' }}>
+                      <div className="flex text-dark" style={{ fontSize: 14, fontWeight: 'bold' }}>
                         <span className="mb-2 ms-2 me-auto">
                           <FormattedMessage id="filePanel.switchBranches" />
                         </span>
@@ -1341,7 +1340,7 @@ export function Workspace() {
                                 key={index}
                                 placement="right"
                                 tooltipId={`branchTooltip-${index}`}
-                                tooltipClasses="text-nowrap"
+                                tooltipClasses="whitespace-nowrap"
                                 tooltipText={intl.formatMessage({ id: `filePanel.switchToBranch${branch.remote ? 'Title1' : 'Title2'}` })}
                               >
                                 <Dropdown.Item
@@ -1357,7 +1356,7 @@ export function Workspace() {
                                         <span className="ps-1">{branch.name}</span>
                                       </span>
                                     ) : (
-                                      <span className="ps-3">
+                                      <span className="ps-4">
                                         <i className={`far ${branch.remote ? 'fa-cloud' : 'fa-code-branch'}`}></i>
                                         <span className="ps-1">{branch.remote ? `${branch.remote.name}/${branch.name}` : branch.name}</span>
                                       </span>
@@ -1379,7 +1378,7 @@ export function Workspace() {
                         )}
                       </div>
                       {(selectedWorkspace.branches || []).length > 4 && (
-                        <button className="btn btn-sm w-100" style={{ cursor: "pointer" }} onClick={showAllBranches}>
+                        <button className="btn btn-sm w-full" style={{ cursor: "pointer" }} onClick={showAllBranches}>
                           <FormattedMessage id="filePanel.viewAllBranches" />
                         </button>
                       )}
@@ -1433,14 +1432,14 @@ export function Workspace() {
               <div>{examples}</div>
             </>
           )}
-          <div className="d-flex flex-row">
-            {modalState.modalInfo.prefix && <span className="text-nowrap align-self-center me-2">ipfs://</span>}
+          <div className="flex flex-row">
+            {modalState.modalInfo.prefix && <span className="whitespace-nowrap self-center me-2">ipfs://</span>}
             <input
               ref={inputValue}
               type="text"
               name="prompt_text"
               id="inputPrompt_text"
-              className="w-100 mt-1 form-control"
+              className="w-full mt-1 form-control"
               data-id="homeTabModalDialogCustomPromptText"
               value={modalState.importSource}
               onInput={(e) => {

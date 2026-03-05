@@ -13,8 +13,8 @@ export function VerificationSettingsUI(props: VerificationSettingsProps) {
   const intl = useIntl()
 
   return (
-    <div className="d-flex flex-column py-1">
-      <div className="d-flex form-check align-items-center">
+    <div className="flex flex-col py-1">
+      <div className="flex form-check items-center">
         <input
           id="deployAndRunVerifyContract"
           className="form-check-input"
@@ -24,10 +24,10 @@ export function VerificationSettingsUI(props: VerificationSettingsProps) {
         />
         <CustomTooltip
           placement={'auto-end'}
-          tooltipClasses="text-wrap text-start"
+          tooltipClasses="text-wrap text-left"
           tooltipId="remixVerifyContractTooltip"
           tooltipText={
-            <span className="text-start">
+            <span className="text-left">
               <FormattedMessage
                 id="udapp.remixVerifyContractTooltip"
                 defaultMessage="Automatically verify contract on multiple explorers after deployment. Etherscan API Key can be set in the global Settings panel."

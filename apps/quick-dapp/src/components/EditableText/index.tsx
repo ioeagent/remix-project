@@ -49,7 +49,7 @@ const EditableText = ({
         onChange={handleChange}
         style={{ height: textarea ? 100 : 'auto' }}
       />
-      <div className="d-flex justify-content-end">
+      <div className="flex justify-end">
         <i
           className="fas ms-2 mt-2 fa-save cursor_pointer"
           onClick={handleSave}
@@ -61,7 +61,7 @@ const EditableText = ({
       </div>
     </>
   ) : (
-    <div className="d-flex justify-content-between align-items-center">
+    <div className="flex justify-between items-center">
       <TextElement className="udapp_intro">
         {value ? value : placeholder}
       </TextElement>

@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect, forwardRef, ReactNode } from 'react'
-import { Button, Dropdown, Form } from 'react-bootstrap'
+import { Button, Dropdown } from '@remix-ui/helper';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { CustomTooltip } from "@remix-ui/helper"
 import { trackMatomoEvent } from '@remix-api'
 import remixClient from '../../remix-client'
 import './index.css'
+import { Form } from '@remix-ui/helper'
 
 interface CustomToggleProps {
   children?: ReactNode
@@ -17,7 +18,7 @@ const CustomToggle = forwardRef<HTMLButtonElement, { children?: ReactNode, onCli
     <button
       ref={ref}
       onClick={(e) => { e.preventDefault(); onClick(e) }}
-      className="btn btn-secondary d-flex justify-content-between align-items-center w-100"
+      className="btn btn-secondary flex justify-between items-center w-full"
     >
       <span>{children}</span>
       <i className="fas fa-caret-down"></i>
@@ -80,8 +81,8 @@ function RepoImporter({ list, selectedRepo }: any): JSX.Element {
 
   return (
     <>
-      <div className="repo-importer-container px-3 pt-3">
-        <button onClick={panelChange} className="btn btn-secondary d-flex align-items-center justify-content-center w-100 mb-3 ">
+      <div className="repo-importer-container px-4 pt-4">
+        <button onClick={panelChange} className="btn btn-secondary flex items-center justify-center w-full mb-4 ">
           <i className="fas fa-upload me-2"></i>
           <span>Import another tutorial repo</span>
         </button>
@@ -89,12 +90,12 @@ function RepoImporter({ list, selectedRepo }: any): JSX.Element {
         {open && (
           <div>
             <h6 className="mb-2 panel-title">Tutorial import</h6>
-            <div className="bg-light border rounded p-3">
-              <Dropdown className="w-100">
+            <div className="bg-light border rounded p-4">
+              <Dropdown className="w-full">
                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-toggle">
                   Select a repo
                 </Dropdown.Toggle>
-                <Dropdown.Menu className="w-100">
+                <Dropdown.Menu className="w-full">
                   {list.map((item: any) => (
                     <Dropdown.Item
                       key={`${item.name}/${item.branch}`}
@@ -109,14 +110,14 @@ function RepoImporter({ list, selectedRepo }: any): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
 
-              <div className="d-flex align-items-center my-1">
-                <hr className="w-100 hr-themed" />
-                <span className="px-2 text-nowrap">or import</span>
-                <hr className="w-100 hr-themed" />
+              <div className="flex items-center my-1">
+                <hr className="w-full hr-themed" />
+                <span className="px-2 whitespace-nowrap">or import</span>
+                <hr className="w-full hr-themed" />
               </div>
               <Form onSubmit={importRepo}>
-                <Form.Group className="mb-3">
-                  <Form.Label className="repo-label d-flex align-items-center" htmlFor="name">
+                <Form.Group className="mb-4">
+                  <Form.Label className="repo-label flex items-center" htmlFor="name">
                     REPO REFERENCE
                     <CustomTooltip placement="top" tooltipId="learnethQuestionIconTooltip" tooltipText='i.e. username/repository'>
                       <i className="fas fa-question-circle ms-1" />
@@ -132,7 +133,7 @@ function RepoImporter({ list, selectedRepo }: any): JSX.Element {
                     value={name}
                   />
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-4">
                   <Form.Label className="repo-label" htmlFor="branch">
                     BRANCH
                   </Form.Label>
@@ -146,7 +147,7 @@ function RepoImporter({ list, selectedRepo }: any): JSX.Element {
                     value={branch}
                   />  
                 </Form.Group>
-                <button className="btn btn-primary w-100" type="submit" disabled={!name || !branch}>
+                <button className="btn btn-primary w-full" type="submit" disabled={!name || !branch}>
                   Import tutorial repository
                 </button> 
               </Form>

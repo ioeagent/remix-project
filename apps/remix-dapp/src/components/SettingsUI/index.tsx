@@ -18,13 +18,13 @@ export function SettingsUI() {
   const { balance, name, address, verified } = appState.instance;
 
   return (
-    <div className="px-4">
-      <div className="bg-light mt-2 mb-4 p-3">
-        <div className="d-flex justify-content-between align-items-center">
+    <div className="px-6">
+      <div className="bg-light mt-2 mb-6 p-4">
+        <div className="flex justify-between items-center">
           <div className="bg-transparent m-0 p-0 border-0 alert alert-secondary">
             <div className="input-group-prepend">
               <span
-                className="input-group-text border-0 p-0 bg-transparent text-uppercase"
+                className="input-group-text border-0 p-0 bg-transparent uppercase"
                 style={{ fontSize: 11 }}
               >
                 {name} at {shortenAddress(address)}
@@ -39,7 +39,7 @@ export function SettingsUI() {
             </div>
             <div className="input-group-prepend">
               <div
-                className="input-group-text border-0 p-0 bg-transparent text-uppercase"
+                className="input-group-text border-0 p-0 bg-transparent uppercase"
                 style={{ fontSize: 11 }}
               >
                 <FormattedMessage id="udapp.balance" />: {balance} ETH
@@ -49,7 +49,7 @@ export function SettingsUI() {
           <LocaleUI />
         </div>
       </div>
-      <div className="bg-light mt-3 mb-4 p-3">
+      <div className="bg-light mt-4 mb-6 p-4">
         <NetworkUI />
         <AccountUI />
         <GasPriceUI />
@@ -57,14 +57,14 @@ export function SettingsUI() {
         {/* <ThemeUI /> */}
       </div>
       <LowLevelInteractions />
-      <div className="p-2 w-auto d-flex justify-content-between align-items-center">
+      <div className="p-2 w-auto flex justify-between items-center">
         <span>
           QuickDapp by{' '}
           <a href={`https://remix.ethereum.org`} target="_blank">
             <CustomTooltip
               placement="top"
               tooltipId="remix"
-              tooltipClasses="text-nowrap"
+              tooltipClasses="whitespace-nowrap"
               tooltipText="Remix IDE"
             >
               <img

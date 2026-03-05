@@ -125,7 +125,7 @@ export const TransactionRecorder = (props: TransactionRecorderProps) => {
 
           {activeTab === 'transaction-list' && (
             <div className="tab-pane active" role="tabpanel">
-              <div className="transaction-list-content p-3">
+              <div className="transaction-list-content p-4">
                 <p className="text-muted">
                   <FormattedMessage
                     id="debugger.transactionListPlaceholder"

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { Form, Button, Alert, Card, Collapse, Spinner } from 'react-bootstrap';
+import { Alert, Button, Card, Collapse, Form, Spinner } from '@remix-ui/helper';
 import { ethers } from 'ethers';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { AppContext } from '../../contexts';
@@ -10,7 +10,7 @@ import { generateWalletSelectionScript } from '../../utils/wallet-selection-scri
 // remixClient removed - using plugin from context instead
 import { trackMatomoEvent } from '@remix-api';
 
-import BaseAppWizard from './BaseAppWizard';
+import BaseAppWizard from './BaseAppWizard'
 
 const REMIX_ENDPOINT_IPFS = 'https://quickdapp-ipfs.api.remix.live';
 const REMIX_ENDPOINT_ENS = 'https://quickdapp-ens.api.remix.live';
@@ -196,12 +196,12 @@ function DeployPanel(): JSX.Element {
   };
 
   const renderEditForm = () => (
-    <div className="mb-3">
-      <Form.Group className="mb-3">
-        <Form.Label className="text-uppercase mb-0 form-label">Dapp logo</Form.Label>
+    <div className="mb-4">
+      <Form.Group className="mb-4">
+        <Form.Label className="uppercase mb-0 form-label">Dapp logo</Form.Label>
         <input ref={logoInputRef} type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
         {logo && typeof logo === 'string' ? (
-          <div className="mt-2 mb-2 position-relative d-inline-block border bg-white rounded p-1">
+          <div className="mt-2 mb-2 position-relative inline-block border bg-white rounded p-1">
             <img src={logo} alt="Preview" style={{ height: '60px', maxWidth: '100%', objectFit: 'contain' }} onError={(e) => e.currentTarget.style.display = 'none'} />
             <span onClick={handleRemoveLogo} style={{ cursor: 'pointer', position: 'absolute', top: -10, right: -10 }} className="badge bg-danger rounded-circle"><i className="fas fa-times"></i></span>
           </div>
@@ -213,17 +213,17 @@ function DeployPanel(): JSX.Element {
           </div>
         )}
       </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label className="text-uppercase mb-0 form-label">Dapp Title</Form.Label>
+      <Form.Group className="mb-4">
+        <Form.Label className="uppercase mb-0 form-label">Dapp Title</Form.Label>
         <Form.Control value={title} onChange={({ target: { value } }) => dispatch({ type: 'SET_INSTANCE', payload: { title: value } })} />
       </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label className="text-uppercase mb-0 form-label">Dapp Description</Form.Label>
+      <Form.Group className="mb-4">
+        <Form.Label className="uppercase mb-0 form-label">Dapp Description</Form.Label>
         <Form.Control as="textarea" rows={3} value={details} onChange={({ target: { value } }) => dispatch({ type: 'SET_INSTANCE', payload: { details: value } })} />
       </Form.Group>
 
-      <div className="d-grid">
-        <Button variant="primary" className="w-100" onClick={handleSaveConfig} disabled={isSavingConfig}>
+      <div className="grid">
+        <Button variant="primary" className="w-full" onClick={handleSaveConfig} disabled={isSavingConfig}>
           {isSavingConfig ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> Saving...</> : 'Save Configuration'}
         </Button>
       </div>
@@ -239,7 +239,7 @@ function DeployPanel(): JSX.Element {
   return (
     <div data-id="deploy-panel">
       <Card className="mb-2">
-        <Card.Header onClick={() => setIsDetailsOpen(!isDetailsOpen)} style={{ cursor: 'pointer' }} className="d-flex justify-content-between bg-transparent border-0">
+        <Card.Header onClick={() => setIsDetailsOpen(!isDetailsOpen)} style={{ cursor: 'pointer' }} className="flex justify-between bg-transparent border-0">
           Dapp details <i className={`fas ${isDetailsOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
         </Card.Header>
         <Collapse in={isDetailsOpen}>
@@ -250,29 +250,29 @@ function DeployPanel(): JSX.Element {
       </Card>
 
       <Card className="mb-2">
-        <Card.Header onClick={() => setIsPublishOpen(!isPublishOpen)} style={{ cursor: 'pointer' }} className="d-flex justify-content-between bg-transparent border-0">
+        <Card.Header onClick={() => setIsPublishOpen(!isPublishOpen)} style={{ cursor: 'pointer' }} className="flex justify-between bg-transparent border-0">
           Publish to IPFS <i className={`fas ${isPublishOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
         </Card.Header>
         <Collapse in={isPublishOpen}>
           <Card.Body>
-            <Button variant="primary" className="w-100" onClick={() => handleIpfsDeploy()} disabled={isDeploying} data-id="deploy-ipfs-btn">
+            <Button variant="primary" className="w-full" onClick={() => handleIpfsDeploy()} disabled={isDeploying} data-id="deploy-ipfs-btn">
               {isDeploying ? <><i className="fas fa-spinner fa-spin me-1"></i> Uploading...</> : <FormattedMessage id="quickDapp.deployToIPFS" defaultMessage="Deploy to IPFS" />}
             </Button>
             {displayCid && (
-              <Alert variant="success" className="mt-3" style={{ wordBreak: 'break-all' }} data-id="deploy-ipfs-success">
-                <div className="fw-bold">Deployed Successfully!</div>
+              <Alert variant="success" className="mt-4" style={{ wordBreak: 'break-all' }} data-id="deploy-ipfs-success">
+                <div className="font-bold">Deployed Successfully!</div>
                 <div><strong>CID:</strong> {displayCid}</div>
                 {displayGateway && <div className="mt-1"><a href={displayGateway} target="_blank" rel="noopener noreferrer">View DApp</a></div>}
               </Alert>
             )}
-            {deployResult.error && <Alert variant="danger" className="mt-3 small">{deployResult.error}</Alert>}
+            {deployResult.error && <Alert variant="danger" className="mt-4 small">{deployResult.error}</Alert>}
           </Card.Body>
         </Collapse>
       </Card>
 
       {displayCid && (
         <Card className="mb-2">
-          <Card.Header onClick={() => setIsEnsOpen(!isEnsOpen)} style={{ cursor: 'pointer' }} className="d-flex justify-content-between bg-transparent border-0" data-id="ens-section-header">
+          <Card.Header onClick={() => setIsEnsOpen(!isEnsOpen)} style={{ cursor: 'pointer' }} className="flex justify-between bg-transparent border-0" data-id="ens-section-header">
             Register ENS (Arbitrum) <i className={`fas ${isEnsOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
           </Card.Header>
           <Collapse in={isEnsOpen}>
@@ -296,9 +296,9 @@ function DeployPanel(): JSX.Element {
                   }} />
                   <span className="input-group-text">.remixdapp.eth</span>
                 </div>
-                {ensNameError && <small className="text-danger mt-1 d-block">{ensNameError}</small>}
+                {ensNameError && <small className="text-danger mt-1 block">{ensNameError}</small>}
               </Form.Group>
-              <Button variant="secondary" className="w-100" onClick={() => {
+              <Button variant="secondary" className="w-full" onClick={() => {
                 const targetCid = deployResult.cid || activeDapp?.deployment?.ipfsCid;
                 if (!targetCid) return;
                 setIsEnsLoading(true);
@@ -338,8 +338,8 @@ function DeployPanel(): JSX.Element {
                 })();
               }} disabled={isEnsLoading || !ensName || !!ensNameError}>{isEnsLoading ? 'Processing...' : ensButtonText}</Button>
               {currentEnsDomain && (
-                <Alert variant="success" className="mt-3" style={{ wordBreak: 'break-all' }}>
-                  <div className="fw-bold mb-1">
+                <Alert variant="success" className="mt-4" style={{ wordBreak: 'break-all' }}>
+                  <div className="font-bold mb-1">
                     <i className="fas fa-check-circle me-2"></i>ENS Linked!
                   </div>
                   <div>
@@ -347,7 +347,7 @@ function DeployPanel(): JSX.Element {
                       href={`https://${currentEnsDomain}.limo`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-decoration-underline fw-bold"
+                      className="underline font-bold"
                     >
                       https://{currentEnsDomain}.limo
                     </a>
@@ -359,19 +359,19 @@ function DeployPanel(): JSX.Element {
                         href={`https://arbiscan.io/tx/${ensResult.txHash}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-muted text-decoration-none"
+                        className="text-muted no-underline"
                       >
                         View on Explorer <i className="fas fa-external-link-alt small"></i>
                       </a>
                     </div>
                   )}
-                  <small className="d-block mt-2 text-muted">
+                  <small className="block mt-2 text-muted">
                     <i className="fas fa-info-circle me-1"></i>
                     It may take a few minutes for the ENS link to become accessible. If not available yet, try the IPFS gateway link above.
                   </small>
                 </Alert>
               )}
-              {ensResult.error && <Alert variant="danger" className="mt-3">{ensResult.error}</Alert>}
+              {ensResult.error && <Alert variant="danger" className="mt-4">{ensResult.error}</Alert>}
             </Card.Body>
           </Collapse>
         </Card>

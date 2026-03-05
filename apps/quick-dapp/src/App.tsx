@@ -53,12 +53,12 @@ function App(): JSX.Element {
     >
       <IntlProvider locale={locale.code} messages={locale.messages}>
         {Object.keys(appState.instance.abi).length > 0 ? (
-          <div className="row m-0 pt-3">
+          <div className="flex flex-wrap m-0 pt-4">
             <EditInstance />
             <DeployPanel />
           </div>
         ) : (
-          <div className="row m-0 pt-3">
+          <div className="flex flex-wrap m-0 pt-4">
             <CreateInstance />
           </div>
         )}

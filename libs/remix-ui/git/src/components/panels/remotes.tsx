@@ -41,7 +41,7 @@ export const Remotes = () => {
 
   return (
     <>
-      <div data-id="remotes-panel-content" className="d-flex flex-column">
+      <div data-id="remotes-panel-content" className="flex flex-col">
         {context.remotes && context.remotes.length ?
           <div>
 
@@ -52,17 +52,17 @@ export const Remotes = () => {
               );
             })}
           </div> : <div>
-            <label className="text-uppercase">No remotes</label>
+            <label className="uppercase">No remotes</label>
           </div>}
         <hr></hr>
-        <label className="text-uppercase">Add remote from GitHub</label>
+        <label className="uppercase">Add remote from GitHub</label>
         <RemotesImport />
         <hr></hr>
-        <label className="text-uppercase">Add remote manually</label>
+        <label className="uppercase">Add remote manually</label>
         <input data-id="add-manual-remotename" placeholder="remote name" name='remotename' onChange={e => onRemoteNameChange(e.target.value)} value={remoteName} className="form-control mb-2" type="text" id="remotename" />
         <input data-id="add-manual-remoteurl" placeholder="remote url" name='remoteurl' onChange={e => onUrlChange(e.target.value)} value={url} className="form-control mb-2" type="text" id="remoteurl" />
 
-        <button data-id="add-manual-remotebtn" disabled={(remoteName && url) ? false : true} className='btn btn-primary mt-1 w-100' onClick={async () => {
+        <button data-id="add-manual-remotebtn" disabled={(remoteName && url) ? false : true} className='btn btn-primary mt-1 w-full' onClick={async () => {
           addRemote();
         }}>add remote</button>
         <hr className="mt-0 border border-2" />

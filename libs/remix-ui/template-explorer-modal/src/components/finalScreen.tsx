@@ -13,13 +13,13 @@ export function FinalScreen(props: FinalScreenProps) {
   const [showEditWorkspaceName, setShowEditWorkspaceName] = useState(false)
 
   return (
-    <section className="d-flex flex-column gap-3 bg-light" style={{ height: '80%' }}>
-      <div className="pt-3 ps-3 d-flex flex-row align-items-center text-dark">
-        { showEditWorkspaceName ? <input data-id="finalize-contract-wizard-workspaceName-input" type="text" className="form-control form-control-sm" value={state.workspaceName} onChange={(e) => dispatch({ type: TemplateExplorerWizardAction.SET_WORKSPACE_NAME, payload: e.target.value })} /> : <span data-id="finalize-contract-wizard-workspaceName-span" className="fw-semibold fs-6">{state.workspaceName}</span> }
+    <section className="flex flex-col gap-4 bg-light" style={{ height: '80%' }}>
+      <div className="pt-4 ps-4 flex flex-row items-center text-dark">
+        { showEditWorkspaceName ? <input data-id="finalize-contract-wizard-workspaceName-input" type="text" className="form-control form-control-sm" value={state.workspaceName} onChange={(e) => dispatch({ type: TemplateExplorerWizardAction.SET_WORKSPACE_NAME, payload: e.target.value })} /> : <span data-id="finalize-contract-wizard-workspaceName-span" className="font-semibold text-base">{state.workspaceName}</span> }
         <i data-id="finalize-contractWizard-workspace-edit-icon" className="fa-solid fa-edit ms-2" onClick={() => setShowEditWorkspaceName(!showEditWorkspaceName)}></i>
       </div>
 
-      <button className="btn btn-primary btn-sm mx-3" data-id="validateWorkspaceButton" onClick={async () => {
+      <button className="btn btn-primary btn-sm mx-4" data-id="validateWorkspaceButton" onClick={async () => {
         await facade.createWorkspace({
           workspaceName: state.workspaceName,
           workspaceTemplateName: state.workspaceTemplateChosen.value,

@@ -126,18 +126,18 @@ export const CommitMessage = () => {
 
   return (
     <>
-      <div className="mb-3 pt-3">
+      <div className="mb-4 pt-4">
         <input placeholder={commitMessagePlaceholder()} data-id='commitMessage' disabled={!messageEnabled()} className="form-control" type="text" onChange={handleChange} value={message.value} />
       </div>
-      <button data-id='commitButton' className={`btn btn-primary w-100 ${buttonState === buttonStateValues.Commit ? '' : 'd-none'}`} disabled={commitNotAllowed()} onClick={async () => await commit()} >
+      <button data-id='commitButton' className={`btn btn-primary w-full ${buttonState === buttonStateValues.Commit ? '' : 'hidden'}`} disabled={commitNotAllowed()} onClick={async () => await commit()} >
         <FontAwesomeIcon icon={faCheck} className="me-1" />
         Commit
       </button>
-      <button data-id='syncButton' className={`btn btn-primary w-100 ${buttonState === buttonStateValues.Sync ? '' : 'd-none'}`} disabled={!syncEnabled()} onClick={async () => await sync()} >
+      <button data-id='syncButton' className={`btn btn-primary w-full ${buttonState === buttonStateValues.Sync ? '' : 'hidden'}`} disabled={!syncEnabled()} onClick={async () => await sync()} >
         <FontAwesomeIcon icon={faSync} className="me-1" aria-hidden="true" />
         Sync Changes {upDownArrows()}
       </button>
-      <button data-id='publishBranchButton' className={`btn btn-primary w-100 ${buttonState === buttonStateValues.PublishBranch ? '' : 'd-none'}`} onClick={async () => await publishBranch()} >
+      <button data-id='publishBranchButton' className={`btn btn-primary w-full ${buttonState === buttonStateValues.PublishBranch ? '' : 'hidden'}`} onClick={async () => await publishBranch()} >
         <FontAwesomeIcon icon={faCloudArrowUp} className="me-1" aria-hidden="true" />
         Publish Branch
       </button>

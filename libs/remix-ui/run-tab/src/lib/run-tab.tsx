@@ -87,9 +87,9 @@ export function RunTabUI(props: RunTabProps) {
           plugin.call('notification', 'modal', {
             id: 'evm-chainId-incompatible',
             title: 'Incompatible EVM for the selected chain',
-            message: <div className="px-3">
+            message: <div className="px-4">
               <p>The smart contract has not been compiled with an EVM version that is compatible with the selected chain.</p>
-              <ul className="px-3">
+              <ul className="px-4">
                 <li>Have Remix switch to a compatible EVM version for this chain and recompile the contract.</li>
                 <li>Cancel to keep the current EVM version.</li>
               </ul>
@@ -129,7 +129,7 @@ export function RunTabUI(props: RunTabProps) {
   return (
     <Fragment>
       <div className="udapp_runTabView run-tab" id="runTabView" data-id="runTabView">
-        <div className="list-group pb-4 list-group-flush">
+        <div className="list-group pb-6 list-group-flush">
           <RecorderUI
             plugin={plugin}
             storeScenario={storeNewScenario}

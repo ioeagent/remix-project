@@ -39,10 +39,10 @@ function HomeTabFileElectron({ plugin }: HomeTabFileProps) {
   }
 
   return (
-    <div className="justify-content-start mt-1 p-2 d-flex flex-column" id="hTFileSection">
+    <div className="justify-start mt-1 p-2 flex flex-col" id="hTFileSection">
       <label style={{ fontSize: "1.2rem" }}><FormattedMessage id='home.files' /></label>
       <label style={{ fontSize: "0.8rem" }} className="pt-2"><FormattedMessage id='home.loadFrom' /></label>
-      <div className="d-flex">
+      <div className="flex">
 
         <button className="btn p-2 border me-2" data-id="landingPageImportFromTemplate" onClick={async () => await loadTemplate()}>Project Template</button>
         <button className="btn p-2 border me-2" data-id="landingPageImportFromGit" onClick={async () => await clone()}>Clone a Git Repository</button>

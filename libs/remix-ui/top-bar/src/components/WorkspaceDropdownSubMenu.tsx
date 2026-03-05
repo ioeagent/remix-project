@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown } from '@remix-ui/helper'
 
 export interface WorkspaceDropdownSubMenuProps {
   menuItems: { label: string, onClick: () => void, icon: string }[]
@@ -19,9 +19,9 @@ export function WorkspaceDropdownSubMenu ({ menuItems, style }: WorkspaceDropdow
               <Dropdown.Item
                 key={item.label}
                 onClick={item.onClick}
-                className="text-decoration-none"
+                className="no-underline"
               >
-                <span className="d-flex justify-content-evenly align-items-center">
+                <span className="flex justify-evenly items-center">
                   <i className={item.icon}></i>
                   <span className="ps-2">{item.label}</span>
                 </span>
@@ -37,9 +37,9 @@ export function WorkspaceDropdownSubMenu ({ menuItems, style }: WorkspaceDropdow
               <Dropdown.Item
                 key={item.label}
                 onClick={item.onClick}
-                className="text-decoration-none"
+                className="no-underline"
               >
-                <span className="d-flex justify-content-evenly align-items-center text-danger">
+                <span className="flex justify-evenly items-center text-danger">
                   <i className={item.icon}></i>
                   <span className="ps-2">{item.label}</span>
                 </span>

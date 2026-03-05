@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Button } from '@remix-ui/helper';
+import { Alert } from '@remix-ui/helper'
 import { FormattedMessage, useIntl } from 'react-intl';
 import { initInstance } from '../../actions';
+import { Form } from '@remix-ui/helper'
 
 const CreateInstance: React.FC = () => {
   const intl = useIntl()
@@ -14,14 +16,14 @@ const CreateInstance: React.FC = () => {
   const [error, setError] = useState('')
   return (
     <Form
-      className="w-50 m-auto"
+      className="w-1/2 m-auto"
       onSubmit={(e: any) => {
         e.preventDefault();
         initInstance({ ...formVal });
       }}
     >
       <Form.Group className="mb-2" controlId="formAddress">
-        <Form.Label className="text-uppercase mb-0"><FormattedMessage id="quickDapp.address" /></Form.Label>
+        <Form.Label className="uppercase mb-0"><FormattedMessage id="quickDapp.address" /></Form.Label>
         <Form.Control
           type="address"
           placeholder={intl.formatMessage({ id: 'quickDapp.enterAddress' })}
@@ -33,7 +35,7 @@ const CreateInstance: React.FC = () => {
       </Form.Group>
 
       <Form.Group className="mb-2" controlId="formAbi">
-        <Form.Label className="text-uppercase mb-0">abi</Form.Label>
+        <Form.Label className="uppercase mb-0">abi</Form.Label>
         <Form.Control
           as="textarea"
           rows={3}
@@ -58,7 +60,7 @@ const CreateInstance: React.FC = () => {
       </Form.Group>
 
       <Form.Group className="mb-2" controlId="formName">
-        <Form.Label className="text-uppercase mb-0"><FormattedMessage id="quickDapp.name" /></Form.Label>
+        <Form.Label className="uppercase mb-0"><FormattedMessage id="quickDapp.name" /></Form.Label>
         <Form.Control
           type="name"
           placeholder={intl.formatMessage({ id: 'quickDapp.enterName' })}
@@ -70,7 +72,7 @@ const CreateInstance: React.FC = () => {
       </Form.Group>
 
       <Form.Group className="mb-2" controlId="formNetwork">
-        <Form.Label className="text-uppercase mb-0"><FormattedMessage id="quickDapp.network" /></Form.Label>
+        <Form.Label className="uppercase mb-0"><FormattedMessage id="quickDapp.network" /></Form.Label>
         <Form.Control
           type="network"
           placeholder={intl.formatMessage({ id: 'quickDapp.enterNetwork' })}
@@ -94,7 +96,7 @@ const CreateInstance: React.FC = () => {
       >
         <FormattedMessage id="quickDapp.submit" />
       </Button>
-      <Alert className="mt-4" variant="info" data-id="quickDappTooltips">
+      <Alert className="mt-6" variant="info" data-id="quickDappTooltips">
         <FormattedMessage id="quickDapp.text1" />
         <br />
         <FormattedMessage id="quickDapp.text2" />

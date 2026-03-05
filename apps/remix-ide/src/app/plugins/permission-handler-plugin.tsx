@@ -93,9 +93,9 @@ export class PermissionHandlerPlugin extends Plugin {
       if (!allow) {
         const warning = this.notAllowWarning(from, to, method)
         const warnEl =
-        <div className='d-flex flex-column'>
+        <div className='flex flex-col'>
           <span>{ warning }</span>
-          <div className='d-flex flex-row'>
+          <div className='flex flex-row'>
             <span onClick={()=>{}}>To change the permission go to </span>
             <span className='px-2' style={{ fontWeight: 'bolder' }}>Plugin Manager</span>
             <img alt="" id="permissionModalImagesFrom" src="assets/img/pluginManager.webp" style={{ height: '1rem', width: '1rem' }} />

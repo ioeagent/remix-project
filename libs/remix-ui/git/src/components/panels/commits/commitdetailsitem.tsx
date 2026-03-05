@@ -38,12 +38,12 @@ export const CommitDetailsItems = (props: CCommitDetailsItemsProps) => {
     </>)
   }
   return (<>
-    <div data-id={`commit-change-${commitChange.type}-${path.basename(commitChange.path)}`} className={`d-flex w-100 d-flex flex-row commitdetailsitem ${isAheadOfRepo ? 'text-success' : ''}`}>
+    <div data-id={`commit-change-${commitChange.type}-${path.basename(commitChange.path)}`} className={`flex w-full flex flex-row commitdetailsitem ${isAheadOfRepo ? 'text-success' : ''}`}>
       <div className='pointer gitfile long-and-truncated' onClick={async () => await openChanges(commitChange)}>
-        <span className='fw-bold long-and-truncated'>{path.basename(commitChange.path)}</span>
+        <span className='font-bold long-and-truncated'>{path.basename(commitChange.path)}</span>
         <div className='text-secondary long-and-truncated'> {commitChange.path}</div>
       </div>
-      <div className="d-flex align-items-end">
+      <div className="flex items-end">
         {!isAheadOfRepo ?
           <GitUIButton tooltip="open on remote" className="btn btn-sm p-0 text-muted me-1" onClick={() => openRemote()}><FontAwesomeIcon icon={faGlobe} ></FontAwesomeIcon></GitUIButton>
           : <></>}

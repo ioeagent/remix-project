@@ -1,8 +1,7 @@
-import { CustomTooltip } from '@remix-ui/helper';
+import { ButtonGroup, CustomTooltip, Dropdown } from '@remix-ui/helper';
 import { TerminalContext } from '@remix-ui/terminal';
 import { createTerminal } from '@remix-ui/xterm';
 import React, { useState, useEffect, useRef, useContext } from 'react' // eslint-disable-line
-import { Dropdown, ButtonGroup } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { RemixUiTerminalProps } from "../../../../terminal/src/lib/types/terminalTypes";
 
@@ -26,7 +25,7 @@ export const RemixUIXtermMenu = (props: RemixUiTerminalProps) => {
   }
 
   return (<>
-    <div className={`d-flex flex-row align-items-center ${xtermState.showOutput ? 'd-none' : ''}`}>
+    <div className={`flex flex-row items-center ${xtermState.showOutput ? 'hidden' : ''}`}>
       <div data-id="createTerminalButton" className="mx-2" onClick={async () => onCreateTerminal()}>
         <CustomTooltip tooltipText={<FormattedMessage id='xterm.new' defaultMessage='New terminal' />}>
           <i className="fas fa-plus border-0 p-0 m-0"></i>

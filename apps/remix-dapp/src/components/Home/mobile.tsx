@@ -14,11 +14,11 @@ const MobilePage: React.FC = () => {
   return <div>
     <div
       className={`${
-        active === 'functions' ? '' : 'd-none'
-      } col-xl-9 col-lg-8 col-md-7 pe-0`}
+        active === 'functions' ? '' : 'hidden'
+      } xl:w-3/4 lg:w-2/3 md:w-7/12 pe-0`}
     >
-      <div className="mx-3 my-2 row">
-        {instance.showLogo && <div className="col-2 text-center px-0 d-flex align-items-center">
+      <div className="mx-4 my-2 flex flex-wrap">
+        {instance.showLogo && <div className="w-1/6 text-center px-0 flex items-center">
           <img src="/assets/logo.png" style={{ width: 55, height: 55 }} />
         </div>}
         <DappTop />
@@ -26,19 +26,19 @@ const MobilePage: React.FC = () => {
       <UniversalDappUI />
     </div>
     {!instance.noTerminal && (
-      <div className={`${active === 'transactions' ? '' : 'd-none'}`}>
+      <div className={`${active === 'transactions' ? '' : 'hidden'}`}>
         <TxList />
       </div>
     )}
     <div
       className={`${
-        active === 'settings' ? '' : 'd-none'
-      } col-xl-3 col-lg-4 col-md-5 ps-0`}
+        active === 'settings' ? '' : 'hidden'
+      } xl:w-1/4 lg:w-1/3 md:w-5/12 ps-0`}
     >
       <SettingsUI />
     </div>
     <ul
-      className="nav nav-pills justify-content-center fixed-bottom row bg-light"
+      className="nav nav-pills justify-center fixed-bottom flex flex-wrap bg-light"
       style={{ zIndex: 'auto' }}
     >
       <li

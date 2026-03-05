@@ -1,9 +1,7 @@
 import { CopyToClipboard } from '@remix-ui/clipboard'
 import JSONTree, { ThemeKeys, ThemeObject } from '@microlink/react-json-view'
 import React, { useState } from 'react'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
-import Button from 'react-bootstrap/Button'
+import { Button, Tab, Tabs } from '@remix-ui/helper';
 import { ABIDescription } from '@remixproject/plugin-api'
 
 export interface VyperCompilationResult {
@@ -68,11 +66,11 @@ export default function VyperCompile({ result, theme, themeStyle }: VyperCompile
   ]
 
   return (
-    <div className='w-100 h-100 d-flex flex-row'>
-      <Tabs className="flex-column" style={{ height: "fit-content", backgroundColor: 'var(--bs-body-bg)' }} id="result" activeKey={active} onSelect={(key: any) => setActive(key)}>
+    <div className='w-full h-full flex flex-row'>
+      <Tabs className="flex-col" style={{ height: "fit-content", backgroundColor: 'var(--bs-body-bg)' }} id="result" activeKey={active} onSelect={(key: any) => setActive(key)}>
         {tabContent.map((content, index) => (
-          <Tab className="border-top border-start p-4 bg-light" style={{ width: '50rem', height: 'fit-content', minHeight: '25rem' }} eventKey={content.eventKey} title={content.tabHeadingText} as={'span'} key={`${index}-${content.eventKey}`}>
-            <div className="d-flex flex-column w-90 justify-content-center mx-auto rounded-2">
+          <Tab className="border-top border-start p-6 bg-light" style={{ width: '50rem', height: 'fit-content', minHeight: '25rem' }} eventKey={content.eventKey} title={content.tabHeadingText} as={'span'} key={`${index}-${content.eventKey}`}>
+            <div className="flex flex-col w-90 justify-center mx-auto rounded-2">
               <CopyToClipboard getContent={() => (content.eventKey !== 'abi' ? content.tabPayload : JSON.stringify(result['abi']))}>
                 <Button
                   className="copy ms-2 btn btn-sm btn-secondary"
@@ -83,7 +81,7 @@ export default function VyperCompile({ result, theme, themeStyle }: VyperCompile
                 </Button>
               </CopyToClipboard>
               {content.eventKey === 'abi' ? (
-                <div className="my-3">
+                <div className="my-4">
                   {JSON.stringify(content?.tabPayload)?.length > 1 ? <JSONTree
                     src={{ ...content.tabPayload as ABIDescription[], evmVersion: content.evmVersion, version: content.version, methodIdentifiers: content.methodIdentifiers } }
                     theme={theme}
@@ -91,7 +89,7 @@ export default function VyperCompile({ result, theme, themeStyle }: VyperCompile
                   /> : null}
                 </div>
               ) : (
-                <div className="w-100 mt-2 p-2 mx-auto">
+                <div className="w-full mt-2 p-2 mx-auto">
                   <textarea className="form-control rounded-2" defaultValue={content.tabPayload as string} rows={15}></textarea>
                 </div>
               )}

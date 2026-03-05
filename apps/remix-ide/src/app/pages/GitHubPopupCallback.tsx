@@ -84,7 +84,7 @@ export const GitHubPopupCallback = () => {
   return (
     <>
       <div className="preload-container">
-        <div className="preload-logo pb-4">
+        <div className="preload-logo pb-6">
           {logo}
           <div>
             <div className='text-center'>

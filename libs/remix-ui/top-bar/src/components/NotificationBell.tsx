@@ -210,7 +210,7 @@ export function NotificationBell({ className = '' }: NotificationBellProps) {
                 </div>
                 <div className="notification-item-content">
                   <div className="notification-item-header">
-                    <span className={`notification-item-title ${notification.priority === 'high' || notification.priority === 'critical' ? 'fw-bold' : ''}`}>
+                    <span className={`notification-item-title ${notification.priority === 'high' || notification.priority === 'critical' ? 'font-bold' : ''}`}>
                       {notification.title}
                     </span>
                     <span className="notification-item-time">{timeAgo(notification.created_at)}</span>

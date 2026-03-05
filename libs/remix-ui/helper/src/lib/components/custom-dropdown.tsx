@@ -33,8 +33,8 @@ export const CustomToggle = React.forwardRef(
       className={className.replace('dropdown-toggle', '')}
       style={style}
     >
-      <div className="d-flex align-items-center">
-        <div className="me-auto text-nowrap text-truncate overflow-hidden font-sm" data-id={`dropdown-content`}>{children}</div>
+      <div className="flex items-center">
+        <div className="me-auto whitespace-nowrap truncate overflow-hidden font-sm" data-id={`dropdown-content`}>{children}</div>
         {icon ? useDefaultIcon ? (
           <div className="pe-1">
             <i className={`${icon} pe-1`}></i>
@@ -75,13 +75,13 @@ export const CustomIconsToggle = React.forwardRef(
         e.preventDefault()
         onClick()
       }}
-      className={`${className.replace('dropdown-toggle', '')} me-1 mb-0 pb-0 d-flex justify-content-end align-items-end remixuimenuicon_shadow remixuimenuicon_hamburger_menu fs-3`}
+      className={`${className.replace('dropdown-toggle', '')} me-1 mb-0 pb-0 flex justify-end items-end remixuimenuicon_shadow remixuimenuicon_hamburger_menu text-2xl`}
       data-id="workspaceMenuDropdown"
     >
       {icon && (
         <CustomTooltip
           placement={'top'}
-          tooltipClasses="text-nowrap text-start"
+          tooltipClasses="whitespace-nowrap text-left"
           tooltipId="remixHamburgerTooltip"
           tooltipText={<FormattedMessage id="filePanel.workspaceActions" />}
         >
@@ -132,7 +132,7 @@ export const CustomTopbarMenu = React.forwardRef(
       'aria-labelledby': labeledBy,
       innerItemWidth = '',
       innerXPadding = '',
-      width = 'w-100'
+      width = 'w-full'
     }: {
       'children': React.ReactNode
       'style'?: React.CSSProperties
@@ -148,7 +148,7 @@ export const CustomTopbarMenu = React.forwardRef(
     const height = window.innerHeight * 0.6
     return (
       <div ref={ref} style={style} className={className} aria-labelledby={labeledBy} data-id={dataId}>
-        <ul className={`overflow-auto ${ width } list-unstyled text-truncate mb-0 ${innerItemWidth} ${innerXPadding}`} style={{ maxHeight: height + 'px' }}>
+        <ul className={`overflow-auto ${ width } list-unstyled truncate mb-0 ${innerItemWidth} ${innerXPadding}`} style={{ maxHeight: height + 'px' }}>
           {children}
         </ul>
       </div>
@@ -179,7 +179,7 @@ export const ProxyAddressToggle = React.forwardRef(
           e.preventDefault()
           onClick(e)
         }}
-        className={'d-flex ' + className.replace('dropdown-toggle', '')}
+        className={'flex ' + className.replace('dropdown-toggle', '')}
         data-id="toggleProxyAddressDropdown"
       >
         <input
@@ -251,8 +251,8 @@ export const EnvironmentToggle = React.forwardRef(
       style={style}
       data-id={dataId}
     >
-      <div className="d-flex align-items-center">
-        <div className="me-auto text-nowrap text-truncate overflow-hidden font-sm">{children}</div>
+      <div className="flex items-center">
+        <div className="me-auto whitespace-nowrap truncate overflow-hidden font-sm">{children}</div>
         {environmentUI}
       </div>
     </div>

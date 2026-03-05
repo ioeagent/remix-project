@@ -27,7 +27,7 @@
 }
 
 /* Hide dragbar when terminal panel is hidden */
-.dragbar_terminal:has(+ .terminal-wrap.d-none) {
+.dragbar_terminal:has(+ .terminal-wrap.hidden) {
   display: none !important;
 }
 

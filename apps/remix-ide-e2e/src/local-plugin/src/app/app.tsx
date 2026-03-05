@@ -116,7 +116,7 @@ function App() {
   }
 
   return (
-    <div className="App container-fluid">
+    <div className="App w-full">
       <h5>PLUGIN API TESTER</h5>
       <label id="callStatus">{started ? <>start</> : <>stop</>}</label>
       <br></br>
@@ -124,7 +124,7 @@ function App() {
       <Logger id="methods" log={log}></Logger>
       <label>events</label>
       <Logger id="events" log={events}></Logger>
-      <input className="form-control w-100" type="text" id="payload" placeholder="Enter payload here..." value={payload} onChange={handleChange} data-id="payload-input" />
+      <input className="form-control w-full" type="text" id="payload" placeholder="Enter payload here..." value={payload} onChange={handleChange} data-id="payload-input" />
       {profiles.map((profile: Profile, index: number) => {
         const methods = profile.methods.map((method: string, index: number) => {
           return (
@@ -144,7 +144,7 @@ function App() {
           : null
         return (
           <div key={index} className="small border-bottom">
-            <label className="text-uppercase">{profile.name}</label>
+            <label className="uppercase">{profile.name}</label>
             <br/>
             {methods}
             <br/>

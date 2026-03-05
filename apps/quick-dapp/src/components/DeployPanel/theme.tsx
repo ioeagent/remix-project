@@ -2,8 +2,8 @@ import { Ref, useContext, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { AppContext } from '../../contexts';
 import { selectTheme } from '../../actions';
-import { Dropdown } from 'react-bootstrap';
 import React from 'react';
+import { Dropdown } from '@remix-ui/helper'
 
 export const themeMap: Record<string, any> = {
   Dark: { quality: 'dark', url: 'assets/css/themes/remix-dark_tvx1s2.css' },
@@ -35,8 +35,8 @@ const CustomToggle = React.forwardRef(
       data-id="selectThemesOptions"
       className={className.replace('dropdown-toggle', '')}
     >
-      <div className="d-flex">
-        <div className="me-auto text-nowrap overflow-hidden">{children}</div>
+      <div className="flex">
+        <div className="me-auto whitespace-nowrap overflow-hidden">{children}</div>
         {icon && (
           <div className="pe-1">
             <i className={`${icon} pe-1`}></i>
@@ -98,19 +98,19 @@ export function ThemeUI() {
   }, []);
 
   return (
-    <div className="d-block">
-      <label className="text-uppercase mb-0"><FormattedMessage id="quickDapp.themes" /></label>
-      <Dropdown className="w-100">
+    <div className="block">
+      <label className="uppercase mb-0"><FormattedMessage id="quickDapp.themes" /></label>
+      <Dropdown className="w-full">
         <Dropdown.Toggle
           as={CustomToggle}
-          className="btn btn-light btn-block w-100 d-inline-block border form-select"
+          className="btn btn-light btn-block w-full inline-block border form-select"
           icon={''}
         >
           {theme} - {themeMap[theme].quality}
         </Dropdown.Toggle>
         <Dropdown.Menu
           as={CustomMenu}
-          className="w-100 form-select"
+          className="w-full form-select"
           data-id="custom-dropdown-items"
         >
           {themeList.map((item) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card } from '@remix-ui/helper';
 
 interface CreateInstanceProps {
   isAiLoading: boolean;
@@ -9,8 +9,8 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
 
   if (isAiLoading) {
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center py-5" data-id="ai-loading-spinner">
-        <div className="spinner-border text-primary mb-3" role="status" style={{ width: '3rem', height: '3rem' }}></div>
+      <div className="flex flex-col items-center justify-center py-12" data-id="ai-loading-spinner">
+        <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}></div>
         <h5 className="text-primary">Creating Your DApp...</h5>
         <p className="text-muted">RemixAI Assistant is generating your DApp code.</p>
       </div>
@@ -18,10 +18,10 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
   }
 
   return (
-    <div className="py-4">
-      <div className="text-center mb-4">
+    <div className="py-6">
+      <div className="text-center mb-6">
         <h2 className="mb-2">Welcome to QuickDapp</h2>
-        <p className="text-muted mb-0 fs-5">
+        <p className="text-muted mb-0 text-lg">
           Transform your smart contracts into interactive Dapps with AI.
         </p>
       </div>
@@ -34,16 +34,16 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
           </h4>
         </Card.Header>
         <Card.Body>
-          <p className="mb-4 fs-5">After deploying your contract, create a Dapp using one of these options:</p>
+          <p className="mb-6 text-lg">After deploying your contract, create a Dapp using one of these options:</p>
 
-          <div className="row g-4">
-            <div className="col-12 col-md-6 qd-grid-col">
-              <div className="border rounded p-3 h-100">
-                <h5 className="text-primary mb-3">
+          <div className="flex flex-wrap g-4">
+            <div className="w-full md:w-1/2 qd-grid-col">
+              <div className="border rounded p-4 h-full">
+                <h5 className="text-primary mb-4">
                   <i className="fas fa-flag me-2"></i>
                   Option 1: Start Now Banner
                 </h5>
-                <p className="text-muted mb-3">
+                <p className="text-muted mb-4">
                   Click the <span className="badge bg-primary">Start now</span> button in the banner above the editor.
                 </p>
                 <img
@@ -61,13 +61,13 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
               </div>
             </div>
 
-            <div className="col-12 col-md-6 qd-grid-col">
-              <div className="border rounded p-3 h-100">
-                <h5 className="text-primary mb-3">
+            <div className="w-full md:w-1/2 qd-grid-col">
+              <div className="border rounded p-4 h-full">
+                <h5 className="text-primary mb-4">
                   <i className="fas fa-magic me-2"></i>
                   Option 2: Create a dapp
                 </h5>
-                <p className="text-muted mb-3">
+                <p className="text-muted mb-4">
                   Click the "Create a dapp" on your deployed contract instance.
                 </p>
                 <img

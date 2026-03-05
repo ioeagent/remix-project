@@ -15,7 +15,7 @@ export default function ScamAlertStatus ({ refs, getReferenceProps }: ScamAlertS
       <CustomTooltip
         tooltipText={"Scam Alerts"}
       >
-        <div className="me-1 d-flex align-items-center justify-content-center remixui_statusbar_scamAlert" data-id="hTScamAlertButton" id="hTScamAlertSection" ref={refs.setReference} {...getReferenceProps()}>
+        <div className="me-1 flex items-center justify-center remixui_statusbar_scamAlert" data-id="hTScamAlertButton" id="hTScamAlertSection" ref={refs.setReference} {...getReferenceProps()}>
           <span className="pe-2 far fa-exclamation-triangle text-white"></span>
           <span className="text-white font-semibold small">
             <FormattedMessage id="home.scamAlert" />

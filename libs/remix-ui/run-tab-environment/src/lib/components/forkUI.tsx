@@ -2,7 +2,7 @@ import React, { useState, useContext, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import { EnvAppContext } from '../contexts'
 import { forkState } from '../actions'
-import { Spinner } from 'react-bootstrap'
+import { Spinner } from '@remix-ui/helper'
 
 export function ForkUI() {
   const { plugin, widgetState, dispatch, themeQuality } = useContext(EnvAppContext)
@@ -50,8 +50,8 @@ export function ForkUI() {
   }
 
   return (
-    <div className='m-3 mt-0 p-3 pt-2 pb-0 rounded' style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
-      <div className="d-flex justify-content-between align-items-center mb-2">
+    <div className='m-4 mt-0 p-4 pt-2 pb-0 rounded' style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+      <div className="flex justify-between items-center mb-2">
         <p className="mb-0" style={{ color: themeQuality === 'dark' ? 'white' : 'black', fontSize: '0.9rem' }}>
           {intl.formatMessage({ id: 'udapp.forkStateTitle' })}
         </p>
@@ -68,16 +68,16 @@ export function ForkUI() {
           }}
         > × </button>
       </div>
-      <p style={{ color: 'var(--bs-tertiary)' }} className="mb-2 fw-light small">
+      <p style={{ color: 'var(--bs-tertiary)' }} className="mb-2 font-light small">
           Forking state will create a new environment with same state as selected environment.
       </p>
-      <div className="mb-3">
-        <div className="d-flex align-items-center mb-2">
+      <div className="mb-4">
+        <div className="flex items-center mb-2">
           <label className="mb-0 me-2" style={{ color: 'var(--bs-tertiary)' }}>
               Fork name
           </label>
         </div>
-        <div className="position-relative flex-fill">
+        <div className="position-relative flex-1">
           <input
             type="text"
             className="form-control"

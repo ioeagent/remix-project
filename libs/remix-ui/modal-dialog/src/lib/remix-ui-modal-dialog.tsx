@@ -107,7 +107,7 @@ export const ModalDialog = (props: ModalDialogProps) => {
               </span>
             )}
           </div>
-          <div className="modal-body text-break remixModalBody" data-id={`${props.id}ModalDialogModalBody-react`}>
+          <div className="modal-body break-words remixModalBody" data-id={`${props.id}ModalDialogModalBody-react`}>
             {props.children ? props.children : props.message}
           </div>
           <div className="modal-footer" data-id={`${props.id}ModalDialogModalFooter-react`}>

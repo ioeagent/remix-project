@@ -55,7 +55,7 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
   return (
     <div className="pt-1 ps-2" id="hTFeaturedeSection">
       <div className="mb-2 remix_ui-carousel-container">
-        <div className="w-100 d-flex flex-column rounded-3 remix_ui-carouselbox">
+        <div className="w-full flex flex-col rounded-3 remix_ui-carouselbox">
           <ThemeContext.Provider value={themeFilter}>
             <Carousel
               arrows={false}
@@ -72,20 +72,20 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
               centerMode={false}
               autoPlay={true}
               keyBoardControl={true}
-              containerClass="border w-full carousel-container d-flex align-items-center"
-              sliderClass="h-100 justify-content-between"
+              containerClass="border w-full carousel-container flex items-center"
+              sliderClass="h-full justify-between"
               deviceType={'desktop'}
               itemClass=""
               autoPlaySpeed={10000}
               dotListClass="position-relative mt-2"
             >
               {false && <div // no this is not a mistake. keep it false until next year ;)
-                className="mx-1 px-1 d-flex d-none" // Please do not delete. just comment this out or keep hidden. To be used every year.
+                className="mx-1 px-1 flex hidden" // Please do not delete. just comment this out or keep hidden. To be used every year.
               >
                 <a href="https://cryptpad.fr/form/#/2/form/view/pV-DdryeJoYUWvW+gXsFaMNynEY7t5mUsgeD1urgwSE/" target="__blank">
                   <img className="remixui_carouselImage" src={'/assets/img/solSurvey2024.webp'} alt=""></img>
                 </a>
-                <div className="h6 w-50 p-2 ps-4  align-self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 ps-6  self-center" style={{ flex: '1' }}>
                   <h5>
                   The Solidity Developer Survey 2024 is live!
                   </h5>
@@ -105,7 +105,7 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
                       COMPLETE THE SURVEY.
                     </a>
                   </p>
-                  <p style={{ fontSize: '0.8rem' }} className="mb-3">
+                  <p style={{ fontSize: '0.8rem' }} className="mb-4">
                     Thank you for your support! Read the full announcement
                     <a
                       className="remixui_home_text mx-1"
@@ -123,13 +123,13 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
                   </p>
                 </div>
               </div> }
-              <div className="me-1 pe-1 d-flex align-items-center justify-content-center h-100">
+              <div className="me-1 pe-1 flex items-center justify-center h-full">
                 <a href={releaseDetails.moreLink} target="__blank">
                   <img src={'assets/img/remi_drums_whatsnew.webp'} className="remixui_carouselImage" alt=""></img>
                 </a>
-                <div className="h6 w-50 p-2 ps-4 align-self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 ps-6 self-center" style={{ flex: '1' }}>
                   <h5>{releaseDetails.version} {releaseDetails.title}</h5>
-                  <div style={{ fontSize: '0.8rem' }} className="mb-3">
+                  <div style={{ fontSize: '0.8rem' }} className="mb-4">
                     <ul>
                       { releaseDetails.highlight1 ? <li style={{ padding: '0.15rem' }}>{releaseDetails.highlight1}</li> : '' }
                       { releaseDetails.highlight2 ? <li style={{ padding: '0.15rem' }}>{releaseDetails.highlight2}</li> : '' }
@@ -138,7 +138,7 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
                     </ul>
                   </div>
                   <a
-                    className="remixui_home_text btn-sm btn-secondary mt-2 text-decoration-none mb-3"
+                    className="remixui_home_text btn-sm btn-secondary mt-2 no-underline mb-4"
                     onClick={() => trackMatomoEvent({
                       category: 'hometab',
                       action: 'featuredSection',
@@ -152,41 +152,41 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
                   </a>
                 </div>
               </div>
-              <div className="me-1 pe-1 d-flex align-items-center justify-content-center h-100">
+              <div className="me-1 pe-1 flex items-center justify-center h-full">
                 <button className='btn' onClick={()=>handleStartLearneth()}>
                   <img src={'assets/img/remi-prof.webp'} className="remixui_carouselImage" alt=""></img>
                 </button>
-                <div className="h6 w-50 p-2 ps-4  align-self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 ps-6  self-center" style={{ flex: '1' }}>
                   <h5>
                     <FormattedMessage id="home.learnEthPromoTitle" />
                   </h5>
-                  <div style={{ fontSize: '0.8rem', lineHeight: '1.25rem' }} className="mb-3">
+                  <div style={{ fontSize: '0.8rem', lineHeight: '1.25rem' }} className="mb-4">
                     <FormattedMessage id="home.learnEthPromoText" />
                   </div>
                   <button
-                    className="remixui_home_text btn-sm btn-secondary mt-2 text-decoration-none mb-3"
+                    className="remixui_home_text btn-sm btn-secondary mt-2 no-underline mb-4"
                     onClick={()=>handleStartLearneth()}
                   >
                     <FormattedMessage id="home.learnEthPromoButton" />
                   </button>
                 </div>
               </div>
-              <div className="me-1 pe-1 d-flex align-items-center justify-content-center h-100">
+              <div className="me-1 pe-1 flex items-center justify-center h-full">
                 <button className="btn" onClick={() => handleStartRemixGuide()}>
                   <img src={'assets/img/YouTubeLogo.webp'} className="remixui_carouselImage" alt=""></img>
                 </button>
-                <div className="h6 w-50 p-2 ps-4  align-self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 ps-6  self-center" style={{ flex: '1' }}>
                   <h5>
                     <FormattedMessage id="home.remixYouTube" />
                   </h5>
                   <p style={{ fontStyle: 'italic', fontSize: '1rem' }}>
                     <FormattedMessage id="home.remixYouTubeText1" />
                   </p>
-                  <div style={{ fontSize: '0.8rem' }} className="mb-3">
+                  <div style={{ fontSize: '0.8rem' }} className="mb-4">
                     <FormattedMessage id="home.remixYouTubeText2" />
                   </div>
                   <button
-                    className="remixui_home_text btn-sm btn-secondary mt-2 text-decoration-none mb-3"
+                    className="remixui_home_text btn-sm btn-secondary mt-2 no-underline mb-4"
                     onClick={() => handleStartRemixGuide()}
                   >
                     <FormattedMessage id="home.remixYouTubeMore" />

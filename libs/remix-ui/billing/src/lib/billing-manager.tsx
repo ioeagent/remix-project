@@ -433,7 +433,7 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
     <div className="billing-manager">
       {/* Header with credits balance */}
       {isAuthenticated && credits && (
-        <div className="p-3 border-bottom d-flex justify-content-between align-items-center">
+        <div className="p-4 border-bottom flex justify-between items-center">
           <div>
             <i className="fas fa-wallet me-2"></i>
             <strong>Your Balance</strong>
@@ -449,7 +449,7 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
       {/* Paddle status warning */}
       {paddleError && (
-        <div className="alert alert-warning m-3 mb-0">
+        <div className="alert alert-warning m-4 mb-0">
           <i className="fas fa-exclamation-triangle me-2"></i>
           {paddleError}
         </div>
@@ -457,7 +457,7 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
       {/* Login prompt */}
       {!isAuthenticated && (
-        <div className="alert alert-info m-3">
+        <div className="alert alert-info m-4">
           <i className="fas fa-info-circle me-2"></i>
           <a href="#" onClick={(e) => { e.preventDefault(); plugin?.call('auth', 'login', 'github') }}>
             Sign in
@@ -467,7 +467,7 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
       {/* Current subscription */}
       {isAuthenticated && (
-        <div className="p-3 border-bottom">
+        <div className="p-4 border-bottom">
           <CurrentSubscription
             subscription={subscription}
             loading={userLoading}
@@ -477,7 +477,7 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       )}
 
       {/* Tabs */}
-      <ul className="nav nav-tabs px-3 pt-3">
+      <ul className="nav nav-tabs px-4 pt-4">
         <li className="nav-item">
           <button
             className={`nav-link ${activeTab === 'features' ? 'active' : ''}`}
@@ -508,7 +508,7 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       </ul>
 
       {/* Tab content */}
-      <div className="p-3">
+      <div className="p-4">
         {activeTab === 'features' && (
           <FeatureAccessProductsView
             products={featureProducts}

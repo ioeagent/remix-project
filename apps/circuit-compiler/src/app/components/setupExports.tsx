@@ -9,8 +9,8 @@ export function SetupExports () {
   const circuitApp = useContext(CircuitAppContext)
 
   return (
-    <div className="flex-column">
-      <div className="flex-column d-flex">
+    <div className="flex-col">
+      <div className="flex-col flex">
         <div className="mb-1 ms-0">
           <label className="circuit_inner_label form-check-label">
             <FormattedMessage id="circuit.provingScheme" />
@@ -53,7 +53,7 @@ export function SetupExports () {
           <CustomTooltip
             placement={"auto"}
             tooltipId="circuitPtauTooltip"
-            tooltipClasses="text-nowrap"
+            tooltipClasses="whitespace-nowrap"
             tooltipText={<span>{'To choose the from the list of ptau files'}</span>}
           >
             <div className="mb-1">

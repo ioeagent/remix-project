@@ -2,8 +2,7 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { EnvironmentProps } from '../types'
-import { Dropdown } from 'react-bootstrap'
-import { CustomMenu, CustomToggle, CustomTooltip } from '@remix-ui/helper'
+import { CustomMenu, CustomToggle, CustomTooltip, Dropdown } from '@remix-ui/helper'
 import { DropdownLabel } from './dropdownLabel'
 import SubmenuPortal from './subMenuPortal'
 import { TrackingContext } from '@remix-ide/tracking'
@@ -78,7 +77,7 @@ export function EnvironmentUI(props: EnvironmentProps) {
   const forkStatePrompt = (defaultName: string) => {
     return (
       <div data-id="forkVmStateModal">
-        <ul className='ms-3'>
+        <ul className='ms-4'>
           <li><FormattedMessage id="udapp.forkVmStateDesc1"/></li>
           <li><FormattedMessage id="udapp.forkVmStateDesc2"/></li>
         </ul>
@@ -99,7 +98,7 @@ export function EnvironmentUI(props: EnvironmentProps) {
   const deleteVmStatePrompt = () => {
     return (
       <div data-id="deleteVmStateModal">
-        <ul className='ms-3'>
+        <ul className='ms-4'>
           <li><FormattedMessage id="udapp.resetVmStateDesc1"/></li>
           <li><FormattedMessage id="udapp.resetVmStateDesc2"/></li>
         </ul>
@@ -184,9 +183,9 @@ export function EnvironmentUI(props: EnvironmentProps) {
 
   return (
     <div className="udapp_crow">
-      <label id="selectExEnv" className="udapp_settingsLabel w-100">
+      <label id="selectExEnv" className="udapp_settingsLabel w-full">
         <FormattedMessage id="udapp.environment" />
-        <CustomTooltip placement={'auto-end'} tooltipClasses="text-nowrap" tooltipId="info-recorder" tooltipText={<FormattedMessage id="udapp.tooltipText2" />}>
+        <CustomTooltip placement={'auto-end'} tooltipClasses="whitespace-nowrap" tooltipId="info-recorder" tooltipText={<FormattedMessage id="udapp.tooltipText2" />}>
           <a href="https://chainlist.org/" target="_blank">
             <i className='udapp_infoDeployAction ms-2 fas fa-plug' aria-hidden="true"></i>
           </a>
@@ -209,11 +208,11 @@ export function EnvironmentUI(props: EnvironmentProps) {
           data-id="settingsSelectEnvOptions"
           className="udapp_selectExEnvOptions"
         >
-          <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" className="btn btn-light btn-block w-100 d-inline-block border form-select" icon={null}>
+          <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" className="btn btn-light btn-block w-full inline-block border form-select" icon={null}>
             {/* {isL2(currentProvider && currentProvider.displayName)} */}
             <DropdownLabel label={currentProvider && currentProvider.displayName} bridges={bridges} currentProvider={currentProvider} envLabel={props.envLabel} runTabState={props.udappState} setExecutionEnv={props.setExecutionContext} isL2={isL2} plugin={props.runTabPlugin} />
           </Dropdown.Toggle>
-          <Dropdown.Menu as={CustomMenu} className="w-100 form-select udapp_exenv_menu" data-id="custom-dropdown-items">
+          <Dropdown.Menu as={CustomMenu} className="w-full form-select udapp_exenv_menu" data-id="custom-dropdown-items">
             {providers.length === 0 && <Dropdown.Item>No provider pinned</Dropdown.Item>}
 
             {remixVMs.length > 0 && (

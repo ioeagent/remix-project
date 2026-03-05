@@ -53,16 +53,16 @@ export class WalkthroughService extends Plugin {
     }).onafterchange((targetElement) => {
       const header = document.getElementsByClassName('introjs-tooltip-header')[0]
       if (header) {
-        header.classList.add('d-flex')
-        header.classList.add('justify-content-between')
-        header.classList.add('text-nowrap')
+        header.classList.add('flex')
+        header.classList.add('justify-between')
+        header.classList.add('whitespace-nowrap')
         header.classList.add('pe-0')
         header.id="remixRecorderWalkthrowTitle"
       }
       const skipbutton = document.getElementsByClassName('introjs-skipbutton')[0]
       if (skipbutton) {
-        skipbutton.classList.add('ms-3')
-        skipbutton.classList.add('text-decoration-none')
+        skipbutton.classList.add('ms-4')
+        skipbutton.classList.add('no-underline')
         skipbutton.id = 'remixTourSkipbtn'
       }
     }).start()

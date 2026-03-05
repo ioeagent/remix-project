@@ -52,7 +52,7 @@ const BackupHistorySection: React.FC<{
   return (
     <>
       <div
-        className="d-flex align-items-center px-2 pt-2 pb-1"
+        className="flex items-center px-2 pt-2 pb-1"
         onClick={() => setIsOpen(!isOpen)}
         style={{ cursor: 'pointer' }}
       >
@@ -122,7 +122,7 @@ export const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
     <div className="workspace-item">
       {/* Workspace Header */}
       <div
-        className="d-flex align-items-center px-2 py-1 border-bottom"
+        className="flex items-center px-2 py-1 border-bottom"
         onClick={() => onToggleExpand(workspace.id)}
         style={{ minHeight: '32px', cursor: 'pointer' }}
       >
@@ -132,12 +132,12 @@ export const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
         ></i>
         <i className={`fas fa-folder me-1 ${isOnDevice ? 'text-success' : 'text-muted'}`}></i>
         <div
-          className="d-flex flex-column flex-grow-1 text-truncate"
+          className="flex flex-col grow truncate"
           style={{ maxWidth: 'calc(100% - 80px)', lineHeight: 1.2 }}
         >
-          <div className="d-flex align-items-center text-truncate">
+          <div className="flex items-center truncate">
             <span
-              className="text-truncate"
+              className="truncate"
               title={secondary ? `${primary} (${secondary})` : primary}
             >
               {primary}
@@ -156,7 +156,7 @@ export const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
           </div>
           {secondary && (
             <span
-              className="text-muted text-truncate"
+              className="text-muted truncate"
               style={{ fontSize: '0.65rem' }}
               title={secondary}
             >

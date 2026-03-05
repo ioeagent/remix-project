@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useIntl } from 'react-intl'
 import { EnvAppContext } from '../contexts'
 import { resetVmState } from '../actions'
-import { Spinner } from 'react-bootstrap'
+import { Spinner } from '@remix-ui/helper'
 
 export function ResetUI() {
   const { plugin, widgetState, dispatch, themeQuality } = useContext(EnvAppContext)
@@ -22,8 +22,8 @@ export function ResetUI() {
   }
 
   return (
-    <div className='mx-3 p-3 rounded' style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
-      <div className="d-flex justify-content-between align-items-center mb-2">
+    <div className='mx-4 p-4 rounded' style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+      <div className="flex justify-between items-center mb-2">
         <p className="mb-0 text-danger" style={{ fontSize: '0.9rem' }}> {intl.formatMessage({ id: 'udapp.resetVmStateTitle' })} </p>
         <button
           className="btn btn-sm"
@@ -40,15 +40,15 @@ export function ResetUI() {
       </div>
 
       <div>
-        <div style={{ color: 'var(--bs-tertiary)', fontSize: '0.75rem' }} className="mb-2 fw-light">
+        <div style={{ color: 'var(--bs-tertiary)', fontSize: '0.75rem' }} className="mb-2 font-light">
           <p className="mb-1">You are about to reset your environment state.</p>
           <p className="mb-1">
             {intl.formatMessage({ id: 'udapp.resetVmStateDesc1' })}
             {intl.formatMessage({ id: 'udapp.resetVmStateDesc2' })}
           </p>
-          <p className="mb-3" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>{intl.formatMessage({ id: 'udapp.resetVmStateDesc3' })}</p>
+          <p className="mb-4" style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>{intl.formatMessage({ id: 'udapp.resetVmStateDesc3' })}</p>
         </div>
-        <div className="d-flex justify-content-between align-items-center gap-3">
+        <div className="flex justify-between items-center gap-4">
           <button
             className="btn btn-sm btn-secondary rounded"
             onClick={() => dispatch({ type: 'HIDE_RESET_UI', payload: undefined })}

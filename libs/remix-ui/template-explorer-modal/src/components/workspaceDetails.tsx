@@ -46,17 +46,17 @@ export function WorkspaceDetails(props: WorkspaceDetailsProps) {
   }, [state.contractType, state.contractTag])
 
   return (
-    <section data-id="workspace-details-section" className="d-flex flex-column gap-3 bg-light workspace-details-section h-100">
-      <div className="p-3 d-flex flex-row align-items-center">
+    <section data-id="workspace-details-section" className="flex flex-col gap-4 bg-light workspace-details-section h-full">
+      <div className="p-4 flex flex-row items-center">
         { showEditWorkspaceName ? <input data-id="workspace-name-input" type="text" className="form-control form-control-sm" value={uniqueWorkspaceName} onChange={(e) => {
           setUniqueWorkspaceName(e.target.value)
           dispatch({ type: TemplateExplorerWizardAction.SET_WORKSPACE_NAME, payload: uniqueWorkspaceName })
-        }} /> : <span data-id="default-workspace-name-span" className={`text-uppercase small fw-semibold fs-6 ${theme?.name === 'Light' ? 'text-dark' : 'text-white'}`}>
+        }} /> : <span data-id="default-workspace-name-span" className={`uppercase small font-semibold text-base ${theme?.name === 'Light' ? 'text-dark' : 'text-white'}`}>
           {uniqueWorkspaceName}
         </span> }
         <i data-id="default-workspace-name-edit-icon" className={`${showEditWorkspaceName ? 'fas fa-lock ms-2' : "ms-2 fas fa-edit"}`} onClick={() => setShowEditWorkspaceName(!showEditWorkspaceName)}></i>
       </div>
-      <div className="d-flex flex-column flex-md-row h-100 pt-1 ps-3 pe-3 pb-3 workspace-details-content-wrapper">
+      <div className="flex flex-col flex-md-row h-full pt-1 ps-4 pe-4 pb-4 workspace-details-content-wrapper">
         <div className="workspace-details-file-explorer">
           <MiniFileExplorer />
         </div>
@@ -81,7 +81,7 @@ export function WorkspaceDetails(props: WorkspaceDetailsProps) {
           />
         </div>
       </div>
-      <div className="d-flex justify-content-between align-items-center gap-3 mb-2 p-2">
+      <div className="flex justify-between items-center gap-4 mb-2 p-2">
         <div className="form-check m-0">
           <>
             <input data-id="initGitRepositoryLabel" className="form-check-input" type="checkbox" id="initGit" checked={state.initializeAsGitRepo}

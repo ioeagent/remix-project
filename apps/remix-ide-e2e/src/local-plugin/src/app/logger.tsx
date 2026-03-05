@@ -6,7 +6,7 @@ interface loggerProps {
 
 export const Logger = (props) => {
   return (
-    <div id={props.id} className="jumbotron overflow-auto text-break mb-1 p-2">
+    <div id={props.id} className="jumbotron overflow-auto break-words mb-1 p-2">
       {props.log}
     </div>
   )

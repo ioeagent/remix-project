@@ -1053,7 +1053,7 @@ export const DebugLayout = ({
           <i className={`fas ${expandedSections.transactionDetails ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ fontSize: '0.75rem', marginRight: '1rem', color: 'var(--bs-body-color)' }}></i>
         </div>
         {expandedSections.transactionDetails && (
-          <div className="debug-section-content ms-3">
+          <div className="debug-section-content ms-4">
             {renderGlobalVariables()}
           </div>
         )}

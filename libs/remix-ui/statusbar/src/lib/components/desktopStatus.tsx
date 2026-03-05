@@ -8,13 +8,13 @@ export const DesktopStatus = () => {
   const appContext = useContext(AppContext)
 
   return (
-    <div className={`d-flex flex-row ps-3 small text-white justify-content-center align-items-center 
+    <div className={`flex flex-row ps-4 small text-white justify-center items-center 
     
       ${appContext.appState.connectedToDesktop === desktopConnectionType.connected ? 'bg-success' : ''}
       ${appContext.appState.connectedToDesktop === desktopConnectionType.alreadyConnected ? 'bg-danger' : ''}
       ${appContext.appState.connectedToDesktop === desktopConnectionType.disconnected ? 'bg-warning' : ''}
       
-     w-100 h-100`}>
+     w-full h-full`}>
       {appContext.appState.connectedToDesktop === desktopConnectionType.connected ? (
         <>
           <span className="fas fa-plug me-1"></span>

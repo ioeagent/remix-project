@@ -15,7 +15,7 @@ module.exports = {
   'Terminal dragbar should not be visible on load #group1': '' + function (browser: NightwatchBrowser) {
     browser
       .waitForElementVisible('*[data-id="toggleBottomPanelIcon"]', 10000)
-      .assert.hasClass('.terminal-wrap', 'd-none')
+      .assert.hasClass('.terminal-wrap', 'hidden')
       .assert.not.elementPresent('.dragbar_terminal')
   },
 
@@ -23,7 +23,7 @@ module.exports = {
     browser
       .click('*[data-id="toggleBottomPanelIcon"]')
       .waitForElementVisible('.terminal-wrap', 5000)
-      .assert.not.hasClass('.terminal-wrap', 'd-none')
+      .assert.not.hasClass('.terminal-wrap', 'hidden')
       .waitForElementVisible('.dragbar_terminal', 2000)
       .assert.elementPresent('.dragbar_terminal')
   },
@@ -32,7 +32,7 @@ module.exports = {
     browser
       .refresh()
       .waitForElementVisible('.terminal-wrap', 10000)
-      .assert.not.hasClass('.terminal-wrap', 'd-none')
+      .assert.not.hasClass('.terminal-wrap', 'hidden')
       .waitForElementVisible('.dragbar_terminal', 2000)
       .assert.elementPresent('.dragbar_terminal')
   },

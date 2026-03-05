@@ -116,12 +116,12 @@ export const SettingsSectionUI: React.FC<SettingsSectionUIProps> = ({ plugin, se
 
   return (
     <>
-      <h4 className={`${isDark ? 'text-white' : 'text-black'} py-3`} style={{ fontSize: '1.5rem' }}>{<FormattedMessage id={section.label} />}</h4>
+      <h4 className={`${isDark ? 'text-white' : 'text-black'} py-4`} style={{ fontSize: '1.5rem' }}>{<FormattedMessage id={section.label} />}</h4>
       <span className={`${isDark ? 'text-white' : 'text-black'}`} style={{ fontSize: '0.95rem' }}>{<FormattedMessage id={section.description} />}</span>
 
       {/* Show loading state for auth-required sections */}
       {section.requiresAuth && authLoading && (
-        <div className="pt-3">
+        <div className="pt-4">
           <div className="spinner-border spinner-border-sm" role="status">
             <span className="sr-only">Loading...</span>
           </div>
@@ -131,7 +131,7 @@ export const SettingsSectionUI: React.FC<SettingsSectionUIProps> = ({ plugin, se
 
       {/* Show warning for auth-required sections when not logged in */}
       {section.requiresAuth && !authLoading && !isLoggedIn && (
-        <div className="pt-3">
+        <div className="pt-4">
           <div className="alert alert-warning" role="alert">
             <i className="fas fa-exclamation-triangle me-2"></i>
             Not logged in. Please log in with Google, GitHub, Discord, or wallet to manage accounts.
@@ -144,10 +144,10 @@ export const SettingsSectionUI: React.FC<SettingsSectionUIProps> = ({ plugin, se
         const isLastItem = subSectionIndex === section.subSections.length - 1
 
         return (
-          <div key={subSectionIndex} className='pt-3'>
+          <div key={subSectionIndex} className='pt-4'>
             {subSection.title && <h5 className={`${isDark ? 'text-white' : 'text-black'}`} style={{ fontSize: '1.2rem' }}>{subSection.title}</h5>}
-            {subSection.description && <p className={`text-muted mb-3`} style={{ fontSize: '0.85rem' }}>{subSection.description}</p>}
-            <div className={`card ${isDark ? 'text-light' : 'text-dark'} border-0 ${isLastItem ? 'mb-4' : ''}`}>
+            {subSection.description && <p className={`text-muted mb-4`} style={{ fontSize: '0.85rem' }}>{subSection.description}</p>}
+            <div className={`card ${isDark ? 'text-light' : 'text-dark'} border-0 ${isLastItem ? 'mb-6' : ''}`}>
               <div className={`card-body ${section.key === 'account' ? 'pt-1' : ''}`} style={section.key === 'account' ? {} : { padding: '0.75rem' }}>
                 {subSection.options.map((option, optionIndex) => {
                   const isFirstOption = optionIndex === 0
@@ -163,7 +163,7 @@ export const SettingsSectionUI: React.FC<SettingsSectionUIProps> = ({ plugin, se
                   return (
                     <div className={`card border-0 rounded-0 ${paddingClass}`} key={optionIndex}>
                       {option.label && option.label.length > 0 && (
-                        <div className="d-flex align-items-center">
+                        <div className="flex items-center">
                           <h6 data-id={`settingsTab${option.name}Label`} className={`${option.headerClass || (isDark ? 'text-white' : 'text-black')} m-0`} style={{ fontSize: '1rem' }}>
                             <FormattedMessage id={option.label} />
                             {option.labelIconTooltip ?
@@ -185,27 +185,27 @@ export const SettingsSectionUI: React.FC<SettingsSectionUIProps> = ({ plugin, se
                       )}
                       {option.description && option.label && option.label.length > 0 && <span className="text-secondary mt-1" style={{ fontSize: '0.9rem' }}>{typeof option.description === 'string' ? <FormattedMessage id={option.description} /> : option.description}</span>}
                       {option.type === 'custom' && option.customComponent === 'mcpServerManager' && (
-                        <div className="mt-3">
+                        <div className="mt-4">
                           <IMCPServerManager plugin={plugin} />
                         </div>
                       )}
                       {option.type === 'custom' && option.customComponent === 'profileSection' && (
-                        <div className="mt-3">
+                        <div className="mt-4">
                           <ProfileSection plugin={plugin} />
                         </div>
                       )}
                       {option.type === 'custom' && option.customComponent === 'creditsBalance' && (
-                        <div className="mt-3">
+                        <div className="mt-4">
                           <CreditsBalance plugin={plugin} />
                         </div>
                       )}
                       {option.type === 'custom' && option.customComponent === 'connectedAccounts' && (
-                        <div className="mt-3">
+                        <div className="mt-4">
                           <ConnectedAccounts plugin={plugin} />
                         </div>
                       )}
                       {option.type === 'custom' && option.customComponent === 'billingSection' && (
-                        <div className="mt-3">
+                        <div className="mt-4">
                           <BillingSection plugin={plugin} />
                         </div>
                       )}
@@ -234,7 +234,7 @@ export const SettingsSectionUI: React.FC<SettingsSectionUIProps> = ({ plugin, se
                                 placeholder={intl.formatMessage({ id: `settings.${toggleOption.name}` })}
                               />
                             </div>
-                            {isLastOption && <div className="d-flex pt-3">
+                            {isLastOption && <div className="flex pt-4">
                               <input
                                 className="btn btn-sm btn-primary"
                                 id={`settingsTabSave${option.name}`}

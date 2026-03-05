@@ -491,7 +491,7 @@ export const EditorUI = (props: EditorUIProps) => {
       decoration = decoration as sourceAnnotation
       return {
         type: typeOfDecoration,
-        range: new monacoRef.current.Range(decoration.row + 1, 1, decoration.row + 1, 1),
+        range: new monacoRef.current.Range(decoration.flex flex-wrap + 1, 1, decoration.flex flex-wrap + 1, 1),
         options: {
           isWholeLine: false,
           glyphMarginHoverMessage: {
@@ -940,7 +940,7 @@ export const EditorUI = (props: EditorUIProps) => {
                 </div>
               </div>
               {/* Added Checkbox section below */}
-              <div className="mt-3">
+              <div className="mt-4">
                 <label htmlFor="donotshowagain" className="text-dark">
                   <input
                     type="checkbox"
@@ -1427,7 +1427,7 @@ export const EditorUI = (props: EditorUIProps) => {
         const acceptBtn = document.createElement('button')
         acceptBtn.style.backgroundColor = 'var(--custom-ai-color)'
         acceptBtn.style.color = 'var(--vscode-editor-background)'
-        acceptBtn.classList.add(...['btn', 'border', 'align-items-center', 'px-1', 'py-0', 'me-1'])
+        acceptBtn.classList.add(...['btn', 'border', 'items-center', 'px-1', 'py-0', 'me-1'])
         acceptBtn.style.fontSize = '0.8rem'
         acceptBtn.textContent = 'Accept'
 
@@ -1439,7 +1439,7 @@ export const EditorUI = (props: EditorUIProps) => {
         }
 
         const rejectBtn = document.createElement('button')
-        rejectBtn.classList.add(...['btn', 'border', 'align-items-center', 'px-1', 'py-0', 'bg-light', 'text-dark'])
+        rejectBtn.classList.add(...['btn', 'border', 'items-center', 'px-1', 'py-0', 'bg-light', 'text-dark'])
         rejectBtn.style.fontSize = '0.8rem'
         rejectBtn.textContent = 'Decline'
         rejectBtn.onclick = () => {
@@ -1454,7 +1454,7 @@ export const EditorUI = (props: EditorUIProps) => {
 
         if (acceptAllHandler) {
           const acceptAllBtn = document.createElement('button')
-          acceptAllBtn.classList.add(...['btn', 'border', 'align-items-center', 'px-1', 'py-0', 'bg-light', 'text-dark'])
+          acceptAllBtn.classList.add(...['btn', 'border', 'items-center', 'px-1', 'py-0', 'bg-light', 'text-dark'])
           acceptAllBtn.style.fontSize = '0.8rem'
           acceptAllBtn.textContent = 'Accept All'
           acceptAllBtn.onclick = () => {
@@ -1468,7 +1468,7 @@ export const EditorUI = (props: EditorUIProps) => {
 
         if (rejectAllHandler) {
           const rejectAllBtn = document.createElement('button')
-          rejectAllBtn.classList.add(...['btn', 'border', 'align-items-center', 'px-1', 'py-0', 'bg-light', 'text-dark'])
+          rejectAllBtn.classList.add(...['btn', 'border', 'items-center', 'px-1', 'py-0', 'bg-light', 'text-dark'])
           rejectAllBtn.style.fontSize = '0.8rem'
           rejectAllBtn.textContent = 'Decline All'
           rejectAllBtn.onclick = () => {
@@ -1665,7 +1665,7 @@ export const EditorUI = (props: EditorUIProps) => {
   }
 
   return (
-    <div className="w-100 h-100 d-flex flex-column-reverse">
+    <div className="w-full h-full flex flex-col-reverse">
       <DiffEditor
         originalLanguage={'remix-solidity'}
         modifiedLanguage={'remix-solidity'}
@@ -1675,7 +1675,7 @@ export const EditorUI = (props: EditorUIProps) => {
         options={{ readOnly: false, renderSideBySide: isSplit }}
         width='100%'
         height={props.isDiff ? '100%' : '0%'}
-        className={props.isDiff ? "d-block" : "d-none"}
+        className={props.isDiff ? "block" : "hidden"}
         data-id="diffEditor"
       />
       <Editor
@@ -1696,10 +1696,10 @@ export const EditorUI = (props: EditorUIProps) => {
           }
         }}
         defaultValue={defaultEditorValue}
-        className={props.isDiff ? "d-none" : "d-block"}
+        className={props.isDiff ? "hidden" : "block"}
       />
       {editorModelsState[props.currentFile]?.readOnly && (
-        <span className="ps-4 h6 mb-0 w-100 alert-info position-absolute bottom-0 end-0">
+        <span className="ps-6 h6 mb-0 w-full alert-info position-absolute bottom-0 end-0">
           <i className="fas fa-lock-alt p-2"></i>
           <FormattedMessage
             id="editor.text"

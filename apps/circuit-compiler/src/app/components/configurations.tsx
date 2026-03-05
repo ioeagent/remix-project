@@ -4,8 +4,8 @@ import { ConfigurationsProps, PrimeValue } from "../types"
 
 export function Configurations ({primeValue, setPrimeValue, versionValue}: ConfigurationsProps) {
   return (
-    <div className="flex-column">
-      <div className="flex-column d-flex">
+    <div className="flex-col">
+      <div className="flex-col flex">
         <div className="ms-0">
           <label className="circuit_inner_label form-check-label" htmlFor="circuitPrimeSelector">
             <FormattedMessage id="circuit.prime" />
@@ -13,7 +13,7 @@ export function Configurations ({primeValue, setPrimeValue, versionValue}: Confi
           <CustomTooltip
             placement={"auto"}
             tooltipId="circuitPrimeLabelTooltip"
-            tooltipClasses="text-nowrap"
+            tooltipClasses="whitespace-nowrap"
             tooltipText={<span>{'To choose the prime number to use to generate the circuit. Receives the name of the curve (bn128, bls12381, goldilocks, grumpkin, pallas, vesta)'}</span>}
           >
             <div>

@@ -36,7 +36,7 @@ export const AutosaveItem: React.FC<AutosaveItemProps> = ({
   const { workspaceName, isEncrypted } = parseAutosaveFilename(autosave.filename)
 
   return (
-    <div className="d-flex align-items-center py-1 px-2 border-bottom" style={{ background: 'var(--remix-bg-opacity, transparent)' }}>
+    <div className="flex items-center py-1 px-2 border-bottom" style={{ background: 'var(--remix-bg-opacity, transparent)' }}>
       <i className="fas fa-save me-1 text-success" style={{ fontSize: '0.75rem' }}></i>
       {isEncrypted && (
         <CustomTooltip
@@ -50,8 +50,8 @@ export const AutosaveItem: React.FC<AutosaveItemProps> = ({
         placement="top"
         tooltipText={`${workspaceName ? workspaceName + ' • ' : ''}${formatDate(autosave.lastModified)}${isEncrypted ? ' 🔐' : ''}`}
       >
-        <div className="flex-grow-1 text-truncate" style={{ minWidth: 0, cursor: 'default' }}>
-          <span className="small fw-bold">
+        <div className="grow truncate" style={{ minWidth: 0, cursor: 'default' }}>
+          <span className="small font-bold">
             <FormattedMessage id="cloudWorkspaces.lastSave" defaultMessage="Last Save" />
           </span>
           {workspaceName && (

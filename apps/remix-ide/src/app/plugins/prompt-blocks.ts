@@ -417,7 +417,7 @@ export const platform = {
   /** Figma-to-React transformation rules */
   figmaTransform: (): string => `
 **FIGMA DESIGN TRANSFORMATION RULES:**
-1. **Containerization:** Use \`max-w-7xl mx-auto px-4\` instead of fixed widths (e.g., 1440px).
+1. **Containerization:** Use \`max-w-7xl mx-auto px-6\` instead of fixed widths (e.g., 1440px).
 2. **Mobile First:** Use \`flex-wrap\` and \`grid-cols-1 md:grid-cols-3\` so elements stack on mobile.
 3. **No Absolute:** Avoid \`position: absolute\` unless strictly necessary.
 4. **Interactive:** Make buttons and inputs responsive (hover states, cursor pointers).
@@ -543,7 +543,7 @@ The DApp shell passes configuration via \`window.__QUICK_DAPP_CONFIG__\`.
 
 2. **STYLING:** Use Tailwind utility classes directly in JSX.
    - Do NOT create custom CSS classes like "card", "btn", "navbar".
-   - Use Tailwind classes: \`className="bg-white p-4 rounded shadow"\`.
+   - Use Tailwind classes: \`className="bg-white p-6 rounded shadow"\`.
 `,
 }
 

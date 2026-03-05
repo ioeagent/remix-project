@@ -1,6 +1,7 @@
 import React from 'react'
-import { Overlay } from 'react-bootstrap'
+
 import { CopyToClipboard } from '@remix-ui/clipboard'
+import { Overlay } from '@remix-ui/helper'
 
 interface ContractKebabMenuProps {
   show: boolean
@@ -57,11 +58,11 @@ export const ContractKebabMenu: React.FC<ContractKebabMenuProps> = ({
     >
       {(props) => (
         <MenuContent {...props} data-id={`contractKebabMenu-${menuIndex}`}>
-          <div className="p-0 rounded w-100" style={{ backgroundColor: 'var(--bs-light)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)' }}>
-            <div className="d-flex flex-column">
+          <div className="p-0 rounded w-full" style={{ backgroundColor: 'var(--bs-light)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)' }}>
+            <div className="flex flex-col">
               <CopyToClipboard tip="Copy" icon="fa-clipboard" direction="right" getContent={onCopyABI}>
                 <div
-                  className="d-flex align-items-center px-3 py-2"
+                  className="flex items-center px-4 py-2"
                   data-id="copyABI"
                   style={{
                     color: 'var(--bs-body-color)',
@@ -80,7 +81,7 @@ export const ContractKebabMenu: React.FC<ContractKebabMenuProps> = ({
               </CopyToClipboard>
               <CopyToClipboard tip="Copy" icon="fa-clipboard" direction="right" getContent={onCopyBytecode}>
                 <div
-                  className="d-flex align-items-center px-3 py-2"
+                  className="flex items-center px-4 py-2"
                   data-id="copyBytecode"
                   style={{
                     color: 'var(--bs-body-color)',

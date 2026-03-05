@@ -15,7 +15,7 @@ export const PurchaseButton: React.FC<PurchaseButtonProps> = ({
   requirePriceId = true
 }) => {
   const getButtonClass = () => {
-    const base = 'btn w-100'
+    const base = 'btn w-full'
     switch (variant) {
     case 'primary':
       return `${base} btn-primary`

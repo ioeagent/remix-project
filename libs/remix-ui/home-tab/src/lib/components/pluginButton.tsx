@@ -17,15 +17,15 @@ function PluginButton({ imgPath, envID, envText, callback, l2, description, main
   const themeFilter = useContext(ThemeContext)
 
   return (
-    <div className="d-flex remixui_home_envButton">
+    <div className="flex remixui_home_envButton">
       <button
-        className="btn border-secondary d-flex flex-column  pb-2 text-nowrap justify-content-center align-items-center me-2 remixui_home_envButton"
+        className="btn border-secondary flex flex-col  pb-2 whitespace-nowrap justify-center items-center me-2 remixui_home_envButton"
         data-id={'landingPageStart' + envText}
         onClick={() => callback()}
       >
-        <img className="px-2 mb-2 align-self-center remixui_home_envLogo" id={envID} src={imgPath} alt="" style={{ filter: themeFilter.filter }} />
-        <div className="mb-2 h-100 d-flex flex-column">
-          <label className="text-uppercase text-dark remixui_home_cursorStyle">{envText}</label>
+        <img className="px-2 mb-2 self-center remixui_home_envLogo" id={envID} src={imgPath} alt="" style={{ filter: themeFilter.filter }} />
+        <div className="mb-2 h-full flex flex-col">
+          <label className="uppercase text-dark remixui_home_cursorStyle">{envText}</label>
           <div className="remixui_home_envLogoDescription">{description}</div>
         </div>
       </button>

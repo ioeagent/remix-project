@@ -74,7 +74,7 @@ const DesktopClientUI = (props: DesktopClientState & { openDesktopApp: () => voi
   if (disabled) {
     return (
       <div>
-        <div className="d-flex p-4 bg-light flex-column">
+        <div className="flex p-6 bg-light flex-col">
           <h3>{title}</h3>
           <p>
             The Brave Wallet is not supported at this time.
@@ -86,7 +86,7 @@ const DesktopClientUI = (props: DesktopClientState & { openDesktopApp: () => voi
 
   return (
     <div>
-      <div className="d-flex p-4 bg-light flex-column">
+      <div className="flex p-6 bg-light flex-col">
         <h3>{title}</h3>
         <p>
           1. Connect to your favorite Ethereum wallet provider
@@ -99,14 +99,14 @@ const DesktopClientUI = (props: DesktopClientState & { openDesktopApp: () => voi
       </div>
 
       <div>
-        <div className="row">
+        <div className="flex flex-wrap">
           {filteredList && filteredList.length > 0 ? (
             filteredList
               .map((provider, index) => (
-                <div key={index} className="col-md-4 mb-4">
-                  <div className="provider-item card h-100">
-                    <div className="card-body d-flex flex-column align-items-center">
-                      <div className="d-flex mb-2">{providerLogos[provider.name] && providerLogos[provider.name].map((logo, index) => <img key={index} src={logo} style={{ width: '2rem', height: '2rem', marginRight: '0.5rem' }} />)}</div>
+                <div key={index} className="md:w-1/3 mb-6">
+                  <div className="provider-item card h-full">
+                    <div className="card-body flex flex-col items-center">
+                      <div className="flex mb-2">{providerLogos[provider.name] && providerLogos[provider.name].map((logo, index) => <img key={index} src={logo} style={{ width: '2rem', height: '2rem', marginRight: '0.5rem' }} />)}</div>
                       <h5 className="card-title">{provider.displayName}</h5>
                       <p className="card-text">{provider.description}</p>
                       <button data-id={`connection-btn-${provider.name}`} disabled={disableconnect || currentContext === provider.name} className="btn btn-primary mt-auto" onClick={() => onConnect(provider)}>
@@ -117,7 +117,7 @@ const DesktopClientUI = (props: DesktopClientState & { openDesktopApp: () => voi
                 </div>
               ))
           ) : (
-            <div className="col-12">
+            <div className="w-full">
               <div className="alert alert-warning" role="alert">
                 No injected providers found. Please install MetaMask or another browser wallet.
               </div>

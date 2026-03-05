@@ -76,14 +76,14 @@ export const ChatHistorySidebar: React.FC<ChatHistorySidebarProps> = ({
 
   return (
     <div
-      className={`chat-history-sidebar border-0 d-flex flex-column h-100 ${isFloating ? 'chat-history-sidebar-floating ' : isMaximized ? '' : 'w-100'}`}
+      className={`chat-history-sidebar border-0 flex flex-col h-full ${isFloating ? 'chat-history-sidebar-floating ' : isMaximized ? '' : 'w-full'}`}
       style={isMaximized && !isFloating ? { width: '350px', minWidth: '350px', maxWidth: '350px' } : isFloating ? { width: '350px', minWidth: '350px' } : { minWidth: '350px', backgroundColor: theme === 'dark' ? 'var(--bs-dark)' : 'var(--bs-light)' }}
       data-id="chat-history-sidebar"
       data-theme={theme?.toLowerCase()}
     >
       {/* Header */}
-      <div className="border-0 p-3" style={{ backgroundColor: theme.toLowerCase() === 'dark' ? '#222336' : '#eff1f5' }}>
-        <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="border-0 p-4" style={{ backgroundColor: theme.toLowerCase() === 'dark' ? '#222336' : '#eff1f5' }}>
+        <div className="flex justify-between items-center mb-4">
           {isMaximized && (
             <CustomTooltip tooltipText="Close sidebar">
               <button
@@ -102,7 +102,7 @@ export const ChatHistorySidebar: React.FC<ChatHistorySidebarProps> = ({
           <i className={`fas ${isSearching ? 'fa-spinner fa-spin' : 'fa-search'} search-icon`}></i>
           <input
             type="text"
-            className="form-control search-input ps-4 "
+            className="form-control search-input ps-6 "
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -112,8 +112,8 @@ export const ChatHistorySidebar: React.FC<ChatHistorySidebarProps> = ({
         </div>
 
         {/* Archive Toggle */}
-        <div className="d-flex justify-content-between align-items-center">
-          <h6 className="mb-0 fw-normal sidebar-title" data-id="chat-history-sidebar-title">
+        <div className="flex justify-between items-center">
+          <h6 className="mb-0 font-normal sidebar-title" data-id="chat-history-sidebar-title">
             {'Chat history'} <span className="ms-2 text-muted">{filteredConversations.length}</span>
           </h6>
           <button
@@ -128,9 +128,9 @@ export const ChatHistorySidebar: React.FC<ChatHistorySidebarProps> = ({
       </div>
 
       {/* Conversation List */}
-      <div className="sidebar-body flex-grow-1 overflow-y-auto p-2">
+      <div className="sidebar-body grow overflow-y-auto p-2">
         {filteredConversations.length === 0 ? (
-          <div className="text-center text-muted mt-4">
+          <div className="text-center text-muted mt-6">
             {searchQuery ? (
               <>
                 <i className="fas fa-search fa-2x mb-2"></i>

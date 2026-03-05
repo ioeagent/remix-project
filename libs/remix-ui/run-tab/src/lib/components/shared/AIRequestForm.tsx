@@ -85,9 +85,9 @@ export const AIRequestForm = ({
   };
 
   return (
-    <div className="p-3">
+    <div className="p-4">
       {/* Tabs */}
-      <ul className="nav nav-tabs mb-3">
+      <ul className="nav nav-tabs mb-4">
         <li className="nav-item">
           <button
             className={`nav-link ${mode === 'text' ? 'active' : ''}`}
@@ -109,20 +109,20 @@ export const AIRequestForm = ({
       {/* TEXT MODE UI */}
       {mode === 'text' && (
         <div className="fade-in">
-          <div className="mb-3">
+          <div className="mb-4">
             <span>Please describe how you would want the design to look like.</span>
           </div>
 
           <textarea
-            className="form-control mb-3"
+            className="form-control mb-4"
             rows={4}
             placeholder='E.g: "The website should have a dark theme..."'
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
 
-          <div className="mb-3">
-            <div className="d-flex align-items-center gap-2">
+          <div className="mb-4">
+            <div className="flex items-center gap-2">
               <input
                 type="file"
                 id="ai-image-input"
@@ -133,7 +133,7 @@ export const AIRequestForm = ({
               />
 
               <button
-                className="btn btn-secondary btn-sm d-flex align-items-center gap-2"
+                className="btn btn-secondary btn-sm flex items-center gap-2"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <i className="fas fa-image"></i>
@@ -146,7 +146,7 @@ export const AIRequestForm = ({
             {fileError && <div className="text-danger small mt-1">{fileError}</div>}
 
             {previewUrl && (
-              <div className="mt-2 position-relative d-inline-block border rounded overflow-hidden">
+              <div className="mt-2 position-relative inline-block border rounded overflow-hidden">
                 <img
                   src={previewUrl}
                   alt="Preview"
@@ -154,7 +154,7 @@ export const AIRequestForm = ({
                 />
                 <button
                   onClick={handleRemoveImage}
-                  className="position-absolute top-0 end-0 btn btn-danger btn-sm p-0 d-flex align-items-center justify-content-center"
+                  className="position-absolute top-0 end-0 btn btn-danger btn-sm p-0 flex items-center justify-center"
                   style={{ width: '20px', height: '20px', borderRadius: '0 0 0 4px' }}
                   title="Remove image"
                 >
@@ -187,8 +187,8 @@ export const AIRequestForm = ({
             Paste a link to a specific Figma layer
           </div>
 
-          <div className="mb-3">
-            <label className="form-label small fw-bold">Figma File URL</label>
+          <div className="mb-4">
+            <label className="form-label small font-bold">Figma File URL</label>
             <input
               type="text"
               className="form-control"
@@ -201,8 +201,8 @@ export const AIRequestForm = ({
             </div>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label small fw-bold">Personal Access Token</label>
+          <div className="mb-4">
+            <label className="form-label small font-bold">Personal Access Token</label>
             <div className="input-group">
               <input
                 type="password"
@@ -249,8 +249,8 @@ export const AIRequestForm = ({
             </div>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label small fw-bold">Additional Instructions (Optional)</label>
+          <div className="mb-4">
+            <label className="form-label small font-bold">Additional Instructions (Optional)</label>
             <textarea
               className="form-control"
               rows={2}
@@ -259,7 +259,7 @@ export const AIRequestForm = ({
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
-          <div className="form-check mt-3 border-top pt-3">
+          <div className="form-check mt-4 border-top pt-4">
             <input
               className="form-check-input"
               type="checkbox"

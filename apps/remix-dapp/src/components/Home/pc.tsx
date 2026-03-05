@@ -14,7 +14,7 @@ const PCPage: React.FC = () => {
 
   return <div>
     <div
-      className="row m-0 pt-3"
+      className="flex flex-wrap m-0 pt-4"
       style={{
         height: instance.noTerminal
           ? window.innerHeight
@@ -22,16 +22,16 @@ const PCPage: React.FC = () => {
         overflowY: 'auto',
       }}
     >
-      <div className="col-xl-9 col-lg-8 col-md-7 d-inline-block pe-0">
-        <div className="mx-3 my-2 row">
-          {instance.showLogo && <div className="col-2 text-center">
+      <div className="xl:w-3/4 lg:w-2/3 md:w-7/12 inline-block pe-0">
+        <div className="mx-4 my-2 flex flex-wrap">
+          {instance.showLogo && <div className="w-1/6 text-center">
             <img src="/assets/logo.png" style={{ width: 95, height: 95 }} />
           </div>}
           <DappTop />
         </div>
         <UniversalDappUI />
       </div>
-      <div className="col-xl-3 col-lg-4 col-md-5 d-inline-block ps-0">
+      <div className="xl:w-1/4 lg:w-1/3 md:w-5/12 inline-block ps-0">
         <SettingsUI />
       </div>
     </div>

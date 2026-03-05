@@ -1,7 +1,6 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import React, { useContext, useCallback } from 'react'
-import { Button, ButtonGroup, Dropdown } from 'react-bootstrap'
-import { CustomTopbarMenu } from '@remix-ui/helper'
+import { Button, ButtonGroup, CustomTopbarMenu, Dropdown } from '@remix-ui/helper'
 import { AppContext } from '@remix-ui/app'
 import { MatomoEvent, TopbarEvent } from '@remix-api'
 import { TrackingContext } from '@remix-ide/tracking'
@@ -52,14 +51,14 @@ export const GitHubLogin: React.FC<GitHubLoginProps> = ({
       align="end"
     >
       <Button
-        className="btn btn-topbar btn-sm border d-flex flex-nowrap align-items-center justify-content-between github-login"
+        className="btn btn-topbar btn-sm border flex flex-nowrap items-center justify-between github-login"
         variant={ null }
         data-id="github-dropdown-toggle-login"
         onClick={isConnected ? undefined : handleLogin}
         disabled={isConnected}
       >
         {isConnected ? (
-          <div className="d-flex flex-nowrap align-items-center flex-row justify-content-center">
+          <div className="flex flex-nowrap items-center flex-row justify-center">
             <i className="fab fa-github me-1"></i>
             <span>{gitHubUser.login}</span>
             <img src={gitHubUser.avatar_url} alt="Avatar" className="ms-1" style={{
@@ -70,7 +69,7 @@ export const GitHubLogin: React.FC<GitHubLoginProps> = ({
             }}/>
           </div>
         ) : (
-          <div className="d-flex flex-nowrap align-items-center flex-row justify-content-center">
+          <div className="flex flex-nowrap items-center flex-row justify-center">
             <i className="fab fa-github me-1"></i>
             <span>Connect with GitHub</span>
           </div>
@@ -86,7 +85,7 @@ export const GitHubLogin: React.FC<GitHubLoginProps> = ({
       </Dropdown.Toggle>
       <Dropdown.Menu
         as={CustomTopbarMenu}
-        className="custom-dropdown-items w-75 text-decoration-none bg-light"
+        className="custom-dropdown-items w-3/4 no-underline bg-light"
       >
         <Dropdown.Item
           data-id="github-dropdown-item-clone"

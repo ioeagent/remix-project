@@ -145,26 +145,26 @@ function HomeTabFeaturedPlugins({ plugin }: HomeTabFeaturedPluginsProps) {
 
   function PluginCard(pluginInfo: PluginInfo) {
     return (
-      <div className="card border h-100">
-        <div className="d-flex align-items-center px-2 justify-content-between border-bottom">
-          <div className='d-flex align-items-center px-2'>
+      <div className="card border h-full">
+        <div className="flex items-center px-2 justify-between border-bottom">
+          <div className='flex items-center px-2'>
             <RenderIf condition={loadingPlugins.includes(pluginInfo.pluginId)}>
               <i className="fad fa-spinner fa-spin me-2"></i>
             </RenderIf>
             <RenderIfNot condition={loadingPlugins.includes(pluginInfo.pluginId)}>
               { pluginInfo.iconClass ? <i className={`${pluginInfo.iconClass} me-2`}></i> : <i className="fa-solid fa-file-book me-2"></i> }
             </RenderIfNot>
-            <span className="fw-bold" style={{ color: isDark ? 'white' : 'black' }}>{pluginInfo.pluginTitle}</span>
+            <span className="font-bold" style={{ color: isDark ? 'white' : 'black' }}>{pluginInfo.pluginTitle}</span>
           </div>
           <ToggleSwitch id={`toggleSwitch-${pluginInfo.pluginId}`} isOn={activePlugins.includes(pluginInfo.pluginId)} onClick={() => activateFeaturedPlugin(pluginInfo.pluginId)} />
         </div>
-        <div className="d-flex flex-column justify-content-between h-100">
-          <div className="p-3">
+        <div className="flex flex-col justify-between h-full">
+          <div className="p-4">
             <div className={`text-${(pluginInfo.maintainedBy || '').toLowerCase() === 'remix' ? 'success' : 'dark'} mb-1`}><i className="fa-solid fa-shield-halved me-2"></i><FormattedMessage id="home.maintainedBy"/> {pluginInfo.maintainedBy || 'Community'}</div>
             <div className="small mb-2" style={{ color: isDark ? 'white' : 'black' }}>{pluginInfo.description}</div>
           </div>
-          <div className="px-3 pb-3">
-            <button className="btn btn-light btn-sm w-100 text-decoration-none border" onClick={async () => await handleFeaturedPluginActionClick(pluginInfo)}>
+          <div className="px-4 pb-4">
+            <button className="btn btn-light btn-sm w-full no-underline border" onClick={async () => await handleFeaturedPluginActionClick(pluginInfo)}>
               <i className="fa-solid fa-book me-1"></i>{pluginInfo.action.label}
             </button>
           </div>
@@ -174,22 +174,22 @@ function HomeTabFeaturedPlugins({ plugin }: HomeTabFeaturedPluginsProps) {
   }
 
   return (
-    <div className="w-100 align-items-end remixui_featuredplugins_container" id="hTFeaturedPlugins">
-      <div className="d-flex justify-content-between align-items-center mb-2">
+    <div className="w-full items-end remixui_featuredplugins_container" id="hTFeaturedPlugins">
+      <div className="flex justify-between items-center mb-2">
         <h6 style={{ color: isDark ? 'white' : 'black' }}>{pluginList.caption}</h6>
         <button className="btn btn-secondary btn-md" onClick={() => plugin.call('menuicons', 'select', 'pluginManager')} ><FormattedMessage id="home.exploreAllPlugins"/></button>
       </div>
-      <div className="row">
+      <div className="flex flex-wrap">
         {
           isLoading ? (
             Array.from({ length: 4 }).map((_, index) => (
-              <div key={`loading-${index}`} className="col-lg-12 col-xl-6 col-md-6 col-sm-12 mb-4">
+              <div key={`loading-${index}`} className="lg:w-full xl:w-1/2 md:w-1/2 sm:w-full mb-6">
                 <LoadingCard />
               </div>
             ))
           ) : (
             pluginList.plugins.map((pluginInfo: PluginInfo) => (
-              <div className="col-lg-12 col-xl-6 col-md-6 col-sm-12 mb-4 " key={pluginInfo.pluginId}>{ PluginCard(pluginInfo) }</div>
+              <div className="lg:w-full xl:w-1/2 md:w-1/2 sm:w-full mb-6 " key={pluginInfo.pluginId}>{ PluginCard(pluginInfo) }</div>
             ))
           )
         }

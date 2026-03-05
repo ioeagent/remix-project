@@ -121,7 +121,7 @@ export function Container () {
             <CustomTooltip
               placement="bottom"
               tooltipId="showCircumCompilerTooltip"
-              tooltipClasses="text-nowrap"
+              tooltipClasses="whitespace-nowrap"
               tooltipText='See compiler license'
             >
               <span className="far fa-file-certificate border-0 p-0 ms-2" onClick={() => showCompilerLicense()}></span>

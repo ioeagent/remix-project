@@ -1,7 +1,6 @@
 import React, { useMemo, useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Dropdown } from 'react-bootstrap'
-import { CustomToggle } from '@remix-ui/helper'
+import { CustomToggle, Dropdown } from '@remix-ui/helper'
 import { TransactionsAppContext } from '../contexts'
 import { TabType } from '../types'
 import { TransactionRecordCard } from '../components/TransactionRecordCard'
@@ -117,8 +116,8 @@ function TransactionsPortraitView() {
 
   return (
     <div className="card mx-2 my-2" style={{ backgroundColor: 'var(--custom-onsurface-layer-1)', '--theme-text-color': themeQuality === 'dark' ? 'white' : 'black' } as React.CSSProperties}>
-      <div className="p-3 d-flex align-items-center justify-content-between" style={{ cursor: 'pointer' }}>
-        <div className='d-flex align-items-center gap-2'>
+      <div className="p-4 flex items-center justify-between" style={{ cursor: 'pointer' }}>
+        <div className='flex items-center gap-2'>
           <h6 className="my-auto" style={{ color: themeQuality === 'dark' ? 'white' : 'black', margin: 0, }}>
             <FormattedMessage id="udapp.transactionRecorderTitle" defaultMessage="Transactions recorder" /> <span className="text-secondary small">{widgetState.recorderData.journal.length}</span>
           </h6>
@@ -142,8 +141,8 @@ function TransactionsPortraitView() {
 
       {/* Add Contract Dialog */}
       {showSaveDialog && (
-        <div className="m-3 mt-0 p-3 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
-          <div className="d-flex justify-content-between align-items-center mb-2">
+        <div className="m-4 mt-0 p-4 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+          <div className="flex justify-between items-center mb-2">
             <p className="mb-0" style={{ color: themeQuality === 'dark' ? 'white' : 'black', fontSize: '0.9rem' }}>
               Save transactions
             </p>
@@ -160,18 +159,18 @@ function TransactionsPortraitView() {
               }}
             > × </button>
           </div>
-          <p style={{ color: 'var(--bs-tertiary)', fontSize: '0.7rem' }} className="mb-2 fw-light">
+          <p style={{ color: 'var(--bs-tertiary)', fontSize: '0.7rem' }} className="mb-2 font-light">
             <FormattedMessage
               id="udapp.addDeployedContract"
               defaultMessage="Save transactions (deployed contracts and function executions) and replay them in another environment"
             />
           </p>
-          <div className="d-flex align-items-center mb-2">
+          <div className="flex items-center mb-2">
             <label className="mb-0 me-2" style={{ color: 'var(--bs-tertiary)' }}>
                 Scenario name
             </label>
           </div>
-          <div className="position-relative flex-fill">
+          <div className="position-relative flex-1">
             <input
               type="text"
               value={scenarioInput}
@@ -194,8 +193,8 @@ function TransactionsPortraitView() {
 
       {/* Clear All Confirmation Dialog */}
       {showClearAllDialog && (
-        <div className="m-3 mt-0 p-3 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
-          <div className="d-flex justify-content-between align-items-center mb-2">
+        <div className="m-4 mt-0 p-4 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+          <div className="flex justify-between items-center mb-2">
             <p className="mb-0" style={{ color: themeQuality === 'dark' ? 'white' : 'black', fontSize: '0.9rem' }}>
               <FormattedMessage
                 id="udapp.clearAllTransactionsTitle"
@@ -214,23 +213,23 @@ function TransactionsPortraitView() {
               }}
             > × </button>
           </div>
-          <p className="text-sm mb-3">
+          <p className="text-sm mb-4">
             <FormattedMessage
               id="udapp.clearAllTransactionsConfirm"
               defaultMessage="You are about to delete the list of your recorded transactions."
             />
           </p>
           <p style={{ color: themeQuality === 'dark' ? 'white' : 'black' }}>Do you want to proceed?</p>
-          <div className="d-flex justify-content-between align-items-center gap-3">
+          <div className="flex justify-between items-center gap-4">
             <button
-              className="btn btn-sm btn-secondary flex-fill"
+              className="btn btn-sm btn-secondary flex-1"
               onClick={handleCancelClearAll}
               data-id="cancelClearAllTransactions"
             >
               <FormattedMessage id="udapp.cancel" defaultMessage="Cancel" />
             </button>
             <button
-              className="btn btn-sm btn-danger text-light flex-fill"
+              className="btn btn-sm btn-danger text-light flex-1"
               onClick={handleConfirmClearAll}
               data-id="confirmClearAllTransactions"
             >
@@ -300,7 +299,7 @@ function TransactionsPortraitView() {
                       />
                     ))
                   ) : (
-                    <div className="text-muted p-3 mt-2 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+                    <div className="text-muted p-4 mt-2 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
                       <div className="empty-state-text">
                         <FormattedMessage
                           id="debugger.noTransactionsToShow"
@@ -336,7 +335,7 @@ function TransactionsPortraitView() {
                       />
                     ))
                   ) : (
-                    <div className="text-muted p-3 mt-2 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
+                    <div className="text-muted p-4 mt-2 rounded" style={{ backgroundColor: 'var(--custom-onsurface-layer-2)' }}>
                       <div className="empty-state-text">
                         <FormattedMessage
                           id="debugger.noTransactionsToShow"

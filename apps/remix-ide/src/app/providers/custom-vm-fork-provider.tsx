@@ -37,13 +37,13 @@ export class CustomForkVMProvider extends BasicVMProvider {
             <FormattedMessage id="udapp.customVmForkProviderText" />
           </span>
           <div>
-            <label className="mt-3 mb-1">
+            <label className="mt-4 mb-1">
               <FormattedMessage id="udapp.nodeUrl" />
             </label>
             <input data-id="CustomForkNodeUrl" name="nodeUrl" type="text" className="border form-control border-end-0" />
           </div>
           <div>
-            <label className="mt-3 mb-1">
+            <label className="mt-4 mb-1">
               <FormattedMessage id="udapp.blockNumber" />
             </label>
             <input
@@ -56,7 +56,7 @@ export class CustomForkVMProvider extends BasicVMProvider {
             />
           </div>
           <div>
-            <label className="mt-3 mb-1">EVM</label>
+            <label className="mt-4 mb-1">EVM</label>
             <select data-id="CustomForkEvmType" name="evmType" defaultValue="merge" className="border form-control border-end-0">
               {Object.keys(Hardfork).map((value, index) => {
                 return (

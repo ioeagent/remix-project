@@ -5,16 +5,16 @@ export function ModifyContract({ tokenName, updateTokenName, strategy, toggleCon
   const { contractOptions, contractUpgradability, contractAccessControl } = strategy
   return (
     <>
-      <div className="col-12 col-lg-3">
-        <div className="border rounded p-3 h-100">
-          <div className="mb-3">
-            <div className="fw-semibold mb-2">Contract settings</div>
-            <label className="form-label text-uppercase small mb-1">Token name</label>
+      <div className="w-full lg:w-1/4">
+        <div className="border rounded p-4 h-full">
+          <div className="mb-4">
+            <div className="font-semibold mb-2">Contract settings</div>
+            <label className="form-label uppercase small mb-1">Token name</label>
             <input className="form-control form-control-sm" placeholder="My Token" value={tokenName} onChange={(e) => updateTokenName(e.target.value)} />
           </div>
 
-          <div className="mb-3">
-            <div className="text-uppercase small fw-semibold mb-2">Features</div>
+          <div className="mb-4">
+            <div className="uppercase small font-semibold mb-2">Features</div>
             <div className="form-check mb-1">
               <input className="form-check-input" type="checkbox" id="featMintable" checked={contractOptions.mintable} onChange={() => {
                 toggleContractOption('mintable')}
@@ -31,8 +31,8 @@ export function ModifyContract({ tokenName, updateTokenName, strategy, toggleCon
             </div>
           </div>
 
-          <div className="mb-3">
-            <div className="text-uppercase small fw-semibold mb-2">Access control</div>
+          <div className="mb-4">
+            <div className="uppercase small font-semibold mb-2">Access control</div>
             <div className="form-check mb-1">
               <input className="form-check-input" type="radio" name="accessControl" id="accessOwnable" checked={contractAccessControl==='ownable'} onChange={() => switchAccessControl('ownable')} />
               <label className="form-check-label" htmlFor="accessOwnable">Ownable</label>
@@ -47,8 +47,8 @@ export function ModifyContract({ tokenName, updateTokenName, strategy, toggleCon
             </div>
           </div>
 
-          <div className="mb-3">
-            <div className="text-uppercase small fw-semibold mb-2">Upgradability</div>
+          <div className="mb-4">
+            <div className="uppercase small font-semibold mb-2">Upgradability</div>
             <div className="form-check mb-1">
               <input className="form-check-input" type="checkbox" id="featUups" checked={contractUpgradability.uups} onChange={() => checkBoxDispatch({ type: ContractWizardAction.CONTRACT_UPGRADABILITY_UPDATE, payload: { ...contractUpgradability, uups: !contractUpgradability.uups } })} />
               <label className="form-check-label" htmlFor="featUups">UUPS</label>

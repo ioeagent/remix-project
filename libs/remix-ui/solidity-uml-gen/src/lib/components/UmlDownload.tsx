@@ -1,7 +1,6 @@
-import { CustomTooltip } from '@remix-ui/helper'
+import { CustomTooltip, Dropdown } from '@remix-ui/helper'
 import React, { Fragment, Ref, useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Dropdown } from 'react-bootstrap'
 import { UmlFileType } from '../utilities/UmlDownloadStrategy'
 import { MatomoEvent, SolidityUMLGenEvent } from '@remix-api'
 import { TrackingContext } from '@remix-ide/tracking'
@@ -89,7 +88,7 @@ export default function UmlDownload(props: UmlDownloadProps) {
               <CustomTooltip
                 placement="left-start"
                 tooltipId="solUmlgenDownloadAsPngTooltip"
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
                 tooltipText={<FormattedMessage id="solUmlGen.pngDownloadTooltip" />}
               >
                 <div data-id="umlPngDownload">
@@ -111,7 +110,7 @@ export default function UmlDownload(props: UmlDownloadProps) {
               <CustomTooltip
                 placement="left-start"
                 tooltipId="solUmlgenDownloadAsPdfTooltip"
-                tooltipClasses="text-nowrap"
+                tooltipClasses="whitespace-nowrap"
                 tooltipText={<FormattedMessage id="solUmlGen.pdfDownloadTooltip" />}
               >
                 <div data-id="umlPdfDownload">

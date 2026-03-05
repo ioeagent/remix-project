@@ -91,11 +91,11 @@ const tests = {
       .setValue('input[data-id="functionTitle0x6057361d"]', 'Function Store Title')
       .setValue('input[data-id="functionTitle0x2e64cec1"]', 'Function Retrieve Title')
       .execute((function() {
-        document.querySelector('input[data-id="uploadLogo"]').classList.remove('d-none');
+        document.querySelector('input[data-id="uploadLogo"]').classList.remove('hidden');
       }))
       .setValue('input[data-id="uploadLogo"]', logoFilePath)
       .execute((function() {
-        document.querySelector('input[data-id="uploadLogo"]').classList.add('d-none');
+        document.querySelector('input[data-id="uploadLogo"]').classList.add('hidden');
       }))
       .click('[for="shareToTwitter"]')
       .click('[for="shareToFacebook"]')

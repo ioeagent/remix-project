@@ -73,20 +73,20 @@ function HomeTabUpdates({ plugin }: HomeTabUpdatesProps) {
 
   function UpdateCard(updateInfo: UpdateInfo) {
     return (
-      <div className="card border h-100 d-flex flex-column justify-content-between">
+      <div className="card border h-full flex flex-col justify-between">
         <div>
-          <div className="d-flex align-items-center p-3 overflow-hidden justify-content-between" style={{ height: '80px', backgroundColor: 'var(--bs-body-bg)' }}>
+          <div className="flex items-center p-4 overflow-hidden justify-between" style={{ height: '80px', backgroundColor: 'var(--bs-body-bg)' }}>
             <span className={`badge bg-info bg-transparent border p-2 rounded-pill text-${updateInfo.theme}`} style={{ fontWeight: 'light', border: `1px solid var(--${updateInfo.theme})` }}>{updateInfo.badge}</span>
             { updateInfo.icon ? <img src={`${HOME_TAB_BASE_URL + updateInfo.icon}`} alt="RemixAI Assistant" style={{ height: '150px', width: '150px' }} />
               : <img src={`${HOME_TAB_BASE_URL + 'images/illusion.svg'}`} alt="RemixAI Assistant" style={{ height: '150px', width: '150px' }} />
             }
           </div>
-          <div className="px-3" style={{ fontSize: '1rem', zIndex: 1 }}>
-            <span className="d-block my-2" style={{ color: isDark ? 'white' : 'black' }}>
+          <div className="px-4" style={{ fontSize: '1rem', zIndex: 1 }}>
+            <span className="block my-2" style={{ color: isDark ? 'white' : 'black' }}>
               {updateInfo.title}
             </span>
             {Array.isArray(updateInfo.descriptionList) && updateInfo.descriptionList.length > 0 ? (
-              <div className="mb-3 small">
+              <div className="mb-4 small">
                 <ul className="list-unstyled">
                   {updateInfo.descriptionList.map((description: string, index: number) => (
                     <li key={`description-${index}`} className='mb-1'><i className="far fa-check-circle me-2"></i>{description}</li>
@@ -94,12 +94,12 @@ function HomeTabUpdates({ plugin }: HomeTabUpdatesProps) {
                 </ul>
               </div>
             ) : (
-              <div className="mb-3 small">{updateInfo.description}</div>
+              <div className="mb-4 small">{updateInfo.description}</div>
             )}
           </div>
         </div>
-        <div className="px-3 pb-3">
-          <button className={`btn btn-light btn-sm w-100 border ${updateInfo.theme !== 'primary' && `text-${updateInfo.theme}`}`} onClick={() => handleUpdatesActionClick(updateInfo)}>
+        <div className="px-4 pb-4">
+          <button className={`btn btn-light btn-sm w-full border ${updateInfo.theme !== 'primary' && `text-${updateInfo.theme}`}`} onClick={() => handleUpdatesActionClick(updateInfo)}>
             {updateInfo.action.label}
           </button>
         </div>
@@ -108,17 +108,17 @@ function HomeTabUpdates({ plugin }: HomeTabUpdatesProps) {
   }
 
   return (
-    <div className="w-100 align-items-end">
-      <div className="row">
+    <div className="w-full items-end">
+      <div className="flex flex-wrap">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, index) => (
-            <div key={`loading-${index}`} className="col-lg-12 col-xl-6 col-md-6 col-sm-12 mb-4">
+            <div key={`loading-${index}`} className="lg:w-full xl:w-1/2 md:w-1/2 sm:w-full mb-6">
               <LoadingCard />
             </div>
           ))
         ) : (
           pluginList.map((updateInfo: UpdateInfo, index: number) => (
-            <div key={`update-${index}`} className="col-lg-12 col-xl-6 col-md-6 col-sm-12 mb-4">
+            <div key={`update-${index}`} className="lg:w-full xl:w-1/2 md:w-1/2 sm:w-full mb-6">
               {UpdateCard(updateInfo)}
             </div>
           ))

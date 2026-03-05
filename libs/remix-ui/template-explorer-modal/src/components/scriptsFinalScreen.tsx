@@ -12,9 +12,9 @@ export function ScriptsFinalScreen(props: ScriptsFinalScreenProps) {
   const { state, dispatch, facade } = useContext(TemplateExplorerContext)
 
   return (
-    <section className="d-flex flex-column gap-3 bg-light" style={{ height: '80%' }}>
+    <section className="flex flex-col gap-4 bg-light" style={{ height: '80%' }}>
 
-      <button className="btn btn-primary btn-sm mx-3" data-id="validateWorkspaceButton" onClick={async () => {
+      <button className="btn btn-primary btn-sm mx-4" data-id="validateWorkspaceButton" onClick={async () => {
         await facade.createWorkspace({
           workspaceName: state.workspaceName,
           workspaceTemplateName: state.workspaceTemplateChosen.value,

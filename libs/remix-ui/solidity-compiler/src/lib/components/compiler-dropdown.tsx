@@ -1,8 +1,8 @@
 import { appPlatformTypes, platformContext, onLineContext } from '@remix-ui/app';
+import { Dropdown } from '@remix-ui/helper'
 
 ;
 import React, { useEffect, useState, useRef, useReducer, useContext } from 'react' // eslint-disable-line
-import { Dropdown } from 'react-bootstrap';
 import { CompilerMenu, CompilerMenuToggle } from './compiler-menu';
 
 export type compilerVersion = {
@@ -32,7 +32,7 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
         disabled={props.disabled}
         as={CompilerMenuToggle}
         id="dropdown-custom-components"
-        className="btn btn-light w-100 d-inline-block border form-select"
+        className="btn btn-light w-full inline-block border form-select"
         icon={null}
         style={{
           opacity: props.disabled ? 0.5 : 1,
@@ -41,7 +41,7 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
         }}
       >
         <div style={{ flexGrow: 1, overflow: 'hidden', display:'flex', justifyContent:'left' }}>
-          <div className={`text-truncate font-sm ${props.disabled ? 'text-muted' : ''}`}>
+          <div className={`truncate font-sm ${props.disabled ? 'text-muted' : ''}`}>
             {customVersions.map((url, i) => {
               if (selectedVersion === url) return (<span data-id="selectedVersion" key={i}>custom</span>)
             })}
@@ -55,17 +55,17 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
         </div>
       </Dropdown.Toggle>
 
-      <Dropdown.Menu as={CompilerMenu} className="w-100 form-select overflow-hidden" data-id="custom-dropdown-items">
+      <Dropdown.Menu as={CompilerMenu} className="w-full form-select overflow-hidden" data-id="custom-dropdown-items">
         {allversions.length <= 0 && (
           <Dropdown.Item
             key={`default`}
             data-id='builtin'
             onClick={() => {}}
           >
-            <div className='d-flex w-100 justify-content-between'>
+            <div className='flex w-full justify-between'>
               {selectedVersion === defaultVersion ? <span className='fas fa-check text-success me-2'></span> : null}
               <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-                <div className="text-truncate">
+                <div className="truncate">
                   {defaultVersion}
                 </div>
               </div>
@@ -78,10 +78,10 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
             data-id='builtin'
             onClick={() => {}}
           >
-            <div className='d-flex w-100 justify-content-between'>
+            <div className='flex w-full justify-between'>
               {selectedVersion === "builtin" ? <span className='fas fa-check text-success me-2'></span> : null}
               <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-                <div className="text-truncate">
+                <div className="truncate">
                   builtin
                 </div>
               </div>
@@ -94,10 +94,10 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
             data-id={`dropdown-item-${url}`}
             onClick={() => handleLoadVersion(url)}
           >
-            <div className='d-flex w-100 justify-content-between'>
+            <div className='flex w-full justify-between'>
               {selectedVersion === url ? <span className='fas fa-check text-success me-2'></span> : null}
               <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-                <div className="text-truncate">
+                <div className="truncate">
                   custom: {url}
                 </div>
               </div>
@@ -112,10 +112,10 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
               data-id={`dropdown-item-${build.path}`}
               onClick={() => handleLoadVersion(build.path)}
             >
-              <div className='d-flex w-100 justify-content-between'>
+              <div className='flex w-full justify-between'>
                 {selectedVersion === build.path ? <span className='fas fa-check text-success me-2'></span> : null}
                 <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-                  <div className="text-truncate">
+                  <div className="truncate">
                     {build.longVersion}
                   </div>
                 </div>

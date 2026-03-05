@@ -20,7 +20,7 @@ export const createModalMessage = async (
         onChange={(e) => onChangeTemplateName(e.target.value)}
         onInput={(e) => onChangeTemplateName((e.target as any).value)}
       />
-      <div className="d-flex py-2 align-items-center form-check">
+      <div className="flex py-2 items-center form-check">
         <input
           id="initGitRepository"
           data-id="initGitRepository"

@@ -87,14 +87,14 @@ export const RemoteWorkspacesList: React.FC<RemoteWorkspacesListProps> = ({
   }
 
   return (
-    <div className="remote-workspaces-section flex-grow-1 d-flex flex-column mt-3" style={{ minHeight: 0 }}>
+    <div className="remote-workspaces-section grow flex flex-col mt-4" style={{ minHeight: 0 }}>
       {/* Section Header - Clickable to collapse */}
       <div
-        className="d-flex justify-content-between align-items-center px-2 py-1 border-top border-bottom bg-light"
+        className="flex justify-between items-center px-2 py-1 border-top border-bottom bg-light"
         style={{ cursor: 'pointer' }}
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
-        <span className="text-muted small d-flex align-items-center">
+        <span className="text-muted small flex items-center">
           <i className={`fas fa-chevron-${isCollapsed ? 'right' : 'down'} me-1`} style={{ fontSize: '0.7rem', width: '10px' }}></i>
           <i className="fas fa-cloud me-1"></i>
           <FormattedMessage id="cloudWorkspaces.remoteWorkspaces" defaultMessage="Remote Workspaces" />
@@ -129,16 +129,16 @@ export const RemoteWorkspacesList: React.FC<RemoteWorkspacesListProps> = ({
           )}
 
           {/* Workspaces List */}
-          <div className="workspaces-list flex-grow-1 overflow-auto">
+          <div className="workspaces-list grow overflow-auto">
             {loading && workspaces.length === 0 ? (
-              <div className="text-center p-3">
+              <div className="text-center p-4">
                 <i className="fas fa-spinner fa-spin"></i>
                 <p className="mt-1 mb-0 text-muted small">
                   <FormattedMessage id="cloudWorkspaces.loading" defaultMessage="Loading..." />
                 </p>
               </div>
             ) : workspaces.length === 0 ? (
-              <div className="text-center p-3">
+              <div className="text-center p-4">
                 <i className="fas fa-folder-open text-muted mb-1"></i>
                 <p className="text-muted small mb-1">
                   <FormattedMessage id="cloudWorkspaces.noWorkspaces" defaultMessage="No cloud workspaces" />

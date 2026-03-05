@@ -30,16 +30,16 @@ export const ElectronMenu = (props: {
   return (
     (platform !== appPlatformTypes.desktop) ? null :
       (global.fs.browser.isSuccessfulWorkspace ? null :
-        <div className="p-3 d-flex flex-column h-100">
+        <div className="p-4 flex flex-col h-full">
           <div>
-            <div data-id="openFolderButton" onClick={async () => { await openFolderElectron(null) }} className='btn btn-primary mb-2 w-100'><FormattedMessage id="electron.openFolder" /></div>
-            <div data-id="createWorkspaceButton" onClick={async () => { await props.createWorkspace() }} className='btn btn-primary mb-2 w-100'><FormattedMessage id="electron.createProject" /></div>
-            <div data-id="cloneFromGitButton" onClick={async () => { props.clone() }} className='btn btn-primary mb-3 w-100'><FormattedMessage id="electron.gitClone" /></div>
+            <div data-id="openFolderButton" onClick={async () => { await openFolderElectron(null) }} className='btn btn-primary mb-2 w-full'><FormattedMessage id="electron.openFolder" /></div>
+            <div data-id="createWorkspaceButton" onClick={async () => { await props.createWorkspace() }} className='btn btn-primary mb-2 w-full'><FormattedMessage id="electron.createProject" /></div>
+            <div data-id="cloneFromGitButton" onClick={async () => { props.clone() }} className='btn btn-primary mb-4 w-full'><FormattedMessage id="electron.gitClone" /></div>
           </div>
 
           {global.fs.browser.recentFolders.length > 0 ?
-            <div className="border-top pt-3 d-flex flex-column flex-fill recent-folders-section">
-              <div className="recent-folders-label mb-2 fw-bold text-uppercase">
+            <div className="border-top pt-4 flex flex-col flex-1 recent-folders-section">
+              <div className="recent-folders-label mb-2 font-bold uppercase">
                 <FormattedMessage id="electron.recentFolders" />
               </div>
               <ul className="recent-folders-list gap-2">
@@ -48,7 +48,7 @@ export const ElectronMenu = (props: {
                     <div className="recentfolder p-2">
                       <div className="recentfolder_header mb-1">
                         <div className="recentfolder_content" onClick={async () => { await openFolderElectron(folder) }}>
-                          <div className="recentfolder_name fw-semibold">{lastFolderName(folder)}</div>
+                          <div className="recentfolder_name font-semibold">{lastFolderName(folder)}</div>
                           <CustomTooltip
                             tooltipText={folder}
                             tooltipId={`electron-recent-folder-path-${index}`}

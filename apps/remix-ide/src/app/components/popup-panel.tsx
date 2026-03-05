@@ -116,7 +116,7 @@ export class PopupPanel extends AbstractPanel {
     }
     return (
       <div
-        className={`px-0 bg-light border-info ${appState?.showPopupPanel ? 'd-flex' : 'd-none'}`}
+        className={`px-0 bg-light border-info ${appState?.showPopupPanel ? 'flex' : 'hidden'}`}
         style={{
           maxHeight: '100rem',
           minWidth: '22rem',
@@ -130,10 +130,10 @@ export class PopupPanel extends AbstractPanel {
         }}
         data-id="popupPanelPluginsContainer"
       >
-        <div className='d-flex w-100 flex-column'>
+        <div className='flex w-full flex-col'>
           <RemixPluginPanel
             header={
-              <span id='popupPanelToggle' className='d-flex flex-row'>
+              <span id='popupPanelToggle' className='flex flex-row'>
                 <button
                   data-id='popupPanelToggle'
                   className='btn fas fa-angle-double-down'

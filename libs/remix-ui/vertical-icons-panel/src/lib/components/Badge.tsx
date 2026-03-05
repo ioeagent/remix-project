@@ -78,7 +78,7 @@ function Badge({ badgeStatus }: BadgeProps) {
   return (
     <>
       {badgeStatus && checkStatusKeyValue(badgeStatus.key, badgeStatus.type) ? (
-        <CustomTooltip placement={'right'} tooltipClasses="text-nowrap" tooltipId="verticalItemsbadge" tooltipText={badgeStatus.title}>
+        <CustomTooltip placement={'right'} tooltipClasses="whitespace-nowrap" tooltipId="verticalItemsbadge" tooltipText={badgeStatus.title}>
           <i className={`${resolveClasses(badgeStatus.key, badgeStatus.type!)}`} aria-hidden="true">
             {badgeStatus.pluginName && badgeStatus.pluginName === 'solidityStaticAnalysis' ? (
               badgeStatus.type === 'warning' || badgeStatus.type === 'error' || badgeStatus.type === 'danger' ? (
