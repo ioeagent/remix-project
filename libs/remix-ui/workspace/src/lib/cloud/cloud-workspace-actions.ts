@@ -24,6 +24,7 @@ import { WorkspaceLockedError } from './cloud-workspace-lock'
 import { CloudWorkspace, WorkspaceSyncStatus } from './types'
 import {
   setCurrentWorkspace,
+  setExpandPath,
   setMode,
   setReadOnlyMode,
   setWorkspaces,
@@ -217,6 +218,7 @@ export async function enableCloud(): Promise<void> {
         }
         // Dispatch Redux state so the workspace panel UI updates
         _dispatch(setMode('browser'))
+        _dispatch(setExpandPath([]))
         _dispatch(setCurrentWorkspace({ name: targetWs.name, isGitRepo: false }))
         _dispatch(setReadOnlyMode(false))
         localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), targetWs.name)
@@ -308,6 +310,7 @@ export async function disableCloud(): Promise<void> {
       proxy.setWorkspace(targetLocal)
       await _plugin.setWorkspace({ name: targetLocal, isLocalhost: false })
       _dispatch(setMode('browser'))
+      _dispatch(setExpandPath([]))
       _dispatch(setCurrentWorkspace({ name: targetLocal, isGitRepo: false }))
       _dispatch(setReadOnlyMode(false))
     } else {

@@ -28,6 +28,7 @@ import {
   setCurrentWorkspaceBranches,
   setCurrentWorkspaceCurrentBranch,
   setDeleteWorkspace,
+  setExpandPath,
   setMode,
   setReadOnlyMode,
   setRenameWorkspace,
@@ -817,6 +818,7 @@ export const deleteWorkspace = async (workspaceName: string, cb?: (err: Error, r
             const workspaceProvider = plugin.fileProviders.workspace
             startFileChangeTracking(workspaceProvider, nextWs.uuid)
             dispatch(setMode('browser'))
+            dispatch(setExpandPath([]))
             dispatch(setCurrentWorkspace({ name: nextWs.name, isGitRepo: false }))
             dispatch(setReadOnlyMode(false))
             localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), nextWs.name)
@@ -891,6 +893,7 @@ export const switchToWorkspace = async (name: string) => {
           const workspaceProvider = plugin.fileProviders.workspace
           startFileChangeTracking(workspaceProvider, cloudWs.uuid)
           dispatch(setMode('browser'))
+          dispatch(setExpandPath([]))
           dispatch(setCurrentWorkspace({ name, isGitRepo: false }))
           dispatch(setReadOnlyMode(false))
           localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), name)

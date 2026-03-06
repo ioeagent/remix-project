@@ -1520,6 +1520,7 @@ export function Workspace() {
               if (workspaceProvider) {
                 startFileChangeTracking(workspaceProvider, targetWs.uuid)
               }
+              global.dispatchHandleExpandPath([])
               global.dispatchFetchWorkspaceDirectory('/')
               localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), targetWs.name)
             }

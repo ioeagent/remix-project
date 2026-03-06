@@ -713,12 +713,12 @@ export const browserReducer = (state = browserInitialState, action: Actions) => 
       browser: {
         ...state.browser,
         flatTree: state.mode === 'browser' ? flatTree : state.browser.flatTree,
-        expandPath: payload
+        expandPath: state.mode === 'browser' ? payload : state.browser.expandPath
       },
       localhost: {
         ...state.localhost,
         flatTree: state.mode === 'localhost' ? flatTree : state.localhost.flatTree,
-        expandPath: payload
+        expandPath: state.mode === 'localhost' ? payload : state.localhost.expandPath
       }
     }
   }
