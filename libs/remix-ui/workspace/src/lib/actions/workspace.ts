@@ -24,19 +24,15 @@ import {
   fetchWorkspaceDirectoryRequest,
   fetchWorkspaceDirectorySuccess,
   hideNotification,
-  setCurrentWorkspace,
-  setCurrentWorkspaceBranches,
-  setCurrentWorkspaceCurrentBranch,
   setDeleteWorkspace,
-  setExpandPath,
   setMode,
-  setReadOnlyMode,
   setRenameWorkspace,
-  setCurrentWorkspaceIsGitRepo,
   setGitConfig,
   setElectronRecentFolders,
-  setCurrentWorkspaceHasGitSubmodules,
   setCurrentLocalFilePath,
+  switchWorkspaceAction,
+  gitBranchOpComplete,
+  updateGitStatus,
 } from './payload'
 import { addSlash, checkSlash, checkSpecialChars } from '@remix-ui/helper'
 
@@ -817,10 +813,7 @@ export const deleteWorkspace = async (workspaceName: string, cb?: (err: Error, r
             })
             const workspaceProvider = plugin.fileProviders.workspace
             startFileChangeTracking(workspaceProvider, nextWs.uuid)
-            dispatch(setMode('browser'))
-            dispatch(setExpandPath([]))
-            dispatch(setCurrentWorkspace({ name: nextWs.name, isGitRepo: false }))
-            dispatch(setReadOnlyMode(false))
+            dispatch(switchWorkspaceAction({ name: nextWs.name, isGitRepo: false }))
             localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), nextWs.name)
           } catch (switchErr) {
             console.error('[deleteWorkspace] Failed to switch to next cloud workspace:', switchErr)
@@ -892,10 +885,7 @@ export const switchToWorkspace = async (name: string) => {
           // Set up file change tracking
           const workspaceProvider = plugin.fileProviders.workspace
           startFileChangeTracking(workspaceProvider, cloudWs.uuid)
-          dispatch(setMode('browser'))
-          dispatch(setExpandPath([]))
-          dispatch(setCurrentWorkspace({ name, isGitRepo: false }))
-          dispatch(setReadOnlyMode(false))
+          dispatch(switchWorkspaceAction({ name, isGitRepo: false }))
           localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), name)
           return
         }
@@ -931,8 +921,7 @@ export const switchToWorkspace = async (name: string) => {
     } else if (name === ELECTRON) {
       await plugin.fileProviders.workspace.setWorkspace(name)
       await plugin.setWorkspace({ name, isLocalhost: false })
-      dispatch(setMode('browser'))
-      dispatch(setCurrentWorkspace({ name, isGitRepo: false }))
+      dispatch(switchWorkspaceAction({ name, isGitRepo: false }))
 
     } else {
       const isActive = await plugin.call('manager', 'isActive', 'remixd')
@@ -941,9 +930,7 @@ export const switchToWorkspace = async (name: string) => {
       await plugin.fileProviders.workspace.setWorkspace(name)
       await plugin.setWorkspace({ name, isLocalhost: false })
       const isGitRepo = await plugin.fileManager.isGitRepo()
-      dispatch(setMode('browser'))
-      dispatch(setCurrentWorkspace({ name, isGitRepo }))
-      dispatch(setReadOnlyMode(false))
+      dispatch(switchWorkspaceAction({ name, isGitRepo }))
     }
   })
 }
@@ -1056,6 +1043,11 @@ export type WorkspaceType = { name: string; isGitRepo: boolean; hasGitSubmodules
 export const getWorkspaces = async (): Promise<WorkspaceType[]> | undefined => {
   return workspaceOperationQueue.run(async () => {
     try {
+      // plugin is set asynchronously via setPlugin(); callers that mount
+      // before the workspace engine is ready (e.g. WorkspaceDropdown)
+      // should get an empty list instead of crashing.
+      if (!plugin) return []
+
       // ── Cloud mode: return cloud workspaces from the store ──
       if (cloudStore.isCloudMode) {
         const cloudState = cloudStore.getState()
@@ -1176,11 +1168,9 @@ export const cloneRepository = async (url: string) => {
           const workspaceDir = plugin.fileProviders.workspace.workspace
           const branches = await getGitRepoBranches(workspacesPath + '/' + workspaceDir)
 
-          dispatch(setCurrentWorkspaceBranches(branches))
           const currentBranch = await getGitRepoCurrentBranch(workspacesPath + '/' + workspaceDir)
 
-          dispatch(setCurrentWorkspaceCurrentBranch(currentBranch))
-          dispatch(cloneRepositorySuccess())
+          dispatch(gitBranchOpComplete({ currentBranch, branches }))
         } catch {
           const cloneModal = {
             id: 'cloneGitRepository',
@@ -1211,11 +1201,11 @@ export const checkGit = async () => {
   try {
     const isGitRepo = await plugin.fileManager.isGitRepo()
     const hasGitSubmodule = await plugin.fileManager.hasGitSubmodules()
-    dispatch(setCurrentWorkspaceIsGitRepo(isGitRepo))
-    dispatch(setCurrentWorkspaceHasGitSubmodules(hasGitSubmodule))
-    await refreshBranches()
+    const workspacesPath = plugin.fileProviders.workspace.workspacesPath
+    const workspaceName = plugin.fileProviders.workspace.workspace
+    const branches = await getGitRepoBranches(workspacesPath + '/' + workspaceName)
     const currentBranch: branch = await dgitPlugin.call('dgitApi', 'currentbranch')
-    dispatch(setCurrentWorkspaceCurrentBranch(currentBranch))
+    dispatch(updateGitStatus({ isGitRepo, hasGitSubmodules: hasGitSubmodule, branches, currentBranch }))
   } catch (e) {}
 }
 
@@ -1273,16 +1263,7 @@ export const getGitConfig = async () => {
   return config
 }
 
-const refreshBranches = async () => {
-  const workspacesPath = plugin.fileProviders.workspace.workspacesPath
-  const workspaceName = plugin.fileProviders.workspace.workspace
-  const branches = await getGitRepoBranches(workspacesPath + '/' + workspaceName)
-
-  dispatch(setCurrentWorkspaceBranches(branches))
-}
-
 export const switchBranch = async (branch: branch) => {
-  console.log('switch', branch)
   await plugin.call('fileManager', 'closeAllFiles')
   const localChanges = await hasLocalChanges()
 
@@ -1301,8 +1282,7 @@ export const switchBranch = async (branch: branch) => {
           .call('dgitApi', 'checkout', { ref: branch.name, force: true, refresh: false })
           .then(async () => {
             await fetchWorkspaceDirectory(ROOT_PATH)
-            dispatch(setCurrentWorkspaceCurrentBranch(branch))
-            dispatch(cloneRepositorySuccess())
+            dispatch(gitBranchOpComplete({ currentBranch: branch }))
           })
           .catch(() => {
             dispatch(cloneRepositoryFailed())
@@ -1319,8 +1299,7 @@ export const switchBranch = async (branch: branch) => {
       .call('dgitApi', 'checkout', { ref: branch.name, force: true, refresh: false })
       .then(async () => {
         await fetchWorkspaceDirectory(ROOT_PATH)
-        dispatch(setCurrentWorkspaceCurrentBranch(branch))
-        dispatch(cloneRepositorySuccess())
+        dispatch(gitBranchOpComplete({ currentBranch: branch }))
       })
       .catch(() => {
         dispatch(cloneRepositoryFailed())
@@ -1335,16 +1314,14 @@ export const createNewBranch = async (branch: string) => {
   promise
     .then(async () => {
       await fetchWorkspaceDirectory(ROOT_PATH)
-      dispatch(setCurrentWorkspaceCurrentBranch({
-        remote: null,
-        name: branch,
-      }))
       const workspacesPath = plugin.fileProviders.workspace.workspacesPath
       const workspaceName = plugin.fileProviders.workspace.workspace
       const branches = await getGitRepoBranches(workspacesPath + '/' + workspaceName)
 
-      dispatch(setCurrentWorkspaceBranches(branches))
-      dispatch(cloneRepositorySuccess())
+      dispatch(gitBranchOpComplete({
+        currentBranch: { remote: null, name: branch },
+        branches
+      }))
     })
     .catch(() => {
       dispatch(cloneRepositoryFailed())
@@ -1387,13 +1364,11 @@ export const checkoutRemoteBranch = async (branch: branch) => {
           })
           .then(async () => {
             await fetchWorkspaceDirectory(ROOT_PATH)
-            dispatch(setCurrentWorkspaceCurrentBranch(branch))
             const workspacesPath = plugin.fileProviders.workspace.workspacesPath
             const workspaceName = plugin.fileProviders.workspace.workspace
             const branches = await getGitRepoBranches(workspacesPath + '/' + workspaceName)
 
-            dispatch(setCurrentWorkspaceBranches(branches))
-            dispatch(cloneRepositorySuccess())
+            dispatch(gitBranchOpComplete({ currentBranch: branch, branches }))
           })
           .catch(() => {
             dispatch(cloneRepositoryFailed())
@@ -1414,13 +1389,11 @@ export const checkoutRemoteBranch = async (branch: branch) => {
       })
       .then(async () => {
         await fetchWorkspaceDirectory(ROOT_PATH)
-        dispatch(setCurrentWorkspaceCurrentBranch(branch))
         const workspacesPath = plugin.fileProviders.workspace.workspacesPath
         const workspaceName = plugin.fileProviders.workspace.workspace
         const branches = await getGitRepoBranches(workspacesPath + '/' + workspaceName)
 
-        dispatch(setCurrentWorkspaceBranches(branches))
-        dispatch(cloneRepositorySuccess())
+        dispatch(gitBranchOpComplete({ currentBranch: branch, branches }))
       })
       .catch(() => {
         dispatch(cloneRepositoryFailed())

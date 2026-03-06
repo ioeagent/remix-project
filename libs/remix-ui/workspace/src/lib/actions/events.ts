@@ -2,6 +2,7 @@ import { fileDecoration } from '@remix-ui/file-decorators'
 import { extractParentFromKey } from '@remix-ui/helper'
 import isElectron from 'is-electron'
 import React from 'react'
+import { unstable_batchedUpdates } from 'react-dom'
 import { action, FileTree, WorkspaceTemplate } from '../types'
 import { ROOT_PATH } from '../utils/constants'
 import { displayNotification, displayPopUp, focusElement, fileAddedSuccess, fileRemovedSuccess, fileRenamedSuccess, folderAddedSuccess, loadLocalhostError, loadLocalhostRequest, loadLocalhostSuccess, removeContextMenuItem, removeFocus, rootFolderChangedSuccess, setContextMenuItem, setMode, setReadOnlyMode, setFileDecorationSuccess } from './payload'
@@ -116,8 +117,10 @@ export const listenOnProviderEvents = (provider) => (reducerDispatch: React.Disp
 
   provider.event.on('disconnected', async () => {
     plugin.fileManager.setMode('browser')
-    dispatch(setMode('browser'))
-    dispatch(loadLocalhostError('Remixd disconnected!'))
+    unstable_batchedUpdates(() => {
+      dispatch(setMode('browser'))
+      dispatch(loadLocalhostError('Remixd disconnected!'))
+    })
     const workspaceProvider = plugin.fileProviders.workspace
 
     await switchToWorkspace(workspaceProvider.workspace)
@@ -129,9 +132,11 @@ export const listenOnProviderEvents = (provider) => (reducerDispatch: React.Disp
 
   provider.event.on('connected', () => {
     plugin.fileManager.setMode('localhost')
-    dispatch(setMode('localhost'))
+    unstable_batchedUpdates(() => {
+      dispatch(setMode('localhost'))
+      dispatch(loadLocalhostSuccess())
+    })
     fetchWorkspaceDirectory('/')
-    dispatch(loadLocalhostSuccess())
   })
 
   provider.event.on('loadingLocalhost', async () => {

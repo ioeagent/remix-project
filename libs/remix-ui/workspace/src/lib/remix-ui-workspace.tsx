@@ -586,7 +586,6 @@ export function Workspace() {
   const switchWorkspace = async (name: string) => {
     try {
       await global.dispatchSwitchToWorkspace(name)
-      global.dispatchHandleExpandPath([])
       trackMatomoEvent({ category: 'workspace', action: 'switchWorkspace', name: name, isClick: true })
     } catch (e) {
       global.modal(

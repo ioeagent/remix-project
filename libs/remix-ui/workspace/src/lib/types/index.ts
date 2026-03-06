@@ -361,6 +361,22 @@ export interface ActionPayloadTypes {
   },
   SET_ELECTRON_RECENT_FOLDERS: string[]
   SET_CURRENT_LOCAL_FILE_PATH: string
+  SWITCH_WORKSPACE: {
+    name: string
+    isGitRepo: boolean
+    mode: 'browser' | 'localhost'
+    readOnly: boolean
+  }
+  GIT_BRANCH_OP_COMPLETE: {
+    currentBranch: branch
+    branches?: branch[]
+  }
+  UPDATE_GIT_STATUS: {
+    isGitRepo: boolean
+    hasGitSubmodules: boolean
+    branches?: branch[]
+    currentBranch?: branch
+  }
 }
 
 export interface Action<T extends keyof ActionPayloadTypes> {

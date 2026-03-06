@@ -23,11 +23,8 @@ import {
 import { WorkspaceLockedError } from './cloud-workspace-lock'
 import { CloudWorkspace, WorkspaceSyncStatus } from './types'
 import {
-  setCurrentWorkspace,
-  setExpandPath,
-  setMode,
-  setReadOnlyMode,
   setWorkspaces,
+  switchWorkspaceAction,
 } from '../actions/payload'
 import { createWorkspace, getWorkspaces, fetchWorkspaceDirectory } from '../actions/workspace'
 import {
@@ -217,10 +214,7 @@ export async function enableCloud(): Promise<void> {
           startFileChangeTracking(workspaceProvider, targetWs.uuid)
         }
         // Dispatch Redux state so the workspace panel UI updates
-        _dispatch(setMode('browser'))
-        _dispatch(setExpandPath([]))
-        _dispatch(setCurrentWorkspace({ name: targetWs.name, isGitRepo: false }))
-        _dispatch(setReadOnlyMode(false))
+        _dispatch(switchWorkspaceAction({ name: targetWs.name, isGitRepo: false }))
         localStorage.setItem(cloudLocalKey('lastCloudWorkspace'), targetWs.name)
       } catch (err) {
         console.error('[enableCloud] Failed to switch to cloud workspace:', err)
@@ -309,10 +303,7 @@ export async function disableCloud(): Promise<void> {
     if (targetLocal) {
       proxy.setWorkspace(targetLocal)
       await _plugin.setWorkspace({ name: targetLocal, isLocalhost: false })
-      _dispatch(setMode('browser'))
-      _dispatch(setExpandPath([]))
-      _dispatch(setCurrentWorkspace({ name: targetLocal, isGitRepo: false }))
-      _dispatch(setReadOnlyMode(false))
+      _dispatch(switchWorkspaceAction({ name: targetLocal, isGitRepo: false }))
     } else {
       // No local workspaces at all — create a default one
       _plugin.call('notification', 'toast', 'No local workspace found — creating default workspace…')

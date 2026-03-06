@@ -165,6 +165,41 @@ export const browserReducer = (state = browserInitialState, action: Actions) => 
     }
   }
 
+  case 'SWITCH_WORKSPACE': {
+    const payload = action.payload
+    // Ensure the workspace appears in the list (same logic as SET_CURRENT_WORKSPACE)
+    const workspaces = state.browser.workspaces.find(
+      ({ name }) => name === payload.name
+    )
+      ? state.browser.workspaces
+      : [...state.browser.workspaces, { name: payload.name, isGitRepo: payload.isGitRepo, isGist: '' }]
+
+    const emptyExpandPath: string[] = []
+    const flatTree = flattenTree(
+      payload.mode === 'browser' ? state.browser.files : state.localhost.files,
+      emptyExpandPath
+    )
+
+    return {
+      ...state,
+      mode: payload.mode,
+      readonly: payload.readOnly,
+      browser: {
+        ...state.browser,
+        currentWorkspace: payload.name,
+        workspaceSwitchVersion: (state.browser.workspaceSwitchVersion || 0) + 1,
+        workspaces: workspaces.filter((workspace) => workspace),
+        expandPath: payload.mode === 'browser' ? emptyExpandPath : state.browser.expandPath,
+        flatTree: payload.mode === 'browser' ? flatTree : state.browser.flatTree,
+      },
+      localhost: {
+        ...state.localhost,
+        expandPath: payload.mode === 'localhost' ? emptyExpandPath : state.localhost.expandPath,
+        flatTree: payload.mode === 'localhost' ? flatTree : state.localhost.flatTree,
+      }
+    }
+  }
+
   case 'SET_WORKSPACES': {
     const payload = action.payload
     return {
@@ -790,6 +825,50 @@ export const browserReducer = (state = browserInitialState, action: Actions) => 
         ...state.browser,
         isRequestingCloning: false,
         isSuccessfulCloning: false
+      }
+    }
+  }
+
+  case 'GIT_BRANCH_OP_COMPLETE': {
+    const { currentBranch, branches } = action.payload
+    return {
+      ...state,
+      browser: {
+        ...state.browser,
+        isRequestingCloning: false,
+        isSuccessfulCloning: true,
+        workspaces: state.browser.workspaces.map((workspace) => {
+          if (workspace.name === state.browser.currentWorkspace) {
+            return {
+              ...workspace,
+              currentBranch,
+              ...(branches !== undefined ? { branches } : {})
+            }
+          }
+          return workspace
+        })
+      }
+    }
+  }
+
+  case 'UPDATE_GIT_STATUS': {
+    const { isGitRepo, hasGitSubmodules, branches, currentBranch } = action.payload
+    return {
+      ...state,
+      browser: {
+        ...state.browser,
+        workspaces: state.browser.workspaces.map((workspace) => {
+          if (workspace.name === state.browser.currentWorkspace) {
+            return {
+              ...workspace,
+              isGitRepo,
+              hasGitSubmodules,
+              ...(branches !== undefined ? { branches } : {}),
+              ...(currentBranch !== undefined ? { currentBranch } : {})
+            }
+          }
+          return workspace
+        })
       }
     }
   }

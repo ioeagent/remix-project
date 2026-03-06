@@ -322,3 +322,50 @@ export const setCurrentLocalFilePath = (path: string): Action<'SET_CURRENT_LOCAL
     payload: path
   }
 }
+
+/**
+ * Atomic compound action that replaces the 4-dispatch pattern:
+ *   setMode + setExpandPath + setCurrentWorkspace + setReadOnlyMode
+ *
+ * One dispatch → one reducer pass → one re-render. expandPath is always
+ * reset to [] (clean slate for the new workspace).
+ */
+export const switchWorkspaceAction = (ws: { name: string; isGitRepo: boolean; mode?: 'browser' | 'localhost'; readOnly?: boolean }): Action<'SWITCH_WORKSPACE'> => {
+  return {
+    type: 'SWITCH_WORKSPACE',
+    payload: {
+      name: ws.name,
+      isGitRepo: ws.isGitRepo,
+      mode: ws.mode ?? 'browser',
+      readOnly: ws.readOnly ?? false,
+    }
+  }
+}
+
+/**
+ * Atomic compound action for git branch operations.
+ * Replaces: cloneRepositorySuccess + setCurrentWorkspaceCurrentBranch
+ *           + (optionally) setCurrentWorkspaceBranches
+ *
+ * Clears isRequestingCloning and updates branch state in one reducer pass.
+ */
+export const gitBranchOpComplete = (op: { currentBranch: branch; branches?: branch[] }): Action<'GIT_BRANCH_OP_COMPLETE'> => {
+  return {
+    type: 'GIT_BRANCH_OP_COMPLETE',
+    payload: op
+  }
+}
+
+/**
+ * Atomic compound action for refreshing full git status.
+ * Replaces: setCurrentWorkspaceIsGitRepo + setCurrentWorkspaceHasGitSubmodules
+ *           + setCurrentWorkspaceBranches + setCurrentWorkspaceCurrentBranch
+ *
+ * Used by checkGit() after workspace load.
+ */
+export const updateGitStatus = (status: { isGitRepo: boolean; hasGitSubmodules: boolean; branches?: branch[]; currentBranch?: branch }): Action<'UPDATE_GIT_STATUS'> => {
+  return {
+    type: 'UPDATE_GIT_STATUS',
+    payload: status
+  }
+}
