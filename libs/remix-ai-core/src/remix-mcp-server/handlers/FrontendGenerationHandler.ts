@@ -5,6 +5,7 @@
 
 import { IMCPToolResult } from '../../types/mcp';
 import { BaseToolHandler } from '../registry/RemixToolRegistry';
+import { IParams, GenerationParams } from '@remix/remix-ai-core';
 import {
   ToolCategory,
   RemixToolDefinition,
@@ -20,9 +21,6 @@ import {
 import { Plugin } from '@remixproject/engine';
 import { PlanStore } from '../state/PlanStore';
 
-/**
- * Generate Tree Handler - Creates file structure plan using LLM
- */
 export class GenerateTreeHandler extends BaseToolHandler {
   name = 'generate_tree';
   description = 'Generate a file structure plan for a frontend project using AI. Returns a plan ID that can be modified and approved before execution.';
@@ -71,20 +69,13 @@ export class GenerateTreeHandler extends BaseToolHandler {
 
   async execute(args: GenerateTreeArgs, plugin: Plugin): Promise<IMCPToolResult> {
     try {
-      // Build tree generation prompt
       const treePrompt = this.buildTreePrompt(args);
 
-      // Get inferencer and generate tree
-      const inferencer = await plugin.call('remixAI', 'getInferencer');
-      if (!inferencer) {
-        return this.createErrorResult('AI inferencer not available');
-      }
+      const params:IParams = GenerationParams
+      params.stream = false
+      params.stream_result = false
 
-      const response = await inferencer.code_generation(treePrompt, {
-        temperature: 0.3,
-        max_tokens: 2000,
-        format: 'json'
-      });
+      const response = await plugin.call('remixAI', 'answer', treePrompt, params);
 
       // Parse and validate response
       const fileTree = this.parseTreeResponse(response);
@@ -208,9 +199,6 @@ Return ONLY the JSON array, no markdown formatting or explanations.`;
   }
 }
 
-/**
- * Modify Plan Handler - Modify plan before approval
- */
 export class ModifyPlanHandler extends BaseToolHandler {
   name = 'modify_plan';
   description = 'Modify a generation plan before approval. Can update file tree structure and metadata.';
@@ -296,9 +284,6 @@ export class ModifyPlanHandler extends BaseToolHandler {
   }
 }
 
-/**
- * Approve Plan Handler - Approve plan for execution
- */
 export class ApprovePlanHandler extends BaseToolHandler {
   name = 'approve_plan';
   description = 'Approve a generation plan for execution. Plan must be approved before files can be generated.';
@@ -350,9 +335,6 @@ export class ApprovePlanHandler extends BaseToolHandler {
   }
 }
 
-/**
- * Get Plan Handler - Retrieve plan details
- */
 export class GetPlanHandler extends BaseToolHandler {
   name = 'get_plan';
   description = 'Retrieve details of a generation plan by ID.';
@@ -400,9 +382,6 @@ export class GetPlanHandler extends BaseToolHandler {
   }
 }
 
-/**
- * Execute Plan Handler - Execute approved plan and generate files
- */
 export class ExecutePlanHandler extends BaseToolHandler {
   name = 'execute_plan';
   description = 'Execute an approved plan and generate all files. Files are created one-by-one with dependency context.';
@@ -456,12 +435,6 @@ export class ExecutePlanHandler extends BaseToolHandler {
       // Initialize execution
       planStore.initializeExecution(args.planId);
 
-      const inferencer = await plugin.call('remixAI', 'getInferencer');
-      if (!inferencer) {
-        planStore.updatePlan(args.planId, { status: 'failed' });
-        return this.createErrorResult('AI inferencer not available');
-      }
-
       const results = {
         success: true,
         generated: 0,
@@ -499,7 +472,7 @@ export class ExecutePlanHandler extends BaseToolHandler {
           const context = this.buildFileContext(node, planStore.getGeneratedFiles(args.planId), plan);
 
           // Generate file content
-          const content = await this.generateFileContent(inferencer, context, plan);
+          const content = await this.generateFileContent(plugin, context, plan);
 
           // Write file using the pattern from FileWriteHandler
           await this.writeFile(plugin, node.path, content);
@@ -563,18 +536,18 @@ export class ExecutePlanHandler extends BaseToolHandler {
   }
 
   private async generateFileContent(
-    inferencer: any,
+    plugin: Plugin,
     context: FileGenerationContext,
     plan: GenerationPlan
   ): Promise<string> {
     const prompt = this.buildFileGenerationPrompt(context, plan);
 
-    const response = await inferencer.code_generation(prompt, {
-      temperature: 0.4,
-      max_tokens: 4000
-    });
+    const params:IParams = GenerationParams
+    params.stream = false
+    params.stream_result = false
 
-    // Extract code from response
+    const response = await plugin.call('remixAI', 'answer', prompt, params);
+
     return this.extractCode(response);
   }
 
