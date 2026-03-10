@@ -280,7 +280,14 @@ export class RemixMCPServer extends EventEmitter implements IRemixMCPServer {
 
       case 'tools/call':
         const toolResult = await this.executeTool(message.params as IMCPToolCall);
-        return { id: message.id, result: toolResult };
+        let error
+        if (toolResult?.isError) {
+          error = {
+            code: MCPErrorCode.TOOL_EXECUTION_ERROR,
+            message: toolResult?.content[0]?.text
+          }
+        }
+        return { id: message.id, result: toolResult, error };
 
       case 'resources/list':
         const resources = await this._resources.getResources();

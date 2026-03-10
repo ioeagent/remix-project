@@ -962,7 +962,7 @@ Use this tool when you need:
 
             content.push({
               type: 'text' as const,
-              text: `\n[${record.name}] (${record.executionTime}ms)\nArguments: ${JSON.stringify(record.arguments, null, 2)}\nResult:\n${toolResult}`
+              text: `\n[${record.name}] (${record.executionTime}ms)\nArguments: ${JSON.stringify(record.arguments, null, 2)}\n${isError ? `Result:\n${'Error:' + toolResult}` : ''}`
             });
           }
         }
