@@ -100,10 +100,10 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       label: 'File',
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} far fa-copy`,
       color: '',
-      action: () => sendPrompt('Create a new file')
+      action: () => sendPrompt("Let's create a new file together in the current workspace")
     },
     {
-      label: 'New workspace',
+      label: 'New Workspace',
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-plus`,
       color: '',
       action: handleGenerateWorkspace
@@ -114,7 +114,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       color: '',
       action: () => {
         handleActionClick()
-        sendPrompt('Sum up a list of all the MCP endpoints and their functionalities in a concise manner. Propose a few prompts I can use to enhance my workflow.')
+        sendPrompt('Create a list of all features and summarized MCP functionalities in a concise manner. Propose a few related prompts I can use to enhance my workflow.')
       }
     },
     {
@@ -130,8 +130,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-graduation-cap`,
       color: '',
       action: () => {
-        handleActionClick()
-        sendPrompt('I would like to learn Web3 development. Can you create a learning path for me with resources and projects to work on?')
+        sendPrompt('I would like to learn Web3 development. Can you create a learning path for me based on Learneth with resources and projects to work on?. Do not generate URLs')
       }
     },
     {
@@ -148,15 +147,15 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
       action: async () => {
-        sendPrompt('Give me a little introduction about insights about Etherscan and how I may use it with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage Etherscan with other mcp tools (like TheGraph, Alchemy, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
+        sendPrompt('Give me a little introduction about insights about Etherscan and how I may use it with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage Etherscan with other mcp tools (like The Graph, Alchemy, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
       }
     },
     {
-      label: 'TheGraph',
+      label: 'The Graph',
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
       action: async () => {
-        sendPrompt('Give me a little introduction about insights about TheGraph and how I may use it with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage TheGraph with other mcp tools (like Etherscan, Alchemy, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
+        sendPrompt('Give me a brief introduction to The Graph and how it can be used with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage The Graph with other mcp tools (like Etherscan, Alchemy, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
       }
     },
     {
@@ -164,7 +163,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
       action: async () => {
-        sendPrompt('Give me a little introduction about insights about Alchemy and how I may use it with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage Alchemy with other mcp tools (like TheGraph, Etherscan, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
+        sendPrompt('Give me a brief introduction to Alchemy and how I can use it with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage Alchemy with other mcp tools (like TheGraph, Etherscan, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
       }
     },
     ...dynamicButtons
