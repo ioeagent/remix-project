@@ -155,7 +155,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
       action: async () => {
-        sendPrompt('Give me a brief introduction to The Graph and how it can be used with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage The Graph with other mcp tools (like Etherscan, Alchemy, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
+        sendPrompt('Give me a brief introduction to The Graph and how it can be used with RemixAI. Give some example prompts and if applicable show how I can write prompts that leverage The Graph with other MCP tools like Etherscan, Alchemy, etc. Do not write a wall of text. Let me ask questions. Propose a few directions moving forward.')
       }
     },
     {
@@ -163,7 +163,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
       action: async () => {
-        sendPrompt('Give me a brief introduction to Alchemy and how I can use it with RemixAI. Give me some examples prompts and if applicable show me how I could write prompts which could leverage Alchemy with other mcp tools (like TheGraph, Etherscan, etc...). Do not write a wall of text, let me ask questions. Propose me a few directions moving forward.')
+        sendPrompt('Give me a brief introduction to Alchemy and how I can use it with RemixAI. Show some example prompts and if applicable show how I can write prompts that leverage Alchemy with other MCP tools (like The Graph, Etherscan, etc...). Do not write a wall of text. Let me ask questions. Propose a few directions moving forward.')
       }
     },
     ...dynamicButtons
