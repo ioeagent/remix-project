@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { BillingManagerProps, CreditPackage, SubscriptionPlan, UserSubscription, Credits, FeatureAccessProduct, UserFeatureMembership } from './types'
-import { BillingApiService, ApiClient, CryptoCurrency } from '@remix-api'
+import { BillingManagerProps, UserSubscription, Credits, UserFeatureMembership } from './types'
+import { BillingApiService, ProductsApiService, ApiClient, CryptoCurrency, EligibleProduct } from '@remix-api'
 import { endpointUrls } from '@remix-endpoints-helper'
-import { CreditPackagesView } from './components/credit-packages-view'
-import { SubscriptionPlansView } from './components/subscription-plans-view'
-import { FeatureAccessProductsView } from './components/feature-access-products-view'
 import { CurrentSubscription } from './components/current-subscription'
 import { PaymentMethodSelector, PaymentProvider } from './components/payment-method-selector'
 import { CryptoPaymentModal } from './components/crypto-payment-modal'
+import { ProductCard } from './components/product-card'
 import { initPaddle, getPaddle, openCheckoutWithTransaction, onPaddleEvent, offPaddleEvent } from './paddle-singleton'
 import type { Paddle, PaddleEventData } from '@paddle/paddle-js'
 
-type TabType = 'features' | 'credits' | 'subscription'
-
 /**
  * Main Billing Manager component
- * Handles credit packages, subscription plans, and Paddle checkout integration
+ * Single API call loads visibility-filtered products, rendered as a flat grid.
  */
 export const BillingManager: React.FC<BillingManagerProps> = ({
   plugin,
@@ -24,263 +20,149 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
   onPurchaseComplete,
   onSubscriptionChange
 }) => {
-  // Billing API client
+  // API clients
   const [billingApi] = useState(() => {
     const client = new ApiClient(endpointUrls.billing)
-    // Set up token refresh callback
-    client.setTokenRefreshCallback(async () => {
-      const token = localStorage.getItem('remix_access_token')
-      return token
-    })
+    client.setTokenRefreshCallback(async () => localStorage.getItem('remix_access_token'))
     return new BillingApiService(client)
   })
 
-  // UI State
-  const [activeTab, setActiveTab] = useState<TabType>('features')
+  const [productsApi] = useState(() => {
+    const client = new ApiClient(endpointUrls.products)
+    client.setTokenRefreshCallback(async () => localStorage.getItem('remix_access_token'))
+    return new ProductsApiService(client)
+  })
+
+  // Core state
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [products, setProducts] = useState<EligibleProduct[]>([])
+  const [productsLoading, setProductsLoading] = useState(true)
+  const [productsError, setProductsError] = useState<string | null>(null)
 
-  // Feature Access Products state
-  const [featureProducts, setFeatureProducts] = useState<FeatureAccessProduct[]>([])
-  const [featureProductsLoading, setFeatureProductsLoading] = useState(true)
-  const [featureProductsError, setFeatureProductsError] = useState<string | null>(null)
-  const [featureMemberships, setFeatureMemberships] = useState<UserFeatureMembership[]>([])
-
-  // Credit packages state
-  const [packages, setPackages] = useState<CreditPackage[]>([])
-  const [packagesLoading, setPackagesLoading] = useState(true)
-  const [packagesError, setPackagesError] = useState<string | null>(null)
-
-  // Subscription plans state
-  const [plans, setPlans] = useState<SubscriptionPlan[]>([])
-  const [plansLoading, setPlansLoading] = useState(true)
-  const [plansError, setPlansError] = useState<string | null>(null)
-
-  // User data state
+  // User state
   const [credits, setCredits] = useState<Credits | null>(null)
   const [subscription, setSubscription] = useState<UserSubscription | null>(null)
+  const [featureMemberships, setFeatureMemberships] = useState<UserFeatureMembership[]>([])
   const [userLoading, setUserLoading] = useState(true)
 
   // Purchase state
-  const [purchasing, setPurchasing] = useState(false)
-  const [subscribing, setSubscribing] = useState(false)
-  const [purchasingFeature, setPurchasingFeature] = useState(false)
+  const [purchasingSlug, setPurchasingSlug] = useState<string | null>(null)
 
   // Paddle state
   const [paddle, setPaddle] = useState<Paddle | null>(null)
-  const [paddleLoading, setPaddleLoading] = useState(false)
   const [paddleError, setPaddleError] = useState<string | null>(null)
 
-  // Payment method selection state
+  // Payment method selection
   const [paymentSelector, setPaymentSelector] = useState<{
-    type: 'credits' | 'feature' | 'subscription'
-    id: string
-    priceId: string | null
-    name: string
-    priceCents: number
+    product: EligibleProduct
     availableProviders: string[]
   } | null>(null)
 
-  // Crypto payment state
+  // Crypto payment
   const [cryptoChargeId, setCryptoChargeId] = useState<string | null>(null)
 
-  // Initialize Paddle
+  // ==================== Paddle ====================
+
   useEffect(() => {
-    if (!paddleClientToken) {
-      console.log('[BillingManager] No Paddle client token provided')
-      return
-    }
-
+    if (!paddleClientToken) return
     let mounted = true
-    setPaddleLoading(true)
-
     initPaddle(paddleClientToken, paddleEnvironment)
-      .then((instance) => {
-        if (mounted) {
-          setPaddle(instance)
-          setPaddleError(null)
-        }
-      })
-      .catch((err) => {
-        if (mounted) {
-          setPaddleError(err.message || 'Failed to initialize payment system')
-          console.error('[BillingManager] Paddle init error:', err)
-        }
-      })
-      .finally(() => {
-        if (mounted) setPaddleLoading(false)
-      })
-
+      .then((inst) => { if (mounted) setPaddle(inst) })
+      .catch((err) => { if (mounted) setPaddleError(err.message || 'Failed to initialize payment system') })
     return () => { mounted = false }
   }, [paddleClientToken, paddleEnvironment])
 
-  // Listen for Paddle checkout events
   useEffect(() => {
-    const handlePaddleEvent = (event: PaddleEventData) => {
+    const handler = (event: PaddleEventData) => {
       if (event.name === 'checkout.completed') {
-        console.log('[BillingManager] Checkout completed')
-        setPurchasing(false)
-        setSubscribing(false)
-        setPurchasingFeature(false)
-        // Refresh user data
-        setTimeout(() => {
-          loadUserData()
-          onPurchaseComplete?.()
-          onSubscriptionChange?.()
-        }, 1500) // Give webhook time to process
+        setPurchasingSlug(null)
+        setTimeout(() => { loadUserData(); onPurchaseComplete?.(); onSubscriptionChange?.() }, 1500)
       } else if (event.name === 'checkout.closed') {
-        console.log('[BillingManager] Checkout closed')
-        setPurchasing(false)
-        setSubscribing(false)
-        setPurchasingFeature(false)
+        setPurchasingSlug(null)
       }
     }
-
-    onPaddleEvent(handlePaddleEvent)
-    return () => offPaddleEvent(handlePaddleEvent)
+    onPaddleEvent(handler)
+    return () => offPaddleEvent(handler)
   }, [onPurchaseComplete, onSubscriptionChange])
 
-  // Check authentication status
+  // ==================== Auth ====================
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const user = await plugin?.call('auth', 'getUser')
         setIsAuthenticated(!!user)
-
-        // Set token for billing API
         const token = localStorage.getItem('remix_access_token')
-        if (token) {
-          billingApi.setToken(token)
-        }
-      } catch (err) {
-        setIsAuthenticated(false)
-      }
+        if (token) { billingApi.setToken(token); productsApi.setToken(token) }
+      } catch { setIsAuthenticated(false) }
     }
-
     checkAuth()
 
-    // Listen for auth changes (login/logout only — not token refreshes)
     const handleAuthChange = (authState: { isAuthenticated: boolean; token?: string }) => {
       setIsAuthenticated(authState.isAuthenticated)
       if (authState.isAuthenticated) {
         const token = authState.token || localStorage.getItem('remix_access_token')
-        if (token) billingApi.setToken(token)
+        if (token) { billingApi.setToken(token); productsApi.setToken(token) }
         loadUserData()
       } else {
-        setCredits(null)
-        setSubscription(null)
+        setCredits(null); setSubscription(null); setFeatureMemberships([])
       }
     }
-
-    // Listen for token refreshes — just update the API client token, no data reload needed
     const handleTokenRefreshed = (data: { token: string }) => {
-      if (data.token) billingApi.setToken(data.token)
+      if (data.token) { billingApi.setToken(data.token); productsApi.setToken(data.token) }
     }
 
     try {
       plugin?.on('auth', 'authStateChanged', handleAuthChange)
       plugin?.on('auth', 'tokenRefreshed', handleTokenRefreshed)
-    } catch {
-      // Ignore if plugin not available
-    }
-
-    return () => {
-      try {
-        plugin?.off('auth', 'authStateChanged')
-        plugin?.off('auth', 'tokenRefreshed')
-      } catch {
-        // Ignore
-      }
-    }
+    } catch { /* */ }
+    return () => { try { plugin?.off('auth', 'authStateChanged'); plugin?.off('auth', 'tokenRefreshed') } catch { /* */ } }
   }, [plugin, billingApi])
 
-  // Load public data (packages and plans)
-  useEffect(() => {
-    loadPublicData()
-  }, [])
+  // ==================== Single products call ====================
 
-  // Load user data when authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      loadUserData()
-    }
+    if (isAuthenticated) loadProducts()
   }, [isAuthenticated])
 
-  const loadPublicData = async () => {
-    // Load feature access products
-    setFeatureProductsLoading(true)
+  const loadProducts = async () => {
+    setProductsLoading(true)
+    setProductsError(null)
     try {
-      const response = await billingApi.getFeatureAccessProducts()
+      const response = await productsApi.getAvailableGrouped()
       if (response.ok && response.data) {
-        setFeatureProducts(response.data.products || [])
-        setFeatureProductsError(null)
+        const { credit_packages, subscription_plans, feature_access } = response.data.data
+        // Merge into a single flat list — server already filtered by visibility rules
+        const all = [...feature_access, ...credit_packages, ...subscription_plans]
+        setProducts(all)
       } else {
-        setFeatureProductsError(response.error || 'Failed to load feature products')
+        setProductsError(response.error || 'Failed to load products')
       }
-    } catch (err) {
-      setFeatureProductsError('Failed to load feature products')
+    } catch {
+      setProductsError('Failed to load products')
     } finally {
-      setFeatureProductsLoading(false)
-    }
-
-    // Load credit packages
-    setPackagesLoading(true)
-    try {
-      const response = await billingApi.getCreditPackages()
-      if (response.ok && response.data) {
-        // Filter to only show packages with active Paddle provider
-        const availablePackages = BillingApiService.filterByActiveProvider(response.data.packages, 'paddle')
-        setPackages(availablePackages)
-        setPackagesError(null)
-      } else {
-        setPackagesError(response.error || 'Failed to load credit packages')
-      }
-    } catch (err) {
-      setPackagesError('Failed to load credit packages')
-    } finally {
-      setPackagesLoading(false)
-    }
-
-    // Load subscription plans
-    setPlansLoading(true)
-    try {
-      const response = await billingApi.getSubscriptionPlans()
-      if (response.ok && response.data) {
-        // Filter to only show plans with active Paddle provider
-        const availablePlans = BillingApiService.filterByActiveProvider(response.data.plans, 'paddle')
-        setPlans(availablePlans)
-        setPlansError(null)
-      } else {
-        setPlansError(response.error || 'Failed to load subscription plans')
-      }
-    } catch (err) {
-      setPlansError('Failed to load subscription plans')
-    } finally {
-      setPlansLoading(false)
+      setProductsLoading(false)
     }
   }
 
+  // ==================== User data ====================
+
+  useEffect(() => {
+    if (isAuthenticated) loadUserData()
+  }, [isAuthenticated])
+
   const loadUserData = useCallback(async () => {
     if (!isAuthenticated) return
-
     setUserLoading(true)
     try {
-      // Load credits
-      const creditsResponse = await billingApi.getCredits()
-      if (creditsResponse.ok && creditsResponse.data) {
-        setCredits(creditsResponse.data)
-      }
-
-      // Load subscription
-      const subResponse = await billingApi.getSubscription()
-      if (subResponse.ok && subResponse.data) {
-        setSubscription(subResponse.data.subscription)
-      }
-
-      // Load feature memberships
-      const membershipsResponse = await billingApi.getFeatureMemberships()
-      if (membershipsResponse.ok && membershipsResponse.data) {
-        setFeatureMemberships(membershipsResponse.data.memberships || [])
-      }
+      const [creditsRes, subRes, membRes] = await Promise.all([
+        billingApi.getCredits(),
+        billingApi.getSubscription(),
+        billingApi.getFeatureMemberships()
+      ])
+      if (creditsRes.ok && creditsRes.data) setCredits(creditsRes.data)
+      if (subRes.ok && subRes.data) setSubscription(subRes.data.subscription)
+      if (membRes.ok && membRes.data) setFeatureMemberships(membRes.data.memberships || [])
     } catch (err) {
       console.error('[BillingManager] Failed to load user data:', err)
     } finally {
@@ -288,326 +170,146 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
     }
   }, [isAuthenticated, billingApi])
 
-  const handlePurchaseCredits = async (packageId: string, priceId: string | null) => {
+  // ==================== Purchase logic ====================
+
+  const handlePurchase = async (product: EligibleProduct) => {
     if (!isAuthenticated) {
-      try {
-        await plugin?.call('auth', 'login', 'github')
-        return
-      } catch {
-        console.error('[BillingManager] Login failed')
-        return
-      }
+      try { await plugin?.call('auth', 'login', 'github') } catch { /* */ }
+      return
     }
 
-    // Find the package to check available providers
-    const pkg = packages.find(p => p.id === packageId)
-    const providerSlugs = pkg ? BillingApiService.getActiveProviderSlugs(pkg) : []
+    // Determine which providers this product's slug has across all rows
+    const productRows = products.filter(p => p.slug === product.slug)
+    const providerSlugs = [...new Set(productRows.map(p => p.provider_slug).filter(Boolean))] as string[]
     const hasCrypto = providerSlugs.includes('crypto')
-    const hasPaddle = providerSlugs.includes('paddle')
+    const hasPaddle = providerSlugs.includes('paddle') || providerSlugs.includes('freepaddle')
 
-    // If both paddle and crypto are available, show payment method selector
-    if (hasPaddle && hasCrypto) {
-      setPaymentSelector({
-        type: 'credits',
-        id: packageId,
-        priceId,
-        name: pkg?.name || packageId,
-        priceCents: pkg?.priceUsd || 0,
-        availableProviders: providerSlugs
-      })
+    // Recurring products can't use crypto
+    const isRecurring = product.is_recurring || product.product_type === 'subscription_plan'
+
+    if (hasPaddle && hasCrypto && !isRecurring) {
+      setPaymentSelector({ product, availableProviders: providerSlugs })
+      return
+    }
+    if (hasCrypto && !hasPaddle && !isRecurring) {
+      setPaymentSelector({ product, availableProviders: ['crypto'] })
       return
     }
 
-    // If only crypto available, go directly to crypto
-    if (hasCrypto && !hasPaddle) {
-      setPaymentSelector({
-        type: 'credits',
-        id: packageId,
-        priceId,
-        name: pkg?.name || packageId,
-        priceCents: pkg?.priceUsd || 0,
-        availableProviders: ['crypto']
-      })
-      return
-    }
-
-    // Default: Paddle flow
-    executePaddlePurchaseCredits(packageId, priceId)
+    // Default: Paddle/FreePaddle
+    executePaddlePurchase(product)
   }
 
-  const executePaddlePurchaseCredits = async (packageId: string, priceId: string | null) => {
-    if (!priceId) {
-      console.error('[BillingManager] No price ID for package:', packageId)
-      return
-    }
-
-    setPurchasing(true)
+  /**
+   * Route to the correct /billing endpoint based on product_type.
+   * Uses existing endpoints that already handle Paddle transactions:
+   *   POST /billing/purchase-credits   (credit_package)
+   *   POST /billing/feature-access/purchase (feature_access)
+   *   POST /billing/subscribe          (subscription_plan)
+   */
+  const executePaddlePurchase = async (product: EligibleProduct) => {
+    setPurchasingSlug(product.slug)
     try {
-      const response = await billingApi.purchaseCredits(packageId, 'paddle')
+      const provider = product.provider_slug || 'paddle'
+      let response: { ok: boolean; data?: { transactionId: string; checkoutUrl: string } | null; error?: string }
+
+      if (product.product_type === 'credit_package') {
+        response = await billingApi.purchaseCredits(product.slug, provider)
+      } else if (product.product_type === 'feature_access') {
+        response = await billingApi.purchaseFeatureAccess(product.slug, provider)
+      } else {
+        // subscription_plan
+        response = await billingApi.subscribe(product.slug, provider)
+      }
+
       if (!response.ok || !response.data) {
-        console.error('[BillingManager] Failed to create checkout:', response.error)
+        console.error('[BillingManager] Purchase failed:', response.error)
+        setPurchasingSlug(null)
         return
       }
 
       const { transactionId, checkoutUrl } = response.data
-
       const paddleInstance = paddle || getPaddle()
       if (paddleInstance && transactionId) {
         openCheckoutWithTransaction(paddleInstance, transactionId, {
-          settings: {
-            displayMode: 'overlay',
-            theme: 'light'
-          }
+          settings: { displayMode: 'overlay', theme: 'light' }
         })
       } else if (checkoutUrl) {
         window.open(checkoutUrl, '_blank')
-        setPurchasing(false)
+        setPurchasingSlug(null)
       } else {
-        console.error('[BillingManager] No transactionId or checkoutUrl returned')
+        setPurchasingSlug(null)
       }
     } catch (err) {
       console.error('[BillingManager] Purchase error:', err)
-      setPurchasing(false)
+      setPurchasingSlug(null)
     }
   }
 
-  const executeCryptoPurchase = async (
-    type: 'credits' | 'feature',
-    id: string,
-    priceCents: number,
-    currency: CryptoCurrency
-  ) => {
-    if (type === 'credits') {
-      setPurchasing(true)
-      try {
-        const pkg = packages.find(p => p.id === id)
-        const response = await billingApi.purchaseCredits(id, 'crypto', undefined, {
-          currency,
-          priceCents,
-          credits: pkg?.credits,
-          productSlug: id
-        })
-        if (!response.ok || !response.data) {
-          console.error('[BillingManager] Failed to create crypto checkout:', response.error)
-          setPurchasing(false)
-          return
-        }
-        setCryptoChargeId(response.data.transactionId)
-        setPurchasing(false)
-      } catch (err) {
-        console.error('[BillingManager] Crypto purchase error:', err)
-        setPurchasing(false)
+  /**
+   * Crypto purchase — uses the same /billing endpoints with provider: "crypto".
+   * Per the brief:
+   *   POST /billing/purchase-credits       { packageId, provider: "crypto", customData }
+   *   POST /billing/feature-access/purchase { productSlug, provider: "crypto", customData }
+   * Returns { transactionId (= chargeId), checkoutUrl }
+   */
+  const executeCryptoPurchase = async (product: EligibleProduct, currency: CryptoCurrency) => {
+    setPurchasingSlug(product.slug)
+    try {
+      const customData = {
+        currency,
+        priceCents: product.price_cents,
+        productSlug: product.slug,
+        unifiedProductId: product.id,
+        ...(product.product_type === 'credit_package' ? { credits: product.credits } : {}),
+        ...(product.product_type === 'feature_access' ? { type: 'feature_access' as const } : {})
       }
-    } else {
-      setPurchasingFeature(true)
-      try {
-        const product = featureProducts.find(p => p.slug === id)
-        const response = await billingApi.purchaseFeatureAccess(id, 'crypto', undefined, {
-          currency,
-          priceCents,
-          type: 'feature_access',
-          productSlug: id,
-          unifiedProductId: product?.id
-        })
-        if (!response.ok || !response.data) {
-          console.error('[BillingManager] Failed to create crypto checkout:', response.error)
-          setPurchasingFeature(false)
-          return
-        }
-        setCryptoChargeId(response.data.transactionId)
-        setPurchasingFeature(false)
-      } catch (err) {
-        console.error('[BillingManager] Crypto feature purchase error:', err)
-        setPurchasingFeature(false)
+
+      let response: { ok: boolean; data?: { transactionId: string; checkoutUrl: string } | null; error?: string }
+
+      if (product.product_type === 'credit_package') {
+        response = await billingApi.purchaseCredits(product.slug, 'crypto', undefined, customData)
+      } else {
+        // feature_access (subscriptions can't use crypto)
+        response = await billingApi.purchaseFeatureAccess(product.slug, 'crypto', undefined, customData)
       }
+
+      if (!response.ok || !response.data) {
+        console.error('[BillingManager] Crypto purchase failed:', response.error)
+        setPurchasingSlug(null)
+        return
+      }
+      setCryptoChargeId(response.data.transactionId)
+      setPurchasingSlug(null)
+    } catch (err) {
+      console.error('[BillingManager] Crypto purchase error:', err)
+      setPurchasingSlug(null)
     }
   }
 
   const handlePaymentMethodSelect = (provider: PaymentProvider, currency?: CryptoCurrency) => {
     if (!paymentSelector) return
-    const { type, id, priceId, priceCents } = paymentSelector
+    const { product } = paymentSelector
     setPaymentSelector(null)
-
-    if (provider === 'paddle') {
-      if (type === 'credits') {
-        executePaddlePurchaseCredits(id, priceId)
-      } else if (type === 'feature') {
-        executePaddlePurchaseFeatureAccess(id, priceId)
-      } else if (type === 'subscription') {
-        executeSubscribe(id, priceId)
-      }
-    } else if (provider === 'crypto') {
-      if (type === 'subscription') {
-        console.error('[BillingManager] Crypto does not support subscriptions')
-        return
-      }
-      executeCryptoPurchase(type, id, priceCents, currency || 'USDC')
+    if (provider === 'crypto') {
+      executeCryptoPurchase(product, currency || 'USDC')
+    } else {
+      executePaddlePurchase(product)
     }
   }
 
-  const handleCryptoComplete = () => {
-    setCryptoChargeId(null)
-    loadUserData()
-    onPurchaseComplete?.()
-  }
-
-  const handleCryptoCancel = () => {
-    setCryptoChargeId(null)
-  }
-
-  const handleSubscribe = async (planId: string, priceId: string | null) => {
-    if (!isAuthenticated) {
-      try {
-        await plugin?.call('auth', 'login', 'github')
-        return
-      } catch {
-        console.error('[BillingManager] Login failed')
-        return
-      }
-    }
-
-    // Subscriptions are Paddle-only (crypto doesn't support recurring)
-    executeSubscribe(planId, priceId)
-  }
-
-  const executeSubscribe = async (planId: string, priceId: string | null) => {
-    if (!priceId) {
-      console.error('[BillingManager] No price ID for plan:', planId)
-      return
-    }
-
-    setSubscribing(true)
-    try {
-      const response = await billingApi.subscribe(planId, 'paddle')
-      if (!response.ok || !response.data) {
-        console.error('[BillingManager] Failed to create checkout:', response.error)
-        return
-      }
-
-      const { transactionId, checkoutUrl } = response.data
-
-      const paddleInstance = paddle || getPaddle()
-      if (paddleInstance && transactionId) {
-        openCheckoutWithTransaction(paddleInstance, transactionId, {
-          settings: {
-            displayMode: 'overlay',
-            theme: 'light'
-          }
-        })
-      } else if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank')
-        setSubscribing(false)
-      } else {
-        console.error('[BillingManager] No transactionId or checkoutUrl returned')
-      }
-    } catch (err) {
-      console.error('[BillingManager] Subscribe error:', err)
-      setSubscribing(false)
-    }
-  }
-
-  const handlePurchaseFeatureAccess = async (productSlug: string, priceId: string | null) => {
-    if (!isAuthenticated) {
-      try {
-        await plugin?.call('auth', 'login', 'github')
-        return
-      } catch {
-        console.error('[BillingManager] Login failed')
-        return
-      }
-    }
-
-    // Find the product to check available providers
-    const product = featureProducts.find(p => p.slug === productSlug)
-    const providerSlugs = product?.providers
-      ? product.providers.filter(p => p.isActive && p.syncStatus === 'synced').map(p => p.slug)
-      : []
-    const hasCrypto = providerSlugs.includes('crypto')
-    const hasPaddle = providerSlugs.includes('paddle')
-
-    // For recurring products, crypto is not supported
-    if (product?.isRecurring) {
-      executePaddlePurchaseFeatureAccess(productSlug, priceId)
-      return
-    }
-
-    // If both paddle and crypto are available, show payment method selector
-    if (hasPaddle && hasCrypto) {
-      setPaymentSelector({
-        type: 'feature',
-        id: productSlug,
-        priceId,
-        name: product?.name || productSlug,
-        priceCents: product?.priceCents || 0,
-        availableProviders: providerSlugs
-      })
-      return
-    }
-
-    // If only crypto available
-    if (hasCrypto && !hasPaddle) {
-      setPaymentSelector({
-        type: 'feature',
-        id: productSlug,
-        priceId,
-        name: product?.name || productSlug,
-        priceCents: product?.priceCents || 0,
-        availableProviders: ['crypto']
-      })
-      return
-    }
-
-    // Default: Paddle flow
-    executePaddlePurchaseFeatureAccess(productSlug, priceId)
-  }
-
-  const executePaddlePurchaseFeatureAccess = async (productSlug: string, priceId: string | null) => {
-    if (!priceId) {
-      console.error('[BillingManager] No price ID for product:', productSlug)
-      return
-    }
-
-    setPurchasingFeature(true)
-    try {
-      const response = await billingApi.purchaseFeatureAccess(productSlug, 'paddle')
-      if (!response.ok || !response.data) {
-        console.error('[BillingManager] Failed to create checkout:', response.error)
-        setPurchasingFeature(false)
-        return
-      }
-
-      const { transactionId, checkoutUrl } = response.data
-
-      const paddleInstance = paddle || getPaddle()
-      if (paddleInstance && transactionId) {
-        openCheckoutWithTransaction(paddleInstance, transactionId, {
-          settings: {
-            displayMode: 'overlay',
-            theme: 'light'
-          }
-        })
-      } else if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank')
-        setPurchasingFeature(false)
-      } else {
-        console.error('[BillingManager] No transactionId or checkoutUrl returned')
-        setPurchasingFeature(false)
-      }
-    } catch (err) {
-      console.error('[BillingManager] Feature access purchase error:', err)
-      setPurchasingFeature(false)
-    }
-  }
+  const handleCryptoComplete = () => { setCryptoChargeId(null); loadUserData(); onPurchaseComplete?.() }
+  const handleCryptoCancel = () => { setCryptoChargeId(null) }
 
   const handleManageSubscription = () => {
-    // Open Paddle customer portal or custom management page
     console.log('[BillingManager] Manage subscription')
-    // TODO: Implement subscription management
   }
+
+  // ==================== Render ====================
 
   return (
     <div className="billing-manager">
-      {/* Header with credits balance */}
+      {/* Balance */}
       {isAuthenticated && credits && (
         <div className="p-3 border-bottom d-flex justify-content-between align-items-center">
           <div>
@@ -623,7 +325,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
         </div>
       )}
 
-      {/* Paddle status warning */}
       {paddleError && (
         <div className="alert alert-warning m-3 mb-0">
           <i className="fas fa-exclamation-triangle me-2"></i>
@@ -631,13 +332,12 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
         </div>
       )}
 
-      {/* Login prompt */}
       {!isAuthenticated && (
         <div className="alert alert-info m-3">
           <i className="fas fa-info-circle me-2"></i>
           <a href="#" onClick={(e) => { e.preventDefault(); plugin?.call('auth', 'login', 'github') }}>
             Sign in
-          </a> to purchase credits or manage your subscription.
+          </a> to view available products and purchase credits.
         </div>
       )}
 
@@ -652,70 +352,42 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
         </div>
       )}
 
-      {/* Tabs */}
-      <ul className="nav nav-tabs px-3 pt-3">
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'features' ? 'active' : ''}`}
-            onClick={() => setActiveTab('features')}
-          >
-            <i className="fas fa-unlock-alt me-2"></i>
-            Feature Access
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'credits' ? 'active' : ''}`}
-            onClick={() => setActiveTab('credits')}
-          >
-            <i className="fas fa-coins me-2"></i>
-            Credit Packages
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'subscription' ? 'active' : ''}`}
-            onClick={() => setActiveTab('subscription')}
-          >
-            <i className="fas fa-sync-alt me-2"></i>
-            Subscription Plans
-          </button>
-        </li>
-      </ul>
-
-      {/* Tab content */}
+      {/* Products */}
       <div className="p-3">
-        {activeTab === 'features' && (
-          <FeatureAccessProductsView
-            products={featureProducts}
-            loading={featureProductsLoading}
-            error={featureProductsError}
-            memberships={featureMemberships}
-            onPurchase={handlePurchaseFeatureAccess}
-            purchasing={purchasingFeature}
-          />
+        {productsLoading && (
+          <div className="d-flex justify-content-center p-4">
+            <div className="spinner-border spinner-border-sm" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
         )}
 
-        {activeTab === 'credits' && (
-          <CreditPackagesView
-            packages={packages}
-            loading={packagesLoading}
-            error={packagesError}
-            currentBalance={credits?.balance}
-            onPurchase={handlePurchaseCredits}
-            purchasing={purchasing}
-          />
+        {productsError && (
+          <div className="alert alert-warning">
+            <i className="fas fa-exclamation-triangle me-2"></i>
+            {productsError}
+          </div>
         )}
 
-        {activeTab === 'subscription' && (
-          <SubscriptionPlansView
-            plans={plans}
-            loading={plansLoading}
-            error={plansError}
-            currentSubscription={subscription}
-            onSubscribe={handleSubscribe}
-            subscribing={subscribing}
-          />
+        {!productsLoading && !productsError && products.length === 0 && isAuthenticated && (
+          <div className="text-muted text-center p-4">
+            No products available at this time.
+          </div>
+        )}
+
+        {!productsLoading && products.length > 0 && (
+          <div className="row g-3">
+            {products.map((product) => (
+              <ProductCard
+                key={`${product.slug}-${product.provider_slug}`}
+                product={product}
+                onPurchase={handlePurchase}
+                purchasing={purchasingSlug === product.slug}
+                currentSubscription={subscription}
+                featureMemberships={featureMemberships}
+              />
+            ))}
+          </div>
         )}
       </div>
 
@@ -723,8 +395,8 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       {paymentSelector && (
         <PaymentMethodSelector
           availableProviders={paymentSelector.availableProviders}
-          productName={paymentSelector.name}
-          priceCents={paymentSelector.priceCents}
+          productName={paymentSelector.product.name}
+          priceCents={paymentSelector.product.price_cents}
           onSelect={handlePaymentMethodSelect}
           onCancel={() => setPaymentSelector(null)}
         />

@@ -695,6 +695,111 @@ export interface FeatureAccessCheckResponse {
   hasAccess: boolean
 }
 
+// ==================== Eligible Products (Personalized) ====================
+
+export type EligibleProductType = 'credit_package' | 'subscription_plan' | 'feature_access'
+
+/**
+ * A product returned by the personalized /products/available endpoint.
+ * Products are pre-filtered by visibility rules (tags, subscriptions, date ranges, etc.)
+ */
+export interface EligibleProduct {
+  id: number                          // Unified product ID
+  name: string
+  slug: string
+  description: string | null
+  product_type: EligibleProductType
+  price_cents: number
+  currency: string
+  // credit_package only
+  credits?: number
+  // subscription_plan only
+  credits_per_month?: number
+  billing_interval?: 'month' | 'year'
+  features?: string[]
+  // feature_access only
+  feature_group?: string
+  feature_groups?: FeatureGroupInfo[]
+  duration_type?: 'days' | 'months' | 'years' | 'unlimited'
+  duration_value?: number
+  is_recurring?: boolean
+  is_popular?: boolean
+  // provider info for checkout
+  provider_slug: string | null
+  external_product_id: string | null
+  external_price_id: string | null    // Use this for checkout
+}
+
+/**
+ * Response from GET /products/available
+ */
+export interface AvailableProductsResponse {
+  data: EligibleProduct[]
+  meta: {
+    user_id: number
+    provider_filter: string | null
+    type_filter: string | null
+    total: number
+  }
+}
+
+/**
+ * Response from GET /products/available/grouped
+ */
+export interface GroupedProductsResponse {
+  data: {
+    credit_packages: EligibleProduct[]
+    subscription_plans: EligibleProduct[]
+    feature_access: EligibleProduct[]
+  }
+  meta: {
+    user_id: number
+    provider_filter: string | null
+    totals: {
+      credit_packages: number
+      subscription_plans: number
+      feature_access: number
+    }
+  }
+}
+
+/**
+ * Request body for POST /products/purchase (unified purchase endpoint)
+ */
+export interface UnifiedPurchaseRequest {
+  product_id?: number
+  slug?: string
+  provider?: string               // 'paddle' | 'freepaddle' | 'crypto'
+  returnUrl?: string
+  customData?: CryptoPurchaseCustomData
+}
+
+/**
+ * Response from POST /products/purchase
+ */
+export interface UnifiedPurchaseResponse {
+  checkoutUrl: string
+  transactionId: string
+  provider: string
+  product: {
+    id: number
+    slug: string
+    name: string
+    product_type: EligibleProductType
+    price_cents: number
+  }
+}
+
+/**
+ * Response from GET /products/:productId/eligible
+ */
+export interface EligibilityCheckResponse {
+  product_id: number
+  user_id: number
+  eligible: boolean
+  reason: string | null
+}
+
 // ==================== Crypto Payments ====================
 
 export type CryptoChargeStatusValue = 'pending' | 'confirming' | 'confirmed' | 'expired' | 'failed'

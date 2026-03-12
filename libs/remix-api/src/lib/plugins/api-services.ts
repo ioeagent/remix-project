@@ -68,6 +68,16 @@ import {
   PoolReleaseAllResponse
 } from './api-types'
 
+import {
+  EligibleProduct,
+  GroupedProductsResponse,
+  AvailableProductsResponse,
+  UnifiedPurchaseRequest,
+  UnifiedPurchaseResponse,
+  EligibilityCheckResponse,
+  FeatureGroupInfo
+} from './api-types'
+
 /**
  * SSO API Service - All SSO/Auth endpoints with full TypeScript typing
  */
@@ -659,6 +669,166 @@ export class BillingApiService {
    */
   static filterFeatureProducts(products: FeatureAccessProduct[], recurring: boolean): FeatureAccessProduct[] {
     return products.filter(p => p.isRecurring === recurring)
+  }
+}
+
+/**
+ * Products API Service - Personalized product visibility with eligibility filtering
+ * Uses the /products/* endpoints which apply server-side visibility rules
+ */
+export class ProductsApiService {
+  constructor(private apiClient: IApiClient) {}
+
+  setToken(token: string): void {
+    this.apiClient.setToken(token)
+  }
+
+  /**
+   * Get all products the user is eligible to see, grouped by type
+   */
+  async getAvailableGrouped(provider?: string): Promise<ApiResponse<GroupedProductsResponse>> {
+    const params = new URLSearchParams()
+    if (provider) params.set('provider', provider)
+    const query = params.toString()
+    return this.apiClient.get<GroupedProductsResponse>(`/available/grouped${query ? '?' + query : ''}`)
+  }
+
+  /**
+   * Get all products the user is eligible to see (flat list)
+   */
+  async getAvailable(provider?: string, type?: string): Promise<ApiResponse<AvailableProductsResponse>> {
+    const params = new URLSearchParams()
+    if (provider) params.set('provider', provider)
+    if (type) params.set('type', type)
+    const query = params.toString()
+    return this.apiClient.get<AvailableProductsResponse>(`/available${query ? '?' + query : ''}`)
+  }
+
+  /**
+   * Check if a specific product is eligible for the current user
+   */
+  async checkEligibility(productId: number): Promise<ApiResponse<EligibilityCheckResponse>> {
+    return this.apiClient.get<EligibilityCheckResponse>(`/${productId}/eligible`)
+  }
+
+  /**
+   * Unified purchase endpoint - works for any product type
+   */
+  async purchase(request: UnifiedPurchaseRequest): Promise<ApiResponse<UnifiedPurchaseResponse>> {
+    return this.apiClient.post<UnifiedPurchaseResponse>('/purchase', request)
+  }
+
+  // ==================== Mapping Helpers ====================
+
+  /**
+   * Convert EligibleProduct[] (credit_packages) to CreditPackage[] for existing UI components
+   */
+  static toCreditPackages(items: EligibleProduct[]): CreditPackage[] {
+    return items.map(item => ({
+      id: item.slug,
+      internalId: item.id,
+      name: item.name,
+      description: item.description || '',
+      credits: item.credits || 0,
+      priceUsd: item.price_cents,
+      currency: item.currency,
+      popular: item.is_popular,
+      savings: null,
+      providers: item.provider_slug && item.external_price_id ? [{
+        slug: item.provider_slug,
+        name: item.provider_slug,
+        priceId: item.external_price_id,
+        productId: item.external_product_id,
+        isActive: true,
+        syncStatus: 'synced' as const
+      }] : [],
+      paddlePriceId: item.external_price_id,
+      source: 'database' as const
+    }))
+  }
+
+  /**
+   * Convert EligibleProduct[] (subscription_plans) to SubscriptionPlan[] for existing UI
+   */
+  static toSubscriptionPlans(items: EligibleProduct[]): SubscriptionPlan[] {
+    return items.map(item => ({
+      id: item.slug,
+      internalId: item.id,
+      name: item.name,
+      description: item.description || '',
+      creditsPerMonth: item.credits_per_month || 0,
+      priceUsd: item.price_cents,
+      currency: item.currency,
+      billingInterval: (item.billing_interval || 'month') as 'month' | 'year',
+      features: item.features || [],
+      popular: item.is_popular,
+      providers: item.provider_slug && item.external_price_id ? [{
+        slug: item.provider_slug,
+        name: item.provider_slug,
+        priceId: item.external_price_id,
+        productId: item.external_product_id,
+        isActive: true,
+        syncStatus: 'synced' as const
+      }] : [],
+      paddlePriceId: item.external_price_id,
+      source: 'database' as const
+    }))
+  }
+
+  /**
+   * Convert EligibleProduct[] (feature_access) to FeatureAccessProduct[] for existing UI
+   */
+  static toFeatureAccessProducts(items: EligibleProduct[]): FeatureAccessProduct[] {
+    return items.map(item => ({
+      id: item.id,
+      slug: item.slug,
+      name: item.name,
+      description: item.description || '',
+      featureGroup: item.feature_group || '',
+      featureGroups: item.feature_groups || [],
+      durationType: (item.duration_type || 'days') as FeatureAccessProduct['durationType'],
+      durationValue: item.duration_value || 0,
+      isRecurring: item.is_recurring || false,
+      billingInterval: (item.billing_interval as FeatureAccessProduct['billingInterval']) || null,
+      priceCents: item.price_cents,
+      currency: item.currency,
+      isPopular: item.is_popular || false,
+      providers: item.provider_slug && item.external_price_id ? [{
+        slug: item.provider_slug,
+        name: item.provider_slug,
+        priceId: item.external_price_id,
+        productId: item.external_product_id,
+        isActive: true,
+        syncStatus: 'synced' as const
+      }] : []
+    }))
+  }
+
+  /**
+   * Group flat EligibleProduct[] by provider — the /products/available endpoint
+   * returns one row per product-per-provider, so we need to merge providers
+   * into the same product entries for the UI.
+   */
+  static mergeProviders(items: EligibleProduct[]): EligibleProduct[] {
+    const map = new Map<string, EligibleProduct & { _providers: ProductProvider[] }>()
+    for (const item of items) {
+      const key = item.slug
+      if (!map.has(key)) {
+        map.set(key, { ...item, _providers: [] })
+      }
+      const entry = map.get(key)!
+      if (item.provider_slug && item.external_price_id) {
+        entry._providers.push({
+          slug: item.provider_slug,
+          name: item.provider_slug,
+          priceId: item.external_price_id,
+          productId: item.external_product_id,
+          isActive: true,
+          syncStatus: 'synced'
+        })
+      }
+    }
+    return [...map.values()]
   }
 }
 
