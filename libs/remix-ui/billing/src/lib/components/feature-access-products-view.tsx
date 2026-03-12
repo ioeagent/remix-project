@@ -75,6 +75,7 @@ export const FeatureAccessProductsView: React.FC<FeatureAccessProductsViewProps>
           // Get price ID from providers array (if available)
           const paddleProvider = product.providers?.find(p => p.slug === 'paddle' && p.isActive)
           const priceId = paddleProvider?.priceId || null
+          const hasCrypto = product.providers?.some(p => p.slug === 'crypto' && p.isActive) ?? false
 
           return (
             <div key={product.id} className="col-12 col-md-6 col-lg-4">
@@ -93,9 +94,16 @@ export const FeatureAccessProductsView: React.FC<FeatureAccessProductsViewProps>
                 <div className="card-body d-flex flex-column">
                   <div className="d-flex justify-content-between align-items-start mb-2">
                     <h5 className="card-title mb-0">{product.name}</h5>
-                    {product.isRecurring && (
-                      <span className="badge bg-info">Subscription</span>
-                    )}
+                    <div className="d-flex gap-1">
+                      {product.isRecurring && (
+                        <span className="badge bg-info">Subscription</span>
+                      )}
+                      {hasCrypto && !product.isRecurring && (
+                        <span className="badge bg-secondary" title="Pay with crypto">
+                          <i className="fab fa-ethereum me-1"></i>Crypto
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <p className="card-text text-muted small mb-3">

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { BillingManagerProps, CreditPackage, SubscriptionPlan, UserSubscription, Credits, FeatureAccessProduct, UserFeatureMembership } from './types'
-import { BillingApiService, ApiClient } from '@remix-api'
+import { BillingApiService, ApiClient, CryptoCurrency } from '@remix-api'
 import { endpointUrls } from '@remix-endpoints-helper'
 import { CreditPackagesView } from './components/credit-packages-view'
 import { SubscriptionPlansView } from './components/subscription-plans-view'
 import { FeatureAccessProductsView } from './components/feature-access-products-view'
 import { CurrentSubscription } from './components/current-subscription'
+import { PaymentMethodSelector, PaymentProvider } from './components/payment-method-selector'
+import { CryptoPaymentModal } from './components/crypto-payment-modal'
 import { initPaddle, getPaddle, openCheckoutWithTransaction, onPaddleEvent, offPaddleEvent } from './paddle-singleton'
 import type { Paddle, PaddleEventData } from '@paddle/paddle-js'
 
@@ -67,6 +69,19 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
   const [paddle, setPaddle] = useState<Paddle | null>(null)
   const [paddleLoading, setPaddleLoading] = useState(false)
   const [paddleError, setPaddleError] = useState<string | null>(null)
+
+  // Payment method selection state
+  const [paymentSelector, setPaymentSelector] = useState<{
+    type: 'credits' | 'feature' | 'subscription'
+    id: string
+    priceId: string | null
+    name: string
+    priceCents: number
+    availableProviders: string[]
+  } | null>(null)
+
+  // Crypto payment state
+  const [cryptoChargeId, setCryptoChargeId] = useState<string | null>(null)
 
   // Initialize Paddle
   useEffect(() => {
@@ -275,7 +290,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
   const handlePurchaseCredits = async (packageId: string, priceId: string | null) => {
     if (!isAuthenticated) {
-      // Prompt login
       try {
         await plugin?.call('auth', 'login', 'github')
         return
@@ -285,6 +299,43 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       }
     }
 
+    // Find the package to check available providers
+    const pkg = packages.find(p => p.id === packageId)
+    const providerSlugs = pkg ? BillingApiService.getActiveProviderSlugs(pkg) : []
+    const hasCrypto = providerSlugs.includes('crypto')
+    const hasPaddle = providerSlugs.includes('paddle')
+
+    // If both paddle and crypto are available, show payment method selector
+    if (hasPaddle && hasCrypto) {
+      setPaymentSelector({
+        type: 'credits',
+        id: packageId,
+        priceId,
+        name: pkg?.name || packageId,
+        priceCents: pkg?.priceUsd || 0,
+        availableProviders: providerSlugs
+      })
+      return
+    }
+
+    // If only crypto available, go directly to crypto
+    if (hasCrypto && !hasPaddle) {
+      setPaymentSelector({
+        type: 'credits',
+        id: packageId,
+        priceId,
+        name: pkg?.name || packageId,
+        priceCents: pkg?.priceUsd || 0,
+        availableProviders: ['crypto']
+      })
+      return
+    }
+
+    // Default: Paddle flow
+    executePaddlePurchaseCredits(packageId, priceId)
+  }
+
+  const executePaddlePurchaseCredits = async (packageId: string, priceId: string | null) => {
     if (!priceId) {
       console.error('[BillingManager] No price ID for package:', packageId)
       return
@@ -292,7 +343,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
     setPurchasing(true)
     try {
-      // Always call backend API first to create transaction with customData (userId)
       const response = await billingApi.purchaseCredits(packageId, 'paddle')
       if (!response.ok || !response.data) {
         console.error('[BillingManager] Failed to create checkout:', response.error)
@@ -301,7 +351,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
       const { transactionId, checkoutUrl } = response.data
 
-      // Use Paddle.js overlay if available and we have a transactionId
       const paddleInstance = paddle || getPaddle()
       if (paddleInstance && transactionId) {
         openCheckoutWithTransaction(paddleInstance, transactionId, {
@@ -311,7 +360,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
           }
         })
       } else if (checkoutUrl) {
-        // Fallback to redirect checkout URL
         window.open(checkoutUrl, '_blank')
         setPurchasing(false)
       } else {
@@ -321,6 +369,90 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       console.error('[BillingManager] Purchase error:', err)
       setPurchasing(false)
     }
+  }
+
+  const executeCryptoPurchase = async (
+    type: 'credits' | 'feature',
+    id: string,
+    priceCents: number,
+    currency: CryptoCurrency
+  ) => {
+    if (type === 'credits') {
+      setPurchasing(true)
+      try {
+        const pkg = packages.find(p => p.id === id)
+        const response = await billingApi.purchaseCredits(id, 'crypto', undefined, {
+          currency,
+          priceCents,
+          credits: pkg?.credits,
+          productSlug: id
+        })
+        if (!response.ok || !response.data) {
+          console.error('[BillingManager] Failed to create crypto checkout:', response.error)
+          setPurchasing(false)
+          return
+        }
+        setCryptoChargeId(response.data.transactionId)
+        setPurchasing(false)
+      } catch (err) {
+        console.error('[BillingManager] Crypto purchase error:', err)
+        setPurchasing(false)
+      }
+    } else {
+      setPurchasingFeature(true)
+      try {
+        const product = featureProducts.find(p => p.slug === id)
+        const response = await billingApi.purchaseFeatureAccess(id, 'crypto', undefined, {
+          currency,
+          priceCents,
+          type: 'feature_access',
+          productSlug: id,
+          unifiedProductId: product?.id
+        })
+        if (!response.ok || !response.data) {
+          console.error('[BillingManager] Failed to create crypto checkout:', response.error)
+          setPurchasingFeature(false)
+          return
+        }
+        setCryptoChargeId(response.data.transactionId)
+        setPurchasingFeature(false)
+      } catch (err) {
+        console.error('[BillingManager] Crypto feature purchase error:', err)
+        setPurchasingFeature(false)
+      }
+    }
+  }
+
+  const handlePaymentMethodSelect = (provider: PaymentProvider, currency?: CryptoCurrency) => {
+    if (!paymentSelector) return
+    const { type, id, priceId, priceCents } = paymentSelector
+    setPaymentSelector(null)
+
+    if (provider === 'paddle') {
+      if (type === 'credits') {
+        executePaddlePurchaseCredits(id, priceId)
+      } else if (type === 'feature') {
+        executePaddlePurchaseFeatureAccess(id, priceId)
+      } else if (type === 'subscription') {
+        executeSubscribe(id, priceId)
+      }
+    } else if (provider === 'crypto') {
+      if (type === 'subscription') {
+        console.error('[BillingManager] Crypto does not support subscriptions')
+        return
+      }
+      executeCryptoPurchase(type, id, priceCents, currency || 'USDC')
+    }
+  }
+
+  const handleCryptoComplete = () => {
+    setCryptoChargeId(null)
+    loadUserData()
+    onPurchaseComplete?.()
+  }
+
+  const handleCryptoCancel = () => {
+    setCryptoChargeId(null)
   }
 
   const handleSubscribe = async (planId: string, priceId: string | null) => {
@@ -334,6 +466,11 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       }
     }
 
+    // Subscriptions are Paddle-only (crypto doesn't support recurring)
+    executeSubscribe(planId, priceId)
+  }
+
+  const executeSubscribe = async (planId: string, priceId: string | null) => {
     if (!priceId) {
       console.error('[BillingManager] No price ID for plan:', planId)
       return
@@ -341,7 +478,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
     setSubscribing(true)
     try {
-      // Always call backend API first to create transaction with customData (userId)
       const response = await billingApi.subscribe(planId, 'paddle')
       if (!response.ok || !response.data) {
         console.error('[BillingManager] Failed to create checkout:', response.error)
@@ -350,7 +486,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
       const { transactionId, checkoutUrl } = response.data
 
-      // Use Paddle.js overlay if available and we have a transactionId
       const paddleInstance = paddle || getPaddle()
       if (paddleInstance && transactionId) {
         openCheckoutWithTransaction(paddleInstance, transactionId, {
@@ -360,7 +495,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
           }
         })
       } else if (checkoutUrl) {
-        // Fallback to redirect checkout URL
         window.open(checkoutUrl, '_blank')
         setSubscribing(false)
       } else {
@@ -383,6 +517,51 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       }
     }
 
+    // Find the product to check available providers
+    const product = featureProducts.find(p => p.slug === productSlug)
+    const providerSlugs = product?.providers
+      ? product.providers.filter(p => p.isActive && p.syncStatus === 'synced').map(p => p.slug)
+      : []
+    const hasCrypto = providerSlugs.includes('crypto')
+    const hasPaddle = providerSlugs.includes('paddle')
+
+    // For recurring products, crypto is not supported
+    if (product?.isRecurring) {
+      executePaddlePurchaseFeatureAccess(productSlug, priceId)
+      return
+    }
+
+    // If both paddle and crypto are available, show payment method selector
+    if (hasPaddle && hasCrypto) {
+      setPaymentSelector({
+        type: 'feature',
+        id: productSlug,
+        priceId,
+        name: product?.name || productSlug,
+        priceCents: product?.priceCents || 0,
+        availableProviders: providerSlugs
+      })
+      return
+    }
+
+    // If only crypto available
+    if (hasCrypto && !hasPaddle) {
+      setPaymentSelector({
+        type: 'feature',
+        id: productSlug,
+        priceId,
+        name: product?.name || productSlug,
+        priceCents: product?.priceCents || 0,
+        availableProviders: ['crypto']
+      })
+      return
+    }
+
+    // Default: Paddle flow
+    executePaddlePurchaseFeatureAccess(productSlug, priceId)
+  }
+
+  const executePaddlePurchaseFeatureAccess = async (productSlug: string, priceId: string | null) => {
     if (!priceId) {
       console.error('[BillingManager] No price ID for product:', productSlug)
       return
@@ -390,7 +569,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
     setPurchasingFeature(true)
     try {
-      // Call backend API to create transaction
       const response = await billingApi.purchaseFeatureAccess(productSlug, 'paddle')
       if (!response.ok || !response.data) {
         console.error('[BillingManager] Failed to create checkout:', response.error)
@@ -400,7 +578,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
 
       const { transactionId, checkoutUrl } = response.data
 
-      // Use Paddle.js overlay if available
       const paddleInstance = paddle || getPaddle()
       if (paddleInstance && transactionId) {
         openCheckoutWithTransaction(paddleInstance, transactionId, {
@@ -410,7 +587,6 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
           }
         })
       } else if (checkoutUrl) {
-        // Fallback to redirect checkout URL
         window.open(checkoutUrl, '_blank')
         setPurchasingFeature(false)
       } else {
@@ -542,6 +718,27 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
           />
         )}
       </div>
+
+      {/* Payment Method Selector Modal */}
+      {paymentSelector && (
+        <PaymentMethodSelector
+          availableProviders={paymentSelector.availableProviders}
+          productName={paymentSelector.name}
+          priceCents={paymentSelector.priceCents}
+          onSelect={handlePaymentMethodSelect}
+          onCancel={() => setPaymentSelector(null)}
+        />
+      )}
+
+      {/* Crypto Payment Modal */}
+      {cryptoChargeId && (
+        <CryptoPaymentModal
+          chargeId={cryptoChargeId}
+          billingApi={billingApi}
+          onComplete={handleCryptoComplete}
+          onCancel={handleCryptoCancel}
+        />
+      )}
     </div>
   )
 }

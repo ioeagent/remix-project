@@ -548,6 +548,7 @@ export interface PurchaseCreditsRequest {
   packageId: string
   provider?: string   // Provider slug (default: "paddle")
   returnUrl?: string  // Redirect URL after checkout
+  customData?: CryptoPurchaseCustomData  // Required for crypto provider
 }
 
 /**
@@ -641,6 +642,7 @@ export interface FeatureAccessPurchaseRequest {
   productId?: number         // Or product ID
   provider?: string          // Provider slug (default: "paddle")
   returnUrl?: string         // Redirect URL after checkout
+  customData?: CryptoPurchaseCustomData  // Required for crypto provider
 }
 
 /**
@@ -691,6 +693,41 @@ export interface FeatureAccessCheckResponse {
   userId: number
   featureGroup: string
   hasAccess: boolean
+}
+
+// ==================== Crypto Payments ====================
+
+export type CryptoChargeStatusValue = 'pending' | 'confirming' | 'confirmed' | 'expired' | 'failed'
+export type CryptoCurrency = 'USDC' | 'ETH'
+
+/**
+ * Status of a crypto payment charge, returned by GET /billing/crypto/charge/:chargeId/status
+ */
+export interface CryptoChargeStatus {
+  id: string
+  status: CryptoChargeStatusValue
+  currency: CryptoCurrency
+  amount: string                 // Exact amount to send (e.g., "25.4372")
+  recipientAddress: string
+  chain: string                  // "ethereum" | "sepolia" | "optimism" | "arbitrum"
+  expiresAt: string              // ISO timestamp
+  confirmations: number
+  txHash: string | null
+  explorerUrl: string | null
+  createdAt: string
+  confirmedAt: string | null
+}
+
+/**
+ * Custom data sent with crypto purchase requests
+ */
+export interface CryptoPurchaseCustomData {
+  currency: CryptoCurrency
+  priceCents: number
+  credits?: number
+  productSlug?: string
+  unifiedProductId?: number
+  type?: 'credit_package' | 'feature_access'
 }
 
 // ==================== Invite Tokens ====================

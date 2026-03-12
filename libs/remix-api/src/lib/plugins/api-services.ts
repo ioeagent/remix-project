@@ -54,6 +54,8 @@ import {
   FeatureAccessPurchaseResponse,
   UserMembershipsResponse,
   FeatureAccessCheckResponse,
+  CryptoChargeStatus,
+  CryptoPurchaseCustomData,
   InviteValidateResponse,
   InviteRedeemRequest,
   InviteRedeemResponse,
@@ -475,9 +477,10 @@ export class BillingApiService {
    * @param provider - Provider slug (default: "paddle")
    * @param returnUrl - URL to redirect after checkout
    */
-  async purchaseCredits(packageId: string, provider: string = 'paddle', returnUrl?: string): Promise<ApiResponse<PurchaseCreditsResponse>> {
-    const body: { packageId: string; provider: string; returnUrl?: string } = { packageId, provider }
+  async purchaseCredits(packageId: string, provider: string = 'paddle', returnUrl?: string, customData?: CryptoPurchaseCustomData): Promise<ApiResponse<PurchaseCreditsResponse>> {
+    const body: { packageId: string; provider: string; returnUrl?: string; customData?: CryptoPurchaseCustomData } = { packageId, provider }
     if (returnUrl) body.returnUrl = returnUrl
+    if (customData) body.customData = customData
     return this.apiClient.post<PurchaseCreditsResponse>('/purchase-credits', body)
   }
 
@@ -491,6 +494,16 @@ export class BillingApiService {
     const body: { planId: string; provider: string; returnUrl?: string } = { planId, provider }
     if (returnUrl) body.returnUrl = returnUrl
     return this.apiClient.post<SubscribeResponse>('/subscribe', body)
+  }
+
+  // ==================== Crypto Payments ====================
+
+  /**
+   * Get crypto charge status (no auth required — charge ID is the bearer token)
+   * @param chargeId - The crypto charge UUID
+   */
+  async getCryptoChargeStatus(chargeId: string): Promise<ApiResponse<CryptoChargeStatus>> {
+    return this.apiClient.get<CryptoChargeStatus>(`/crypto/charge/${chargeId}/status`)
   }
 
   // ==================== Helper Methods ====================
@@ -527,6 +540,22 @@ export class BillingApiService {
    */
   static filterByActiveProvider<T extends CreditPackage | SubscriptionPlan>(items: T[], providerSlug: string = 'paddle'): T[] {
     return items.filter(item => BillingApiService.hasActiveProvider(item, providerSlug))
+  }
+
+  /**
+   * Check if an item has ANY active provider (paddle, crypto, freepaddle, etc.)
+   */
+  static hasAnyActiveProvider(item: { providers?: ProductProvider[] }): boolean {
+    return item.providers?.some(p => p.isActive && p.syncStatus === 'synced') ?? false
+  }
+
+  /**
+   * Get all active provider slugs for an item
+   */
+  static getActiveProviderSlugs(item: { providers?: ProductProvider[] }): string[] {
+    return (item.providers ?? [])
+      .filter(p => p.isActive && p.syncStatus === 'synced')
+      .map(p => p.slug)
   }
 
   /**
@@ -571,9 +600,10 @@ export class BillingApiService {
    * @param provider - Provider slug (default: "paddle")
    * @param returnUrl - URL to redirect after checkout
    */
-  async purchaseFeatureAccess(productSlug: string, provider: string = 'paddle', returnUrl?: string): Promise<ApiResponse<FeatureAccessPurchaseResponse>> {
+  async purchaseFeatureAccess(productSlug: string, provider: string = 'paddle', returnUrl?: string, customData?: CryptoPurchaseCustomData): Promise<ApiResponse<FeatureAccessPurchaseResponse>> {
     const body: FeatureAccessPurchaseRequest = { productSlug, provider }
     if (returnUrl) body.returnUrl = returnUrl
+    if (customData) body.customData = customData
     return this.apiClient.post<FeatureAccessPurchaseResponse>('/feature-access/purchase', body)
   }
 

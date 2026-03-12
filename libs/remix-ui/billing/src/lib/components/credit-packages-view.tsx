@@ -58,6 +58,7 @@ export const CreditPackagesView: React.FC<CreditPackagesViewProps> = ({
           // Get active Paddle provider
           const paddleProvider = BillingApiService.getActiveProvider(pkg, 'paddle')
           const priceId = paddleProvider?.priceId || null
+          const hasCrypto = BillingApiService.hasActiveProvider(pkg, 'crypto')
 
           return (
             <div key={pkg.id} className="col-12 col-md-6 col-lg-3">
@@ -68,7 +69,14 @@ export const CreditPackagesView: React.FC<CreditPackagesViewProps> = ({
                   </div>
                 )}
                 <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{pkg.name}</h5>
+                  <div className="d-flex justify-content-between align-items-start">
+                    <h5 className="card-title">{pkg.name}</h5>
+                    {hasCrypto && (
+                      <span className="badge bg-secondary" title="Pay with crypto">
+                        <i className="fab fa-ethereum me-1"></i>Crypto
+                      </span>
+                    )}
+                  </div>
                   <p className="card-text text-muted small flex-grow-1">
                     {pkg.description}
                   </p>

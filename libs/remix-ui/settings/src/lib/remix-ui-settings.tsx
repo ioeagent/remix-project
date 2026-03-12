@@ -299,12 +299,8 @@ export const RemixUiSettings = (props: RemixUiSettingsProps) => {
 
   // Derive visible sections based on app config
   const computeVisibleSections = (config: AppConfig): SettingsSection[] => {
-    return settingsSections.filter(section => {
-      if (section.key === 'account' && config['settings.account_management'] === false) {
-        return false
-      }
-      return true
-    })
+    // TODO: remove override — account section forced on for payment dev
+    return settingsSections
   }
 
   // Recompute visible sections when shared app config changes

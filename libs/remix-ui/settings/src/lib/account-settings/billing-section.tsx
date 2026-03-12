@@ -81,9 +81,11 @@ export const BillingSection: React.FC<BillingSectionProps> = ({ plugin }) => {
     }
   }, [plugin])
 
-  if (!loginEnabled || !configEnabled) {
-    return null
-  }
+  // TODO: revert — force-show for crypto payment dev
+  console.log('[BillingSection] loginEnabled:', loginEnabled, 'configEnabled:', configEnabled)
+  // if (!loginEnabled || !configEnabled) {
+  //   return null
+  // }
 
   const handlePurchaseComplete = async () => {
     // Refresh credits after purchase
