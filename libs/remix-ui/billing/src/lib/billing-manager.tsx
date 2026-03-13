@@ -3,7 +3,7 @@ import { BillingManagerProps, UserSubscription, Credits, UserFeatureMembership }
 import { BillingApiService, ProductsApiService, ApiClient, CryptoCurrency, EligibleProduct } from '@remix-api'
 import { endpointUrls } from '@remix-endpoints-helper'
 import { CurrentSubscription } from './components/current-subscription'
-import { PaymentMethodSelector, PaymentProvider } from './components/payment-method-selector'
+import { CryptoCurrencySelector } from './components/crypto-currency-selector'
 import { CryptoPaymentModal } from './components/crypto-payment-modal'
 import { ProductCard } from './components/product-card'
 import { initPaddle, getPaddle, openCheckoutWithTransaction, onPaddleEvent, offPaddleEvent } from './paddle-singleton'
@@ -52,11 +52,8 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
   const [paddle, setPaddle] = useState<Paddle | null>(null)
   const [paddleError, setPaddleError] = useState<string | null>(null)
 
-  // Payment method selection
-  const [paymentSelector, setPaymentSelector] = useState<{
-    product: EligibleProduct
-    availableProviders: string[]
-  } | null>(null)
+  // Crypto currency selection (shown when user clicks "Buy with Crypto")
+  const [cryptoCurrencySelector, setCryptoCurrencySelector] = useState<EligibleProduct | null>(null)
 
   // Crypto payment
   const [cryptoChargeId, setCryptoChargeId] = useState<string | null>(null)
@@ -178,25 +175,14 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       return
     }
 
-    // Determine which providers this product's slug has across all rows
-    const productRows = products.filter(p => p.slug === product.slug)
-    const providerSlugs = [...new Set(productRows.map(p => p.provider_slug).filter(Boolean))] as string[]
-    const hasCrypto = providerSlugs.includes('crypto')
-    const hasPaddle = providerSlugs.includes('paddle') || providerSlugs.includes('freepaddle')
-
-    // Recurring products can't use crypto
-    const isRecurring = product.is_recurring || product.product_type === 'subscription_plan'
-
-    if (hasPaddle && hasCrypto && !isRecurring) {
-      setPaymentSelector({ product, availableProviders: providerSlugs })
-      return
-    }
-    if (hasCrypto && !hasPaddle && !isRecurring) {
-      setPaymentSelector({ product, availableProviders: ['crypto'] })
+    // Route directly based on provider_slug — no intermediate selection
+    if (product.provider_slug === 'crypto') {
+      // Show currency selector (USDC / ETH)
+      setCryptoCurrencySelector(product)
       return
     }
 
-    // Default: Paddle/FreePaddle
+    // Default: Paddle/FreePaddle (card/paypal)
     executePaddlePurchase(product)
   }
 
@@ -287,15 +273,11 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
     }
   }
 
-  const handlePaymentMethodSelect = (provider: PaymentProvider, currency?: CryptoCurrency) => {
-    if (!paymentSelector) return
-    const { product } = paymentSelector
-    setPaymentSelector(null)
-    if (provider === 'crypto') {
-      executeCryptoPurchase(product, currency || 'USDC')
-    } else {
-      executePaddlePurchase(product)
-    }
+  const handleCryptoCurrencySelect = (currency: CryptoCurrency) => {
+    if (!cryptoCurrencySelector) return
+    const product = cryptoCurrencySelector
+    setCryptoCurrencySelector(null)
+    executeCryptoPurchase(product, currency)
   }
 
   const handleCryptoComplete = () => { setCryptoChargeId(null); loadUserData(); onPurchaseComplete?.() }
@@ -391,14 +373,13 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
         )}
       </div>
 
-      {/* Payment Method Selector Modal */}
-      {paymentSelector && (
-        <PaymentMethodSelector
-          availableProviders={paymentSelector.availableProviders}
-          productName={paymentSelector.product.name}
-          priceCents={paymentSelector.product.price_cents}
-          onSelect={handlePaymentMethodSelect}
-          onCancel={() => setPaymentSelector(null)}
+      {/* Crypto Currency Selector */}
+      {cryptoCurrencySelector && (
+        <CryptoCurrencySelector
+          productName={cryptoCurrencySelector.name}
+          priceCents={cryptoCurrencySelector.price_cents}
+          onSelect={handleCryptoCurrencySelect}
+          onCancel={() => setCryptoCurrencySelector(null)}
         />
       )}
 

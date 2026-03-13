@@ -1,0 +1,73 @@
+/* Plans Modal — fullscreen overlay with blurred backdrop */
+
+.plans-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: plans-modal-fade-in 0.2s ease-out;
+}
+
+@keyframes plans-modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.plans-modal-container {
+  background: var(--remix-bg-primary, var(--bs-body-bg, #1a1a2e));
+  border: 1px solid var(--remix-border, var(--bs-border-color, rgba(255,255,255,0.1)));
+  border-radius: 12px;
+  width: 90vw;
+  max-width: 900px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: plans-modal-slide-up 0.25s ease-out;
+}
+
+@keyframes plans-modal-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.plans-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--remix-border, var(--bs-border-color, rgba(255,255,255,0.1)));
+  flex-shrink: 0;
+}
+
+.plans-modal-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.plans-modal-close {
+  background: none;
+  border: none;
+  color: var(--bs-body-color, #ccc);
+  font-size: 1.1rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.plans-modal-close:hover {
+  background: var(--bs-secondary-bg, rgba(255,255,255,0.1));
+}
+
+.plans-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px 0;
+}

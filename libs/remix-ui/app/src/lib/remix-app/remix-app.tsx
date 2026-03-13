@@ -473,6 +473,7 @@ const RemixApp = (props: IRemixAppUi) => {
               }
               {props.app.invitationManager.render()}
               {props.app.membershipRequest.render()}
+              {props.app.plans.render()}
               {showBetaTestRegisterWidget && props.app.betaCornerWidget.render()}
             </AppProvider>
           </AuthProvider>

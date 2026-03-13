@@ -132,14 +132,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               </button>
             ) : (
               <button
-                className="btn btn-primary btn-sm w-100"
+                className={`btn btn-sm w-100 ${hasCrypto ? 'btn-warning' : 'btn-primary'}`}
                 onClick={() => onPurchase(product)}
                 disabled={purchasing}
               >
                 {purchasing ? (
                   <><span className="spinner-border spinner-border-sm me-1"></span>Processing...</>
+                ) : hasCrypto ? (
+                  <><i className="fab fa-ethereum me-1"></i>Buy with Crypto</>
+                ) : isSubscription ? (
+                  <><i className="fas fa-credit-card me-1"></i>Subscribe</>
                 ) : (
-                  <>{isSubscription ? 'Subscribe' : 'Purchase'}</>
+                  <><i className="fas fa-credit-card me-1"></i>Buy with Card</>
                 )}
               </button>
             )}

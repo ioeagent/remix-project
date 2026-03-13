@@ -349,6 +349,7 @@ export const UserMenuCompact: React.FC<UserMenuCompactProps> = ({
           />
         </>
       )}
+
     </div>
   )
 }

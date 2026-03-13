@@ -1,5 +1,6 @@
 // Billing UI Components
 export { BillingManager } from './lib/billing-manager'
+export { PlansOverlay } from './lib/plans-modal'
 export { CreditPackagesView } from './lib/components/credit-packages-view'
 export { SubscriptionPlansView } from './lib/components/subscription-plans-view'
 export { FeatureAccessProductsView } from './lib/components/feature-access-products-view'

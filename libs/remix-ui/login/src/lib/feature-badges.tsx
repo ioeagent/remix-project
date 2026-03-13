@@ -24,13 +24,12 @@ export const FeatureBadges: React.FC<FeatureBadgesProps> = ({ plugin, onClose })
   const { featureGroups } = useAuth()
   const [showBetaModal, setShowBetaModal] = useState(false)
 
-  if (!featureGroups || featureGroups.length === 0) return null
+  const groups = featureGroups || []
 
   const handleBadgeClick = (group: FeatureGroup) => {
     if (group.name === 'beta') {
       setShowBetaModal(true)
     }
-    // Other badges: future modals can be added here
   }
 
   return (
@@ -38,9 +37,9 @@ export const FeatureBadges: React.FC<FeatureBadgesProps> = ({ plugin, onClose })
       <div className="feature-badges-section">
         <div className="feature-badges-label">Your Plan</div>
         <div className="feature-badges-list">
-          {featureGroups.map((group) => {
+          {groups.map((group) => {
             const config = BADGE_CONFIG[group.name] || getDefaultBadgeConfig(group.name)
-            const isClickable = group.name === 'beta' // only beta has a modal for now
+            const isClickable = group.name === 'beta'
 
             return (
               <div
@@ -57,6 +56,14 @@ export const FeatureBadges: React.FC<FeatureBadgesProps> = ({ plugin, onClose })
               </div>
             )
           })}
+          <button
+            className="feature-badge feature-badge--upgrade feature-badge--clickable"
+            onClick={() => { plugin?.call('plans', 'open'); onClose?.() }}
+          >
+            <i className="fas fa-rocket feature-badge-icon"></i>
+            <span className="feature-badge-name">Upgrade</span>
+            <i className="fas fa-chevron-right feature-badge-arrow"></i>
+          </button>
         </div>
       </div>
       <div className="dropdown-divider user-menu-divider"></div>
