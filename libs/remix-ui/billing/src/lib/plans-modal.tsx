@@ -36,8 +36,8 @@ export const PlansOverlay: React.FC<PlansOverlayProps> = ({ plugin, onClose }) =
       <div className="plans-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="plans-modal-header">
           <h5 className="plans-modal-title">
-            <i className="fas fa-rocket me-2"></i>
-            Plans
+            <i className="fas fa-rocket me-2" style={{ color: '#6366f1' }}></i>
+            Plans & Pricing
           </h5>
           <button className="plans-modal-close" onClick={onClose} aria-label="Close">
             <i className="fas fa-times"></i>

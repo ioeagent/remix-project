@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { BillingManagerProps, UserSubscription, Credits, UserFeatureMembership } from './types'
 import { BillingApiService, ProductsApiService, ApiClient, CryptoCurrency, EligibleProduct } from '@remix-api'
 import { endpointUrls } from '@remix-endpoints-helper'
-import { CurrentSubscription } from './components/current-subscription'
 import { CryptoCurrencySelector } from './components/crypto-currency-selector'
 import { CryptoPaymentModal } from './components/crypto-payment-modal'
 import { ProductCard } from './components/product-card'
@@ -283,61 +282,66 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
   const handleCryptoComplete = () => { setCryptoChargeId(null); loadUserData(); onPurchaseComplete?.() }
   const handleCryptoCancel = () => { setCryptoChargeId(null) }
 
-  const handleManageSubscription = () => {
-    console.log('[BillingManager] Manage subscription')
-  }
-
   // ==================== Render ====================
+
+  // Group products by type for section headers
+  const featureProducts = products.filter(p => p.product_type === 'feature_access')
+  const subscriptionProducts = products.filter(p => p.product_type === 'subscription_plan')
+  const creditProducts = products.filter(p => p.product_type === 'credit_package')
 
   return (
     <div className="billing-manager">
-      {/* Balance */}
-      {isAuthenticated && credits && (
-        <div className="p-3 border-bottom d-flex justify-content-between align-items-center">
-          <div>
-            <i className="fas fa-wallet me-2"></i>
-            <strong>Your Balance</strong>
+      {/* Status bar: credits + subscription inline */}
+      {isAuthenticated && !userLoading && (
+        <div className="billing-status-bar">
+          <div className="billing-status-bar__sub">
+            {subscription?.status === 'active' ? (
+              <span className="billing-status-bar__sub-badge billing-status-bar__sub-badge--active">
+                <i className="fas fa-check-circle"></i> {subscription.items?.[0]?.description || 'Active Plan'}
+              </span>
+            ) : (
+              <span className="billing-status-bar__sub-badge billing-status-bar__sub-badge--none">
+                Free Plan
+              </span>
+            )}
           </div>
-          <div className="h5 mb-0">
-            <span className="badge bg-primary">
-              <i className="fas fa-coins me-1"></i>
+          {credits && (
+            <div className="billing-status-bar__credits">
+              <i className="fas fa-coins"></i>
               {credits.balance.toLocaleString()} credits
-            </span>
-          </div>
+            </div>
+          )}
         </div>
       )}
 
       {paddleError && (
-        <div className="alert alert-warning m-3 mb-0">
+        <div className="alert alert-warning m-3 mb-0" style={{ borderRadius: 10 }}>
           <i className="fas fa-exclamation-triangle me-2"></i>
           {paddleError}
         </div>
       )}
 
       {!isAuthenticated && (
-        <div className="alert alert-info m-3">
-          <i className="fas fa-info-circle me-2"></i>
-          <a href="#" onClick={(e) => { e.preventDefault(); plugin?.call('auth', 'login', 'github') }}>
-            Sign in
-          </a> to view available products and purchase credits.
-        </div>
-      )}
-
-      {/* Current subscription */}
-      {isAuthenticated && (
-        <div className="p-3 border-bottom">
-          <CurrentSubscription
-            subscription={subscription}
-            loading={userLoading}
-            onManage={handleManageSubscription}
-          />
+        <div style={{ padding: '40px 28px', textAlign: 'center' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>🚀</div>
+          <h5 style={{ fontWeight: 700, marginBottom: 8 }}>Unlock the full power of Remix</h5>
+          <p style={{ color: 'var(--bs-secondary-color, #8892a4)', marginBottom: 20, fontSize: '0.9rem' }}>
+            Sign in to view plans and purchase credits.
+          </p>
+          <button
+            className="plan-card__btn plan-card__btn--card"
+            style={{ maxWidth: 240, margin: '0 auto' }}
+            onClick={() => plugin?.call('auth', 'login', 'github')}
+          >
+            <i className="fas fa-sign-in-alt"></i> Sign In
+          </button>
         </div>
       )}
 
       {/* Products */}
-      <div className="p-3">
+      <div style={{ padding: '20px 28px' }}>
         {productsLoading && (
-          <div className="d-flex justify-content-center p-4">
+          <div className="d-flex justify-content-center p-5">
             <div className="spinner-border spinner-border-sm" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
@@ -345,33 +349,89 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
         )}
 
         {productsError && (
-          <div className="alert alert-warning">
+          <div className="alert alert-warning" style={{ borderRadius: 10 }}>
             <i className="fas fa-exclamation-triangle me-2"></i>
             {productsError}
           </div>
         )}
 
         {!productsLoading && !productsError && products.length === 0 && isAuthenticated && (
-          <div className="text-muted text-center p-4">
+          <div className="text-muted text-center p-5">
             No products available at this time.
           </div>
         )}
 
-        {!productsLoading && products.length > 0 && (
-          <div className="row g-3">
-            {products.map((product) => (
-              <ProductCard
-                key={`${product.slug}-${product.provider_slug}`}
-                product={product}
-                onPurchase={handlePurchase}
-                purchasing={purchasingSlug === product.slug}
-                currentSubscription={subscription}
-                featureMemberships={featureMemberships}
-              />
-            ))}
-          </div>
+        {/* Feature Access */}
+        {featureProducts.length > 0 && (
+          <>
+            <div className="billing-section-header">Feature Passes</div>
+            <div className="row g-3 mb-4">
+              {featureProducts.map((product) => (
+                <ProductCard
+                  key={`${product.slug}-${product.provider_slug}`}
+                  product={product}
+                  onPurchase={handlePurchase}
+                  purchasing={purchasingSlug === product.slug}
+                  currentSubscription={subscription}
+                  featureMemberships={featureMemberships}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Subscriptions */}
+        {subscriptionProducts.length > 0 && (
+          <>
+            <div className="billing-section-header">Subscription Plans</div>
+            <div className="row g-3 mb-4">
+              {subscriptionProducts.map((product) => (
+                <ProductCard
+                  key={`${product.slug}-${product.provider_slug}`}
+                  product={product}
+                  onPurchase={handlePurchase}
+                  purchasing={purchasingSlug === product.slug}
+                  currentSubscription={subscription}
+                  featureMemberships={featureMemberships}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Credit Packages */}
+        {creditProducts.length > 0 && (
+          <>
+            <div className="billing-section-header">Credit Packages</div>
+            <div className="row g-3 mb-4">
+              {creditProducts.map((product) => (
+                <ProductCard
+                  key={`${product.slug}-${product.provider_slug}`}
+                  product={product}
+                  onPurchase={handlePurchase}
+                  purchasing={purchasingSlug === product.slug}
+                  currentSubscription={subscription}
+                  featureMemberships={featureMemberships}
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
+
+      {/* Payment methods footer */}
+      {isAuthenticated && products.length > 0 && !productsLoading && (
+        <div className="billing-payment-methods">
+          <span>Accepted:</span>
+          <i className="fas fa-credit-card" title="Credit / Debit Card"></i>
+          <i className="fab fa-cc-visa" title="Visa"></i>
+          <i className="fab fa-cc-mastercard" title="Mastercard"></i>
+          <i className="fab fa-paypal" title="PayPal"></i>
+          <i className="fab fa-google-pay" title="Google Pay"></i>
+          <i className="fab fa-apple-pay" title="Apple Pay"></i>
+          <i className="fab fa-ethereum" title="ETH / USDC"></i>
+        </div>
+      )}
 
       {/* Crypto Currency Selector */}
       {cryptoCurrencySelector && (

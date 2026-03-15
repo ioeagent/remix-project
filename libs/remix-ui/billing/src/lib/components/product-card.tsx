@@ -9,9 +9,10 @@ interface ProductCardProps {
   featureMemberships?: UserFeatureMembership[]
 }
 
-const formatPrice = (cents: number, currency = 'USD') => {
+const formatPrice = (cents: number) => {
   if (cents === 0) return 'Free'
-  return `$${(cents / 100).toFixed(2)}`
+  const dollars = cents / 100
+  return dollars % 1 === 0 ? `$${dollars}` : `$${dollars.toFixed(2)}`
 }
 
 const typeLabel = (type: string) => {
@@ -23,12 +24,12 @@ const typeLabel = (type: string) => {
   }
 }
 
-const typeIcon = (type: string) => {
+const typeClass = (type: string) => {
   switch (type) {
-  case 'credit_package': return 'fas fa-coins'
-  case 'subscription_plan': return 'fas fa-sync-alt'
-  case 'feature_access': return 'fas fa-unlock-alt'
-  default: return 'fas fa-box'
+  case 'credit_package': return 'plan-card__type--credits'
+  case 'subscription_plan': return 'plan-card__type--subscription'
+  case 'feature_access': return 'plan-card__type--feature'
+  default: return ''
   }
 }
 
@@ -43,112 +44,101 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const isFeature = product.product_type === 'feature_access'
   const isCredit = product.product_type === 'credit_package'
 
-  // Check if user already has this subscription plan
   const hasActiveSub = isSubscription && currentSubscription?.status === 'active'
     && currentSubscription?.items?.some(item => item.productId === product.external_product_id)
 
-  // Check if user has active membership for this feature
   const hasActiveMembership = isFeature && product.feature_group
     && featureMemberships.some(m => m.featureGroup === product.feature_group && m.status === 'active')
 
   const alreadyOwned = hasActiveSub || hasActiveMembership
-
   const hasCrypto = product.provider_slug === 'crypto'
+
+  // Collect all displayable details as feature-list items
+  const details: string[] = []
+  if (isCredit && product.credits) details.push(`${product.credits.toLocaleString()} credits`)
+  if (isSubscription && product.credits_per_month) details.push(`${product.credits_per_month.toLocaleString()} credits/month`)
+  if (isSubscription && product.billing_interval) details.push(`Billed ${product.billing_interval}ly`)
+  if (isFeature && product.duration_type && product.duration_value) details.push(`${product.duration_value} ${product.duration_type} access`)
+  if (product.features) details.push(...product.features.slice(0, 5))
 
   return (
     <div className="col-12 col-md-6 col-lg-4">
-      <div className={`card h-100 ${product.is_popular ? 'border-primary' : ''}`}>
+      <div className={`plan-card ${product.is_popular ? 'plan-card--popular' : ''}`}>
         {product.is_popular && (
-          <div className="card-header bg-primary text-white text-center py-1 small fw-bold">
-            Popular
+          <div className="plan-card__popular-badge">Most Popular</div>
+        )}
+
+        {/* Type label */}
+        <div className={`plan-card__type ${typeClass(product.product_type)}`}>
+          {typeLabel(product.product_type)}
+          {hasCrypto && (
+            <span className="plan-card__crypto-tag">
+              <i className="fab fa-ethereum"></i> Crypto
+            </span>
+          )}
+        </div>
+
+        {/* Name */}
+        <div className="plan-card__name">{product.name}</div>
+
+        {/* Description */}
+        {product.description && (
+          <div className="plan-card__desc">{product.description}</div>
+        )}
+
+        {/* Price */}
+        <div className="plan-card__price">
+          {formatPrice(product.price_cents)}
+          {isSubscription && product.billing_interval && (
+            <span className="plan-card__price-interval">/{product.billing_interval === 'month' ? 'mo' : 'yr'}</span>
+          )}
+        </div>
+
+        {/* Feature groups */}
+        {isFeature && product.feature_groups && product.feature_groups.length > 0 && (
+          <div style={{ marginTop: 12 }}>
+            {product.feature_groups.map((fg, i) => (
+              <span key={i} className="plan-card__crypto-tag" style={{ color: '#a78bfa', background: 'rgba(167,139,250,0.1)', borderColor: 'rgba(167,139,250,0.2)', marginRight: 4, marginBottom: 4 }}>
+                {fg.displayName || fg.name}
+              </span>
+            ))}
           </div>
         )}
-        <div className="card-body d-flex flex-column">
-          {/* Type badge */}
-          <div className="mb-2">
-            <span className="badge bg-secondary-subtle text-secondary me-1">
-              <i className={`${typeIcon(product.product_type)} me-1`}></i>
-              {typeLabel(product.product_type)}
-            </span>
-            {hasCrypto && (
-              <span className="badge bg-warning-subtle text-warning">
-                <i className="fab fa-ethereum me-1"></i>Crypto
-              </span>
-            )}
-          </div>
 
-          {/* Name */}
-          <h6 className="card-title mb-1">{product.name}</h6>
+        {/* Feature / detail list */}
+        {details.length > 0 && (
+          <ul className="plan-card__features">
+            {details.map((d, i) => (
+              <li key={i}><i className="fas fa-check"></i>{d}</li>
+            ))}
+          </ul>
+        )}
 
-          {/* Description */}
-          {product.description && (
-            <p className="card-text text-muted small mb-2">{product.description}</p>
-          )}
+        {/* Spacer */}
+        <div style={{ flex: 1, minHeight: 16 }}></div>
 
-          {/* Details based on type */}
-          <div className="mb-3 small">
-            {isCredit && product.credits && (
-              <div><i className="fas fa-coins me-1 text-primary"></i>{product.credits.toLocaleString()} credits</div>
-            )}
-            {isSubscription && product.credits_per_month && (
-              <div><i className="fas fa-coins me-1 text-primary"></i>{product.credits_per_month.toLocaleString()} credits/month</div>
-            )}
-            {isSubscription && product.billing_interval && (
-              <div><i className="fas fa-calendar me-1"></i>Billed {product.billing_interval}ly</div>
-            )}
-            {isFeature && product.feature_groups && product.feature_groups.length > 0 && (
-              <div className="mt-1">
-                {product.feature_groups.map((fg, i) => (
-                  <span key={i} className="badge bg-info-subtle text-info me-1 mb-1">{fg.displayName || fg.name}</span>
-                ))}
-              </div>
-            )}
-            {isFeature && product.duration_type && product.duration_value && (
-              <div><i className="fas fa-clock me-1"></i>{product.duration_value} {product.duration_type}</div>
-            )}
-            {product.features && product.features.length > 0 && (
-              <ul className="list-unstyled mt-1 mb-0">
-                {product.features.slice(0, 4).map((f, i) => (
-                  <li key={i} className="small"><i className="fas fa-check text-success me-1"></i>{f}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Spacer to push price + button to bottom */}
-          <div className="mt-auto">
-            {/* Price */}
-            <div className="h5 mb-2">
-              {formatPrice(product.price_cents, product.currency)}
-              {isSubscription && product.billing_interval && (
-                <span className="text-muted small">/{product.billing_interval}</span>
-              )}
-            </div>
-
-            {/* Action */}
-            {alreadyOwned ? (
-              <button className="btn btn-outline-success btn-sm w-100" disabled>
-                <i className="fas fa-check me-1"></i>Active
-              </button>
+        {/* Button */}
+        {alreadyOwned ? (
+          <button className="plan-card__btn plan-card__btn--active" disabled>
+            <i className="fas fa-check"></i> Active
+          </button>
+        ) : (
+          <button
+            className={`plan-card__btn ${hasCrypto ? 'plan-card__btn--crypto' : 'plan-card__btn--card'}`}
+            onClick={() => onPurchase(product)}
+            disabled={purchasing}
+          >
+            {purchasing ? (
+              <><span className="spinner-border spinner-border-sm"></span> Processing...</>
+            ) : hasCrypto ? (
+              <><i className="fab fa-ethereum"></i> Buy with Crypto</>
+            ) : isSubscription ? (
+              <><i className="fas fa-credit-card"></i> Subscribe</>
             ) : (
-              <button
-                className={`btn btn-sm w-100 ${hasCrypto ? 'btn-warning' : 'btn-primary'}`}
-                onClick={() => onPurchase(product)}
-                disabled={purchasing}
-              >
-                {purchasing ? (
-                  <><span className="spinner-border spinner-border-sm me-1"></span>Processing...</>
-                ) : hasCrypto ? (
-                  <><i className="fab fa-ethereum me-1"></i>Buy with Crypto</>
-                ) : isSubscription ? (
-                  <><i className="fas fa-credit-card me-1"></i>Subscribe</>
-                ) : (
-                  <><i className="fas fa-credit-card me-1"></i>Buy with Card</>
-                )}
-              </button>
+              <><i className="fas fa-credit-card"></i> Buy with Card</>
             )}
-          </div>
-        </div>
+          </button>
+        )}
       </div>
     </div>
   )
