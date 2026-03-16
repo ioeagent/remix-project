@@ -770,6 +770,7 @@ export interface UnifiedPurchaseRequest {
   product_id?: number
   slug?: string
   provider?: string               // 'paddle' | 'freepaddle' | 'crypto'
+  currency?: CryptoCurrency       // Required when provider is 'crypto' ('USDC' | 'ETH')
   returnUrl?: string
   customData?: CryptoPurchaseCustomData
 }

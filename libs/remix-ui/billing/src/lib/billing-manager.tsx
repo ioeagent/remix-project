@@ -174,38 +174,29 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
       return
     }
 
-    // Route directly based on provider_slug — no intermediate selection
+    // Crypto → show currency selector first
     if (product.provider_slug === 'crypto') {
-      // Show currency selector (USDC / ETH)
       setCryptoCurrencySelector(product)
       return
     }
 
-    // Default: Paddle/FreePaddle (card/paypal)
-    executePaddlePurchase(product)
+    // Paddle / FreePaddle → purchase directly
+    executePurchase(product)
   }
 
   /**
-   * Route to the correct /billing endpoint based on product_type.
-   * Uses existing endpoints that already handle Paddle transactions:
-   *   POST /billing/purchase-credits   (credit_package)
-   *   POST /billing/feature-access/purchase (feature_access)
-   *   POST /billing/subscribe          (subscription_plan)
+   * Unified purchase — POST /products/purchase
+   * Works for all product types and providers. The server handles
+   * Paddle transaction creation, crypto charge creation, and enrichment.
    */
-  const executePaddlePurchase = async (product: EligibleProduct) => {
+  const executePurchase = async (product: EligibleProduct, currency?: CryptoCurrency) => {
     setPurchasingSlug(product.slug)
     try {
-      const provider = product.provider_slug || 'paddle'
-      let response: { ok: boolean; data?: { transactionId: string; checkoutUrl: string } | null; error?: string }
-
-      if (product.product_type === 'credit_package') {
-        response = await billingApi.purchaseCredits(product.slug, provider)
-      } else if (product.product_type === 'feature_access') {
-        response = await billingApi.purchaseFeatureAccess(product.slug, provider)
-      } else {
-        // subscription_plan
-        response = await billingApi.subscribe(product.slug, provider)
-      }
+      const response = await productsApi.purchase({
+        slug: product.slug,
+        provider: product.provider_slug || 'paddle',
+        ...(currency ? { currency } : {})
+      })
 
       if (!response.ok || !response.data) {
         console.error('[BillingManager] Purchase failed:', response.error)
@@ -213,61 +204,28 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
         return
       }
 
-      const { transactionId, checkoutUrl } = response.data
-      const paddleInstance = paddle || getPaddle()
-      if (paddleInstance && transactionId) {
-        openCheckoutWithTransaction(paddleInstance, transactionId, {
-          settings: { displayMode: 'overlay', theme: 'light' }
-        })
-      } else if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank')
+      const { transactionId, provider } = response.data
+
+      if (provider === 'crypto') {
+        // Crypto: open the charge status modal
+        setCryptoChargeId(transactionId)
         setPurchasingSlug(null)
       } else {
-        setPurchasingSlug(null)
+        // Paddle: open checkout overlay
+        const paddleInstance = paddle || getPaddle()
+        if (paddleInstance && transactionId) {
+          openCheckoutWithTransaction(paddleInstance, transactionId, {
+            settings: { displayMode: 'overlay', theme: 'light' }
+          })
+        } else if (response.data.checkoutUrl) {
+          window.open(response.data.checkoutUrl, '_blank')
+          setPurchasingSlug(null)
+        } else {
+          setPurchasingSlug(null)
+        }
       }
     } catch (err) {
       console.error('[BillingManager] Purchase error:', err)
-      setPurchasingSlug(null)
-    }
-  }
-
-  /**
-   * Crypto purchase — uses the same /billing endpoints with provider: "crypto".
-   * Per the brief:
-   *   POST /billing/purchase-credits       { packageId, provider: "crypto", customData }
-   *   POST /billing/feature-access/purchase { productSlug, provider: "crypto", customData }
-   * Returns { transactionId (= chargeId), checkoutUrl }
-   */
-  const executeCryptoPurchase = async (product: EligibleProduct, currency: CryptoCurrency) => {
-    setPurchasingSlug(product.slug)
-    try {
-      const customData = {
-        currency,
-        priceCents: product.price_cents,
-        productSlug: product.slug,
-        unifiedProductId: product.id,
-        ...(product.product_type === 'credit_package' ? { credits: product.credits } : {}),
-        ...(product.product_type === 'feature_access' ? { type: 'feature_access' as const } : {})
-      }
-
-      let response: { ok: boolean; data?: { transactionId: string; checkoutUrl: string } | null; error?: string }
-
-      if (product.product_type === 'credit_package') {
-        response = await billingApi.purchaseCredits(product.slug, 'crypto', undefined, customData)
-      } else {
-        // feature_access (subscriptions can't use crypto)
-        response = await billingApi.purchaseFeatureAccess(product.slug, 'crypto', undefined, customData)
-      }
-
-      if (!response.ok || !response.data) {
-        console.error('[BillingManager] Crypto purchase failed:', response.error)
-        setPurchasingSlug(null)
-        return
-      }
-      setCryptoChargeId(response.data.transactionId)
-      setPurchasingSlug(null)
-    } catch (err) {
-      console.error('[BillingManager] Crypto purchase error:', err)
       setPurchasingSlug(null)
     }
   }
@@ -276,7 +234,7 @@ export const BillingManager: React.FC<BillingManagerProps> = ({
     if (!cryptoCurrencySelector) return
     const product = cryptoCurrencySelector
     setCryptoCurrencySelector(null)
-    executeCryptoPurchase(product, currency)
+    executePurchase(product, currency)
   }
 
   const handleCryptoComplete = () => { setCryptoChargeId(null); loadUserData(); onPurchaseComplete?.() }
