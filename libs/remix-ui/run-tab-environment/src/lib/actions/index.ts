@@ -95,6 +95,13 @@ export async function forkState (plugin: EnvironmentPlugin, dispatch: React.Disp
   trackMatomoEvent(plugin, { category: 'udapp', action: 'forkState', name: `forked from ${context}`, isClick: false })
 }
 
+export async function initContext (plugin: EnvironmentPlugin, dispatch: React.Dispatch<Actions>) {
+  await plugin.call('blockchain', 'resetAndInit')
+  const provider = await plugin.call('blockchain', 'getProvider')
+  dispatch({ type: 'SET_CURRENT_PROVIDER', payload: provider })
+  plugin.emit('providersChanged', provider)
+}
+
 export async function setExecutionContext (provider: Provider, plugin: EnvironmentPlugin, dispatch: React.Dispatch<Actions>) {
   if (provider.name === 'walletconnect') {
     await plugin.call('walletconnect', 'openModal')

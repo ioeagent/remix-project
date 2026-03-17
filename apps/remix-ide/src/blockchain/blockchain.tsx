@@ -685,9 +685,9 @@ export class Blockchain extends Plugin {
     return this.executionContext.isVM() ? 'memory' : 'blockchain'
   }
 
-  resetAndInit() {
+  async resetAndInit() {
     // this.transactionContextAPI = transactionContextAPI
-    this.executionContext.init()
+    await this.executionContext.init()
     this.executionContext.stopListenOnLastBlock()
     this.executionContext.listenOnLastBlock()
   }

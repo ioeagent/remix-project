@@ -45,9 +45,8 @@ export class ExecutionContext {
     this.isConnected = false
   }
 
-  init (config) {
-    this.executionContext = 'vm-osaka'
-    this.event.trigger('contextChanged', [this.executionContext])
+  async init () {
+    await this.executionContextChange({ context: 'vm-osaka' })
   }
 
   getProvider () {

@@ -3,7 +3,7 @@ import isElectron from 'is-electron'
 import { EnvAppContext } from './contexts'
 import { widgetInitialState, widgetReducer } from './reducers'
 import EnvironmentPortraitView from './widgets/envPortraitView'
-import { addFVSProvider, addProvider, getAccountsList, loadAllDelegations, registerInjectedProvider } from './actions'
+import { addFVSProvider, addProvider, getAccountsList, initContext, loadAllDelegations, registerInjectedProvider } from './actions'
 import { ProviderDetailsEvent } from './types'
 import { formatBalance } from '@remix-ui/helper'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
@@ -128,6 +128,10 @@ function EnvironmentWidget({ plugin }: { plugin: EnvironmentPlugin }) {
 
         if (balance) dispatch({ type: 'SET_ACCOUNT_BALANCE', payload: { address, balance: formatBalance(balance, 3) } })
       }
+    })
+
+    plugin.on('filePanel', 'setWorkspace', () => {
+      initContext(plugin, dispatch)
     })
 
     // Cleanup function to remove event listeners when component unmounts
