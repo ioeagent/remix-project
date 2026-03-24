@@ -105,19 +105,37 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
   // }
 
   return (
-    <div className="d-flex flex-column w-100" data-id="remixUIHTAll">
+    <div className="flex flex-col w-full" data-id="remixUIHTAll">
       <ThemeContext.Provider value={state.themeQuality}>
-        <div className="container-fluid">
-          <div className="row">
-            <div className="d-flex w-100 m-3 justify-content-end">
-              <button className="btn btn-secondary btn-md me-3" onClick={startLearnEth}><i className="fa-solid fa-book me-1"></i><FormattedMessage id="home.startLearning" /></button>
-              <button data-id="landingPageImportFromTemplate" className="btn btn-primary btn-md me-2" onClick={openTemplateSelection}><i className="fa-solid fa-plus me-1"></i><FormattedMessage id="home.createNewWorkspace" /></button>
+        <div className="w-full px-4">
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Header buttons */}
+            <div className="flex w-full justify-end mb-6 mt-3 gap-3">
+              <button 
+                className="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-md hover:bg-secondary/90 transition-colors text-sm font-medium"
+                onClick={startLearnEth}
+              >
+                <i className="fa-solid fa-book"></i>
+                <FormattedMessage id="home.startLearning" />
+              </button>
+              <button 
+                data-id="landingPageImportFromTemplate" 
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+                onClick={openTemplateSelection}
+              >
+                <i className="fa-solid fa-plus"></i>
+                <FormattedMessage id="home.createNewWorkspace" />
+              </button>
             </div>
-            <div className="col-lg-8 col-xl-5 col-sm-12 mb-4">
+            
+            {/* Left column - Main content */}
+            <div className="flex-1 lg:max-w-[60%] xl:max-w-[42%] mb-4">
               <HomeTabTitle />
               {!(platform === appPlatformTypes.desktop) ? <HomeTabRecentWorkspaces plugin={plugin} /> : <HomeTabRecentWorkspacesElectron plugin={plugin} />}
             </div>
-            <div className="col-lg-4 col-xl-7 col-sm-12 overflow-y-scroll" style={{ overflow: 'hidden', height: isTerminalHidden ? '85vh' : '61vh' }}>
+            
+            {/* Right column - Updates and plugins */}
+            <div className="flex-1 lg:max-w-[40%] xl:max-w-[58%] overflow-y-auto" style={{ height: isTerminalHidden ? '85vh' : '61vh' }}>
               <HomeTabUpdates plugin={plugin} />
               <HomeTabFeaturedPlugins plugin={plugin} />
             </div>
