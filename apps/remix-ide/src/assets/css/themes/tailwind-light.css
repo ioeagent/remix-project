@@ -1,0 +1,117 @@
+@charset "UTF-8";
+/*!
+ * Remix IDE Light Theme - Tailwind Version  
+ * Converted from Bootstrap Flatly theme
+ * Based on Bootswatch v5.3.7 Flatly theme
+ */
+
+/* Import Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap");
+
+/* Light theme (default) - no class selector needed */
+:root {
+  /* Core theme colors */
+  --color-primary: 0 122 166;      /* #007aa6 */
+  --color-secondary: 162 163 189;   /* #a2a3bd */
+  --color-success: 24 188 156;      /* #18bc9c */
+  --color-info: 52 152 219;         /* #3498db */
+  --color-warning: 243 156 18;      /* #f39c12 */
+  --color-danger: 231 76 60;        /* #e74c3c */
+  --color-light: 248 250 254;       /* #f8fafe */
+  --color-dark: 142 148 166;        /* #8e94a6 */
+
+  /* Gray scale for light theme */
+  --color-gray-50: 248 249 250;     /* #f8f9fa */
+  --color-gray-100: 248 249 250;    /* #f8f9fa */
+  --color-gray-200: 236 240 241;    /* #ecf0f1 */
+  --color-gray-300: 222 226 230;    /* #dee2e6 */
+  --color-gray-400: 206 212 218;    /* #ced4da */
+  --color-gray-500: 180 188 194;    /* #b4bcc2 */
+  --color-gray-600: 149 165 166;    /* #95a5a6 */
+  --color-gray-700: 123 138 139;    /* #7b8a8b */
+  --color-gray-800: 52 58 64;       /* #343a40 */
+  --color-gray-900: 33 37 41;       /* #212529 */
+
+  /* Body colors for light theme */
+  --color-body-bg: 239 241 245;     /* #eff1f5 */
+  --color-body-text: 116 123 144;   /* #747b90 */
+  --color-emphasis: 0 0 0;          /* #000 */
+
+  /* Remix custom colors for light theme */
+  --color-ai: 30 162 170;           /* #1ea2aa */
+  --color-surface-1: 248 250 254;   /* #f8fafe */
+  --color-surface-2: 255 255 255;   /* #fff */
+  --color-surface-3: 255 255 255;   /* #fff - using same as surface-2 for light */
+  --color-surface-4: 255 255 255;   /* #fff - using same as surface-2 for light */
+  --color-border-light: 222 226 230; /* #dee2e6 */
+  --color-border-dark: 206 212 218;  /* #ced4da */
+
+  /* Background color */
+  background-color: rgb(239 241 245); /* #eff1f5 */
+  color: rgb(116 123 144);            /* #747b90 */
+}
+
+/* Preserve legacy Bootstrap variables for compatibility */
+:root {
+  --bs-blue: #2c3e50;
+  --bs-indigo: #6610f2;
+  --bs-purple: #6f42c1;
+  --bs-pink: #e83e8c;
+  --bs-red: #e74c3c;
+  --bs-orange: #fd7e14;
+  --bs-yellow: #f39c12;
+  --bs-green: #18bc9c;
+  --bs-teal: #20c997;
+  --bs-cyan: #3498db;
+  --bs-black: #000;
+  --bs-white: #fff;
+  --bs-gray: #95a5a6;
+  --bs-gray-dark: #343a40;
+  --bs-primary: #007aa6;
+  --bs-secondary: #a2a3bd;
+  --bs-success: #18bc9c;
+  --bs-info: #3498db;
+  --bs-warning: #f39c12;
+  --bs-danger: #e74c3c;
+  --bs-light: #f8fafe;
+  --bs-dark: #8e94a6;
+  --bs-body-bg: #eff1f5;
+  --bs-body-color: #747b90;
+  --bs-emphasis-color: #000;
+
+  /* Remix custom variables */
+  --custom-ai-color: #1ea2aa;
+  --custom-onsurface-layer-1: #f8fafe;
+  --custom-onsurface-layer-2: #fff;
+  --custom-onsurface-layer-3: #fff;
+  --custom-onsurface-layer-4: #fff;
+  --custom-border-light: #dee2e6;
+  --custom-border-dark: #ced4da;
+}
+
+/* Component styles for light theme */
+.btn-ai {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 4px 12px !important;
+  background: color-mix(in srgb, var(--custom-ai-color) 8%, transparent) !important;
+  color: var(--custom-ai-color) !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-ai:hover {
+  opacity: 0.8;
+}
+
+.btn-ai span {
+  color: var(--custom-ai-color);
+}
+
+.text-ai {
+  color: var(--custom-ai-color) !important;
+}

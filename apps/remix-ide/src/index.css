@@ -1,4 +1,12 @@
-@import '@vscode/codicons/dist/codicon.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import our custom Bootstrap-to-Tailwind utilities */
+@import './tailwind-utils.css';
+
+/* Import codicons after Tailwind setup */
+@import url('https://cdn.jsdelivr.net/npm/@vscode/codicons@0.0.43/dist/codicon.css');
 
 .centered {
   position           : fixed;

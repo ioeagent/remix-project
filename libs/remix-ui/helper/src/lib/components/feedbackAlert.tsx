@@ -23,7 +23,7 @@ export function FeedbackAlert ({ message, askGPT }: FeedbackAlertProps) {
             <CopyToClipboard content={message} className="p-0 m-0 far fa-copy error" direction={'top'} />
           </span>
           <button
-            className="btn btn-ai"
+            className="flex items-center gap-2 px-3 py-1 text-ai bg-ai/10 hover:bg-ai/20 rounded transition-colors duration-200 text-xs border-0"
             data-id="ask-remix-ai-button"
             onClick={(event) => {
               event.stopPropagation()

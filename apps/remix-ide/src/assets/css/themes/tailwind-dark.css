@@ -1,0 +1,117 @@
+@charset "UTF-8";
+/*!
+ * Remix IDE Dark Theme - Tailwind Version
+ * Converted from Bootstrap Darkly theme
+ * Based on Bootswatch v5.3.7 Darkly theme
+ */
+
+/* Import Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap");
+
+/* Apply dark class to html element for Tailwind dark mode */
+html.dark {
+  /* Core theme colors */
+  --color-primary: 0 122 166;      /* #007aa6 */
+  --color-secondary: 68 68 68;      /* #444 */
+  --color-success: 0 188 140;       /* #00bc8c */
+  --color-info: 52 152 219;         /* #3498db */
+  --color-warning: 243 156 18;      /* #f39c12 */
+  --color-danger: 231 76 60;        /* #e74c3c */
+  --color-light: 42 44 63;          /* #2a2c3f */
+  --color-dark: 162 163 189;        /* #a2a3bd */
+
+  /* Gray scale */
+  --color-gray-50: 248 249 250;     /* #f8f9fa */
+  --color-gray-100: 248 249 250;    /* #f8f9fa */
+  --color-gray-200: 235 235 235;    /* #ebebeb */
+  --color-gray-300: 222 226 230;    /* #dee2e6 */
+  --color-gray-400: 206 212 218;    /* #ced4da */
+  --color-gray-500: 173 181 189;    /* #adb5bd */
+  --color-gray-600: 136 136 136;    /* #888 */
+  --color-gray-700: 68 68 68;       /* #444 */
+  --color-gray-800: 48 48 48;       /* #303030 */
+  --color-gray-900: 34 34 34;       /* #222 */
+
+  /* Body colors for dark theme */
+  --color-body-bg: 34 35 54;        /* #222336 */
+  --color-body-text: 162 163 189;   /* #a2a3bd */
+  --color-emphasis: 255 255 255;    /* #fff */
+
+  /* Remix custom colors for dark theme */
+  --color-ai: 45 231 243;           /* #2de7f3 */
+  --color-surface-1: 42 44 63;      /* #2a2c3f */
+  --color-surface-2: 51 52 70;      /* #333446 */
+  --color-surface-3: 59 60 77;      /* #3b3c4d */
+  --color-surface-4: 67 68 84;      /* #434454 */
+  --color-border-light: 81 83 107;  /* #51536b */
+  --color-border-dark: 44 50 68;    /* #2c3244 */
+
+  /* Background color */
+  background-color: rgb(34 35 54);   /* #222336 */
+  color: rgb(162 163 189);           /* #a2a3bd */
+}
+
+/* Preserve legacy Bootstrap variables for compatibility */
+html.dark {
+  --bs-blue: #375a7f;
+  --bs-indigo: #6610f2;
+  --bs-purple: #6f42c1;
+  --bs-pink: #e83e8c;
+  --bs-red: #e74c3c;
+  --bs-orange: #fd7e14;
+  --bs-yellow: #f39c12;
+  --bs-green: #00bc8c;
+  --bs-teal: #20c997;
+  --bs-cyan: #3498db;
+  --bs-black: #000;
+  --bs-white: #fff;
+  --bs-gray: #888;
+  --bs-gray-dark: #303030;
+  --bs-primary: #007aa6;
+  --bs-secondary: #444;
+  --bs-success: #00bc8c;
+  --bs-info: #3498db;
+  --bs-warning: #f39c12;
+  --bs-danger: #e74c3c;
+  --bs-light: #2a2c3f;
+  --bs-dark: #a2a3bd;
+  --bs-body-bg: #222336;
+  --bs-body-color: #a2a3bd;
+  --bs-emphasis-color: #fff;
+
+  /* Remix custom variables */
+  --custom-ai-color: #2de7f3;
+  --custom-onsurface-layer-1: #2a2c3f;
+  --custom-onsurface-layer-2: #333446;
+  --custom-onsurface-layer-3: #3b3c4d;
+  --custom-onsurface-layer-4: #434454;
+  --custom-border-light: #51536b;
+  --custom-border-dark: #2c3244;
+}
+
+/* Component styles using Tailwind approach */
+html.dark .btn-ai {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 4px 12px !important;
+  background: color-mix(in srgb, var(--custom-ai-color) 8%, transparent) !important;
+  color: var(--custom-ai-color) !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+html.dark .btn-ai:hover {
+  opacity: 0.8;
+}
+
+html.dark .btn-ai span {
+  color: var(--custom-ai-color);
+}
+
+html.dark .text-ai {
+  color: var(--custom-ai-color) !important;
+}

@@ -1,0 +1,102 @@
+/* Bootstrap to Tailwind class mapping utilities */
+
+/* Flexbox utilities - common Bootstrap classes */
+.d-flex { display: flex; }
+.d-inline-flex { display: inline-flex; }
+.flex-row { flex-direction: row; }
+.flex-row-reverse { flex-direction: row-reverse; }
+.flex-column { flex-direction: column; }
+.align-items-center { align-items: center; }
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
+.justify-content-center { justify-content: center; }
+.justify-content-start { justify-content: flex-start; }
+.justify-content-end { justify-content: flex-end; }
+.justify-content-between { justify-content: space-between; }
+
+/* Spacing utilities */
+.p-0 { padding: 0; }
+.p-1 { padding: 0.25rem; }
+.p-2 { padding: 0.5rem; }
+.p-3 { padding: 1rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-3 { padding-left: 1rem; padding-right: 1rem; }
+.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.pt-1 { padding-top: 0.25rem; }
+.pt-2 { padding-top: 0.5rem; }
+.pb-1 { padding-bottom: 0.25rem; }
+.pb-2 { padding-bottom: 0.5rem; }
+.ms-3 { margin-left: 1rem; }
+.me-3 { margin-right: 1rem; }
+.m-0 { margin: 0; }
+
+/* Text utilities */
+.text-center { text-align: center; }
+.text-start { text-align: left; }
+.text-end { text-align: right; }
+.text-wrap { word-wrap: break-word; overflow-wrap: break-word; }
+
+/* Background utilities using theme colors */
+.bg-primary { background-color: var(--bs-primary); }
+.bg-secondary { background-color: var(--bs-secondary); }
+.bg-success { background-color: var(--bs-success); }
+.bg-info { background-color: var(--bs-info); }
+.bg-warning { background-color: var(--bs-warning); }
+.bg-danger { background-color: var(--bs-danger); }
+.bg-body { background-color: var(--bs-body-bg); }
+
+/* Text colors using theme colors */
+.text-primary { color: var(--bs-primary); }
+.text-secondary { color: var(--bs-secondary); }
+.text-success { color: var(--bs-success); }
+.text-info { color: var(--bs-info); }
+.text-warning { color: var(--bs-warning); }
+.text-danger { color: var(--bs-danger); }
+.text-body { color: var(--bs-body-color); }
+
+/* Border utilities */
+.border { border-width: 1px; border-style: solid; }
+.border-0 { border-width: 0; }
+.rounded { border-radius: 0.25rem; }
+.rounded-0 { border-radius: 0; }
+
+/* Display utilities */
+.d-none { display: none; }
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-inline-block { display: inline-block; }
+
+/* Width utilities */
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
+
+@layer components {
+  /* Specialized button classes that need to maintain theme system */
+  .btn-ai {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 4px 12px !important;
+    background: color-mix(in srgb, var(--custom-ai-color) 8%, transparent) !important;
+    color: var(--custom-ai-color) !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  
+  .btn-ai:hover {
+    opacity: 0.8;
+  }
+  
+  .btn-ai span {
+    color: var(--custom-ai-color);
+  }
+  
+  /* Other theme-aware components can go here */
+  .text-ai {
+    color: var(--custom-ai-color) !important;
+  }
+}
