@@ -102,25 +102,30 @@ function HomeTabRecentWorkspaces({ plugin }: HomeTabFileProps) {
   }
 
   return (
-    <div className="justify-content-start d-flex flex-column my-5" id="hTFileSection">
-      <div className="d-flex flex-column mb-5 remixui_recentworkspace">
-        <label style={{ fontSize: '1rem', color: isDark ? 'white' : 'black' }} className="mt-1 mb-3">
-                Recent Workspaces
+    <div className="flex flex-col justify-start my-5" id="hTFileSection">
+      <div className="flex flex-col mb-5 remixui_recentworkspace">
+        <label className="text-base mt-1 mb-3 text-black dark:text-white">
+          Recent Workspaces
         </label>
-        <div className="d-flex flex-column ps-2">
+        <div className="flex flex-col pl-2">
           {
             Array.isArray(state.recentWorkspaces) && state.recentWorkspaces.map((workspace: any, index) => {
               const workspaceName = (workspace || {}).name ? workspace.name : workspace
               const workspaceTimestamp = (workspace || {}).timestamp ? workspace.timestamp : null
 
               return index < 10 ? (
-                <div key={index} className="d-flex flex-row align-items-center mb-2">
-                  { loadingWorkspace === workspace ? <i className="fad fa-spinner fa-spin me-2"></i> : <i className="fas fa-folder-tree me-2"></i> }
-                  <div className="d-flex flex-row justify-content-between w-100 flex-wrap">
-                    <a className="cursor-pointer text-decoration-none d-inline-block" href="#" onClick={(e) => handleSwitchToRecentWorkspace(e, workspaceName)} key={index}>
-                      <span style={{ color: isDark ? 'white' : 'black' }}>{workspaceName}</span>
+                <div key={index} className="flex flex-row items-center mb-2 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-md transition-colors">
+                  { loadingWorkspace === workspace ? <i className="fad fa-spinner fa-spin mr-2 text-primary"></i> : <i className="fas fa-folder-tree mr-2 text-gray-600 dark:text-gray-400"></i> }
+                  <div className="flex flex-row justify-between w-full flex-wrap">
+                    <a 
+                      className="cursor-pointer no-underline inline-block hover:text-primary transition-colors" 
+                      href="#" 
+                      onClick={(e) => handleSwitchToRecentWorkspace(e, workspaceName)} 
+                      key={index}
+                    >
+                      <span className="text-black dark:text-white">{workspaceName}</span>
                     </a>
-                    <span className="text-muted">created {getTimeAgo(workspaceTimestamp)}</span>
+                    <span className="text-gray-500 dark:text-gray-400 text-sm">created {getTimeAgo(workspaceTimestamp)}</span>
                   </div>
                 </div>
               ) : null

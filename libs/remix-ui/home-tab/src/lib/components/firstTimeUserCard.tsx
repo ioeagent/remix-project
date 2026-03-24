@@ -46,25 +46,25 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
 
   return (
     <div
-      className="card border-0 h-100 shadow-lg"
+      className="bg-white dark:bg-gray-800 border-0 h-100 shadow-lg rounded-lg"
       style={{
         background: `linear-gradient(135deg, var(--bs-body-bg) 0%, ${isDark ? '#2a2a3e' : '#f8f9ff'} 100%)`,
         borderRadius: '20px',
         minHeight: '280px'
       }}
     >
-      <div className="card-body p-4">
+      <div className="p-4">
         {/* Welcome Header */}
         <div className="text-center mb-4">
-          <h4 className="mb-2 fw-bold" style={{ color: isDark ? 'white' : 'black' }}>
+          <h4 className="mb-2 font-bold text-black dark:text-white">
             <FormattedMessage id="homeTab.newToRemix" defaultMessage="First time in Remix? here's what you can do" />
           </h4>
         </div>
 
         {/* Action Cards */}
-        <div className="d-flex flex-column gap-3">
+        <div className="flex flex-col gap-3">
           <div
-            className="p-3 rounded-4 d-flex align-items-center justify-content-between shadow-sm position-relative overflow-hidden"
+            className="p-3 rounded-lg flex items-center justify-between shadow-sm relative overflow-hidden"
             style={{
               background: `linear-gradient(45deg, var(--bs-body-bg), ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'})`,
               backdropFilter: 'blur(10px)',
@@ -81,9 +81,9 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
               e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)'
             }}
           >
-            <div className="d-flex align-items-center flex-grow-1" onClick={handleExplainEthereum}>
+            <div className="flex items-center flex-grow" onClick={handleExplainEthereum}>
               <div
-                className="d-flex justify-content-center align-items-center me-3 shadow-sm"
+                className="flex justify-center items-center mr-3 shadow-sm"
                 style={{
                   width: '20px'
                 }}
@@ -91,10 +91,10 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
                 <i className="fas fa-lightbulb text-primary" style={{ color: isDark ? '#64c4ff' : 'var(--bs-primary)', fontSize: '1.2rem' }}></i>
               </div>
               <div className="flex-grow-1 pe-3">
-                <h5 className="mb-2" style={{ color: isDark ? 'white' : 'black' }}>
+                <h5 className="mb-2 text-black dark:text-white">
                   <FormattedMessage id="home.learnFoundationTitle" />
                 </h5>
-                <p className="mb-0" style={{ fontSize: '0.875rem', color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)' }}>
+                <p className="mb-0 text-sm text-gray-600 dark:text-gray-400">
                   <FormattedMessage id="home.learnFoundationDesc" />
                 </p>
               </div>
@@ -102,7 +102,7 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
           </div>
 
           <div
-            className="p-3 rounded-4 d-flex align-items-center justify-content-between shadow-sm position-relative overflow-hidden"
+            className="p-3 rounded-lg flex items-center justify-between shadow-sm relative overflow-hidden"
             style={{
               background: `linear-gradient(45deg, var(--bs-body-bg), ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'})`,
               backdropFilter: 'blur(10px)',
@@ -119,9 +119,9 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
               e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)'
             }}
           >
-            <div className="d-flex align-items-center flex-grow-1" onClick={handleGetStarted}>
+            <div className="flex items-center flex-grow" onClick={handleGetStarted}>
               <div
-                className="d-flex justify-content-center align-items-center me-3 shadow-sm"
+                className="flex justify-center items-center mr-3 shadow-sm"
                 style={{
                   width: '20px'
                 }}
@@ -129,10 +129,10 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
                 <i className="fas fa-code text-primary" style={{ color: isDark ? '#64c4ff' : 'var(--bs-primary)', fontSize: '1.2rem' }}></i>
               </div>
               <div className="flex-grow-1 pe-3">
-                <h5 className="mb-2" style={{ color: isDark ? 'white' : 'black' }}>
+                <h5 className="mb-2 text-black dark:text-white">
                   <FormattedMessage id="home.buildFirstContractTitle" />
                 </h5>
-                <p className="mb-0" style={{ fontSize: '0.875rem', color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)' }}>
+                <p className="mb-0 text-sm text-gray-600 dark:text-gray-400">
                   <FormattedMessage id="home.buildFirstContractDesc" />
                 </p>
               </div>

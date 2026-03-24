@@ -116,33 +116,33 @@ function HomeTabUpdates({ plugin }: HomeTabUpdatesProps) {
 
   function UpdateCard(updateInfo: UpdateInfo) {
     return (
-      <div className="card border h-100 d-flex flex-column justify-content-between">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg h-full flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
         <div>
-          <div className="d-flex align-items-center p-3 overflow-hidden justify-content-between" style={{ height: '80px', backgroundColor: 'var(--bs-body-bg)' }}>
-            <span className={`badge bg-info bg-transparent border p-2 rounded-pill text-${updateInfo.theme}`} style={{ fontWeight: 'light', border: `1px solid var(--${updateInfo.theme})` }}>{updateInfo.badge}</span>
-            { updateInfo.icon ? <img src={`${HOME_TAB_BASE_URL + updateInfo.icon}`} alt="RemixAI Assistant" style={{ height: '150px', width: '150px' }} />
-              : <img src={`${HOME_TAB_BASE_URL + 'images/illusion.svg'}`} alt="RemixAI Assistant" style={{ height: '150px', width: '150px' }} />
+          <div className="flex items-center p-3 overflow-hidden justify-between h-20 bg-body">
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-light border text-${updateInfo.theme} bg-transparent`} style={{ border: `1px solid var(--${updateInfo.theme})` }}>{updateInfo.badge}</span>
+            { updateInfo.icon ? <img src={`${HOME_TAB_BASE_URL + updateInfo.icon}`} alt="RemixAI Assistant" className="h-36 w-36" />
+              : <img src={`${HOME_TAB_BASE_URL + 'images/illusion.svg'}`} alt="RemixAI Assistant" className="h-36 w-36" />
             }
           </div>
-          <div className="px-3" style={{ fontSize: '1rem', zIndex: 1 }}>
-            <span className="d-block my-2" style={{ color: isDark ? 'white' : 'black' }}>
+          <div className="px-3 text-base relative z-10">
+            <span className="block my-2 text-black dark:text-white font-medium">
               {updateInfo.title}
             </span>
             {Array.isArray(updateInfo.descriptionList) && updateInfo.descriptionList.length > 0 ? (
-              <div className="mb-3 small">
-                <ul className="list-unstyled">
+              <div className="mb-3 text-sm">
+                <ul className="list-none space-y-1">
                   {updateInfo.descriptionList.map((description: string, index: number) => (
-                    <li key={`description-${index}`} className='mb-1'><i className="far fa-check-circle me-2"></i>{description}</li>
+                    <li key={`description-${index}`} className='flex items-start'><i className="far fa-check-circle mr-2 text-success mt-0.5 flex-shrink-0"></i><span className="text-gray-700 dark:text-gray-300">{description}</span></li>
                   ))}
                 </ul>
               </div>
             ) : (
-              <div className="mb-3 small">{updateInfo.description}</div>
+              <div className="mb-3 text-sm text-gray-700 dark:text-gray-300">{updateInfo.description}</div>
             )}
           </div>
         </div>
         <div className="px-3 pb-3">
-          <button className={`btn btn-light btn-sm w-100 border ${updateInfo.theme !== 'primary' && `text-${updateInfo.theme}`}`} onClick={() => handleUpdatesActionClick(updateInfo)}>
+          <button className={`w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 rounded-md text-sm font-medium transition-colors ${updateInfo.theme !== 'primary' ? `text-${updateInfo.theme}` : 'text-gray-700 dark:text-gray-200'}`} onClick={() => handleUpdatesActionClick(updateInfo)}>
             {updateInfo.action.label}
           </button>
         </div>
