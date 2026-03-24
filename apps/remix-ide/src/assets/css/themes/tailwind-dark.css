@@ -47,8 +47,8 @@ html.dark {
   --color-border-dark: 44 50 68;    /* #2c3244 */
 
   /* Background color */
-  background-color: rgb(34 35 54);   /* #222336 */
-  color: rgb(162 163 189);           /* #a2a3bd */
+  background-color: rgb(34, 35, 54);   /* #222336 */
+  color: rgb(162, 163, 189);           /* #a2a3bd */
 }
 
 /* Preserve legacy Bootstrap variables for compatibility */

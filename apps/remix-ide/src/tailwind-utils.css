@@ -71,32 +71,179 @@
 .w-100 { width: 100%; }
 .h-100 { height: 100%; }
 
-@layer components {
-  /* Specialized button classes that need to maintain theme system */
-  .btn-ai {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 4px 12px !important;
-    background: color-mix(in srgb, var(--custom-ai-color) 8%, transparent) !important;
-    color: var(--custom-ai-color) !important;
-    border-radius: 4px !important;
-    font-size: 12px !important;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-  }
-  
-  .btn-ai:hover {
-    opacity: 0.8;
-  }
-  
-  .btn-ai span {
-    color: var(--custom-ai-color);
-  }
-  
-  /* Other theme-aware components can go here */
-  .text-ai {
-    color: var(--custom-ai-color) !important;
-  }
+/* Bootstrap button system replacements */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  color: white;
+  border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--bs-primary);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--bs-secondary);
+  color: white;
+  border-color: var(--bs-secondary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bs-secondary);
+  opacity: 0.9;
+}
+
+.btn-success {
+  background-color: var(--bs-success);
+  color: white;
+  border-color: var(--bs-success);
+}
+
+.btn-info {
+  background-color: var(--bs-info);
+  color: white;
+  border-color: var(--bs-info);
+}
+
+.btn-warning {
+  background-color: var(--bs-warning);
+  color: white;
+  border-color: var(--bs-warning);
+}
+
+.btn-danger {
+  background-color: var(--bs-danger);
+  color: white;
+  border-color: var(--bs-danger);
+}
+
+.btn-light {
+  background-color: var(--bs-light);
+  color: var(--bs-dark);
+  border-color: var(--bs-light);
+}
+
+.btn-dark {
+  background-color: var(--bs-dark);
+  color: white;
+  border-color: var(--bs-dark);
+}
+
+/* Button sizes */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.btn-lg {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+/* Button states */
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Specialized AI button with theme support */
+.btn-ai {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 4px 12px !important;
+  background: color-mix(in srgb, var(--custom-ai-color) 8%, transparent) !important;
+  color: var(--custom-ai-color) !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-ai:hover {
+  opacity: 0.8;
+}
+
+.btn-ai span {
+  color: var(--custom-ai-color);
+}
+
+.text-ai {
+  color: var(--custom-ai-color) !important;
+}
+
+/* Form controls */
+.form-control {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-gray-400);
+  border-radius: 0.375rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  outline: 0;
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--bs-primary) 25%, transparent);
+}
+
+/* Alerts */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  margin-bottom: 1rem;
+}
+
+.alert-primary { background-color: color-mix(in srgb, var(--bs-primary) 10%, transparent); border-color: var(--bs-primary); color: var(--bs-primary); }
+.alert-secondary { background-color: color-mix(in srgb, var(--bs-secondary) 10%, transparent); border-color: var(--bs-secondary); color: var(--bs-secondary); }
+.alert-success { background-color: color-mix(in srgb, var(--bs-success) 10%, transparent); border-color: var(--bs-success); color: var(--bs-success); }
+.alert-info { background-color: color-mix(in srgb, var(--bs-info) 10%, transparent); border-color: var(--bs-info); color: var(--bs-info); }
+.alert-warning { background-color: color-mix(in srgb, var(--bs-warning) 10%, transparent); border-color: var(--bs-warning); color: var(--bs-warning); }
+.alert-danger { background-color: color-mix(in srgb, var(--bs-danger) 10%, transparent); border-color: var(--bs-danger); color: var(--bs-danger); }
+
+/* Cards */
+.card {
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-300);
+  font-weight: 500;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--bs-gray-300);
 }

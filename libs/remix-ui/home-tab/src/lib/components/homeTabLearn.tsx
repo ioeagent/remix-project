@@ -62,18 +62,18 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
         <CustomTooltip
           placement={'top'}
           tooltipId="overlay-tooltip"
-          tooltipClasses="text-nowrap"
+          tooltipClasses="whitespace-nowrap"
           tooltipText={<FormattedMessage id="home.seeAllTutorials" />}
-          tooltipTextClasses="border bg-light text-dark p-1 pe-3"
+          tooltipTextClasses="border bg-light text-dark p-1 pr-3"
         >
           <button
             onClick={async () => {
               await goToLearnEthHome()
             }}
-            className="h-100 px-2 pt-0 btn"
+            className="h-full px-2 pt-0 btn"
           >
             <img
-              className="align-self-center"
+              className="self-center"
               src="assets/img/learnEthLogo.webp"
               alt=""
               style={{

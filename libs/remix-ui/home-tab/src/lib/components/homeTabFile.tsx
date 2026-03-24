@@ -200,8 +200,8 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
             <FormattedMessage id="home.files" />
           </label>
           <div className="flex flex-row flex-wrap">
-            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id="home.newFileTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pe-3">
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="homeTabNewFile" style={{ width: 'fit-content' }} onClick={async () => {
+            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.newFileTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3">
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="homeTabNewFile" style={{ width: 'fit-content' }} onClick={async () => {
                 trackMatomoEvent({
                   category: 'hometab',
                   action: 'filesSection',
@@ -211,14 +211,14 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
                 await plugin.call('menuicons', 'select', 'filePanel')
                 await plugin.call('filePanel', 'createNewFile')
               }}>
-                <i className="far fa-file ps-1 pe-2"></i>
+                <i className="far fa-file pl-1 pr-2"></i>
                 <FormattedMessage id="home.newFile" />
               </button>
             </CustomTooltip>
-            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id="home.openFileTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pe-3">
+            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.openFileTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3">
               <span>
-                <label className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer inline-block" style={{ width: 'fit-content' }} htmlFor="openFileInput">
-                  <i className="far fa-upload ps-1 pe-2"></i>
+                <label className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer inline-block" style={{ width: 'fit-content' }} htmlFor="openFileInput">
+                  <i className="far fa-upload pl-1 pr-2"></i>
                   <FormattedMessage id="home.openFile" />
                 </label>
                 <input
@@ -233,16 +233,16 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
                 />
               </span>
             </CustomTooltip>
-            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id="home.gistTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pe-3"
+            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.gistTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3"
             >
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGistButton" onClick={() => importFromGist()}>
-                <i className="fab fa-github ps-1 pe-2"></i>
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGistButton" onClick={() => importFromGist()}>
+                <i className="fab fa-github pl-1 pr-2"></i>
                 <FormattedMessage id="home.gist" />
               </button>
             </CustomTooltip>
-            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id="home.gitCloneTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pe-3"
+            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.gitCloneTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3"
             >
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGitHubButton" onClick={async () => {
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGitHubButton" onClick={async () => {
                 trackMatomoEvent({
                   category: 'hometab',
                   action: 'filesSection',
@@ -251,13 +251,13 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
                 })
                 await plugin.call('filePanel', 'clone')
               }}>
-                <i className="fa-brands fa-github-alt ps-1 pe-2"></i>
+                <i className="fa-brands fa-github-alt pl-1 pr-2"></i>
                 <FormattedMessage id="home.clone" />
               </button>
             </CustomTooltip>
-            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="text-nowrap" tooltipText={<FormattedMessage id="home.connectToLocalhost" />} tooltipTextClasses="border bg-light text-dark p-1 pe-3">
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-nowrap border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => connectToLocalhost()}>
-                <i className="fa-regular fa-desktop pe-2"></i>
+            <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.connectToLocalhost" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3">
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => connectToLocalhost()}>
+                <i className="fa-regular fa-desktop pr-2"></i>
                 <FormattedMessage id="home.accessFileSystem" />
               </button>
             </CustomTooltip>

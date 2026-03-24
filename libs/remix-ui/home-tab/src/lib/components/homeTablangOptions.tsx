@@ -34,7 +34,7 @@ export function LanguageOptions({ plugin }: { plugin: any }) {
 
   return (
     <>
-      <div className="flex justify-between w-100 items-center pt-4">
+      <div className="flex justify-between w-full items-center pt-4">
         <label style={{ fontSize: '1.2rem' }} className="ml-2 pb-0 mb-0">
           <FormattedMessage id="home.featured" />
         </label>

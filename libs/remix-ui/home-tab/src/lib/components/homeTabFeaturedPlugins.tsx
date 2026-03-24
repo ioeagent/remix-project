@@ -145,27 +145,27 @@ function HomeTabFeaturedPlugins({ plugin }: HomeTabFeaturedPluginsProps) {
 
   function PluginCard(pluginInfo: PluginInfo) {
     return (
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg h-100">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg h-full">
         <div className="flex items-center px-2 justify-between border-b border-gray-200 dark:border-gray-700">
           <div className='flex items-center px-2'>
             <RenderIf condition={loadingPlugins.includes(pluginInfo.pluginId)}>
-              <i className="fad fa-spinner fa-spin me-2"></i>
+              <i className="fad fa-spinner fa-spin mr-2"></i>
             </RenderIf>
             <RenderIfNot condition={loadingPlugins.includes(pluginInfo.pluginId)}>
-              { pluginInfo.iconClass ? <i className={`${pluginInfo.iconClass} me-2`}></i> : <i className="fa-solid fa-file-book me-2"></i> }
+              { pluginInfo.iconClass ? <i className={`${pluginInfo.iconClass} mr-2`}></i> : <i className="fa-solid fa-file-book mr-2"></i> }
             </RenderIfNot>
             <span className="font-bold text-black dark:text-white">{pluginInfo.pluginTitle}</span>
           </div>
           <ToggleSwitch id={`toggleSwitch-${pluginInfo.pluginId}`} isOn={activePlugins.includes(pluginInfo.pluginId)} onClick={() => activateFeaturedPlugin(pluginInfo.pluginId)} />
         </div>
-        <div className="flex flex-col justify-between h-100">
+        <div className="flex flex-col justify-between h-full">
           <div className="p-3">
-            <div className={`${(pluginInfo.maintainedBy || '').toLowerCase() === 'remix' ? 'text-green-600 dark:text-green-400' : 'text-gray-800 dark:text-gray-200'} mb-1`}><i className="fa-solid fa-shield-halved me-2"></i><FormattedMessage id="home.maintainedBy"/> {pluginInfo.maintainedBy || 'Community'}</div>
+            <div className={`${(pluginInfo.maintainedBy || '').toLowerCase() === 'remix' ? 'text-green-600 dark:text-green-400' : 'text-gray-800 dark:text-gray-200'} mb-1`}><i className="fa-solid fa-shield-halved mr-2"></i><FormattedMessage id="home.maintainedBy"/> {pluginInfo.maintainedBy || 'Community'}</div>
             <div className="text-sm mb-2 text-black dark:text-white">{pluginInfo.description}</div>
           </div>
           <div className="px-3 pb-3">
-            <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm w-100 no-underline border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" onClick={async () => await handleFeaturedPluginActionClick(pluginInfo)}>
-              <i className="fa-solid fa-book me-1"></i>{pluginInfo.action.label}
+            <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm w-full no-underline border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" onClick={async () => await handleFeaturedPluginActionClick(pluginInfo)}>
+              <i className="fa-solid fa-book mr-1"></i>{pluginInfo.action.label}
             </button>
           </div>
         </div>
@@ -174,7 +174,7 @@ function HomeTabFeaturedPlugins({ plugin }: HomeTabFeaturedPluginsProps) {
   }
 
   return (
-    <div className="mt-2 w-100 items-end remixui_featuredplugins_container" id="hTFeaturedPlugins">
+    <div className="mt-2 w-full items-end remixui_featuredplugins_container" id="hTFeaturedPlugins">
       <div className="flex justify-between items-center mb-2">
         <h6 className="text-black dark:text-white">{pluginList.caption}</h6>
         <button className="px-4 py-2 bg-gray-600 dark:bg-gray-500 text-white rounded-md hover:bg-gray-700 dark:hover:bg-gray-400 transition-colors" onClick={() => plugin.call('menuicons', 'select', 'pluginManager')} ><FormattedMessage id="home.exploreAllPlugins"/></button>

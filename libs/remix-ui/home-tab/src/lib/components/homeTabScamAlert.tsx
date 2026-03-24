@@ -28,7 +28,7 @@ function HomeTabScamAlert() {
             <span className="pl-4 mt-1">
               <FormattedMessage id="home.scamAlertText" />
             </span>)}
-          <span className="ps-4 mt-1">
+          <span className="pl-4 mt-1">
             <FormattedMessage id="home.scamAlertText2" />:
             <a
               className="pl-2 remixui_home_text"
@@ -44,7 +44,7 @@ function HomeTabScamAlert() {
               <FormattedMessage id="home.learnMore" />
             </a>
           </span>
-          <span className="ps-4 mt-1">
+          <span className="pl-4 mt-1">
             <FormattedMessage id="home.scamAlertText3" />: &nbsp;
             <a
               className="remixui_home_text"

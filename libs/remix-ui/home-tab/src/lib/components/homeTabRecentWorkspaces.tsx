@@ -102,34 +102,48 @@ function HomeTabRecentWorkspaces({ plugin }: HomeTabFileProps) {
   }
 
   return (
-    <div className="flex flex-col justify-start my-5" id="hTFileSection">
-      <div className="flex flex-col mb-5 remixui_recentworkspace">
-        <label className="text-base mt-1 mb-3 text-black dark:text-white">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm" id="hTFileSection">
+      <div className="flex flex-col">
+        <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
           Recent Workspaces
-        </label>
-        <div className="flex flex-col pl-2">
+        </h3>
+        <div className="space-y-3">
           {
-            Array.isArray(state.recentWorkspaces) && state.recentWorkspaces.map((workspace: any, index) => {
+            Array.isArray(state.recentWorkspaces) && state.recentWorkspaces.length > 0 ? 
+            state.recentWorkspaces.map((workspace: any, index) => {
               const workspaceName = (workspace || {}).name ? workspace.name : workspace
               const workspaceTimestamp = (workspace || {}).timestamp ? workspace.timestamp : null
 
               return index < 10 ? (
-                <div key={index} className="flex flex-row items-center mb-2 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-md transition-colors">
-                  { loadingWorkspace === workspace ? <i className="fad fa-spinner fa-spin mr-2 text-primary"></i> : <i className="fas fa-folder-tree mr-2 text-gray-600 dark:text-gray-400"></i> }
-                  <div className="flex flex-row justify-between w-full flex-wrap">
-                    <a 
-                      className="cursor-pointer no-underline inline-block hover:text-primary transition-colors" 
-                      href="#" 
-                      onClick={(e) => handleSwitchToRecentWorkspace(e, workspaceName)} 
-                      key={index}
-                    >
-                      <span className="text-black dark:text-white">{workspaceName}</span>
-                    </a>
-                    <span className="text-gray-500 dark:text-gray-400 text-sm">created {getTimeAgo(workspaceTimestamp)}</span>
+                <div key={index} className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md transition-colors cursor-pointer group"
+                     onClick={(e) => handleSwitchToRecentWorkspace(e, workspaceName)}>
+                  <div className="flex-shrink-0 mr-3">
+                    { loadingWorkspace === workspace ? 
+                      <i className="fad fa-spinner fa-spin text-blue-600 dark:text-blue-400"></i> : 
+                      <i className="fas fa-folder text-blue-600 dark:text-blue-400"></i> 
+                    }
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {workspaceName}
+                      </h4>
+                      {workspaceTimestamp && (
+                        <span className="text-xs text-gray-500 dark:text-gray-400 ml-2 flex-shrink-0">
+                          {getTimeAgo(workspaceTimestamp)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               ) : null
             })
+            : (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <i className="fas fa-folder-open text-2xl mb-2"></i>
+                <p className="text-sm">No recent workspaces</p>
+              </div>
+            )
           }
         </div>
       </div>

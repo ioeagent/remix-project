@@ -811,13 +811,13 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
           <span>Describe the files you want in the new Workspace, for example:</span>
         </div>
         <li>
-          <span className="fst-italic fw-light">Create an ERC-20 token and explain it with comments in the contract</span>
+          <span className="fst-italic font-light">Create an ERC-20 token and explain it with comments in the contract</span>
         </li>
         <li>
-          <span className="fst-italic fw-light">Create a voting contract and explain the contract with comments</span>
+          <span className="fst-italic font-light">Create a voting contract and explain the contract with comments</span>
         </li>
         <li>
-          <span className="fst-italic fw-light">Create a proxy contract with explanations in comments</span>
+          <span className="fst-italic font-light">Create a proxy contract with explanations in comments</span>
         </li>
       </ul>
     )
@@ -939,7 +939,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
   return (
     props.isInitializing ? (
       <div
-        className="d-flex flex-column w-100 h-100 ai-assistant-startup"
+        className="flex flex-col w-full h-full ai-assistant-startup"
         ref={aiChatRef}
         data-theme={themeTracker && themeTracker?.name.toLowerCase()}
       >
@@ -954,13 +954,13 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
       </div>
     ) : (
       <div
-        className="d-flex flex-column w-100 h-100"
+        className="flex flex-col w-full h-full"
         ref={aiChatRef}
         style={{ overflow: 'hidden' }}
         data-theme={themeTracker && themeTracker?.name.toLowerCase()}
       >
         {/* Main content area with sidebar and chat */}
-        <div className="d-flex flex-row flex-grow-1" style={{ overflow: 'hidden', minHeight: 0 }}>
+        <div className="flex flex-row flex-grow-1" style={{ overflow: 'hidden', minHeight: 0 }}>
           {/* Maximized Mode: Show sidebar on left if enabled */}
           {props.isMaximized && props.showHistorySidebar && props.conversations && (
             <ChatHistorySidebar
@@ -982,7 +982,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
 
           {/* Maximized Mode: Always show chat area */}
           {props.isMaximized ? (
-            <div className={`d-flex flex-column flex-grow-1 always-show ${messages.length === 0 ? 'ai-assistant-bg' : ''}`} style={{ overflow: 'hidden', minHeight: 0, backgroundColor: messages.length > 0 ? (themeTracker?.name.toLowerCase() === 'dark' ? '#222336' : '#eff1f5') : undefined }} data-theme={themeTracker && themeTracker?.name.toLowerCase()}>
+            <div className={`flex flex-col flex-grow-1 always-show ${messages.length === 0 ? 'ai-assistant-bg' : ''}`} style={{ overflow: 'hidden', minHeight: 0, backgroundColor: messages.length > 0 ? (themeTracker?.name.toLowerCase() === 'dark' ? '#222336' : '#eff1f5') : undefined }} data-theme={themeTracker && themeTracker?.name.toLowerCase()}>
               <ChatHistoryHeading
                 onNewChat={props.onNewConversation || (() => {})}
                 onToggleHistory={props.onToggleHistorySidebar || (() => {})}
@@ -996,12 +996,12 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
                 isAiChatMaximized={isAiChatMaximized}
                 setIsAiChatMaximized={setIsAiChatMaximized}
               />
-              <section id="remix-ai-chat-history" className="d-flex flex-column p-2" style={{ flex: 1, overflow: 'auto', minHeight: 0 }} ref={chatHistoryRef}>
+              <section id="remix-ai-chat-history" className="flex flex-col p-2" style={{ flex: 1, overflow: 'auto', minHeight: 0 }} ref={chatHistoryRef}>
                 <div data-id="remix-ai-assistant-ready"></div>
                 {/* hidden hook for E2E tests: data-streaming="true|false" */}
                 <div
                   data-id="remix-ai-streaming"
-                  className='d-none'
+                  className='hidden'
                   data-streaming={isStreaming ? 'true' : 'false'}
                 ></div>
                 <ChatHistoryComponent
@@ -1019,10 +1019,10 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
           ) : (
           /* Non-Maximized Mode: Toggle between history view and chat view */
             props.showHistorySidebar && props.isMaximized === false && props.conversations ? (
-              <div className="d-flex flex-column flex-grow-1 ai-assistant-bg nonMaximizedMode" style={{ overflow: 'hidden', minHeight: 0 }} data-theme={themeTracker && themeTracker?.name.toLowerCase()}>
+              <div className="flex flex-col flex-grow-1 ai-assistant-bg nonMaximizedMode" style={{ overflow: 'hidden', minHeight: 0 }} data-theme={themeTracker && themeTracker?.name.toLowerCase()}>
                 {/* Back button header */}
                 <div
-                  className="p-2 border-bottom"
+                  className="p-2 border-b"
                   style={{ backgroundColor: themeTracker?.name.toLowerCase() === 'dark' ? '#222336' : '#eff1f5' }}
                 >
                   <button
@@ -1030,7 +1030,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
                     onClick={props.onToggleHistorySidebar || (() => {})}
                     data-id="chat-history-back-btn"
                   >
-                    <i className="fas fa-chevron-left me-3"></i>
+                    <i className="fas fa-chevron-left mr-3"></i>
                     <span>Back to chat</span>
                   </button>
                 </div>
@@ -1059,7 +1059,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
               </div>
             ) : (
             /* Show chat area when sidebar is closed */
-              <div className={`d-flex flex-column flex-grow-1 sideBarIsClosed ${messages.length === 0 ? 'ai-assistant-bg' : ''}`} style={{ overflow: 'hidden', minHeight: 0, backgroundColor: messages.length > 0 ? (themeTracker?.name.toLowerCase() === 'dark' ? '#222336' : '#eff1f5') : undefined }} data-theme={themeTracker && themeTracker?.name.toLowerCase()}>
+              <div className={`flex flex-col flex-grow-1 sideBarIsClosed ${messages.length === 0 ? 'ai-assistant-bg' : ''}`} style={{ overflow: 'hidden', minHeight: 0, backgroundColor: messages.length > 0 ? (themeTracker?.name.toLowerCase() === 'dark' ? '#222336' : '#eff1f5') : undefined }} data-theme={themeTracker && themeTracker?.name.toLowerCase()}>
                 <ChatHistoryHeading
                   onNewChat={props.onNewConversation || (() => {})}
                   onToggleHistory={props.onToggleHistorySidebar || (() => {})}
@@ -1073,12 +1073,12 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
                   isAiChatMaximized={isAiChatMaximized}
                   setIsAiChatMaximized={setIsAiChatMaximized}
                 />
-                <section id="remix-ai-chat-history" className="d-flex flex-column p-2" style={{ flex: 1, overflow: 'auto', minHeight: 0 }} ref={chatHistoryRef}>
+                <section id="remix-ai-chat-history" className="flex flex-col p-2" style={{ flex: 1, overflow: 'auto', minHeight: 0 }} ref={chatHistoryRef}>
                   <div data-id="remix-ai-assistant-ready"></div>
                   {/* hidden hook for E2E tests: data-streaming="true|false" */}
                   <div
                     data-id="remix-ai-streaming"
-                    className='d-none'
+                    className='hidden'
                     data-streaming={isStreaming ? 'true' : 'false'}
                   ></div>
                   <ChatHistoryComponent

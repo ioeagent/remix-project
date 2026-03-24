@@ -1,12 +1,49 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import codicons first */
+@import url('https://cdn.jsdelivr.net/npm/@vscode/codicons@0.0.43/dist/codicon.css');
+
+@import "tailwindcss";
+
+@theme {
+  /* Configure content paths */
+  --content: "./apps/remix-ide/src/**/*.{js,ts,jsx,tsx}", "./libs/remix-ui/**/*.{js,ts,jsx,tsx}", "./apps/**/*.{js,ts,jsx,tsx}", "./libs/**/*.{js,ts,jsx,tsx}";
+
+  /* Enable class-based dark mode */
+  --dark-mode: class;
+
+  /* Primary theme colors using CSS custom properties */
+  --color-primary: 0 122 166;
+  --color-secondary: 68 68 68;
+  --color-success: 0 188 140;
+  --color-info: 52 152 219;
+  --color-warning: 243 156 18;
+  --color-danger: 231 76 60;
+  --color-light: 42 44 63;
+  --color-dark: 162 163 189;
+  
+  /* Gray scale */
+  --color-gray-50: 248 249 250;
+  --color-gray-100: 248 249 250;
+  --color-gray-200: 235 235 235;
+  --color-gray-300: 222 226 230;
+  --color-gray-400: 206 212 218;
+  --color-gray-500: 173 181 189;
+  --color-gray-600: 136 136 136;
+  --color-gray-700: 68 68 68;
+  --color-gray-800: 48 48 48;
+  --color-gray-900: 34 34 34;
+  
+  /* Remix custom colors */
+  --color-ai: 45 231 243;
+  --color-surface-1: 42 44 63;
+  --color-surface-2: 51 52 70;
+  --color-surface-3: 59 60 77;
+  --color-surface-4: 67 68 84;
+  --color-border-light: 81 83 107;
+  --color-border-dark: 44 50 68;
+}
 
 /* Import our custom Bootstrap-to-Tailwind utilities */
 @import './tailwind-utils.css';
-
-/* Import codicons after Tailwind setup */
-@import url('https://cdn.jsdelivr.net/npm/@vscode/codicons@0.0.43/dist/codicon.css');
 
 .centered {
   position           : fixed;

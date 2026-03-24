@@ -47,8 +47,8 @@
   --color-border-dark: 206 212 218;  /* #ced4da */
 
   /* Background color */
-  background-color: rgb(239 241 245); /* #eff1f5 */
-  color: rgb(116 123 144);            /* #747b90 */
+  background-color: rgb(239, 241, 245); /* #eff1f5 */
+  color: rgb(116, 123, 144);            /* #747b90 */
 }
 
 /* Preserve legacy Bootstrap variables for compatibility */

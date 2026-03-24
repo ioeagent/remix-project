@@ -56,7 +56,19 @@ module.exports = {
         'bs-info': 'var(--bs-info)',
         'bs-warning': 'var(--bs-warning)',
         'bs-danger': 'var(--bs-danger)',
+        'bs-light': 'var(--bs-light)',
+        'bs-dark': 'var(--bs-dark)',
         'remix-ai': 'var(--custom-ai-color)',
+        
+        // Legacy class mappings for transition period  
+        'light': 'var(--bs-light)',
+        'dark': 'var(--bs-dark)',
+        
+        // Add semantic color utilities for bg- classes
+        'danger': 'var(--bs-danger)',
+        'success': 'var(--bs-success)', 
+        'warning': 'var(--bs-warning)',
+        'info': 'var(--bs-info)',
       },
       fontFamily: {
         sans: ['Nunito Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],

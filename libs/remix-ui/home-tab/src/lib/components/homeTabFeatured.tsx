@@ -53,9 +53,9 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
     await props.plugin.call('tabs', 'focus', 'remixGuide')
   }
   return (
-    <div className="pt-1 ps-2" id="hTFeaturedeSection">
+    <div className="pt-1 pl-2" id="hTFeaturedeSection">
       <div className="mb-2 remix_ui-carousel-container">
-        <div className="w-100 flex flex-col rounded-3 remix_ui-carouselbox">
+        <div className="w-full flex flex-col rounded-lg remix_ui-carouselbox">
           <ThemeContext.Provider value={themeFilter}>
             <Carousel
               arrows={false}
@@ -73,19 +73,19 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
               autoPlay={true}
               keyBoardControl={true}
               containerClass="border w-full carousel-container flex items-center"
-              sliderClass="h-100 justify-content-between"
+              sliderClass="h-full justify-between"
               deviceType={'desktop'}
               itemClass=""
               autoPlaySpeed={10000}
-              dotListClass="position-relative mt-2"
+              dotListClass="relative mt-2"
             >
               {false && <div // no this is not a mistake. keep it false until next year ;)
-                className="mx-1 px-1 flex d-none" // Please do not delete. just comment this out or keep hidden. To be used every year.
+                className="mx-1 px-1 flex hidden" // Please do not delete. just comment this out or keep hidden. To be used every year.
               >
                 <a href="https://cryptpad.fr/form/#/2/form/view/pV-DdryeJoYUWvW+gXsFaMNynEY7t5mUsgeD1urgwSE/" target="__blank">
                   <img className="remixui_carouselImage" src={'/assets/img/solSurvey2024.webp'} alt=""></img>
                 </a>
-                <div className="h6 w-50 p-2 pl-4  self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 pl-4  self-center" style={{ flex: '1' }}>
                   <h5>
                   The Solidity Developer Survey 2024 is live!
                   </h5>
@@ -123,11 +123,11 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
                   </p>
                 </div>
               </div> }
-              <div className="mr-1 pr-1 flex items-center justify-center h-100">
+              <div className="mr-1 pr-1 flex items-center justify-center h-full">
                 <a href={releaseDetails.moreLink} target="__blank">
                   <img src={'assets/img/remi_drums_whatsnew.webp'} className="remixui_carouselImage" alt=""></img>
                 </a>
-                <div className="h6 w-50 p-2 pl-4 self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 pl-4 self-center" style={{ flex: '1' }}>
                   <h5>{releaseDetails.version} {releaseDetails.title}</h5>
                   <div style={{ fontSize: '0.8rem' }} className="mb-3">
                     <ul>
@@ -152,11 +152,11 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
                   </a>
                 </div>
               </div>
-              <div className="mr-1 pr-1 flex items-center justify-center h-100">
+              <div className="mr-1 pr-1 flex items-center justify-center h-full">
                 <button className='bg-transparent border-0 p-0 hover:opacity-80 transition-opacity' onClick={()=>handleStartLearneth()}>
                   <img src={'assets/img/remi-prof.webp'} className="remixui_carouselImage" alt=""></img>
                 </button>
-                <div className="h6 w-50 p-2 pl-4  self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 pl-4  self-center" style={{ flex: '1' }}>
                   <h5>
                     <FormattedMessage id="home.learnEthPromoTitle" />
                   </h5>
@@ -171,11 +171,11 @@ function HomeTabFeatured(props:HomeTabFeaturedProps) {
                   </button>
                 </div>
               </div>
-              <div className="mr-1 pr-1 flex items-center justify-center h-100">
+              <div className="mr-1 pr-1 flex items-center justify-center h-full">
                 <button className="bg-transparent border-0 p-0 hover:opacity-80 transition-opacity" onClick={() => handleStartRemixGuide()}>
                   <img src={'assets/img/YouTubeLogo.webp'} className="remixui_carouselImage" alt=""></img>
                 </button>
-                <div className="h6 w-50 p-2 pl-4  self-center" style={{ flex: '1' }}>
+                <div className="h6 w-1/2 p-2 pl-4  self-center" style={{ flex: '1' }}>
                   <h5>
                     <FormattedMessage id="home.remixYouTube" />
                   </h5>

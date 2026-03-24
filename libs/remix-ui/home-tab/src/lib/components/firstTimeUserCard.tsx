@@ -46,7 +46,7 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
 
   return (
     <div
-      className="bg-white dark:bg-gray-800 border-0 h-100 shadow-lg rounded-lg"
+      className="bg-white dark:bg-gray-800 border-0 h-full shadow-lg rounded-lg"
       style={{
         background: `linear-gradient(135deg, var(--bs-body-bg) 0%, ${isDark ? '#2a2a3e' : '#f8f9ff'} 100%)`,
         borderRadius: '20px',
@@ -90,7 +90,7 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
               >
                 <i className="fas fa-lightbulb text-primary" style={{ color: isDark ? '#64c4ff' : 'var(--bs-primary)', fontSize: '1.2rem' }}></i>
               </div>
-              <div className="flex-grow-1 pe-3">
+              <div className="flex-grow-1 pr-3">
                 <h5 className="mb-2 text-black dark:text-white">
                   <FormattedMessage id="home.learnFoundationTitle" />
                 </h5>
@@ -128,7 +128,7 @@ export const FirstTimeUserCard: React.FC<FirstTimeUserCardProps> = ({ plugin }) 
               >
                 <i className="fas fa-code text-primary" style={{ color: isDark ? '#64c4ff' : 'var(--bs-primary)', fontSize: '1.2rem' }}></i>
               </div>
-              <div className="flex-grow-1 pe-3">
+              <div className="flex-grow-1 pr-3">
                 <h5 className="mb-2 text-black dark:text-white">
                   <FormattedMessage id="home.buildFirstContractTitle" />
                 </h5>
