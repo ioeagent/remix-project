@@ -122,6 +122,28 @@ export class DeployContractHandler extends BaseToolHandler {
       }
 
       const receipt = (txReturn.txResult.receipt)
+
+      // Detect actual network/chain for accurate reporting to AI
+      let chainId: string = 'unknown'
+      let networkName: string = 'Unknown Network'
+      try {
+        const providerObject = await plugin.call('blockchain' as any, 'getProviderObject')
+        const providerName = providerObject?.name || ''
+        const isVM = providerName.startsWith('vm')
+
+        if (isVM) {
+          chainId = providerName
+          networkName = `Remix VM (${providerName})`
+        } else {
+          const network = await plugin.call('network', 'detectNetwork')
+          chainId = network?.id?.toString() || providerName
+          networkName = network?.name || `Chain ${chainId}`
+        }
+      } catch (e) {
+        // Non-critical: network detection failure shouldn't block deployment result
+        console.warn('[DeployContractHandler] Network detection failed:', e)
+      }
+
       const result: DeploymentResult = {
         transactionHash: receipt.hash,
         gasUsed: toNumber(receipt.gasUsed),
@@ -133,7 +155,12 @@ export class DeployContractHandler extends BaseToolHandler {
       }
       plugin.call('udappDeployedContracts', 'addInstance', result.contractAddress, data.abi, args.contractName, data)
 
-      return this.createSuccessResult(result);
+      return this.createSuccessResult({
+        ...result,
+        chainId,
+        networkName,
+        contractName: args.contractName,
+      });
 
     } catch (error) {
       return this.createErrorResult(`Deployment failed: ${error.message}`);

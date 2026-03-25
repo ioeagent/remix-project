@@ -4,7 +4,8 @@ import { Button, Row, Col, Card, Modal } from 'react-bootstrap';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toPng } from 'html-to-image';
 import { AppContext } from '../../contexts';
-import ChatBox from '../ChatBox';
+// ChatBox import removed — DApp updates now go through AI Assistant
+// import ChatBox from '../ChatBox';
 import DeployPanel from '../DeployPanel';
 // remixClient removed - using plugin from context instead
 import { InBrowserVite } from '../../InBrowserVite';
@@ -509,6 +510,7 @@ window.addEventListener('unhandledrejection', function(e) {
   }, [plugin, isVM]);
 
   useEffect(() => {
+    console.log('[QuickDapp] VM contract check — isVM:', isVM, 'isCurrentProviderVM:', isCurrentProviderVM, 'chainId:', activeDapp?.contract?.chainId, 'address:', activeDapp?.contract?.address);
     if (!isVM || !isCurrentProviderVM || !plugin || !activeDapp?.contract?.address) {
       setVmContractStatus('checking');
       return;
@@ -621,7 +623,29 @@ window.addEventListener('unhandledrejection', function(e) {
             <Col xs={12} lg={8} className="pe-lg-3 d-flex flex-column qd-main-col">
               <Row>
                 <div className="flex-grow-1 mb-3" style={{ minHeight: '30px' }}>
-                  <ChatBox onSendMessage={handleChatMessage} isLoading={isAiUpdating}/>
+                  {/* AI Assistant redirect button — replaces inline ChatBox */}
+                  <button
+                    className="btn btn-outline-primary d-flex align-items-center gap-2 w-100 justify-content-center py-2"
+                    onClick={async () => {
+                      try {
+                        // Open the AI Assistant panel without auto-sending a message
+                        const isPanelHidden = await plugin.call('rightSidePanel' as any, 'isPanelHidden')
+                        if (isPanelHidden) {
+                          await plugin.call('rightSidePanel' as any, 'togglePanel')
+                        }
+                        // Show DApp context as a non-interactive banner message
+                        const contextMsg = `📌 Active DApp: "${activeDapp?.name || 'current DApp'}" (slug: ${activeDapp?.slug || activeDapp?.workspaceName}). Type your modification request below.`
+                        await plugin.call('remixaiassistant' as any, 'handleExternalMessage', contextMsg)
+                      } catch (e) {
+                        console.error('[EditHtmlTemplate] Failed to open AI Assistant:', e)
+                        plugin.call('notification', 'toast', 'Failed to open AI Assistant')
+                      }
+                    }}
+                    disabled={isAiUpdating}
+                  >
+                    <i className="fas fa-sparkles"></i>
+                    {isAiUpdating ? 'AI is updating...' : 'Modify with AI Assistant'}
+                  </button>
                 </div>
               </Row>
               <Row className="flex-grow-1 mb-3">

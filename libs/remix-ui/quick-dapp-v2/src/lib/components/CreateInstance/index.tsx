@@ -58,6 +58,19 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
         </p>
       </div>
 
+      {/* AI Assistant CTA — prominent top placement */}
+      <Card className="border-primary mb-4" data-id="quickdapp-ai-cta">
+        <Card.Body className="p-4 text-center">
+          <i className="fas fa-sparkles fs-1 text-primary mb-3 d-block"></i>
+          <h4 className="text-primary mb-2">Create DApps with AI Assistant</h4>
+          <p className="text-muted fs-5 mb-0">
+            Open the <strong>AI Assistant</strong> and say{' '}
+            <em>"Create a DApp for my contract"</em> — the AI will handle compilation,
+            deployment, and DApp generation for you!
+          </p>
+        </Card.Body>
+      </Card>
+
       <Card className="border-info" data-id="quickdapp-getting-started">
         <Card.Header className="bg-info bg-opacity-10 border-info">
           <h4 className="mb-0 text-info">
@@ -77,6 +90,7 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
                 </h5>
                 <p className="text-muted mb-3">
                   Click the <span className="badge bg-primary">Start now</span> button in the banner above the editor.
+                  This will open the <strong>AI Assistant</strong> with your contract context.
                 </p>
                 <img
                   src='assets/img/start-now-guide.png'
@@ -101,6 +115,7 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
                 </h5>
                 <p className="text-muted mb-3">
                   Click the "Create a dapp" on your deployed contract instance.
+                  The <strong>AI Assistant</strong> will guide you through the creation process.
                 </p>
                 <img
                   src='assets/img/create-a-dapp.png'

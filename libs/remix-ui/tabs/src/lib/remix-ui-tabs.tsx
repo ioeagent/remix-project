@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import './remix-ui-tabs.css'
 import { QuickDappBanner } from './components/QuickDappBanner'
-import { AIRequestForm } from '@remix-ui/run-tab'
+// AIRequestForm import removed — DApp creation now goes through AI Assistant
 import { values } from 'lodash'
 import { AppContext } from '@remix-ui/app'
 import { useAuth } from '@remix-ui/app'
@@ -642,41 +642,14 @@ export const TabsUI = (props: TabsUIProps) => {
       }
 
       if (matchingInstances.length === 0) {
-        props.plugin.call('notification', 'modal', {
-          id: 'quick-dapp-no-instance',
-          title: 'No Deployed Contracts',
-          message: `No deployed contracts found for "${currentFileName}".\n\nWe'll compile your contract and take you to the Deploy & Run tab.\n\nPlease deploy to your desired network, then click "Start now" again.`,
-          modalType: 'confirm',
-          okLabel: 'Compile & Continue',
-          cancelLabel: 'Cancel',
-          okFn: async () => {
-            try {
-              const filePath = currentFile.indexOf('/') !== -1
-                ? currentFile.substr(currentFile.indexOf('/') + 1)
-                : currentFile
-              await props.plugin.call('solidity', 'compile', filePath)
-              await props.plugin.call('menuicons', 'select', 'udapp')
-            } catch (e) {
-              console.error('Compile error:', e)
-              props.plugin.call('notification', 'toast', 'Compilation failed. Please check your contract.')
-            }
-          },
-          cancelFn: () => {}
-        })
+        // No deployed contracts — redirect to AI Assistant, which will handle
+        // compilation and deployment via MCP tools (compile_solidity, deploy_contract)
+        const message = `I want to create a DApp for the contract in "${currentFileName}". ` +
+          `No deployed instances found yet — please compile and deploy it first, then create the DApp.`
+        await props.plugin.call('remixaiassistant' as any, 'chatPipe', message)
       } else if (matchingInstances.length === 1) {
         const inst = matchingInstances[0]
-        props.plugin.call('notification', 'modal', {
-          id: 'quick-dapp-confirm-instance',
-          title: 'Create DApp',
-          message: `Deployed contract found:\n\n• ${inst.name} at ${inst.address}\n\nCreate a DApp with this contract?`,
-          modalType: 'confirm',
-          okLabel: 'Create DApp',
-          cancelLabel: 'Cancel',
-          okFn: async () => {
-            await openSparkleModal(inst)
-          },
-          cancelFn: () => {}
-        })
+        await redirectToAIAssistant(inst)
       } else {
         let selectedIndex = 0
 
@@ -702,10 +675,10 @@ export const TabsUI = (props: TabsUIProps) => {
           title: 'Select Contract Instance',
           message: <InstanceSelector />,
           modalType: 'custom',
-          okLabel: 'Create DApp',
+          okLabel: 'Create DApp with AI',
           cancelLabel: 'Cancel',
           okFn: async () => {
-            await openSparkleModal(matchingInstances[selectedIndex])
+            await redirectToAIAssistant(matchingInstances[selectedIndex])
           },
           cancelFn: () => {}
         })
@@ -716,34 +689,13 @@ export const TabsUI = (props: TabsUIProps) => {
     }
   }
 
-  const openSparkleModal = async (instance: any) => {
+  /**
+   * Redirect to AI Assistant with contract context.
+   * AI will collect remaining options (description, Figma, Base Mini App)
+   * through natural conversation, then use dapp_create MCP tool.
+   */
+  const redirectToAIAssistant = async (instance: any) => {
     try {
-      const data = await props.plugin.call('compilerArtefacts', 'getArtefactsByContractName', instance.name)
-
-      const descriptionObj: any = await new Promise((resolve, reject) => {
-        let getFormData: () => Promise<any>
-
-        const modalContent = {
-          id: 'generate-website-ai-banner',
-          title: 'Generate a Dapp UI with AI',
-          message: <AIRequestForm onMount={(fn) => { getFormData = fn }} />,
-          modalType: 'custom',
-          okLabel: 'Generate',
-          cancelLabel: 'Cancel',
-          okFn: async () => {
-            if (getFormData) {
-              const formData = await getFormData()
-              resolve(formData)
-            } else {
-              reject(new Error('Form data not initialized'))
-            }
-          },
-          cancelFn: () => reject(new Error('Canceled')),
-          hideFn: () => reject(new Error('Hide'))
-        }
-        props.plugin.call('notification', 'modal', modalContent)
-      })
-
       const providerObject = await props.plugin.call('blockchain', 'getProviderObject')
       const providerName = providerObject?.name || 'vm-unknown'
       const isVM = providerName.startsWith('vm')
@@ -756,27 +708,17 @@ export const TabsUI = (props: TabsUIProps) => {
         chainId = network?.id?.toString() || providerName
       }
 
-      await props.plugin.call('manager', 'activatePlugin', 'quick-dapp-v2')
-      await props.plugin.call('quick-dapp-v2', 'createDapp', {
-        description: descriptionObj.text,
-        contractName: instance.name,
-        address: instance.address,
-        abi: instance.abi || instance.contractData?.abi,
-        chainId: chainId,
-        compilerData: data,
-        isBaseMiniApp: descriptionObj.isBaseMiniApp,
-        image: descriptionObj.image,
-        figmaUrl: descriptionObj.figmaUrl,
-        figmaToken: descriptionObj.figmaToken,
-        sourceFilePath: tabsState.name
-      })
+      const message = `Create a DApp for my deployed contract:\n` +
+        `- Contract: ${instance.name}\n` +
+        `- Address: ${instance.address}\n` +
+        `- Chain ID: ${chainId}\n` +
+        `Please ask me about the design I want (description, Figma URL if any, Base Mini App option, etc.) and then create the DApp.`
 
-      await props.plugin.call('tabs', 'focus', 'quick-dapp-v2')
-
+      await props.plugin.call('remixaiassistant' as any, 'chatPipe', message)
     } catch (error) {
       if (error.message !== 'Canceled' && error.message !== 'Hide') {
-        console.error('Error generating DApp:', error)
-        props.plugin.call('notification', 'toast', 'Error generating DApp')
+        console.error('Error redirecting to AI Assistant:', error)
+        props.plugin.call('notification', 'toast', 'Error redirecting to AI Assistant')
       }
     }
   }

@@ -124,6 +124,17 @@ export class FileReplacerHandler extends BaseToolHandler {
 
   async execute(args: FileReplacerArgs, plugin: Plugin): Promise<IMCPToolResult> {
     try {
+      // Guard: prevent direct edits to dapp-* workspace files
+      try {
+        const workspace = await plugin.call('filePanel' as any, 'getCurrentWorkspace');
+        if (workspace?.name?.startsWith('dapp-')) {
+          return this.createErrorResult(
+            `Cannot directly edit files in DApp workspace "${workspace.name}". ` +
+            `Use the dapp_update tool instead to modify DApp code safely.`
+          );
+        }
+      } catch (e) { /* workspace check is best-effort */ }
+
       console.log(`[FileReplacerHandler] - Replacing content in file: ${args.path} using regex: ${args.regEx}`);
       const exists = await plugin.call('fileManager', 'exists', args.path)
       if (!exists) {
@@ -198,6 +209,17 @@ export class FileWriteHandler extends BaseToolHandler {
 
   async execute(args: FileWriteArgs, plugin: Plugin): Promise<IMCPToolResult> {
     try {
+      // Guard: prevent direct edits to dapp-* workspace files
+      try {
+        const workspace = await plugin.call('filePanel' as any, 'getCurrentWorkspace');
+        if (workspace?.name?.startsWith('dapp-')) {
+          return this.createErrorResult(
+            `Cannot directly write files in DApp workspace "${workspace.name}". ` +
+            `Use the dapp_update tool instead to modify DApp code safely.`
+          );
+        }
+      } catch (e) { /* workspace check is best-effort */ }
+
       const exists = await plugin.call('fileManager', 'exists', args.path)
       if (exists) {
         const hasUnacceptedChanges = await plugin.call('editor', 'hasUnacceptedChanges')
@@ -288,6 +310,17 @@ export class FileCreateHandler extends BaseToolHandler {
 
   async execute(args: FileCreateArgs, plugin: Plugin): Promise<IMCPToolResult> {
     try {
+      // Guard: prevent direct file creation in dapp-* workspace
+      try {
+        const workspace = await plugin.call('filePanel' as any, 'getCurrentWorkspace');
+        if (workspace?.name?.startsWith('dapp-')) {
+          return this.createErrorResult(
+            `Cannot directly create files in DApp workspace "${workspace.name}". ` +
+            `Use the dapp_update tool instead to modify DApp code safely.`
+          );
+        }
+      } catch (e) { /* workspace check is best-effort */ }
+
       const exists = await plugin.call('fileManager', 'exists', args.path)
       if (exists) {
         return this.createErrorResult(`Path already exists: ${args.path}`);
