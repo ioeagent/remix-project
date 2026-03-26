@@ -2,13 +2,8 @@ import React from 'react'
 import { ViewPlugin } from '@remixproject/engine-web'
 import * as packageJson from '../../../../../package.json'
 import { PluginViewWrapper } from '@remix-ui/helper'
-import { RemixUiQuickDappV2 } from '@remix-ui/quick-dapp-v2'
+import { RemixUiQuickDappV2, DappManager } from '@remix-ui/quick-dapp-v2'
 import { EventEmitter } from 'events'
-
-// DappManager import for direct plugin-level DApp queries.
-// Using relative path because DappManager is an internal utility
-// not exported from @remix-ui/quick-dapp-v2's barrel (index.ts).
-import { DappManager } from '../../../../../libs/remix-ui/quick-dapp-v2/src/lib/utils/DappManager'
 
 const profile = {
   name: 'quick-dapp-v2',
