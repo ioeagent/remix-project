@@ -21,7 +21,7 @@ import { Plugin } from '@remixproject/engine';
  */
 export class DappCreateHandler extends BaseToolHandler {
   name = 'dapp_create';
-  description = 'Create a new DApp frontend from a deployed smart contract. Requires contract address, ABI, chainId, and a description of the desired DApp design. The contract must already be deployed.';
+  description = 'Create a new DApp frontend from a deployed smart contract. IMPORTANT: Before calling this tool, you MUST first: 1) Use get_deployed_contracts to find which contract to use — if multiple contracts are deployed, ask the user which one. 2) Ask the user to describe the desired DApp design. 3) Ask if they have a Figma URL (optional). 4) Ask if they want a Base Mini App (optional). Only call this tool AFTER collecting all preferences from the user.';
   inputSchema = {
     type: 'object',
     properties: {
@@ -61,7 +61,7 @@ export class DappCreateHandler extends BaseToolHandler {
         description: 'Figma Personal Access Token (required if figmaUrl is provided)'
       }
     },
-    required: ['contractName', 'address', 'abi', 'chainId', 'description']
+    required: []
   };
 
   getPermissions(): string[] {
@@ -69,6 +69,12 @@ export class DappCreateHandler extends BaseToolHandler {
   }
 
   validate(args: any): boolean | string {
+    // Phase 1: contractName not provided → will enter discovery mode in execute()
+    if (!args.contractName) {
+      return true;
+    }
+
+    // Phase 2: full creation — validate all required fields
     const required = this.validateRequired(args, ['contractName', 'address', 'abi', 'chainId', 'description']);
     if (required !== true) return required;
 
@@ -96,6 +102,51 @@ export class DappCreateHandler extends BaseToolHandler {
 
   async execute(args: any, plugin: Plugin): Promise<IMCPToolResult> {
     try {
+      // ─── Phase 1: Discovery ───
+      // If contractName is not provided, fetch deployed contracts and
+      // return them so the AI can ask the user which one + collect preferences.
+      if (!args.contractName) {
+        let contracts: any[] = [];
+        try {
+          contracts = await plugin.call('udapp' as any, 'getDeployedContracts') || [];
+        } catch (e) {
+          contracts = [];
+        }
+
+        if (contracts.length === 0) {
+          return this.createSuccessResult({
+            status: 'needs_user_input',
+            message: 'No deployed contracts found.',
+            nextSteps: [
+              '1. Ask the user which Solidity file to compile (or use compile_solidity on the current file)',
+              '2. Deploy the compiled contract using deploy_contract',
+              '3. Then call dapp_create again'
+            ]
+          });
+        }
+
+        const contractSummary = contracts.map((c: any, i: number) => ({
+          index: i + 1,
+          name: c.name || c.contractName || 'Unknown',
+          address: c.address,
+          chainId: c.chainId
+        }));
+
+        return this.createSuccessResult({
+          status: 'needs_user_input',
+          deployedContracts: contractSummary,
+          message: 'Found deployed contracts. Before creating the DApp, you MUST ask the user the following:',
+          requiredQuestions: [
+            '1. Which contract to use? (show the list above and let the user pick)',
+            '2. How should the DApp look? Ask for a design description from the user.',
+            '3. Do they have a Figma URL? (optional) — if yes, also ask for a Figma Personal Access Token.',
+            '4. Should it be a Base Mini App with Coinbase SDK? (optional)'
+          ],
+          instruction: 'Present these questions to the user ONE BY ONE. After collecting all answers, call dapp_create again with ALL fields filled in: contractName, address, abi, chainId, description, and optionally figmaUrl/figmaToken/isBaseMiniApp.'
+        });
+      }
+
+      // ─── Phase 2: Actual Creation ───
       // Activate QuickDapp if not already active
       try {
         await plugin.call('manager' as any, 'activatePlugin', 'quick-dapp-v2');
