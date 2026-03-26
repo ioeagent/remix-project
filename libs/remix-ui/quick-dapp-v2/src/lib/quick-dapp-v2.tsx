@@ -360,11 +360,12 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
         type: 'SET_DAPPS',
         payload: dappsRef.current.filter((d: DappConfig) => d.id !== dapp.id)
       });
-      // Re-focus quick-dapp-v2 tab after a delay since deleteWorkspace
-      // triggers async workspace switching that shifts mainPanel focus
+      // Re-focus quick-dapp-v2 tab immediately + after a short delay
+      // since deleteWorkspace triggers async workspace switching that shifts mainPanel focus
+      try { await plugin.call('tabs', 'focus', 'quick-dapp-v2'); } catch (e) {}
       setTimeout(async () => {
         try { await plugin.call('tabs', 'focus', 'quick-dapp-v2'); } catch (e) {}
-      }, 500);
+      }, 150);
     } catch (e) {
       console.error('[QuickDapp] Failed to delete workspace:', e);
     }
