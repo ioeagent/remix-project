@@ -204,11 +204,6 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
     setEditingServer(null)
   }
 
-  const editServer = (server: IMCPServer) => {
-    setFormData(server)
-    setEditingServer(server)
-  }
-
   const getStatusIcon = (status?: IMCPConnectionStatus) => {
     if (!status) return <span className="text-gray-500 dark:text-gray-400">○</span>
 
@@ -288,15 +283,7 @@ export const IMCPServerManager: React.FC<IMCPServerManagerProps> = ({ plugin }) 
                     )}
                     {!server.isBuiltIn && (
                       <button
-                        className="inline-flex items-center px-3 py-1.5 text-sm rounded-md transition-colors btn-primary"
-                        onClick={() => editServer(server)}
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {!server.isBuiltIn && (
-                      <button
-                        className="inline-flex items-center px-3 py-1.5 text-sm rounded-md transition-colors btn-outline-danger"
+                        className="btn btn-sm btn-outline-danger"
                         onClick={() => {
                           if (confirm(`Delete server "${server.name}"?`)) {
                             deleteServer(server.name)

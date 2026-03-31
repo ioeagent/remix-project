@@ -39,6 +39,7 @@ export interface RemixUiRemixAiAssistantProps {
   onLoadConversation?: (id: string) => void
   onArchiveConversation?: (id: string) => void
   onDeleteConversation?: (id: string) => void
+  onDeleteAllConversations?: () => void
   onToggleHistorySidebar?: () => void
   onSearch?: (query: string) => Promise<ConversationMetadata[]>
 }
@@ -99,6 +100,10 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
   const userHasScrolledRef = useRef(false)
   const lastMessageCountRef = useRef(0)
   const abortControllerRef = useRef<AbortController | null>(null)
+  const clearToolTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const uiToolCallbackRef = useRef<((isExecuting: boolean, toolName?: string, toolArgs?: Record<string, any>) => void) | null>(null)
+  const wasInitializingRef = useRef(props.isInitializing)
+  if (props.isInitializing) wasInitializingRef.current = true
 
   // Audio transcription hook
   const {
@@ -230,18 +235,32 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
     let isRefreshing = false // avoid circular calls
 
     const handleAuthStateChanged = async (authState: any) => {
-      if (authState.isAuthenticated && !isRefreshing) {
-        if (refreshTimeout) {
-          clearTimeout(refreshTimeout)
-        }
+      if (isRefreshing) return
 
-        refreshTimeout = setTimeout(async () => {
-          isRefreshing = true
-          console.log('Auth state changed to authenticated, refreshing model access...')
-          await modelAccess.refreshAccess()
-          isRefreshing = false
-        }, 500)
+      if (refreshTimeout) {
+        clearTimeout(refreshTimeout)
       }
+
+      refreshTimeout = setTimeout(async () => {
+        isRefreshing = true
+        if (authState.isAuthenticated) {
+          console.log('Auth state changed to authenticated, refreshing model access...')
+        } else {
+          console.log('Auth state changed to logged out, refreshing model access and switching to default model...')
+          // Switch back to default model on logout
+          const defaultModel = getDefaultModel()
+          setSelectedModelId(defaultModel.id)
+          setSelectedModel(defaultModel)
+          setAssistantChoice(defaultModel.provider as 'openai' | 'mistralai' | 'anthropic' | 'ollama')
+          try {
+            await props.plugin.call('remixAI', 'setModel', defaultModel.id)
+          } catch (error) {
+            console.warn('Failed to set default model on logout:', error)
+          }
+        }
+        await modelAccess.refreshAccess()
+        isRefreshing = false
+      }, 2000)
     }
 
     props.plugin.on('auth', 'authStateChanged', handleAuthStateChanged)
@@ -321,6 +340,38 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
       abortControllerRef.current.abort()
       setIsStreaming(false)
 
+      if (clearToolTimeoutRef.current) {
+        clearTimeout(clearToolTimeoutRef.current)
+        clearToolTimeoutRef.current = null
+      }
+
+      uiToolCallbackRef.current = null
+      setMessages(prev => {
+        const cleanedMessages = prev
+          .filter(m => {
+            if (m.role !== 'assistant') return true
+            const content = m.content.trim()
+            return content !== '' && !content.startsWith('***')
+          })
+          .map(m => ({
+            ...m,
+            isExecutingTools: false,
+            executingToolName: undefined,
+            executingToolArgs: undefined
+          }))
+
+        return [
+          ...cleanedMessages,
+          {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            content: '**Request stopped by user!**',
+            timestamp: Date.now(),
+            sentiment: 'none'
+          }
+        ]
+      })
+
       // Cancel the backend fetch so the server stops generating
       props.plugin.call('remixAI', 'cancelRequest').catch(() => { /* best-effort */ })
 
@@ -350,15 +401,12 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
         props.plugin.onFirstPromptSent(props.currentConversationId, trimmed)
       }
 
-      // Track tool execution timeout to clear it when content arrives
-      let clearToolTimeout: NodeJS.Timeout | null = null
-
       /** append streaming chunks helper - clears tool status when content arrives */
       const appendAssistantChunk = (msgId: string, chunk: string) => {
         // Clear any pending tool status timeout since content is now displaying
-        if (clearToolTimeout) {
-          clearTimeout(clearToolTimeout)
-          clearToolTimeout = null
+        if (clearToolTimeoutRef.current) {
+          clearTimeout(clearToolTimeoutRef.current)
+          clearToolTimeoutRef.current = null
         }
 
         setMessages(prev =>
@@ -436,9 +484,9 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
           const MIN_DISPLAY_TIME = 30000 // 30 seconds
 
           // Clear any pending timeout
-          if (clearToolTimeout) {
-            clearTimeout(clearToolTimeout)
-            clearToolTimeout = null
+          if (clearToolTimeoutRef.current) {
+            clearTimeout(clearToolTimeoutRef.current)
+            clearToolTimeoutRef.current = null
           }
 
           if (isExecuting) {
@@ -463,7 +511,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
 
               if (remainingTime > 0) {
                 // Not enough time has passed - delay the clearing
-                clearToolTimeout = setTimeout(() => {
+                clearToolTimeoutRef.current = setTimeout(() => {
                   setMessages(prev =>
                     prev.map(m => (m.id === assistantId ? {
                       ...m,
@@ -499,6 +547,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
             }
           }
         }
+        uiToolCallbackRef.current = uiToolCallback
 
         // Attach the callback and abort signal to the response if it's an object
         if (response && typeof response === 'object') {
@@ -602,6 +651,12 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
         console.error('Error sending prompt:', error)
         setIsStreaming(false)
         abortControllerRef.current = null
+
+        if (clearToolTimeoutRef.current) {
+          clearTimeout(clearToolTimeoutRef.current)
+          clearToolTimeoutRef.current = null
+        }
+        uiToolCallbackRef.current = null
 
         // Don't show error message if request was aborted by user
         if (error.name === 'AbortError') {
@@ -958,6 +1013,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
         ref={aiChatRef}
         style={{ overflow: 'hidden' }}
         data-theme={themeTracker && themeTracker?.name.toLowerCase()}
+        data-was-loading={wasInitializingRef.current ? 'true' : undefined}
       >
         {/* Main content area with sidebar and chat */}
         <div className="flex flex-row flex-grow-1" style={{ overflow: 'hidden', minHeight: 0 }}>
@@ -971,6 +1027,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
               onLoadConversation={props.onLoadConversation || (() => {})}
               onArchiveConversation={props.onArchiveConversation || (() => {})}
               onDeleteConversation={props.onDeleteConversation || (() => {})}
+              onDeleteAllConversations={props.onDeleteAllConversations}
               onToggleArchived={() => setShowArchivedConversations(!showArchivedConversations)}
               onClose={props.onToggleHistorySidebar || (() => {})}
               onSearch={props.onSearch}
@@ -1048,6 +1105,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
                     }}
                     onArchiveConversation={props.onArchiveConversation || (() => {})}
                     onDeleteConversation={props.onDeleteConversation || (() => {})}
+                    onDeleteAllConversations={props.onDeleteAllConversations}
                     onToggleArchived={() => setShowArchivedConversations(!showArchivedConversations)}
                     onClose={props.onToggleHistorySidebar || (() => {})}
                     onSearch={props.onSearch}
@@ -1113,6 +1171,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
               availableModels={AVAILABLE_MODELS}
               selectedModel={selectedModel}
               handleModelSelection={handleModelSelection}
+              onLockedModelClick={handleLockedModelClick}
               input={input}
               setInput={setInput}
               isStreaming={isStreaming}
@@ -1155,6 +1214,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
               availableModels={AVAILABLE_MODELS}
               selectedModel={selectedModel}
               handleModelSelection={handleModelSelection}
+              onLockedModelClick={handleLockedModelClick}
               input={input}
               setInput={setInput}
               isStreaming={isStreaming}

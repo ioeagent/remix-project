@@ -253,7 +253,6 @@ export class RightSidePanel extends AbstractPanel {
 
     // Check if no plugin is pinned
     if (!pluginProfile) {
-      this.call('notification', 'toast', 'No plugin pinned on the Right Side Panel.')
       // Ensure the panel is hidden and toggle icon is off
       if (!this.isHidden) {
         this.isHidden = true
@@ -415,7 +414,34 @@ export class RightSidePanel extends AbstractPanel {
   }
 
   updateComponent(state: any) {
-    return <RemixPluginPanel header={<RemixUIPanelHeader sourcePlugin={this} plugins={state.plugins} pinView={this.pinView.bind(this)} unPinView={this.unPinView.bind(this)} togglePanel={this.togglePanel.bind(this)} maximizePanel={this.maximizePanel.bind(this)} isMaximized={this.isMaximized}></RemixUIPanelHeader>} { ...state } />
+    const hasPlugins = state.plugins && Object.keys(state.plugins).length > 0
+    return (
+      <>
+        {!hasPlugins && (
+          <div className="d-flex justify-content-center align-items-center h-100">
+            <div className="fas fa-spinner fa-pulse fa-2x text-secondary" role="status" data-id="right-side-panel-loading-spinner">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <RemixPluginPanel
+          header={
+            !hasPlugins ? null : (
+              <RemixUIPanelHeader
+                sourcePlugin={this}
+                plugins={state.plugins}
+                pinView={this.pinView.bind(this)}
+                unPinView={this.unPinView.bind(this)}
+                togglePanel={this.togglePanel.bind(this)}
+                maximizePanel={this.maximizePanel.bind(this)}
+                isMaximized={this.isMaximized}
+              />
+            )
+          }
+          {...state}
+        />
+      </>
+    )
   }
 
   renderComponent() {

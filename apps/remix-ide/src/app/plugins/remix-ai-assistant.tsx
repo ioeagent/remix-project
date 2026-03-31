@@ -35,7 +35,8 @@ export class RemixAIAssistant extends ViewPlugin {
   conversations: ConversationMetadata[] = []
   showHistorySidebar: boolean = false
   isMaximized: boolean = false
-  private _initializing: boolean = false
+  private _initializing: boolean = true
+  private _initStarted: boolean = false
 
   constructor() {
     super(profile)
@@ -81,9 +82,11 @@ export class RemixAIAssistant extends ViewPlugin {
   }
 
   async initializeStorage() {
+    this._initStarted = true
     this._initializing = true
     this.renderComponent()
     try {
+      //if a timeout is set here the spinner become visible
       // Create IndexedDB backend
       const indexedDBBackend = new IndexedDBChatHistoryBackend()
 
@@ -251,6 +254,26 @@ export class RemixAIAssistant extends ViewPlugin {
     }
   }
 
+  async deleteAllConversations() {
+    if (!this.storageManager) return
+
+    try {
+      const deletePromises = this.conversations.map(conv =>
+        this.storageManager.deleteConversation(conv.id)
+      )
+      await Promise.all(deletePromises)
+
+      trackMatomoEvent(this, { category: 'ai', action: 'remixAI', name: 'delete_all_conversations', isClick: true })
+
+      await this.loadConversations()
+
+      await this.newConversation()
+      trackMatomoEvent(this, { category: 'ai', action: 'remixAI', name: 'create_new_conversation', isClick: false })
+    } catch (error) {
+      console.error('Failed to delete all conversations:', error)
+    }
+  }
+
   onFirstPromptSent(conversationId: string, prompt: string) {
     if (!conversationId) return
 
@@ -347,6 +370,11 @@ export class RemixAIAssistant extends ViewPlugin {
 
   setDispatch(dispatch: React.Dispatch<any>) {
     this.dispatch = dispatch
+    // Safety: if React wired up but initializeStorage was never called
+    // (onActivation not triggered), clear the spinner so it doesn't hang.
+    if (this._initializing && !this._initStarted) {
+      this._initializing = false
+    }
     this.renderComponent()
   }
 
@@ -441,6 +469,7 @@ export class RemixAIAssistant extends ViewPlugin {
         onLoadConversation={this.loadConversation.bind(this)}
         onArchiveConversation={this.archiveConversation.bind(this)}
         onDeleteConversation={this.deleteConversation.bind(this)}
+        onDeleteAllConversations={this.deleteAllConversations.bind(this)}
         onToggleHistorySidebar={this.toggleHistorySidebar.bind(this)}
         onSearch={this.searchConversations.bind(this)}
       />

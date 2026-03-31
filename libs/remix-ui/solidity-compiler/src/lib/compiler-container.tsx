@@ -540,7 +540,8 @@ export const CompilerContainer = (props: CompilerContainerProps) => {
     // "Uncaught RangeError: Maximum call stack size exceeded" error on Chromium,
     // resort to non-worker version in that case.
     if (selectedVersion === 'builtin') selectedVersion = state.defaultVersion
-    if (selectedVersion !== 'builtin' && (canUseWorker(selectedVersion) || platform === appPlatformTypes.desktop)) {
+    const useWorker = selectedVersion !== 'builtin' && (canUseWorker(selectedVersion) || platform === appPlatformTypes.desktop)
+    if (useWorker) {
       compileTabLogic.compiler.loadVersion(true, url)
     } else {
       compileTabLogic.compiler.loadVersion(false, url)
@@ -1060,10 +1061,10 @@ export const CompilerContainer = (props: CompilerContainerProps) => {
                       pointerEvents: state.useFileConfiguration ? 'none' : 'auto'
                     }}
                   >
-                    <option data-id={state.language === 'Solidity' ? 'selected' : ''} value="Solidity">
+                    <option data-sol-lang="solidity" data-id={state.language === 'Solidity' ? 'selected' : ''} value="Solidity">
                       Solidity
                     </option>
-                    <option data-id={state.language === 'Yul' ? 'selected' : ''} value="Yul">
+                    <option data-sol-lang="yul" data-id={state.language === 'Yul' ? 'selected' : ''} value="Yul">
                       Yul
                     </option>
                   </select>
