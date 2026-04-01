@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { DappConfig } from '../types/dapp';
+import { DappConfig, GenerationProgress } from '../types';
 
 interface DappCardProps {
   dapp: DappConfig;
   isProcessing?: boolean;
+  generationProgress?: GenerationProgress;
   onClick: () => void;
   onDelete: () => void;
 }
@@ -24,12 +25,27 @@ const timeAgo = (date: number) => {
   return Math.floor(seconds) + " seconds ago";
 };
 
-const DappCard: React.FC<DappCardProps> = ({ dapp, isProcessing, onClick, onDelete }) => {
+const DappCard: React.FC<DappCardProps> = ({ dapp, isProcessing, generationProgress, onClick, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
   const statusColor = dapp.status === 'deployed' ? 'text-success' : 'text-warning';
   const statusIcon = dapp.status === 'deployed' ? 'fa-check-circle' : 'fa-pen-square';
 
   const loadingText = dapp.status === 'creating' ? 'AI Creating...' : 'AI Updating...';
+  const progress = generationProgress;
+  const generatedFiles = progress?.generatedFiles || [];
+  const currentFile = progress?.filename;
+
+  const statusText = progress?.status === 'generating_file' && currentFile
+    ? `Generating ${currentFile}...`
+    : progress?.status === 'validating'
+      ? 'Validating...'
+      : progress?.status === 'parsing'
+        ? 'Parsing files...'
+        : progress?.status === 'calling_llm'
+          ? 'Calling AI model...'
+          : progress?.status === 'preparing'
+            ? 'Preparing...'
+            : loadingText;
 
   return (
     <div className="col-12 col-md-6 col-xl-4 mb-4 qd-card-col">
@@ -49,7 +65,17 @@ const DappCard: React.FC<DappCardProps> = ({ dapp, isProcessing, onClick, onDele
           <div className="absolute w-full h-full flex flex-col items-center justify-center bg-white bg-opacity-75"
             style={{ zIndex: 10, backdropFilter: 'blur(1px)' }}>
             <div className="spinner-border text-primary mb-2" role="status"></div>
-            <span className="text-primary font-bold small">{loadingText}</span>
+            <span className="text-primary font-bold small">{statusText}</span>
+            {generatedFiles.length > 0 && (
+              <div className="text-start mt-1 qd-progress-log">
+                {generatedFiles.map((f) => (
+                  <div key={f} className="qd-progress-log__done">{f}</div>
+                ))}
+                {progress?.status === 'generating_file' && currentFile && !generatedFiles.includes(currentFile) && (
+                  <div className="qd-progress-log__write">{currentFile}</div>
+                )}
+              </div>
+            )}
           </div>
         )}
         <div
