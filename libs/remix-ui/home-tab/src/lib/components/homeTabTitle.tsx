@@ -109,7 +109,7 @@ function HomeTabTitle() {
         
         {/* Description section */}
         <div className={`${isDark ? 'text-white' : 'text-black'} mb-3 text-xs`}>
-          <FormattedMessage id="home.projectTemplates" /> <span className="text-primary"><FormattedMessage id="home.projectTemplates2" /></span>
+          <FormattedMessage id="home.projectTemplates" /> <span className="text-blue-600 dark:text-blue-400"><FormattedMessage id="home.projectTemplates2" /></span>
         </div>
         
         {/* Social media buttons */}
@@ -122,7 +122,7 @@ function HomeTabTitle() {
                 tooltipId="overlay-tooltip"
                 tooltipClasses="whitespace-nowrap"
                 tooltipText={button.textToolip}
-                tooltipTextClasses="border bg-light text-dark p-1 pr-3"
+                tooltipTextClasses="border bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-1 pr-3"
               >
                 <button
                   key={index}
@@ -135,9 +135,9 @@ function HomeTabTitle() {
                       isClick: true
                     })
                   }}
-                  className={button.customIcon 
-                    ? `border-0 h-full px-1 bg-transparent text-gray-700 dark:text-gray-300 flex items-center hover:text-primary transition-colors` 
-                    : `border-0 h-full px-1 bg-transparent fab ${button.iconClass} text-gray-700 dark:text-gray-300 hover:text-primary transition-colors`}
+                  className={button.customIcon
+                    ? `border-0 h-full px-1 bg-transparent text-gray-700 dark:text-gray-300 flex items-center hover:text-blue-600 dark:hover:text-blue-400 transition-colors`
+                    : `border-0 h-full px-1 bg-transparent fab ${button.iconClass} text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors`}
                 >
                   {button.customIcon}
                 </button>
@@ -148,10 +148,10 @@ function HomeTabTitle() {
         
         {/* Documentation and website buttons */}
         <div className="flex flex-row flex-wrap gap-3 justify-between">
-          <a 
-            className="inline-block px-3 py-2 bg-secondary text-white no-underline rounded text-xs min-w-[125px] text-center hover:bg-secondary/90 transition-colors" 
-            href="https://remix-ide.readthedocs.io/en/latest" 
-            target="_blank" 
+          <a
+            className="inline-block px-3 py-2 bg-gray-600 dark:bg-gray-500 text-white no-underline rounded text-xs min-w-[125px] text-center hover:bg-gray-700 dark:hover:bg-gray-400 transition-colors"
+            href="https://remix-ide.readthedocs.io/en/latest"
+            target="_blank"
             onClick={() => trackMatomoEvent({
               category: 'hometab',
               action: 'titleCard',
@@ -161,10 +161,10 @@ function HomeTabTitle() {
           >
             <FormattedMessage id="home.documentation" />
           </a>
-          <a 
-            className="inline-block px-3 py-2 bg-secondary text-white no-underline rounded text-xs min-w-[125px] text-center hover:bg-secondary/90 transition-colors" 
-            href="https://remix.live" 
-            target="_blank" 
+          <a
+            className="inline-block px-3 py-2 bg-gray-600 dark:bg-gray-500 text-white no-underline rounded text-xs min-w-[125px] text-center hover:bg-gray-700 dark:hover:bg-gray-400 transition-colors"
+            href="https://remix.live"
+            target="_blank"
             onClick={() => trackMatomoEvent({
               category: 'hometab',
               action: 'titleCard',
