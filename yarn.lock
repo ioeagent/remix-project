@@ -14282,7 +14282,7 @@ circom_runtime@0.1.22:
 
 "circom_wasm@https://github.com/remix-project-org/circom_wasm.git":
   version "0.2.1"
-  resolved "git+ssh://git@github.com/remix-project-org/circom_wasm.git#a71f780218a9ef40b4319956d4e8c02688ef3d62"
+  resolved "https://github.com/remix-project-org/circom_wasm.git#a71f780218a9ef40b4319956d4e8c02688ef3d62"
 
 circular-json@^0.3.0:
   version "0.3.3"
