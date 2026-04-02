@@ -37,8 +37,8 @@ export const ToastTrigger = (props: ToasterProps) => {
       if (typeof props.message === 'string') {
         const toastId = toast.custom(
           () => (
-            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-theme rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+              <div className="flex items-center justify-between p-4 border-b border-theme">
                 {showLoadingIcon && (
                   <span className="inline-block w-4 h-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-none mr-2" role="status">
                     <span className="sr-only">Loading...</span>
@@ -80,8 +80,8 @@ export const ToastTrigger = (props: ToasterProps) => {
         // For JSX elements, use toast.custom
         const toastId = toast.custom(
           () => (
-            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-theme rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+              <div className="flex items-center justify-between p-4 border-b border-theme">
                 {showLoadingIcon && (
                   <span className="inline-block w-4 h-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-none mr-2" role="status">
                     <span className="sr-only">Loading...</span>
@@ -168,8 +168,8 @@ export const Toaster = (props: ToasterProps) => {
 
         toastId = toast.custom(
           () => (
-            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-theme rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+              <div className="flex items-center justify-between p-4 border-b border-theme">
                 {showLoadingIcon && (
                   <span className="inline-block w-4 h-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-none mr-2" role="status">
                     <span className="sr-only">Loading...</span>
@@ -207,8 +207,8 @@ export const Toaster = (props: ToasterProps) => {
         // For JSX elements, use toast.custom
         toastId = toast.custom(
           () => (
-            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div data-shared="tooltipPopup" className="max-w-xs bg-white dark:bg-gray-800 border border-theme rounded-xl shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+              <div className="flex items-center justify-between p-4 border-b border-theme">
                 {showLoadingIcon && (
                   <span className="inline-block w-4 h-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-none mr-2" role="status">
                     <span className="sr-only">Loading...</span>

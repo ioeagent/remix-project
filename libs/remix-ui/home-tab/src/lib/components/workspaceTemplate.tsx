@@ -17,7 +17,7 @@ function WorkspaceTemplate({ gsID, workspaceTitle, description, projectLogo, cal
   return (
     <div className="flex remixui_home_workspaceTemplate">
       <button
-        className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 flex flex-col whitespace-nowrap justify-center mr-2 remixui_home_workspaceTemplate rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        className="px-2 py-1 bg-white dark:bg-gray-800 border border-theme flex flex-col whitespace-nowrap justify-center mr-2 remixui_home_workspaceTemplate rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         data-id={'landingPageStart' + gsID}
         onClick={() => callback()}
       >

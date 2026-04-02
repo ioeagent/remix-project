@@ -145,8 +145,8 @@ function HomeTabFeaturedPlugins({ plugin }: HomeTabFeaturedPluginsProps) {
 
   function PluginCard(pluginInfo: PluginInfo) {
     return (
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col">
-        <div className="flex items-center py-3 px-4 justify-between border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 border border-theme rounded-lg flex flex-col">
+        <div className="flex items-center py-3 px-4 justify-between border-b border-theme">
           <div className='flex items-center gap-2'>
             <RenderIf condition={loadingPlugins.includes(pluginInfo.pluginId)}>
               <i className="fad fa-spinner fa-spin"></i>
@@ -166,7 +166,7 @@ function HomeTabFeaturedPlugins({ plugin }: HomeTabFeaturedPluginsProps) {
             </div>
             <div className="text-sm text-gray-900 dark:text-gray-100 mb-4">{pluginInfo.description}</div>
           </div>
-          <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm w-full border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium" onClick={async () => await handleFeaturedPluginActionClick(pluginInfo)}>
+          <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm w-full border border-theme rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium" onClick={async () => await handleFeaturedPluginActionClick(pluginInfo)}>
             <i className="fa-solid fa-book mr-2"></i>{pluginInfo.action.label}
           </button>
         </div>

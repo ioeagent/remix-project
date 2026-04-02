@@ -51,7 +51,7 @@ const SelectDropdown = ({ value, options, name, dispatch }: SelectDropdownProps)
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        className="w-full px-3 py-2 text-left bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+        className="w-full px-3 py-2 text-left bg-white dark:bg-gray-800 border border-theme rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
         data-id={`settingsTabDropdownToggle${name}`}
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -64,7 +64,7 @@ const SelectDropdown = ({ value, options, name, dispatch }: SelectDropdownProps)
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg" data-id="custom-dropdown-items">
+        <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-theme rounded-md shadow-lg" data-id="custom-dropdown-items">
           <div className="py-1 max-h-60 overflow-auto">
             {options.map((option) => (
               <button

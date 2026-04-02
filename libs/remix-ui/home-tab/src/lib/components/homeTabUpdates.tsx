@@ -130,7 +130,7 @@ function HomeTabUpdates({ plugin }: HomeTabUpdatesProps) {
     const themeColors = getThemeColors(updateInfo.theme)
 
     return (
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg h-full flex flex-col shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-white dark:bg-gray-800 border border-theme rounded-lg h-full flex flex-col shadow-sm hover:shadow-md transition-shadow">
         <div className="flex-1">
           <div className="flex items-center p-4 overflow-hidden justify-between h-24 bg-gray-50 dark:bg-gray-700/50">
             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border bg-transparent ${themeColors.text} ${themeColors.border}`}>{updateInfo.badge}</span>
@@ -156,7 +156,7 @@ function HomeTabUpdates({ plugin }: HomeTabUpdatesProps) {
           </div>
         </div>
         <div className="px-4 pb-4">
-          <button className={`w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium transition-colors ${themeColors.buttonText}`} onClick={() => handleUpdatesActionClick(updateInfo)}>
+          <button className={`w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border border-theme rounded-md text-sm font-medium transition-colors ${themeColors.buttonText}`} onClick={() => handleUpdatesActionClick(updateInfo)}>
             {updateInfo.action.label}
           </button>
         </div>

@@ -246,7 +246,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Username</label>
               <input
                 type="text"
-                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 dark:disabled:bg-gray-600 disabled:text-gray-500"
+                className="w-full px-3 py-2 text-sm border border-theme rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 dark:disabled:bg-gray-600 disabled:text-gray-500"
                 value={editedProfile?.username || ''}
                 onChange={(e) => handleFieldChange('username', e.target.value)}
                 placeholder={isEditable ? "Enter username" : (!editedProfile?.username || editedProfile.username === '') ? "Not available" : ""}
@@ -259,7 +259,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ plugin }) => {
               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Email</label>
               <input
                 type="email"
-                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 dark:disabled:bg-gray-600 disabled:text-gray-500"
+                className="w-full px-3 py-2 text-sm border border-theme rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 dark:disabled:bg-gray-600 disabled:text-gray-500"
                 value={editedProfile?.email || ''}
                 onChange={(e) => handleFieldChange('email', e.target.value)}
                 placeholder={isEditable ? "Enter email" : (!editedProfile?.email || editedProfile.email === '') ? "Not available" : ""}

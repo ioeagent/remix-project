@@ -44,9 +44,9 @@ function HomeTabFileElectron({ plugin }: HomeTabFileProps) {
       <label style={{ fontSize: "0.8rem" }} className="pt-2"><FormattedMessage id='home.loadFrom' /></label>
       <div className="flex">
 
-        <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 mr-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromTemplate" onClick={async () => await loadTemplate()}><FormattedMessage id="home.projectTemplate" /></button>
-        <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 mr-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGit" onClick={async () => await clone()}><FormattedMessage id="home.cloneGitRepository" /></button>
-        <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 mr-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGist" onClick={() => importFromGist()}><FormattedMessage id="home.gist" /></button>
+        <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme mr-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromTemplate" onClick={async () => await loadTemplate()}><FormattedMessage id="home.projectTemplate" /></button>
+        <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme mr-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGit" onClick={async () => await clone()}><FormattedMessage id="home.cloneGitRepository" /></button>
+        <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme mr-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGist" onClick={() => importFromGist()}><FormattedMessage id="home.gist" /></button>
       </div>
     </div>
   )

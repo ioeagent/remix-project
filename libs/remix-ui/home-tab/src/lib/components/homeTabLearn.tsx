@@ -87,7 +87,7 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
       </div>
       <div className="flex flex-col">
         <label
-          className="flex flex-col px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+          className="flex flex-col px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
           onClick={() =>
             setState((prevState) => {
               return { ...prevState, visibleTutorial: VisibleTutorial.Basics }
@@ -109,7 +109,7 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
           )}
         </label>
         <label
-          className="flex flex-col px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+          className="flex flex-col px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
           onClick={() =>
             setState((prevState) => {
               return {
@@ -134,7 +134,7 @@ function HomeTabLearn({ plugin }: HomeTabLearnProps) {
           )}
         </label>
         <label
-          className="flex flex-col px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+          className="flex flex-col px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
           onClick={() =>
             setState((prevState) => {
               return { ...prevState, visibleTutorial: VisibleTutorial.Advanced }

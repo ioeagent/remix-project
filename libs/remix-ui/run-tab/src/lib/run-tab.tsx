@@ -185,9 +185,9 @@ export function RunTabUI(props: RunTabProps) {
                 <input
                   type="number"
                   defaultValue="0"
-                  className="flex-1 bg-gray-600 border border-gray-500 rounded-l-md px-3 py-1.5 text-white text-sm"
+                  className="flex-1 bg-gray-600 border border-theme rounded-l-md px-3 py-1.5 text-white text-sm"
                 />
-                <select className="bg-gray-600 border border-l-0 border-gray-500 rounded-r-md px-2 py-1.5 text-white text-sm">
+                <select className="bg-gray-600 border border-l-0 border-theme rounded-r-md px-2 py-1.5 text-white text-sm">
                   <option>wei</option>
                 </select>
               </div>
@@ -201,7 +201,7 @@ export function RunTabUI(props: RunTabProps) {
                 <input
                   type="number"
                   defaultValue="0"
-                  className="bg-gray-600 border border-gray-500 rounded-md px-3 py-1.5 text-white text-sm w-20"
+                  className="bg-gray-600 border border-theme rounded-md px-3 py-1.5 text-white text-sm w-20"
                 />
               </div>
             </div>

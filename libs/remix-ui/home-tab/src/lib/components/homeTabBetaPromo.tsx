@@ -49,7 +49,7 @@ export default function HomeTabBetaPromo({ plugin }: HomeTabBetaPromoProps) {
 
   return (
     <div
-      className="bg-white dark:bg-gray-800 mb-3 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 relative"
+      className="bg-white dark:bg-gray-800 mb-3 rounded-lg overflow-hidden border border-theme relative"
       style={{ cursor: 'pointer' }}
       onClick={handleJoin}
       data-id="beta-promo-banner"

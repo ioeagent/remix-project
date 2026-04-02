@@ -961,7 +961,7 @@ export function Workspace() {
     return (
       <div className='flex flex-col'>
         <label><FormattedMessage id="filePanel.name" /></label>
-        <input type="text" data-id="modalDialogCustomPromptTextRename" defaultValue={workspaceName || currentWorkspace} ref={workspaceRenameInput} className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
+        <input type="text" data-id="modalDialogCustomPromptTextRename" defaultValue={workspaceName || currentWorkspace} ref={workspaceRenameInput} className="block w-full px-3 py-2 border border-theme rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
       </div>
     )
   }

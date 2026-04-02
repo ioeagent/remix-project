@@ -102,8 +102,8 @@ function HomeTabRecentWorkspaces({ plugin }: HomeTabFileProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border-0 border-gray-200 dark:border-gray-700 shadow-sm" id="hTFileSection">
-      <div className="p-1">
+    <div className="flex flex-col my-5" id="hTFileSection">
+      <div className="flex flex-col mb-5">
         <h3 className="text-base font-semibold mb-4 text-gray-900 dark:text-white">
           Recent Workspaces
         </h3>

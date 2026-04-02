@@ -227,7 +227,7 @@ export const SettingsSectionUI: React.FC<SettingsSectionUIProps> = ({ plugin, se
                                 name={toggleOption.name}
                                 data-id={`settingsTab${toggleOption.name}`}
                                 type={toggleOption.type}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                                className="w-full px-3 py-2 border border-theme rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                                 onChange={(e) => handleFormUIData(option.name, toggleOption.name, e.target.value)}
                                 defaultValue={inputValue}
                                 placeholder={intl.formatMessage({ id: `settings.${toggleOption.name}` })}

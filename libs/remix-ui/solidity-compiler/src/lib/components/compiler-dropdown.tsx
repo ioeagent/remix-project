@@ -59,7 +59,7 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
       <button
         disabled={props.disabled}
         id="dropdown-custom-components"
-        className="w-full px-3 py-2 text-left bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-3 py-2 text-left bg-white dark:bg-gray-800 border border-theme rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() => !props.disabled && setIsOpen(!isOpen)}
         style={{
           opacity: props.disabled ? 0.5 : 1,
@@ -78,7 +78,7 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-auto" data-id="custom-dropdown-items">
+        <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-theme rounded-md shadow-lg max-h-60 overflow-auto" data-id="custom-dropdown-items">
           <div className="py-1">
             {allversions.length <= 0 && (
               <button

@@ -86,7 +86,7 @@ function HomeTabTitle() {
   }
 
   return (
-    <div className="relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 overflow-hidden shadow-sm">
+    <div className="relative bg-white dark:bg-gray-800 rounded-lg border border-theme p-6 overflow-hidden shadow-sm">
       <img src="assets/img/remix-link-illustration.svg" className="home-tab-banner absolute -top-48 left-32 w-96 h-96 z-0 opacity-10" alt="Remix Logo" />
       <div className="absolute inset-0 bg-white/90 dark:bg-gray-800/90 z-10"></div>
       <div className="relative z-20">

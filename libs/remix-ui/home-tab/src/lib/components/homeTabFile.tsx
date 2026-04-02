@@ -201,7 +201,7 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
           </label>
           <div className="flex flex-row flex-wrap">
             <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.newFileTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3">
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="homeTabNewFile" style={{ width: 'fit-content' }} onClick={async () => {
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-theme my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="homeTabNewFile" style={{ width: 'fit-content' }} onClick={async () => {
                 trackMatomoEvent({
                   category: 'hometab',
                   action: 'filesSection',
@@ -217,7 +217,7 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
             </CustomTooltip>
             <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.openFileTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3">
               <span>
-                <label className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer inline-block" style={{ width: 'fit-content' }} htmlFor="openFileInput">
+                <label className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-theme my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer inline-block" style={{ width: 'fit-content' }} htmlFor="openFileInput">
                   <i className="far fa-upload pl-1 pr-2"></i>
                   <FormattedMessage id="home.openFile" />
                 </label>
@@ -235,14 +235,14 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
             </CustomTooltip>
             <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.gistTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3"
             >
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGistButton" onClick={() => importFromGist()}>
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-theme my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGistButton" onClick={() => importFromGist()}>
                 <i className="fab fa-github pl-1 pr-2"></i>
                 <FormattedMessage id="home.gist" />
               </button>
             </CustomTooltip>
             <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.gitCloneTooltip" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3"
             >
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGitHubButton" onClick={async () => {
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap mr-2 border border-theme my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" data-id="landingPageImportFromGitHubButton" onClick={async () => {
                 trackMatomoEvent({
                   category: 'hometab',
                   action: 'filesSection',
@@ -256,7 +256,7 @@ function HomeTabFile({ plugin }: HomeTabFileProps) {
               </button>
             </CustomTooltip>
             <CustomTooltip placement={'top'} tooltipId="overlay-tooltip" tooltipClasses="whitespace-nowrap" tooltipText={<FormattedMessage id="home.connectToLocalhost" />} tooltipTextClasses="border bg-light text-dark p-1 pr-3">
-              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap border border-gray-300 dark:border-gray-600 my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => connectToLocalhost()}>
+              <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 whitespace-nowrap border border-theme my-1 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onClick={() => connectToLocalhost()}>
                 <i className="fa-regular fa-desktop pr-2"></i>
                 <FormattedMessage id="home.accessFileSystem" />
               </button>

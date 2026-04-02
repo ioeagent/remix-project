@@ -189,7 +189,7 @@ export const ProxyAddressToggle = React.forwardRef(
             e.preventDefault()
             onChange(e)
           }}
-          className="udapp_input w-full px-3 py-2 text-sm leading-tight border border-gray-300 dark:border-gray-600 rounded-md shadow appearance-none focus:outline-none focus:shadow-outline bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          className="udapp_input w-full px-3 py-2 text-sm leading-tight border border-theme rounded-md shadow appearance-none focus:outline-none focus:shadow-outline bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           value={address}
           placeholder={intl.formatMessage({ id: 'udapp.enterProxyAddress' })}
           style={{ backgroundColor: 'var(--bs-body-bg)', color: 'var(--theme-text-color, white)', width: '100%' }}

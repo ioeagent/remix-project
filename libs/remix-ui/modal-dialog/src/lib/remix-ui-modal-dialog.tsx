@@ -98,7 +98,7 @@ export const ModalDialog = (props: ModalDialogProps) => {
             modalKeyEvent(keyCode)
           }}
         >
-          <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-theme">
             <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" data-id={`${props.id}ModalDialogModalTitle-react`}>
               {props.title && props.title}
             </h3>

@@ -57,7 +57,7 @@ export function ValueUI(props: ValueProps) {
             min="0"
             pattern="^[0-9]"
             step="1"
-            className="col py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            className="col py-2 border border-theme rounded-l-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
             id="value"
             data-id="dandrValue"
             onChange={validateValue}
@@ -68,7 +68,7 @@ export function ValueUI(props: ValueProps) {
           <select
             name="unit"
             value={props.sendUnit}
-            className="px-3 py-2 border border-l-0 border-gray-300 dark:border-gray-600 rounded-r-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            className="px-3 py-2 border border-l-0 border-theme rounded-r-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
             id="unit"
             onChange={(e) => {
               props.setUnit(e.target.value as 'ether' | 'finney' | 'gwei' | 'wei')

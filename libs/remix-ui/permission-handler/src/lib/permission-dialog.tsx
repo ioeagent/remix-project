@@ -109,7 +109,7 @@ const PermissionHandlerDialog = (props: PermissionHandlerProps) => {
             </label>
           </div>
         }
-        <button className="inline-flex items-center px-3 py-1 text-sm bg-secondary border border-gray-300 rounded text-white hover:bg-secondary/80 transition-colors" onClick={reset}>
+        <button className="btn btn-secondary btn-sm" onClick={reset}>
           <FormattedMessage id="permissionHandler.resetAllPermissions" />
         </button>
       </article>

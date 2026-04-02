@@ -181,8 +181,8 @@ function HomeTabGetStarted({ plugin }: HomeTabGetStartedProps) {
                     className={index === 0 ?
                       'px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white border border-blue-600 dark:border-blue-500 whitespace-nowrap mr-3 mb-3 rounded-md hover:bg-blue-700 dark:hover:bg-blue-400 transition-colors' :
                       index === workspaceTemplates.length - 1 ?
-                        'px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 whitespace-nowrap mr-2 mb-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors' :
-                        'px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 whitespace-nowrap mr-3 mb-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
+                        'px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme whitespace-nowrap mr-2 mb-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors' :
+                        'px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-theme whitespace-nowrap mr-3 mb-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
                     }
                     onClick={async (e) => {
                       createWorkspace(template.templateName)

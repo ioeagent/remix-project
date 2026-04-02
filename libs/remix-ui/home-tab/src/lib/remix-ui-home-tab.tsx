@@ -136,11 +136,9 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
             
             {/* Right column - Updates and plugins */}
             <div className="flex-1 lg:max-w-[40%] xl:max-w-[50%] space-y-6">
-              <div className="bg-white dark:bg-gray-800 rounded-lg border-0 border-gray-200 dark:border-gray-700 shadow-sm" style={{ height: isTerminalHidden ? '85vh' : '61vh' }}>
-                <div className="h-full overflow-y-auto">
-                  <HomeTabUpdates plugin={plugin} />
-                  <HomeTabFeaturedPlugins plugin={plugin} />
-                </div>
+              <div className="h-full overflow-y-auto" style={{ height: isTerminalHidden ? '85vh' : '61vh' }}>
+                <HomeTabUpdates plugin={plugin} />
+                <HomeTabFeaturedPlugins plugin={plugin} />
               </div>
             </div>
           </div>

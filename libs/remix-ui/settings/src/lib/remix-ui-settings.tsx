@@ -415,8 +415,8 @@ export const RemixUiSettings = (props: RemixUiSettingsProps) => {
             <h3 className={`font-semibold ${state.themeQuality.name === 'dark' ? 'text-white' : 'text-black'}`} style={{ fontSize: '1.5rem' }}><FormattedMessage id="settings.displayName" /></h3>
           </div>
           <div className='flex flex-grow remix-settings-search' style={{ maxWidth: '53.5em', minHeight: '4em' }}>
-            <span className="flex items-center px-3 py-2 border border-r-0 border-gray-300 dark:border-gray-600 rounded-l-md bg-white dark:bg-gray-800"><i className="fa fa-search text-gray-500 dark:text-gray-400"></i></span>
-            <input type="text" className="col py-2 border border-l-0 border-gray-300 dark:border-gray-600 rounded-r-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder={intl.formatMessage({ id: 'settings.searchSettings' })} style={{ minWidth: '21.5em' }} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <span className="flex items-center px-3 py-2 border border-r-0 border-theme rounded-l-md bg-white dark:bg-gray-800"><i className="fa fa-search text-gray-500 dark:text-gray-400"></i></span>
+            <input type="text" className="col py-2 border border-l-0 border-theme rounded-r-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder={intl.formatMessage({ id: 'settings.searchSettings' })} style={{ minWidth: '21.5em' }} value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </div>
         {filteredSections.length === 0 ? <div className="text-blue-500 text-center cursor-pointer"><FormattedMessage id="settings.noMatchFound" /></div> :
@@ -429,7 +429,7 @@ export const RemixUiSettings = (props: RemixUiSettingsProps) => {
               <ul className="list-none p-0">
                 {filteredSections.map((section, index) => (
                   <li
-                    className={`${index !== filteredSections.length - 1 ? 'border-b border-gray-200 dark:border-gray-700' : ''} px-0 py-3 ${selected === section.key ? state.themeQuality.name === 'dark' ? 'text-white' : 'text-black' : 'text-gray-500 dark:text-gray-400'}`}
+                    className={`${index !== filteredSections.length - 1 ? 'border-b border-theme' : ''} px-0 py-3 ${selected === section.key ? state.themeQuality.name === 'dark' ? 'text-white' : 'text-black' : 'text-gray-500 dark:text-gray-400'}`}
                     key={index}
                     style={{ cursor: 'pointer' }}
                   >
