@@ -48,6 +48,35 @@
   box-shadow: none;
 }
 
+/* Workspace dropdown toggle - position caret on right side */
+button.workspaceDropdown > div {
+  position: relative !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+button.workspaceDropdown > div > div:last-child {
+  position: absolute !important;
+  right: 0.5rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  padding-right: 0.25rem !important;
+}
+
+/* Ensure dropdown menu appears from bottom of button */
+#workspacesSelect {
+  position: relative !important;
+}
+
+#workspacesSelect > .dropdown-menu {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  margin-top: 0.25rem !important;
+}
+
 .custom-form-control {
   /* TODO: Convert block to CSS */
   /* TODO: Convert w-full to CSS */

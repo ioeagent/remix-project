@@ -235,19 +235,19 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
       <Dropdown
         as={ButtonGroup}
         style={{ minWidth: '70%' }}
-        className="flex rounded-md"
+        className="d-flex rounded-md"
         id="workspacesSelect"
         data-id="workspacesSelect"
       >
         <Dropdown.Toggle
           as={CustomToggle}
-          className="inline-flex items-center px-3 py-1.5 text-sm rounded-md transition-colors w-full border relative"
+          className="btn btn-sm w-100 border position-relative"
           variant="secondary"
           data-id="workspacesMenuDropdown"
         >
           <div
             data-id="workspacesSelect-togglerText"
-            className="truncate absolute start-50 translate-middle"
+            className="text-truncate position-absolute start-50 translate-middle"
           >
             {togglerText}
           </div>
@@ -271,27 +271,29 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
       show={dropdownOpen}
       onToggle={(open) => { if (isDropdownLocked && open) return; setDropdownOpen(open) }}
       style={{ minWidth: '70%' }}
-      className="flex rounded-md"
+      className="d-flex rounded-md"
       id="workspacesSelect"
       data-id="workspacesSelect"
       data-disabled={isDropdownLocked ? 'true' : undefined}
+      drop="down"
+      align="start"
     >
       <Dropdown.Toggle
         as={CustomToggle}
-        className="inline-flex items-center px-3 py-1.5 text-sm rounded-md transition-colors w-full border relative"
+        className="btn btn-sm w-100 border position-relative workspaceDropdown"
         variant="secondary"
         data-id="workspacesMenuDropdown"
         icon={selectedWorkspace && selectedWorkspace.isGitRepo ? 'fas fa-code-branch' : null}
       >
         <div
           data-id="workspacesSelect-togglerText"
-          className="truncate absolute start-50 translate-middle flex items-center"
+          className="text-truncate position-absolute start-50 translate-middle d-flex align-items-center"
         >
           {isCloudMode && (() => {
             const props = getSyncIconProps(activeSyncStatus)
             return (
               <i
-                className={`${props.icon}${props.animate ? ' ' + props.animate : ''} mr-2`}
+                className={`${props.icon}${props.animate ? ' ' + props.animate : ''} me-2`}
                 style={{ color: props.color, fontSize: '0.8em' }}
                 title={props.title}
               />
@@ -299,7 +301,7 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
           })()}
           {cloudLoading ? 'Loading workspaces...' : togglerText}
           {!isCloudMode && selectedWorkspace && selectedWorkspace.remoteId && (
-            <CloudSyncStatusIcon remoteId={selectedWorkspace.remoteId} className="ml-2" />
+            <CloudSyncStatusIcon remoteId={selectedWorkspace.remoteId} className="ms-2" />
           )}
         </div>
       </Dropdown.Toggle>
@@ -307,7 +309,6 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
         style={{ minWidth: '100%' }}
         className="px-2"
         data-id="topbar-custom-dropdown-items"
-        show={showMain}
         as={"div"}
       >
         <div id="scrollable-section" className="overflow-y-scroll" style={{ maxHeight: '160px', opacity: isDropdownLocked ? 0.5 : 1, pointerEvents: isDropdownLocked ? 'none' : 'auto' }}>
@@ -466,12 +467,12 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
               color: 'inherit',
             }}
           >
-            <button className="w-full inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors font-weight-light no-underline mb-2 rounded-lg" onClick={(e) => {
+            <button className="w-100 btn btn-primary font-weight-light text-decoration-none mb-2 rounded-lg" onClick={(e) => {
               openTemplateExplorer()
               setShowMain(false)
               setOpenSub(null)
             }}>
-              <i className="fas fa-plus mr-2"></i>
+              <i className="fas fa-plus me-2"></i>
               Create a new Workspace
             </button>
           </Dropdown.Item>
@@ -626,7 +627,7 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
                   color: 'inherit',
                 }}
               >
-                <button className="w-full inline-flex items-center px-4 py-2 bg-danger text-white rounded-md hover:bg-danger/90 transition-colors font-weight-light no-underline" onClick={() => {
+                <button className="w-100 btn btn-danger font-weight-light text-decoration-none" onClick={() => {
                   deleteAllWorkspaces()
                   setShowMain(false)
                   setOpenSub(null)
@@ -636,7 +637,7 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
                     setShowMain(false)
                     setOpenSub(null)
                   }}>
-                    <i className="fas fa-trash-can mr-2"></i>
+                    <i className="fas fa-trash-can me-2"></i>
                     Delete all Workspaces
                   </span>
                 </button>
