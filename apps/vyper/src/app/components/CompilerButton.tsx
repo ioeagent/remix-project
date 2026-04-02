@@ -37,7 +37,7 @@ function CompilerButton({ contract, setOutput, compilerUrl, resetCompilerState, 
             setLoadingSpinnerState(true)
             await compileContract(contract, compilerUrl, setOutput, setLoadingSpinnerState)
           }}
-          className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors w-full block btn-block break-words remixui_disabled"
+          className="btn btn-primary w-full"
         >
           <div className="flex items-center justify-center fa-1x">
             <span className={ loadingSpinner ? 'fas fa-sync fa-pulse mr-1' : 'fas fa-sync mr-1'} />

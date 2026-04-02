@@ -38,7 +38,7 @@ const App = () => {
         </div>
       )}
       {hasBuild && (
-        <button className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors btn-block mt-4" onClick={() => client.generateDocs()}>
+        <button className="btn btn-primary w-full mt-4" onClick={() => client.generateDocs()}>
           Generate Docs
         </button>
       )}

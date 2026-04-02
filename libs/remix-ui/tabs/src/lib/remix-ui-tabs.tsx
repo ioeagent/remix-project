@@ -954,7 +954,7 @@ export const TabsUI = (props: TabsUIProps) => {
                       }
                     >
                       <button
-                        className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors flex items-center justify-center"
+                        className="btn btn-primary flex items-center justify-center"
                         data-id="compile-action"
                         style={{
                           padding: "4px 8px",

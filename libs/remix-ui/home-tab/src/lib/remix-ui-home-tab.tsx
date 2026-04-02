@@ -110,19 +110,19 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
         <div className="w-full px-6 py-4">
           {/* Header buttons */}
           <div className="flex w-full justify-end mb-6 gap-3">
-            <button 
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-400 transition-colors text-sm font-medium shadow-sm"
+            <button
+              className="btn btn-secondary btn-md"
               onClick={startLearnEth}
             >
-              <i className="fa-solid fa-book"></i>
+              <i className="fa-solid fa-book me-1"></i>
               <FormattedMessage id="home.startLearning" />
             </button>
-            <button 
-              data-id="landingPageImportFromTemplate" 
-              className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-md hover:bg-teal-700 dark:hover:bg-teal-400 transition-colors text-sm font-medium shadow-sm"
+            <button
+              data-id="landingPageImportFromTemplate"
+              className="btn btn-primary btn-md"
               onClick={openTemplateSelection}
             >
-              <i className="fa-solid fa-plus"></i>
+              <i className="fa-solid fa-plus me-1"></i>
               <FormattedMessage id="home.createNewWorkspace" />
             </button>
           </div>

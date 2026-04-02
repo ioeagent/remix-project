@@ -52,7 +52,7 @@ export const ConfigInput: React.FC<ConfigInputProps> = ({ label, id, secret, ini
 
         { enabled ? (
           <>
-            <button type="button" className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors btn-sm ml-2" onClick={handleSave}>
+            <button type="button" className="btn btn-primary btn-sm ml-2" onClick={handleSave}>
               <FormattedMessage id="contract-verification.configInputSaveButton" />
             </button>
             <button type="button" className="inline-flex items-center px-4 py-2 bg-secondary text-white rounded-md hover:bg-secondary/90 transition-colors btn-sm ml-2" onClick={handleCancel}>

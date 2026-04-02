@@ -399,7 +399,7 @@ function EnvironmentPortraitView() {
           </div>
           <div className="toggle-container mx-auto px-4">
             {widgetState.providers?.selectedProvider?.startsWith('vm') && !widgetState.fork.isVisible.forkUI && !widgetState.fork.isVisible.resetUI && (
-              <button data-id="fork-state-icon" className='inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors btn-sm small mr-2 btn-small-text' onClick={handleForkClick}>
+              <button data-id="fork-state-icon" className='btn btn-primary btn-sm mr-2' onClick={handleForkClick}>
                 <i className='fas fa-code-branch'></i> {intl.formatMessage({ id: 'udapp.fork' })}
               </button>
             )}

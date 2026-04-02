@@ -10,7 +10,7 @@
 
 /* Apply dark class to html element for Tailwind dark mode */
 html.dark {
-  /* Core theme colors */
+  /* Core theme colors - matching Bootstrap Darkly theme */
   --color-primary: 0 122 166;      /* #007aa6 */
   --color-secondary: 68 68 68;      /* #444 */
   --color-success: 0 188 140;       /* #00bc8c */
@@ -20,7 +20,7 @@ html.dark {
   --color-light: 42 44 63;          /* #2a2c3f */
   --color-dark: 162 163 189;        /* #a2a3bd */
 
-  /* Gray scale */
+  /* Gray scale - matching Bootstrap Darkly theme */
   --color-gray-50: 248 249 250;     /* #f8f9fa */
   --color-gray-100: 248 249 250;    /* #f8f9fa */
   --color-gray-200: 235 235 235;    /* #ebebeb */
@@ -32,7 +32,7 @@ html.dark {
   --color-gray-800: 48 48 48;       /* #303030 */
   --color-gray-900: 34 34 34;       /* #222 */
 
-  /* Body colors for dark theme */
+  /* Body colors for dark theme - matching Bootstrap Darkly */
   --color-body-bg: 34 35 54;        /* #222336 */
   --color-body-text: 162 163 189;   /* #a2a3bd */
   --color-emphasis: 255 255 255;    /* #fff */
@@ -51,8 +51,9 @@ html.dark {
   color: rgb(162, 163, 189);           /* #a2a3bd */
 }
 
-/* Preserve legacy Bootstrap variables for compatibility */
+/* Comprehensive Bootstrap variables for compatibility - matching Darkly theme */
 html.dark {
+  /* Base color palette */
   --bs-blue: #375a7f;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
@@ -67,6 +68,19 @@ html.dark {
   --bs-white: #fff;
   --bs-gray: #888;
   --bs-gray-dark: #303030;
+
+  /* Gray scale with RGB values */
+  --bs-gray-100: #f8f9fa;
+  --bs-gray-200: #ebebeb;
+  --bs-gray-300: #dee2e6;
+  --bs-gray-400: #ced4da;
+  --bs-gray-500: #adb5bd;
+  --bs-gray-600: #888;
+  --bs-gray-700: #444;
+  --bs-gray-800: #303030;
+  --bs-gray-900: #222;
+
+  /* Theme colors */
   --bs-primary: #007aa6;
   --bs-secondary: #444;
   --bs-success: #00bc8c;
@@ -75,9 +89,140 @@ html.dark {
   --bs-danger: #e74c3c;
   --bs-light: #2a2c3f;
   --bs-dark: #a2a3bd;
-  --bs-body-bg: #222336;
+
+  /* RGB values for theme colors */
+  --bs-primary-rgb: 0, 122, 166;
+  --bs-secondary-rgb: 68, 68, 68;
+  --bs-success-rgb: 0, 188, 140;
+  --bs-info-rgb: 52, 152, 219;
+  --bs-warning-rgb: 243, 156, 18;
+  --bs-danger-rgb: 231, 76, 60;
+  --bs-light-rgb: 42, 44, 63;
+  --bs-dark-rgb: 162, 163, 189;
+  --bs-white-rgb: 255, 255, 255;
+  --bs-black-rgb: 0, 0, 0;
+
+  /* Text emphasis colors */
+  --bs-primary-text-emphasis: #879cb2;
+  --bs-secondary-text-emphasis: #8f8f8f;
+  --bs-success-text-emphasis: #66d7ba;
+  --bs-info-text-emphasis: #85c1e9;
+  --bs-warning-text-emphasis: #f8c471;
+  --bs-danger-text-emphasis: #f1948a;
+  --bs-light-text-emphasis: #f8f9fa;
+  --bs-dark-text-emphasis: #dee2e6;
+
+  /* Background subtle colors */
+  --bs-primary-bg-subtle: #0b1219;
+  --bs-secondary-bg-subtle: #0e0e0e;
+  --bs-success-bg-subtle: #00261c;
+  --bs-info-bg-subtle: #0a1e2c;
+  --bs-warning-bg-subtle: #311f04;
+  --bs-danger-bg-subtle: #2e0f0c;
+  --bs-light-bg-subtle: #303030;
+  --bs-dark-bg-subtle: #181818;
+
+  /* Border subtle colors */
+  --bs-primary-border-subtle: #21364c;
+  --bs-secondary-border-subtle: #292929;
+  --bs-success-border-subtle: #007154;
+  --bs-info-border-subtle: #1f5b83;
+  --bs-warning-border-subtle: #925e0b;
+  --bs-danger-border-subtle: #8b2e24;
+  --bs-light-border-subtle: #444;
+  --bs-dark-border-subtle: #303030;
+
+  /* Typography */
+  --bs-font-sans-serif: "Nunito Sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-monospace: Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --bs-body-font-family: var(--bs-font-sans-serif);
+  --bs-body-font-size: 1rem;
+  --bs-body-font-weight: 400;
+  --bs-body-line-height: 1.5;
+
+  /* Body colors */
   --bs-body-color: #a2a3bd;
+  --bs-body-color-rgb: 162, 163, 189;
+  --bs-body-bg: #222336;
+  --bs-body-bg-rgb: 34, 35, 54;
   --bs-emphasis-color: #fff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+
+  /* Secondary and tertiary colors */
+  --bs-secondary-color: rgba(222, 226, 230, 0.75);
+  --bs-secondary-color-rgb: 222, 226, 230;
+  --bs-secondary-bg: #333446;
+  --bs-secondary-bg-rgb: 51, 52, 70;
+  --bs-tertiary-color: rgba(255, 255, 255, 0.5);
+  --bs-tertiary-color-rgb: 255, 255, 255;
+  --bs-tertiary-bg: #292929;
+  --bs-tertiary-bg-rgb: 41, 41, 41;
+
+  /* Heading and link colors */
+  --bs-heading-color: #fff;
+  --bs-link-color: #a2a3bd;
+  --bs-link-hover-color: #b6b8d4;
+  --bs-link-color-rgb: 162, 163, 189;
+  --bs-link-hover-color-rgb: 182, 184, 212;
+  --bs-link-decoration: underline;
+
+  /* Code and highlight */
+  --bs-code-color: #f18bba;
+  --bs-highlight-color: #dee2e6;
+  --bs-highlight-bg: #613e07;
+
+  /* Borders */
+  --bs-border-width: 1px;
+  --bs-border-style: solid;
+  --bs-border-color: #444;
+  --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
+  --bs-border-radius: 0.375rem;
+  --bs-border-radius-sm: 0.25rem;
+  --bs-border-radius-lg: 0.5rem;
+  --bs-border-radius-xl: 1rem;
+  --bs-border-radius-xxl: 2rem;
+  --bs-border-radius-2xl: var(--bs-border-radius-xxl);
+  --bs-border-radius-pill: 50rem;
+
+  /* Shadows */
+  --bs-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --bs-box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --bs-box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --bs-box-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+
+  /* Focus ring */
+  --bs-focus-ring-width: 0.25rem;
+  --bs-focus-ring-opacity: 0.25;
+  --bs-focus-ring-color: rgba(55, 90, 127, 0.25);
+
+  /* Form validation */
+  --bs-form-valid-color: #66d7ba;
+  --bs-form-valid-border-color: #66d7ba;
+  --bs-form-invalid-color: #f1948a;
+  --bs-form-invalid-border-color: #f1948a;
+
+  /* Gradient */
+  --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+
+  /* Button color overrides for dark theme */
+  --bs-btn-primary-bg: #64c4ff;
+  --bs-btn-primary-border: #64c4ff;
+  --bs-btn-primary-hover-bg: #64c4ff;
+  --bs-btn-primary-hover-border: #64c4ff;
+  --bs-btn-primary-active-bg: #64c4ff;
+  --bs-btn-primary-active-border: #64c4ff;
+  --bs-btn-primary-color: var(--bs-body-bg);
+
+  --bs-btn-secondary-bg: #595c76;
+  --bs-btn-secondary-border: #595c76;
+  --bs-btn-secondary-hover-bg: #676a83;
+  --bs-btn-secondary-hover-border: #676a83;
+  --bs-btn-secondary-active-bg: #4d516f;
+  --bs-btn-secondary-active-border: #4d516f;
+  --bs-btn-secondary-color: #fff;
 
   /* Remix custom variables */
   --custom-ai-color: #2de7f3;
@@ -86,7 +231,9 @@ html.dark {
   --custom-onsurface-layer-3: #3b3c4d;
   --custom-onsurface-layer-4: #434454;
   --custom-border-light: #51536b;
+  --custom-border-light-rgb: 81, 83, 107;
   --custom-border-dark: #2c3244;
+  --custom-border-dark-rgb: 44, 50, 68;
 }
 
 /* Component styles using Tailwind approach */

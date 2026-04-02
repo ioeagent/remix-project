@@ -40,7 +40,7 @@ export const Merge = () => {
     <>
 
       <div className="btn-group w-full" role="group" aria-label="Basic example">
-        <GitUIButton type="button" onClick={async () => merge()} className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors mr-1"><FormattedMessage id="gitui.mergeButton" /></GitUIButton>
+        <GitUIButton type="button" onClick={async () => merge()} className="btn btn-primary mr-1"><FormattedMessage id="gitui.mergeButton" /></GitUIButton>
       </div>
 
       <label><FormattedMessage id="gitui.mergeFromBranch" /></label>

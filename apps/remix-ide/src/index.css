@@ -10,36 +10,41 @@
   /* Enable class-based dark mode */
   --dark-mode: class;
 
-  /* Primary theme colors using CSS custom properties */
+  /* Light theme colors (default) - matching Bootstrap Flatly theme */
   --color-primary: 0 122 166;
-  --color-secondary: 68 68 68;
-  --color-success: 0 188 140;
+  --color-secondary: 162 163 189;
+  --color-success: 24 188 156;
   --color-info: 52 152 219;
   --color-warning: 243 156 18;
   --color-danger: 231 76 60;
-  --color-light: 42 44 63;
-  --color-dark: 162 163 189;
-  
-  /* Gray scale */
+  --color-light: 248 250 254;
+  --color-dark: 142 148 166;
+
+  /* Gray scale for light theme - matching Bootstrap Flatly */
   --color-gray-50: 248 249 250;
   --color-gray-100: 248 249 250;
-  --color-gray-200: 235 235 235;
+  --color-gray-200: 236 240 241;
   --color-gray-300: 222 226 230;
   --color-gray-400: 206 212 218;
-  --color-gray-500: 173 181 189;
-  --color-gray-600: 136 136 136;
-  --color-gray-700: 68 68 68;
-  --color-gray-800: 48 48 48;
-  --color-gray-900: 34 34 34;
-  
-  /* Remix custom colors */
-  --color-ai: 45 231 243;
-  --color-surface-1: 42 44 63;
-  --color-surface-2: 51 52 70;
-  --color-surface-3: 59 60 77;
-  --color-surface-4: 67 68 84;
-  --color-border-light: 81 83 107;
-  --color-border-dark: 44 50 68;
+  --color-gray-500: 180 188 194;
+  --color-gray-600: 149 165 166;
+  --color-gray-700: 123 138 139;
+  --color-gray-800: 52 58 64;
+  --color-gray-900: 33 37 41;
+
+  /* Body colors for light theme */
+  --color-body-bg: 239 241 245;
+  --color-body-text: 116 123 144;
+  --color-emphasis: 0 0 0;
+
+  /* Remix custom colors for light theme */
+  --color-ai: 30 162 170;
+  --color-surface-1: 248 250 254;
+  --color-surface-2: 255 255 255;
+  --color-surface-3: 255 255 255;
+  --color-surface-4: 255 255 255;
+  --color-border-light: 222 226 230;
+  --color-border-dark: 206 212 218;
 }
 
 /* Import our custom Bootstrap-to-Tailwind utilities */

@@ -58,7 +58,7 @@ export const AccountOverlay: React.FC<AccountOverlayProps> = ({ plugin }) => {
           />
         </p>
         <button
-          className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+          className="btn btn-primary"
           onClick={() => plugin.call('overlay', 'hideOverlay')}
         >
           <FormattedMessage id="account.close" defaultMessage="Close" />

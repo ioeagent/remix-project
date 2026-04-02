@@ -186,7 +186,7 @@ export default function DeployedContractsPortraitView() {
           <span className="text-secondary" data-id="deployedContractsBadge">{deployedContracts.length}</span>
         </div>
         <div>
-          <button className='inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors btn-sm small' style={{ fontSize: '0.7rem' }} onClick={handleAddClick} data-id="addDeployedContract">
+          <button className='btn btn-primary btn-sm' style={{ fontSize: '0.7rem' }} onClick={handleAddClick} data-id="addDeployedContract">
             <i className='fa-solid fa-plus'></i> Add Contract
           </button>
           {deployedContracts.length > 0 && (

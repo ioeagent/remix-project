@@ -946,7 +946,7 @@ export function DeployedContractItem({ contract, index, registerRef, isKebabMenu
               {((selectedFunctionIndex !== null && functionABIs[selectedFunctionIndex]) || showLowLevel) && (
                 <button
                   data-id={`btnExecute-${index}`}
-                  className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors w-full mt-3"
+                  className="btn btn-primary w-full mt-3"
                   onClick={() => {
                     const actionType = showLowLevel ? 'lowLevel' : functionABIs[selectedFunctionIndex]?.name || 'function'
                     trackMatomoEvent?.({ category: 'udapp', action: 'deployedContractExecute', name: actionType, isClick: true })

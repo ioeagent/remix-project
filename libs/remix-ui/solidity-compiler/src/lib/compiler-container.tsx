@@ -1161,7 +1161,7 @@ export const CompilerContainer = (props: CompilerContainerProps) => {
           <button
             id="compileBtn"
             data-id="compilerContainerCompileBtn"
-            className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors btn-block block w-full break-words remixui_disabled mb-1 mt-3"
+            className="btn btn-primary w-full mb-1 mt-3"
             onClick={compile}
             disabled={disableCompileButton}
           >

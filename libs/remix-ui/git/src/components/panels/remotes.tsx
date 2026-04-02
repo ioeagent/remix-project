@@ -64,7 +64,7 @@ export const Remotes = () => {
         <input data-id="add-manual-remotename" placeholder={intl.formatMessage({ id: 'gitui.remoteNamePlaceholder' })} name='remotename' onChange={e => onRemoteNameChange(e.target.value)} value={remoteName} className="form-control mb-2" type="text" id="remotename" />
         <input data-id="add-manual-remoteurl" placeholder={intl.formatMessage({ id: 'gitui.remoteUrlPlaceholder' })} name='remoteurl' onChange={e => onUrlChange(e.target.value)} value={url} className="form-control mb-2" type="text" id="remoteurl" />
 
-        <button data-id="add-manual-remotebtn" disabled={(remoteName && url) ? false : true} className='inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors mt-1 w-full' onClick={async () => {
+        <button data-id="add-manual-remotebtn" disabled={(remoteName && url) ? false : true} className='btn btn-primary w-full mt-1' onClick={async () => {
           addRemote();
         }}><FormattedMessage id="gitui.addRemote" /></button>
         <hr className="mt-0 border border-2" />

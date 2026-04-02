@@ -286,7 +286,7 @@ export const VerifyView = () => {
                 ((hasProxy && !!proxyAddressError) || (hasProxy && !proxyAddress)) ? <FormattedMessage id="contract-verification.proxyAddressError" defaultMessage="Please provide a valid proxy address." /> :
                   <FormattedMessage id="contract-verification.generalVerifyError" defaultMessage={"Please provide all necessary data to verify"} />) // Is not expected to be a case
         : <FormattedMessage id="contract-verification.verifyButtonTooltip" defaultMessage="Verify the contract on the selected chains with the selected verifiers." />}>
-        <button type="submit" className="w-full inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors mt-3" disabled={submitDisabled}>
+        <button type="submit" className="btn btn-primary w-full mt-3" disabled={submitDisabled}>
           <FormattedMessage id="contract-verification.verifyButton" defaultMessage="Verify" />
         </button>
       </CustomTooltip>

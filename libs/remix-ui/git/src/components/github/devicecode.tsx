@@ -149,7 +149,7 @@ export const ConnectToGitHub = () => {
           <br></br><a target="_blank" href={gitHubResponse.verification_uri}>{gitHubResponse.verification_uri}</a>
           <br /><br></br>
           Step 3: When you are done, click on the button below:
-          <button className='inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors mt-1 w-full' onClick={async () => {
+          <button className='btn btn-primary w-full mt-1' onClick={async () => {
             connectApp()
           }}>Connect</button>
         </div>
@@ -157,7 +157,7 @@ export const ConnectToGitHub = () => {
       {
         (context.gitHubUser && context.gitHubUser.isConnected) ?
           <div className="pt-2">
-            <button data-id='disconnect-github' className='inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors mt-1 w-full' onClick={async () => {
+            <button data-id='disconnect-github' className='btn btn-primary w-full mt-1' onClick={async () => {
               handleDisconnect()
             }}>Disconnect</button>
           </div> : null

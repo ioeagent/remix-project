@@ -81,7 +81,7 @@ export const Clone = (props: CloneProps) => {
         </InputGroup>
 
         <input name='clonebranch' data-id="clone-branch" onChange={e => onCloneBranchChange(e.target.value)} value={cloneBranch} className="form-control mb-2 mt-2" placeholder={intl.formatMessage({ id: 'git.checkout' })} type="text" id="clonebranch" />
-        <GitUIButton disabledCondition={!cloneUrl} data-id='clone-btn' className='inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors mt-1 w-full' onClick={async () => {
+        <GitUIButton disabledCondition={!cloneUrl} data-id='clone-btn' className='btn btn-primary w-full mt-1' onClick={async () => {
           clone()
         }}><FormattedMessage id="gitui.cloneButton" /></GitUIButton>
         <hr />

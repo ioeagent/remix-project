@@ -304,7 +304,7 @@ function DeployPortraitView() {
                           </div>
                           {selectedContract && !selectedContract?.isCompiled && !selectedContract?.isCompiling && (
                             <div
-                              className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors flex items-center justify-center"
+                              className="btn btn-primary flex items-center justify-center"
                               data-id="compile-deploy-tab"
                               role="button"
                               tabIndex={0}
@@ -824,7 +824,7 @@ function DeployPortraitView() {
                 <button
                   onClick={handleDeployClick}
                   data-id="deployButton"
-                  className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors w-full py-2"
+                  className="btn btn-primary w-full"
                   style={{ fontSize: '1rem', fontWeight: '500', cursor: selectedContract?.contractData === null ? 'not-allowed' : 'pointer' }}
                   disabled={selectedContract ? selectedContract?.contractData === null : true}
                 >

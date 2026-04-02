@@ -101,7 +101,7 @@ export const GitHubCredentials = () => {
         </div>
       </div>
       <div className="flex justify-between">
-        <button data-id='saveGitHubCredentials' className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors w-full" onClick={saveGithubToken}>
+        <button data-id='saveGitHubCredentials' className="btn btn-primary w-full" onClick={saveGithubToken}>
           <FormattedMessage id="save" defaultMessage="Save" />
         </button>
         <button className="inline-flex items-center px-4 py-2 bg-danger text-white rounded-md hover:bg-danger/90 transition-colors far fa-trash-alt" onClick={removeToken}>

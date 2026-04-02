@@ -178,8 +178,8 @@ export const PushPull = () => {
       </div>: null}
       <div className="btn-group w-full mt-2" role="group">
 
-        <GitUIButton data-id='sourcecontrol-pull' disabledCondition={pushPullIsDisabled()} type="button" onClick={async () => pull()} className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors mr-1"><FormattedMessage id="git.pull" /></GitUIButton>
-        <GitUIButton data-id='sourcecontrol-push' disabledCondition={pushPullIsDisabled()} type="button" onClick={async () => push()} className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"><FormattedMessage id="git.push" /></GitUIButton>
+        <GitUIButton data-id='sourcecontrol-pull' disabledCondition={pushPullIsDisabled()} type="button" onClick={async () => pull()} className="btn btn-primary mr-1"><FormattedMessage id="git.pull" /></GitUIButton>
+        <GitUIButton data-id='sourcecontrol-push' disabledCondition={pushPullIsDisabled()} type="button" onClick={async () => push()} className="btn btn-primary"><FormattedMessage id="git.push" /></GitUIButton>
       </div>
 
       <label className="pt-3 uppercase"><FormattedMessage id="gitui.localBranchLabel" /></label>
