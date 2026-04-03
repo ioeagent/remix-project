@@ -451,7 +451,10 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
           <Dropdown.Item
             data-id="workspacecreate"
             onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
               openTemplateExplorer()
+              setDropdownOpen(false)
               setOpenSub(null)
             }}
             style={{
@@ -459,11 +462,7 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
               color: 'inherit',
             }}
           >
-            <button className="w-100 btn btn-primary font-weight-light text-decoration-none mb-2 rounded-lg" onClick={(e) => {
-              openTemplateExplorer()
-              setShowMain(false)
-              setOpenSub(null)
-            }}>
+            <button className="w-100 btn btn-primary font-weight-light text-decoration-none mb-2 rounded-lg">
               <i className="fas fa-plus me-2"></i>
               Create a new Workspace
             </button>

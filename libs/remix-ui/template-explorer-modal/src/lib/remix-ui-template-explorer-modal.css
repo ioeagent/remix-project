@@ -3,35 +3,35 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* TODO: Convert inset-0 to CSS */
-  /* TODO: Convert w-full to CSS */
-  /* TODO: Convert h-full to CSS */
-  /* TODO: Convert bg-black/70 to CSS */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .template-explorer-modal-container {
-  /* TODO: Convert rounded-lg to CSS */
+  border-radius: 10px;
   display: flex;
-  /* TODO: Convert flex-col to CSS */
-  /* TODO: Convert w-[70%] to CSS */
-  /* TODO: Convert max-w-[1200px] to CSS */
-  /* TODO: Convert min-w-[600px] to CSS */
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
   /* ===> Responsive sizing of modal container <===*/
+  width: 70%;
+  max-width: 1200px;
+  min-width: 600px;
 }
 
 .template-explorer-modal-close-container {
   display: flex;
-  /* TODO: Convert justify-end to CSS */
+  justify-content: flex-end;
   align-items: center;
 }
 
 .template-explorer-modal-close-button {
-  /* TODO: Convert bg-transparent to CSS */
+  background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
-  line-height: 2rem;
 }
 
 .hover-cursor {
@@ -40,25 +40,23 @@
 
 .hover-cursor:hover {
   cursor: pointer;
-  /* TODO: Convert border-2 to CSS */
-  /* TODO: Convert border-dashed to CSS */
-  border-color: var(--bs-info-border-subtle);
+  border: 2px dashed var(--bs-info-border-subtle);
 }
 
 .template-explorer-modal-close-button:hover {
-  /* TODO: Convert bg-transparent to CSS */
+  background-color: transparent;
 }
 
 .template-explorer-modal-close-button:focus {
-  /* TODO: Convert bg-transparent to CSS */
+  background-color: transparent;
 }
 
 .template-explorer-modal-close-button:active {
-  /* TODO: Convert bg-transparent to CSS */
+  background-color: transparent;
 }
 
 .template-explorer-modal-close-button:disabled {
-  /* TODO: Convert bg-transparent to CSS */
+  background-color: transparent;
 }
 
 .template-explorer-modal-close-button:focus-visible {
@@ -77,8 +75,7 @@
 }
 
 .explora-topcard:hover {
-  border: 1px solid;
-  /* TODO: Convert border-gray-500 to CSS */
+  border: 1px solid #667;
   cursor: pointer !important;
 }
 
@@ -87,49 +84,47 @@
 }
 
 .template-explorer-container {
-  /* TODO: Convert p-4 to CSS */
-  /* TODO: Convert overflow-y-auto to CSS */
   /* height: 60%; */
   /* max-height: none;
   min-height: 200px; */
+  padding: 1rem;
+  overflow-y: auto;
 }
 
 .category-title {
-  /* TODO: Convert text-gray-500 to CSS */
-  /* TODO: Convert pb-2 to CSS */
-  /* TODO: Convert text-xl to CSS */
-  /* TODO: Convert font-normal to CSS */
+  color: #667;
+  padding-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
 .category-description {
-  /* TODO: Convert text-gray-500 to CSS */
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  color: #667;
+  font-size: 0.9rem;
 }
 
 .template-card {
-  /* TODO: Convert w-[calc(50%-12px)] to CSS */
-  /* TODO: Convert min-w-[180px] to CSS */
-  /* TODO: Convert max-w-[250px] to CSS */
+  width: calc(50% - 12px);
+  min-width: 180px;
+  max-width: 250px;
   height: 110px;
-  /* TODO: Convert rounded-md to CSS */
-  /* TODO: Convert shadow-sm to CSS */
-  transition: all;
-  /* TODO: Convert duration-200 to CSS */
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
   cursor: pointer;
   display: flex;
-  /* TODO: Convert flex-col to CSS */
+  flex-direction: column;
 }
 
 .template-card:hover {
-  /* TODO: Convert shadow-md to CSS */
-  /* TODO: Convert -translate-y-0.5 to CSS */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .card-title {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.85rem;
   font-weight: 600;
+  margin: 0;
   line-height: 1.2;
 }
 
@@ -142,7 +137,7 @@
 }
 
 .card-body {
-  /* TODO: Convert flex-1 to CSS */
+  flex: 1;
 }
 
 .card-description {
