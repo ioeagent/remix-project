@@ -59,34 +59,37 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
       <button
         disabled={props.disabled}
         id="dropdown-custom-components"
-        className="w-full px-3 py-2 text-left bg-white dark:bg-gray-800 border border-theme rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-3 py-2 text-left border border-theme rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() => !props.disabled && setIsOpen(!isOpen)}
         style={{
           opacity: props.disabled ? 0.5 : 1,
           cursor: props.disabled ? 'not-allowed' : 'pointer',
-          pointerEvents: props.disabled ? 'none' : 'auto'
+          pointerEvents: props.disabled ? 'none' : 'auto',
+          backgroundColor: 'var(--bs-body-bg)',
+          color: 'var(--bs-body-color)'
         }}
       >
         <div className="flex justify-between items-center">
           <div className="flex-1 overflow-hidden">
-            <div className={`truncate text-sm ${props.disabled ? 'text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100'}`}>
+            <div className={`truncate text-sm`} style={{ color: props.disabled ? 'var(--bs-secondary-color)' : 'var(--bs-body-color)' }}>
               <span data-id="selectedVersion">{getDisplayVersion()}</span>
             </div>
           </div>
-          <i className={`fas fa-caret-down text-gray-500 dark:text-gray-400 transition-transform ${isOpen ? 'transform rotate-180' : ''}`}></i>
+          <i className={`fas fa-caret-down transition-transform ${isOpen ? 'transform rotate-180' : ''}`} style={{ color: 'var(--bs-secondary-color)' }}></i>
         </div>
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-theme rounded-md shadow-lg max-h-60 overflow-auto" data-id="custom-dropdown-items">
+        <div className="absolute z-10 w-full mt-1 border border-theme rounded-md shadow-lg" data-id="custom-dropdown-items" style={{ backgroundColor: 'var(--bs-dropdown-bg)', maxHeight: '500px', overflowY: 'auto' }}>
           <div className="py-1">
             {allversions.length <= 0 && (
               <button
                 type="button"
                 key={`default`}
                 data-id='builtin'
-                className="w-full px-3 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="w-full px-3 py-2 text-left transition-colors compiler-dropdown-item"
                 onClick={() => handleItemClick(defaultVersion)}
+                style={{ color: 'var(--bs-dropdown-link-color)' }}
               >
                 <div className='flex w-full justify-between items-center'>
                   {selectedVersion === defaultVersion && <span className='fas fa-check text-green-500 mr-2'></span>}
@@ -103,8 +106,9 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
                 type="button"
                 key={`builtin`}
                 data-id='builtin'
-                className="w-full px-3 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="w-full px-3 py-2 text-left transition-colors compiler-dropdown-item"
                 onClick={() => handleItemClick('builtin')}
+                style={{ color: 'var(--bs-dropdown-link-color)' }}
               >
                 <div className='flex w-full justify-between items-center'>
                   {selectedVersion === "builtin" && <span className='fas fa-check text-green-500 mr-2'></span>}
@@ -121,8 +125,9 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
                 type="button"
                 key={`custom-${i}`}
                 data-id={`dropdown-item-${url}`}
-                className="w-full px-3 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="w-full px-3 py-2 text-left transition-colors compiler-dropdown-item"
                 onClick={() => handleItemClick(url)}
+                style={{ color: 'var(--bs-dropdown-link-color)' }}
               >
                 <div className='flex w-full justify-between items-center'>
                   {selectedVersion === url && <span className='fas fa-check text-green-500 mr-2'></span>}
@@ -141,8 +146,9 @@ export const CompilerDropdown = (props: compilerDropdownProps) => {
                   type="button"
                   key={`soljson-${i}`}
                   data-id={`dropdown-item-${build.path}`}
-                  className="w-full px-3 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="w-full px-3 py-2 text-left transition-colors compiler-dropdown-item"
                   onClick={() => handleItemClick(build.path)}
+                  style={{ color: 'var(--bs-dropdown-link-color)' }}
                 >
                   <div className='flex w-full justify-between items-center'>
                     {selectedVersion === build.path && <span className='fas fa-check text-green-500 mr-2'></span>}

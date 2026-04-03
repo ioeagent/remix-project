@@ -378,11 +378,11 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
                       }}
                       data-id="workspacesubMenuOverlay"
                     >
-                      <div className="p-0 rounded w-3/4 border-warning">
+                      <div className="p-0">
                         <div className="d-grid gap-0">
                           <Button
                             variant="light"
-                            className="border flex items-center no-underline rounded-start-0"
+                            className="border flex items-center no-underline"
                             data-id="workspacesubMenuRename"
                             size="sm"
                             onClick={(e) => {
@@ -392,10 +392,6 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
                             }}
                             style={{
                               color: 'var(--bs-body-color)',
-                              borderBottomRightRadius: 0,
-                              borderTopRightRadius: 4,
-                              borderTopLeftRadius: 20,
-                              borderBottomLeftRadius: 4,
                             }}
                           >
                             <span className="mr-2">
@@ -428,10 +424,6 @@ export const WorkspacesDropdown: React.FC<WorkspacesDropdownProps> = ({ menuItem
                             size="sm"
                             style={{
                               color: 'var(--bs-body-color)',
-                              borderBottomRightRadius: 4,
-                              borderTopRightRadius: 0,
-                              borderTopLeftRadius: 0,
-                              borderBottomLeftRadius: 4,
                             }}
                             className="border flex items-center no-underline"
                             data-id="workspacesubMenuDelete"

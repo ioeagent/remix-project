@@ -211,3 +211,22 @@
   margin: 15px;
   padding: 15px;
 }
+
+/* Compiler dropdown item hover styles */
+.compiler-dropdown-item {
+  background-color: transparent;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.compiler-dropdown-item:hover {
+  background-color: var(--bs-dropdown-link-hover-bg);
+  color: var(--bs-dropdown-link-hover-color);
+}
+
+.compiler-dropdown-item:active,
+.compiler-dropdown-item:focus {
+  background-color: var(--bs-dropdown-link-active-bg);
+  color: var(--bs-dropdown-link-active-color);
+  outline: none;
+  box-shadow: none;
+}
