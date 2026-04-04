@@ -17,6 +17,7 @@ import { mcpDefaultServersConfig, mcpBasicServersConfig } from './config/mcpDefa
 import { ChatHistoryStorageManager } from './storage/storageManager'
 import { IndexedDBChatHistoryBackend } from './storage/indexedDBBackend'
 import { WeightedToolSelector, IChatMessage } from './services/weightedToolSelector'
+import { RemixAIGraph } from './langgraph'
 export {
   ChatCommandParser,
   ModelType, ICompletions, IParams, IRemoteModel, buildChatPrompt,
@@ -27,7 +28,8 @@ export {
   mcpDefaultServersConfig, mcpBasicServersConfig,
   AIModel, AVAILABLE_MODELS, getDefaultModel, getModelById,
   ChatHistoryStorageManager, IndexedDBChatHistoryBackend,
-  WeightedToolSelector, IChatMessage
+  WeightedToolSelector, IChatMessage,
+  RemixAIGraph
 }
 
 export * from './types/types'

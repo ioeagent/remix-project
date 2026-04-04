@@ -117,7 +117,22 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
     readline: false,
     child_process: false,
     buffer: require.resolve('buffer/'),
-    vm: require.resolve('vm-browserify')
+    vm: require.resolve('vm-browserify'),
+    // Add node: prefixed versions for LangChain compatibility
+    'node:fs': false,
+    'node:path': require.resolve('path-browserify'),
+    'node:crypto': require.resolve('crypto-browserify'),
+    'node:stream': require.resolve('stream-browserify'),
+    'node:os': false,
+    'node:util': require.resolve('util/'),
+    'node:events': require.resolve('events/'),
+    'node:process': require.resolve('process/browser'),
+    'node:buffer': require.resolve('buffer/'),
+    'node:async_hooks': false,
+    'node:module': false,
+    'node:net': false,
+    'node:tls': false,
+    'node:child_process': false
   }
 
   // add externals
@@ -211,8 +226,52 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
     })
   )
 
+  // Handle node: prefixed imports (used by LangChain) by replacing them with their fallbacks
   config.plugins.push(
-    new webpack.IgnorePlugin({ resourceRegExp: /^node:/ })
+    new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
+      const mod = resource.request.replace(/^node:/, '')
+
+      // Extract base module (before any subpath)
+      const baseModule = mod.split('/')[0]
+
+      // Map to fallback or ignore
+      const fallbacks = {
+        'fs': false,
+        'path': 'path-browserify',
+        'crypto': 'crypto-browserify',
+        'stream': 'stream-browserify',
+        'os': false,
+        'util': 'util/',
+        'events': 'events/',
+        'process': 'process/browser',
+        'buffer': 'buffer/',
+        'async_hooks': false,
+        'module': false,
+        'net': false,
+        'tls': false,
+        'child_process': false,
+        'url': 'url/',
+        'assert': 'assert/',
+        'http': 'stream-http',
+        'https': 'https-browserify',
+        'zlib': 'browserify-zlib'
+      }
+
+      const fallback = fallbacks[baseModule]
+
+      if (fallback === false) {
+        // Provide empty module for any subpath too (e.g., node:fs/promises -> empty)
+        resource.request = require.resolve('./empty-module.js')
+      } else if (fallback) {
+        // Replace with fallback, preserving subpath if any
+        const subpath = mod.substring(baseModule.length)
+        resource.request = fallback + subpath
+      } else {
+        // Unknown module, use empty module as fallback
+        console.warn(`[Webpack] Unknown node: module '${mod}', using empty module`)
+        resource.request = require.resolve('./empty-module.js')
+      }
+    })
   )
 
   // source-map loader

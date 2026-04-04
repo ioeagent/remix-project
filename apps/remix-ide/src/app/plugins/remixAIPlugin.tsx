@@ -7,6 +7,7 @@ import { MCPInferencer } from '@remix/remix-ai-core';
 import { IMCPServer, IMCPConnectionStatus } from '@remix/remix-ai-core';
 import { RemixMCPServer, createRemixMCPServer } from '@remix/remix-ai-core';
 import { AIModel, getDefaultModel, getModelById } from '@remix/remix-ai-core';
+import { RemixAIGraph } from '@remix/remix-ai-core'; // Import LangGraph
 import axios from 'axios';
 import { endpointUrls } from "@remix-endpoints-helper"
 
@@ -57,6 +58,7 @@ export class RemixAIPlugin extends Plugin {
   mcpInferencer: MCPInferencer | null = null
   mcpEnabled: boolean = false
   remixMCPServer: RemixMCPServer | null = null
+  langGraphEngine: RemixAIGraph | null = null // LangGraph engine
 
   constructor() {
     super(profile)
@@ -180,14 +182,65 @@ export class RemixAIPlugin extends Plugin {
     return await this.remoteInferencer.code_completion(prompt, promptAfter, contextfiles, currentFileName, params)
   }
 
+  /**
+   * Answer using LangGraph (LangChain-native implementation)
+   * This is the new implementation that reads MCP resources and tools directly
+   */
+  async answerWithLangGraph(prompt: string, params: IParams = GenerationParams): Promise<any> {
+    try {
+      // Lazy initialization of LangGraph engine
+      if (!this.langGraphEngine) {
+        console.log('[RemixAI Plugin] Initializing LangGraph engine...');
+
+        // Get MCP clients from mcpInferencer
+        const mcpClients = this.mcpInferencer?.getMCPClients() || new Map();
+
+        if (mcpClients.size === 0) {
+          console.warn('[RemixAI Plugin] No MCP clients available, falling back to legacy');
+          return this.mcpInferencer?.answer(prompt, params) || '';
+        }
+
+        // Create RemixAIGraph with MCP clients
+        // Proxy endpoint (endpointUrls.solcoder) is imported directly in agentNode.ts
+        this.langGraphEngine = new RemixAIGraph(mcpClients, params);
+        console.log('[RemixAI Plugin] LangGraph engine initialized');
+      }
+
+      // Invoke the graph
+      const result = await this.langGraphEngine.invoke(prompt, params);
+
+      // Output to terminal if requested
+      if (result && params.terminal_output) {
+        this.call('terminal', 'log', { type: 'aitypewriterwarning', value: result });
+      }
+
+      return result;
+    } catch (error) {
+      console.error('[RemixAI Plugin] LangGraph error, falling back to legacy:', error);
+      // Fallback to legacy MCPInferencer on error
+      return this.mcpInferencer?.answer(prompt, params) || '';
+    }
+  }
+
   async answer(prompt: string, params: IParams=GenerationParams): Promise<any> {
 
     let newPrompt = await this.codeExpAgent.chatCommand(prompt)
     // add workspace context
     newPrompt = !this.workspaceAgent.ctxFiles ? newPrompt : "Using the following context: ```\n" + this.workspaceAgent.ctxFiles + "```\n\n" + newPrompt
     let result
+
+    // Feature flag: use LangGraph by default when MCP is enabled
+    // Can be disabled by setting useLangGraph: false in params
+    const useLangGraph = (params as any).useLangGraph !== false; // Default to true
+
     if (this.mcpEnabled && this.mcpInferencer){
-      return this.mcpInferencer.answer(prompt, params)
+      if (useLangGraph) {
+        console.log('[RemixAI Plugin] Using LangGraph implementation');
+        return this.answerWithLangGraph(prompt, params);
+      } else {
+        console.log('[RemixAI Plugin] Using legacy MCP implementation');
+        return this.mcpInferencer.answer(prompt, params);
+      }
     } else {
       result = await this.remoteInferencer.answer(newPrompt)
     }

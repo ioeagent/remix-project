@@ -87,6 +87,7 @@ export interface IParams {
   tool_choice?: string;
   toolsMessages?: any[];
   format?: string;
+  apiKey?: string;
 }
 
 export interface IAIStreamResponse{

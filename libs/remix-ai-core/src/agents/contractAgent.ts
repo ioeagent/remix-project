@@ -34,6 +34,7 @@ export class ContractAgent {
   * @param statusCallback - Optional callback for status updates in chat window
   */
   async writeContracts(payload, userPrompt, statusCallback?: (status: string) => Promise<void>) {
+    console.log('writeContracts called with payload:', payload)
     const prev_statusCallback = statusCallback
     statusCallback = async (status: string) => {
       if (prev_statusCallback) {

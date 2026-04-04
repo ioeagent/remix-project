@@ -133,6 +133,10 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@gradio/client": "^0.10.1",
     "@isomorphic-git/lightning-fs": "^4.4.1",
+    "@langchain/anthropic": "^0.3.0",
+    "@langchain/core": "^1.1.38",
+    "@langchain/langgraph": "^1.2.6",
+    "@langchain/openai": "^0.3.0",
     "@metamask/eth-sig-util": "^7.0.2",
     "@microlink/react-json-view": "^1.23.0",
     "@noir-lang/noir_wasm": "^1.0.0-beta.2",
@@ -275,7 +279,8 @@
     "winston": "^3.3.3",
     "ws": "^8.18.0",
     "xterm": "^5.2.1",
-    "xterm-addon-search": "^0.12.0"
+    "xterm-addon-search": "^0.12.0",
+    "zod": "^3.22.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",

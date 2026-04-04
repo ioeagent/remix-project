@@ -1053,4 +1053,12 @@ Use this tool when you need:
       return false;
     }
   }
+
+  /**
+   * Get the MCP clients map for use by LangGraph
+   * This allows LangGraph to access MCP resources and tools directly
+   */
+  getMCPClients(): Map<string, MCPClient> {
+    return this.mcpClients;
+  }
 }
