@@ -337,4 +337,3 @@ export class QuickDappV2 extends ViewPlugin {
   }
 }
 
-

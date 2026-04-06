@@ -3,6 +3,7 @@ import { Plugin } from '@remixproject/engine';
 import { trackMatomoEvent } from '@remix-api'
 import { RemoteInferencer, IRemoteModel, IParams, GenerationParams, AssistantParams, CodeExplainAgent, SecurityAgent, CompletionParams, OllamaInferencer, isOllamaAvailable, getBestAvailableModel, listModels } from '@remix/remix-ai-core';
 import { CodeCompletionAgent, ContractAgent, workspaceAgent, IContextType, mcpDefaultServersConfig, mcpBasicServersConfig } from '@remix/remix-ai-core';
+import { DappAgent } from '@remix/remix-ai-core';
 import { MCPInferencer } from '@remix/remix-ai-core';
 import { IMCPServer, IMCPConnectionStatus } from '@remix/remix-ai-core';
 import { RemixMCPServer, createRemixMCPServer } from '@remix/remix-ai-core';
@@ -48,6 +49,7 @@ export class RemixAIPlugin extends Plugin {
   securityAgent: SecurityAgent
   contractor: ContractAgent
   workspaceAgent: workspaceAgent
+  dappAgent: DappAgent
   selectedModel: AIModel = getDefaultModel() // default model
   selectedModelId: string = getDefaultModel().id
   assistantThreadId: string = ''
@@ -104,6 +106,7 @@ export class RemixAIPlugin extends Plugin {
     this.codeExpAgent = new CodeExplainAgent(this)
     this.contractor = ContractAgent.getInstance(this)
     this.workspaceAgent = workspaceAgent.getInstance(this)
+    this.dappAgent = DappAgent.getInstance(this)
 
     // Initialize MCP servers with defaults (after initialize() completes)
     this.mcpServers = [...mcpDefaultServersConfig.defaultServers, ...(hasBasicMcp ? mcpBasicServersConfig.defaultServers : [])]
@@ -183,13 +186,19 @@ export class RemixAIPlugin extends Plugin {
   async answer(prompt: string, params: IParams=GenerationParams): Promise<any> {
 
     let newPrompt = await this.codeExpAgent.chatCommand(prompt)
-    // add workspace context
-    newPrompt = !this.workspaceAgent.ctxFiles ? newPrompt : "Using the following context: ```\n" + this.workspaceAgent.ctxFiles + "```\n\n" + newPrompt
+
+    // DappAgent sub-agent: conditionally inject DApp context
+    // (only when the prompt is DApp-related, NOT globally)
+    newPrompt = await this.dappAgent.enrichPrompt(newPrompt)
+
     let result
     if (this.mcpEnabled && this.mcpInferencer){
-      return this.mcpInferencer.answer(prompt, params)
+      // MCP path: pass DApp-enriched prompt only (MCP does its own context enrichment)
+      return this.mcpInferencer.answer(newPrompt, params)
     } else {
-      result = await this.remoteInferencer.answer(newPrompt)
+      // Non-MCP path: add workspace context on top of DApp context
+      const promptWithCtx = !this.workspaceAgent.ctxFiles ? newPrompt : "Using the following context: ```\n" + this.workspaceAgent.ctxFiles + "```\n\n" + newPrompt
+      result = await this.remoteInferencer.answer(promptWithCtx)
     }
     if (result && params.terminal_output) this.call('terminal', 'log', { type: 'aitypewriterwarning', value: result })
     return result
