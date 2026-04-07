@@ -48,7 +48,7 @@ module.exports = {
       .waitForElementPresent('[data-id="contractGUIUpgradeImplementationLabel"]')
   },
 
-  'Should deploy proxy without initialize parameters #group1': function (browser: NightwatchBrowser) {
+  'Should deploy proxy without initialize parameters #group1 #flaky': function (browser: NightwatchBrowser) {
     browser
       .openFile('myTokenV1.sol')
       .clickLaunchIcon('solidity')
@@ -71,7 +71,9 @@ module.exports = {
       .waitForElementVisible('[data-id="confirmProxyDeployment-modal-footer-ok-react"]')
       .click('[data-id="confirmProxyDeployment-modal-footer-ok-react"]')
       .waitForElementPresent('[data-id="deployedContractItem-0"]')
+      .getBrowserLogs()
       .waitForElementPresent('[data-id="deployedContractItem-1"]')
+      .getBrowserLogs()
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Deploying ERC1967 >= 5.0.0 as proxy...')
   },
 
