@@ -62,6 +62,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
   }
 
   const dynamicButtons: {
+    id: string,
     label: React.ReactElement,
     icon: string,
     color: string,
@@ -71,6 +72,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
   if (currentFile) {
     const fileName = currentFile.split('/').pop() || currentFile
     dynamicButtons.push({
+      id: 'review-file',
       label: <FormattedMessage id="remixApp.aiChatButton.reviewFile" values={{ fileName }} />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-search`,
       color: '',
@@ -81,6 +83,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
   if (latestCompiledContracts && latestCompiledContracts.length > 0) {
     for (const contract of latestCompiledContracts) {
       dynamicButtons.push({
+        id: `deploy-${contract}`,
         label: <FormattedMessage id="remixApp.aiChatButton.deployContract" values={{ contractName: contract }} />,
         icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-rocket`,
         color: '',
@@ -99,12 +102,14 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
   }, [])
 
   const btnList: {
+    id: string,
     label: React.ReactElement,
     icon: string,
     color: string,
     action: () => void
   }[] = [
     {
+      id: 'file',
       label: <FormattedMessage id="remixApp.aiChatButton.file" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} far fa-copy`,
       color: '',
@@ -114,6 +119,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       }
     },
     {
+      id: 'new-workspace',
       label: <FormattedMessage id="remixApp.aiChatButton.newWorkspace" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-plus`,
       color: '',
@@ -123,6 +129,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       }
     },
     {
+      id: 'explore-capabilities',
       label: <FormattedMessage id="remixApp.aiChatButton.exploreCapabilities" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-magic`,
       color: '',
@@ -133,6 +140,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       }
     },
     {
+      id: 'load-skills',
       label: <FormattedMessage id="remixApp.aiChatButton.loadSkills" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
@@ -142,6 +150,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       }
     },
     {
+      id: 'start-learning',
       label: <FormattedMessage id="remixApp.aiChatButton.startLearning" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-graduation-cap`,
       color: '',
@@ -150,6 +159,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
         trackMatomoEvent(plugin, { category: 'ai', action: 'conv_starter', name: 'start_learning', isClick: true })
       }
     },{
+      id: 'ethernews',
       label: <FormattedMessage id="remixApp.aiChatButton.ethernews" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-graduation-cap`,
       color: '',
@@ -160,6 +170,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       }
     },
     {
+      id: 'create-dapp',
       label: <FormattedMessage id="remixApp.aiChatButton.createDapp" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
@@ -173,6 +184,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
 
   if (allowedMcps.includes('mcpBasicExternal')) {
     btnList.push({
+      id: 'etherscan',
       label: <FormattedMessage id="remixApp.aiChatButton.etherscan" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
@@ -182,6 +194,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       }
     })
     btnList.push({
+      id: 'thegraph',
       label: <FormattedMessage id="remixApp.aiChatButton.thegraph" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
@@ -191,6 +204,7 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       }
     })
     btnList.push({
+      id: 'alchemy',
       label: <FormattedMessage id="remixApp.aiChatButton.alchemy" />,
       icon: `${theme?.toLowerCase() === 'dark' ? 'text-remix-ai' : 'text-remix-ai-light'} fas fa-cube`,
       color: '',
@@ -208,8 +222,8 @@ export function AiChatButtons({ theme, plugin, sendPrompt, handleGenerateWorkspa
       <div className="d-flex flex-row flex-wrap gap-1 justify-content-center">
         {btnList.map((starter, index) => (
           <button
-            key={`${starter.label}-${index}`}
-            data-id={`remix-ai-assistant-starter-${starter.label}-${index}`}
+            key={starter.id}
+            data-id={`remix-ai-assistant-starter-${starter.id}`}
             className={`mb-2 border-0 rounded-4 text-nowrap gap-2 btn ${theme?.toLowerCase() === 'dark' ? 'btn-dark' : 'btn-light text-light-emphasis'} `}
             onClick={starter.action}
           >
