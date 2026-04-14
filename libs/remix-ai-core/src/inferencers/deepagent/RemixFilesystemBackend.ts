@@ -48,14 +48,21 @@ export class RemixFilesystemBackend {
     try {
       await this.write_file(path, content)
       return {}
-    } catch (err) {
-      return { error: err.message }
+    } catch (err: any) {
+      return { error: err?.message || String(err) }
     }
   }
 
   // deepagents library calls read(path, offset, limit)
   async read(path: string, offset?: number, limit?: number): Promise<string> {
-    const content = await this.read_file(path)
+    const contentOrError = await this.read_file(path)
+
+    // Handle error case
+    if (typeof contentOrError !== 'string') {
+      throw new Error(contentOrError.error)
+    }
+
+    const content = contentOrError
     if (offset !== undefined || limit !== undefined) {
       const lines = content.split('\n')
       const start = offset || 0
@@ -70,9 +77,16 @@ export class RemixFilesystemBackend {
     filePath: string, oldString: string, newString: string, replaceAll = false
   ): Promise<{ error?: string; occurrences?: number; metadata?: any; filesUpdate?: any }> {
     try {
-      const content = await this.read_file(filePath)
+      const contentOrError = await this.read_file(filePath)
+
+      // Handle error case
+      if (typeof contentOrError !== 'string') {
+        return { error: contentOrError.error, occurrences: 0 }
+      }
+
+      const content = contentOrError
       if (!content.includes(oldString)) {
-        return { error: `Text not found in file: "${oldString.substring(0, 50)}..."` }
+        return { error: `Text not found in file: "${oldString.substring(0, 50)}..."`, occurrences: 0 }
       }
       const updated = replaceAll
         ? content.split(oldString).join(newString)
@@ -82,8 +96,8 @@ export class RemixFilesystemBackend {
         : 1
       await this.write_file(filePath, updated)
       return { occurrences }
-    } catch (err) {
-      return { error: err.message }
+    } catch (err: any) {
+      return { error: err?.message || String(err), occurrences: 0 }
     }
   }
 
@@ -129,20 +143,8 @@ export class RemixFilesystemBackend {
       }
 
       return content
-    } catch (error) {
-      return`Failed to read file ${path}: ${error.message}`
-    }
-  }
-
-  async read(file_path: string, offset: number, limit: number): Promise<string | { error: string }> {
-    try {
-      const content = await this.read_file(file_path)
-      if (typeof content !== 'string') {
-        return content
-      }
-      return content.substring(offset, offset + limit)
-    } catch (error) {
-      return { error: `Failed to read file ${file_path} with offset and limit: ${error.message}` }
+    } catch (error: any) {
+      return `Failed to read file ${path}: ${error?.message || String(error)}`
     }
   }
 
@@ -173,14 +175,11 @@ export class RemixFilesystemBackend {
 
       await this.plugin.call('fileManager', 'writeFile', normalizedPath, finalContent)
       console.log(`[HITL] File written successfully: ${path}`)
-    } catch (error) {
+      return { success: true }
+    } catch (error: any) {
       console.error(`[HITL] Error writing file ${path}:`, error)
-      throw new Error(`Failed to write file ${path}: ${error}`)
+      return { error: `Failed to write file ${path}: ${error?.message || String(error)}` }
     }
-  }
-
-  async write(file_path: string, content: string): Promise<any> {
-    return await this.write_file(file_path, content)
   }
 
   /**
@@ -207,8 +206,8 @@ export class RemixFilesystemBackend {
       await this.write_file(normalizedPath, content)
       return { success: true }
 
-    } catch (error) {
-      return { error: `Failed to edit file ${path}: ${error.message}` }
+    } catch (error: any) {
+      return { error: `Failed to edit file ${path}: ${error?.message || String(error)}` }
     }
   }
 
@@ -233,11 +232,10 @@ export class RemixFilesystemBackend {
 
       const files = await this.plugin.call('fileManager', 'readdir', targetPath)
       return Object.keys(files).map(name => {
-        const fullPath = `${targetPath}/${name}`.replace('//', '/')
         return files[name].isDirectory ? `${name}/` : name
       })
-    } catch (error) {
-      return [`Failed to list directory ${path || 'cwd'}: ${error.message}`]  
+    } catch (error: any) {
+      return [`Failed to list directory ${path || 'cwd'}: ${error?.message || String(error)}`]
     }
   }
 
@@ -262,7 +260,7 @@ export class RemixFilesystemBackend {
         is_dir: files[name].isDirectory
       }))
       return res
-    } catch (error) {
+    } catch (error: any) {
       return []
     }
   }
@@ -274,7 +272,7 @@ export class RemixFilesystemBackend {
     try {
       const normalizedPath = this.normalizePath(path)
       await this.plugin.call('fileManager', 'mkdir', normalizedPath)
-    } catch (error) {
+    } catch (error: any) {
     }
   }
 
@@ -301,8 +299,8 @@ export class RemixFilesystemBackend {
           path: `${name}`.replace('//', '/'),
           is_dir: files[name].isDirectory
         }))
-    } catch (error) {
-      throw new Error(`Failed to glob directory ${path || 'cwd'} with pattern "${pattern}": ${error.message}`)
+    } catch (error: any) {
+      throw new Error(`Failed to glob directory ${path || 'cwd'} with pattern "${pattern}": ${error?.message || String(error)}`)
     }
   }
 
@@ -328,7 +326,7 @@ export class RemixFilesystemBackend {
         if (!files[name].isDirectory) {
           const content = await this.plugin.call('fileManager', 'readFile', `${targetPath}/${name}`)
           const lines = content.split('\n')
-          lines.forEach((line, index) => {
+          lines.forEach((line: string, index: number) => {
             if (regex.test(line)) {
               results.push({ file: `${targetPath}/${name}`, line: index + 1, text: line })
             }
@@ -337,8 +335,8 @@ export class RemixFilesystemBackend {
       }
 
       return results
-    } catch (error) {
-      throw new Error(`Failed to grep directory ${path || 'cwd'} with pattern "${pattern}": ${error.message}`)
+    } catch (error: any) {
+      throw new Error(`Failed to grep directory ${path || 'cwd'} with pattern "${pattern}": ${error?.message || String(error)}`)
     }
   }
 
