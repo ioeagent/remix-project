@@ -4,6 +4,8 @@
  */
 
 import { Plugin } from '@remixproject/engine'
+import EventEmitter from 'events'
+import { ToolApprovalRequest, ToolApprovalResponse } from '../../types/humanInTheLoop'
 
 // File size limit for auto-summarization (100KB)
 const MAX_FILE_SIZE = 100 * 1024
@@ -20,9 +22,69 @@ interface EditInstruction {
 export class RemixFilesystemBackend {
   private plugin: Plugin
   private workspaceRoot: string = '/'
+  private eventEmitter: EventEmitter | null = null
+  private pendingApprovals = new Map<string, (result: { approved: boolean; modifiedContent?: string }) => void>()
 
-  constructor(plugin: Plugin) {
+  constructor(plugin: Plugin, eventEmitter?: EventEmitter) {
     this.plugin = plugin
+    if (eventEmitter) {
+      this.eventEmitter = eventEmitter
+      this.eventEmitter.on('onToolApprovalResponse', (response: ToolApprovalResponse) => {
+        console.log('[HITL] Backend received approval response:', response.requestId, response.approved, response.modifiedArgs ? '(edited)' : '')
+        const resolve = this.pendingApprovals.get(response.requestId)
+        if (resolve) {
+          resolve({
+            approved: response.approved,
+            modifiedContent: response.modifiedArgs?.content
+          })
+          this.pendingApprovals.delete(response.requestId)
+        }
+      })
+    }
+  }
+
+  // deepagents library expects write() to return { error?, metadata?, filesUpdate? }
+  async write(path: string, content: string): Promise<{ error?: string; metadata?: any; filesUpdate?: any }> {
+    try {
+      await this.write_file(path, content)
+      return {}
+    } catch (err) {
+      return { error: err.message }
+    }
+  }
+
+  // deepagents library calls read(path, offset, limit)
+  async read(path: string, offset?: number, limit?: number): Promise<string> {
+    const content = await this.read_file(path)
+    if (offset !== undefined || limit !== undefined) {
+      const lines = content.split('\n')
+      const start = offset || 0
+      const end = limit ? start + limit : lines.length
+      return lines.slice(start, end).join('\n')
+    }
+    return content
+  }
+
+  // deepagents library calls edit(path, old_string, new_string, replace_all)
+  async edit(
+    filePath: string, oldString: string, newString: string, replaceAll = false
+  ): Promise<{ error?: string; occurrences?: number; metadata?: any; filesUpdate?: any }> {
+    try {
+      const content = await this.read_file(filePath)
+      if (!content.includes(oldString)) {
+        return { error: `Text not found in file: "${oldString.substring(0, 50)}..."` }
+      }
+      const updated = replaceAll
+        ? content.split(oldString).join(newString)
+        : content.replace(oldString, newString)
+      const occurrences = replaceAll
+        ? (content.split(oldString).length - 1)
+        : 1
+      await this.write_file(filePath, updated)
+      return { occurrences }
+    } catch (err) {
+      return { error: err.message }
+    }
   }
 
   /**
@@ -78,28 +140,29 @@ export class RemixFilesystemBackend {
    */
   async write_file(path: string, content: string): Promise<void> {
     try {
-      console.log(`[RemixFilesystemBackend] Writing file: ${path}`)
-      const normalizedPath = path //this.normalizePath(path)
+      console.log(`[HITL] write_file called for: ${path}`)
+      const normalizedPath = path
       const exists = await this.plugin.call('fileManager', 'exists', normalizedPath)
-      console.log(`[RemixFilesystemBackend] File exists: ${exists}`)
 
-      // If file exists, show diff for approval
+      let oldContent = ''
       if (exists) {
-        console.log(`[RemixFilesystemBackend] Fetching existing content for diff...`)
-        const oldContent = await this.plugin.call('fileManager', 'readFile', normalizedPath)
-        console.log(`[RemixFilesystemBackend] Old content length: ${oldContent.length}`)
-        console.log(`[RemixFilesystemBackend] New content length: ${content.length}`)
-
-        // Show custom diff to user
-        const approved = await this.showCustomDiff(normalizedPath, oldContent, content)
-        console.log(`[RemixFilesystemBackend] User approved changes: ${approved}`)
+        oldContent = await this.plugin.call('fileManager', 'readFile', normalizedPath)
       }
 
-      // Write the file
-      await this.plugin.call('fileManager', 'writeFile', normalizedPath, content)
-      console.log(`[RemixFilesystemBackend] File written successfully: ${path}`)
+      // Request approval before writing
+      const result = await this.requestWriteApproval(normalizedPath, oldContent, content)
+      if (!result.approved) {
+        console.log(`[HITL] User rejected write to: ${path}`)
+        throw new Error(`User rejected file write to ${path}`)
+      }
+
+      const finalContent = result.modifiedContent || content
+      console.log(`[HITL] User approved write to: ${path}${result.modifiedContent ? ' (with edits)' : ''}`)
+
+      await this.plugin.call('fileManager', 'writeFile', normalizedPath, finalContent)
+      console.log(`[HITL] File written successfully: ${path}`)
     } catch (error) {
-      console.error(`[RemixFilesystemBackend] Error writing file ${path}:`, error)
+      console.error(`[HITL] Error writing file ${path}:`, error)
       throw new Error(`Failed to write file ${path}: ${error}`)
     }
   }
@@ -159,7 +222,7 @@ export class RemixFilesystemBackend {
     }
   }
 
-  async lsInfo(path?: string): Promise<{ name: string, isDirectory: boolean }[]> {
+  async lsInfo(path?: string): Promise<{ path: string, is_dir: boolean, size?: number }[]> {
     try {
       const targetPath = path ? this.normalizePath(path) : await this.cwd()
 
@@ -175,8 +238,8 @@ export class RemixFilesystemBackend {
 
       const files = await this.plugin.call('fileManager', 'readdir', targetPath)
       return Object.keys(files).map(name => ({
-        name,
-        isDirectory: files[name].isDirectory
+        path: `${targetPath}/${name}`.replace('//', '/'),
+        is_dir: files[name].isDirectory
       }))
     } catch (error) {
       throw new Error(`Failed to list directory info for ${path || 'cwd'}: ${error.message}`)
@@ -280,7 +343,7 @@ export class RemixFilesystemBackend {
       const contractMatch = line.match(contractRegex)
       if (contractMatch) {
         currentContract = contractMatch[2]
-        contracts[currentContract] = { functions: [], events: [] }
+        contracts[currentContract] = { functions: [], events: []}
         summary.push(`=== ${contractMatch[1]} ${currentContract} ===`)
       }
 
@@ -317,29 +380,38 @@ export class RemixFilesystemBackend {
   }
 
   /**
-   * Show custom diff to user for approval
+   * Request user approval before writing a file.
+   * If no eventEmitter is connected, auto-approves.
    */
-  private async showCustomDiff(
+  private async requestWriteApproval(
     path: string,
     oldContent: string,
     newContent: string
-  ): Promise<boolean> {
-    try {
-      // Use Remix's diff viewer if available
-      if (this.plugin.call) {
-        // Try to show diff in terminal or notification
-        await this.plugin.call('terminal', 'log', {
-          type: 'info',
-          value: `DeepAgent wants to modify ${path}. Please review the changes.`
-        })
-      }
-
-      // For now, auto-approve (in production, this should show a diff modal)
-      // TODO: Integrate with Remix UI to show proper diff modal
-      return true
-    } catch (error) {
-      console.warn('Failed to show diff:', error)
-      return true // Auto-approve on error
+  ): Promise<{ approved: boolean; modifiedContent?: string }> {
+    if (!this.eventEmitter) {
+      console.log('[HITL] No eventEmitter — auto-approving write')
+      return { approved: true }
     }
+
+    const requestId = `fs_approval_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    console.log('[HITL] Requesting write approval:', requestId, path)
+
+    const request: ToolApprovalRequest = {
+      requestId,
+      toolName: 'write_file',
+      toolArgs: { path, content: newContent },
+      category: 'file_write',
+      risk: 'high',
+      existingContent: oldContent || undefined,
+      proposedContent: newContent,
+      filePath: path,
+      timestamp: Date.now()
+    }
+
+    return new Promise<{ approved: boolean; modifiedContent?: string }>((resolve) => {
+      this.pendingApprovals.set(requestId, resolve)
+      console.log('[HITL] Emitting onToolApprovalRequired:', requestId)
+      this.eventEmitter.emit('onToolApprovalRequired', request)
+    })
   }
 }
