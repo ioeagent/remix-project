@@ -30,7 +30,13 @@ const profile = {
     'respondToToolApproval',
     'clearCaches', 'cancelRequest'
   ],
-  events: [],
+  events: [
+    'modelChanged',
+    'chatMessageSent', 'chatPipeRequested',
+    'codeExplainRequested', 'errorExplainRequested', 'vulnerabilityCheckRequested',
+    'codeCompletionUsed', 'workspaceGenerated',
+    'mcpEnabled', 'mcpDisabled'
+  ],
   icon: 'assets/img/remix-logo-blue.png',
   description: 'RemixAI provides AI services to Remix IDE.',
   kind: '',
@@ -242,6 +248,7 @@ export class RemixAIPlugin extends Plugin {
   }
 
   async code_completion(prompt: string, promptAfter: string, params:IParams=CompletionParams): Promise<any> {
+    this.emit('codeCompletionUsed')
     if (this.completionAgent.indexer == null || this.completionAgent.indexer == undefined) await this.completionAgent.indexWorkspace()
     params.provider = 'mistralai' // default provider for code completion
     const currentFileName = await this.call('fileManager', 'getCurrentFile')
@@ -250,7 +257,7 @@ export class RemixAIPlugin extends Plugin {
   }
 
   async answer(prompt: string, params: IParams=GenerationParams): Promise<any> {
-
+    this.emit('chatMessageSent')
     let newPrompt = await this.codeExpAgent.chatCommand(prompt)
     // add workspace context
     newPrompt = !this.workspaceAgent.ctxFiles ? newPrompt : "Using the following context: ```\n" + this.workspaceAgent.ctxFiles + "```\n\n" + newPrompt
@@ -267,6 +274,7 @@ export class RemixAIPlugin extends Plugin {
   }
 
   async code_explaining(prompt: string, context: string, params: IParams=GenerationParams): Promise<any> {
+    this.emit('codeExplainRequested')
     let result
     if (this.deepAgentEnabled && this.deepAgentInferencer) {
       result = await this.deepAgentInferencer.code_explaining(prompt, context, params)
@@ -280,6 +288,7 @@ export class RemixAIPlugin extends Plugin {
   }
 
   async error_explaining(prompt: string, params: IParams=GenerationParams): Promise<any> {
+    this.emit('errorExplainRequested')
     let localFilesImports = ""
 
     // Get local imports from the workspace restrict to 5 most relevant files
@@ -296,6 +305,7 @@ export class RemixAIPlugin extends Plugin {
   }
 
   async vulnerability_check(prompt: string, params: IParams=GenerationParams): Promise<any> {
+    this.emit('vulnerabilityCheckRequested')
     const result = await this.remoteInferencer.vulnerability_check(prompt, params)
     if (result && params.terminal_output) this.call('terminal', 'log', { type: 'aitypewriterwarning', value: result })
     return result
@@ -346,6 +356,7 @@ export class RemixAIPlugin extends Plugin {
     this.setAssistantProvider(await this.getAssistantProvider())
     if (genResult.includes('No payload')) return genResult
     await this.call('menuicons', 'select', 'filePanel')
+    this.emit('workspaceGenerated')
     return genResult
   }
 
@@ -387,7 +398,9 @@ export class RemixAIPlugin extends Plugin {
     const result = await this.remoteInferencer.generateWorkspace(userPrompt, params)
 
     await statusCallback?.(await this.getLocalizedMessage('remixApp.ai.status.applyingChanges'))
-    return (result !== undefined) ? this.workspaceAgent.writeGenerationResults(result, statusCallback) : "### No Changes applied!"
+    const finalResult = (result !== undefined) ? this.workspaceAgent.writeGenerationResults(result, statusCallback) : "### No Changes applied!"
+    this.emit('workspaceGenerated')
+    return finalResult
   }
 
   async fixWorspaceErrors(): Promise<any> {
@@ -427,6 +440,7 @@ export class RemixAIPlugin extends Plugin {
       console.log("chatRequestBuffer is not empty. First process the last request.", this.chatRequestBuffer)
     }
     trackMatomoEvent(this, { category: 'ai', action: 'remixAI', name: 'remixAI_chat', isClick: false })
+    this.emit('chatPipeRequested', fn)
   }
 
   async ProcessChatRequestBuffer(params:IParams=GenerationParams){
@@ -718,6 +732,7 @@ export class RemixAIPlugin extends Plugin {
 
   async enableMCPEnhancement(): Promise<void> {
     this.mcpEnabled = true;
+    this.emit('mcpEnabled')
 
     if (!this.mcpServers || this.mcpServers.length === 0) {
       return;
@@ -742,6 +757,7 @@ export class RemixAIPlugin extends Plugin {
 
   async disableMCPEnhancement(): Promise<void> {
     this.mcpEnabled = false;
+    this.emit('mcpDisabled')
   }
 
   isMCPEnabled(): boolean {

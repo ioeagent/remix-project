@@ -725,15 +725,19 @@ export const TabsUI = (props: TabsUIProps) => {
 
         const modalContent = {
           id: 'generate-website-ai-banner',
-          title: 'Generate a Dapp UI with AI',
+          title: 'Generate a DApp UI with AI',
           message: <AIRequestForm onMount={(fn) => { getFormData = fn }} />,
           modalType: 'custom',
           okLabel: 'Generate',
           cancelLabel: 'Cancel',
           okFn: async () => {
             if (getFormData) {
-              const formData = await getFormData()
-              resolve(formData)
+              try {
+                const formData = await getFormData()
+                resolve(formData)
+              } catch (e) {
+                reject(e)
+              }
             } else {
               reject(new Error('Form data not initialized'))
             }

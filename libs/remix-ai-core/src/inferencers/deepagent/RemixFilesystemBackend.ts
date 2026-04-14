@@ -110,7 +110,7 @@ export class RemixFilesystemBackend {
    * Read file contents
    * Auto-summarizes files larger than 100KB
    */
-  async read_file(path: string): Promise<string> {
+  async read_file(path: string): Promise<string | { error: string }> {
     try {
       console.log(`[RemixFilesystemBackend] Reading file: ${path}`)
       const normalizedPath = path //this.normalizePath(path)
@@ -130,7 +130,19 @@ export class RemixFilesystemBackend {
 
       return content
     } catch (error) {
-      throw new Error(`Failed to read file ${path}: ${error.message}`)
+      return`Failed to read file ${path}: ${error.message}`
+    }
+  }
+
+  async read(file_path: string, offset: number, limit: number): Promise<string | { error: string }> {
+    try {
+      const content = await this.read_file(file_path)
+      if (typeof content !== 'string') {
+        return content
+      }
+      return content.substring(offset, offset + limit)
+    } catch (error) {
+      return { error: `Failed to read file ${file_path} with offset and limit: ${error.message}` }
     }
   }
 
@@ -138,7 +150,7 @@ export class RemixFilesystemBackend {
    * Write file contents
    * Shows diff to user for approval before writing
    */
-  async write_file(path: string, content: string): Promise<void> {
+  async write_file(path: string, content: string): Promise< { success?: boolean, error?: string } > {
     try {
       console.log(`[HITL] write_file called for: ${path}`)
       const normalizedPath = path
@@ -167,31 +179,36 @@ export class RemixFilesystemBackend {
     }
   }
 
+  async write(file_path: string, content: string): Promise<any> {
+    return await this.write_file(file_path, content)
+  }
+
   /**
    * Edit file with search/replace operations
    */
-  async edit_file(path: string, edits: EditInstruction[]): Promise<void> {
+  async edit_file(path: string, edits: EditInstruction[]): Promise< { success?: boolean, error?: string } > {
     try {
       const normalizedPath = this.normalizePath(path)
       let content = await this.read_file(normalizedPath)
 
-      // Apply each edit instruction
+      if (typeof content !== 'string') {
+        throw new Error(`Failed to read file: ${content.error}`)
+      }
+
       for (const edit of edits) {
         const { oldText, newText } = edit
-
-        // Check if oldText exists in content
         if (!content.includes(oldText)) {
           throw new Error(`Text not found in file: "${oldText.substring(0, 50)}..."`)
         }
 
-        // Replace the text
         content = content.replace(oldText, newText)
       }
 
-      // Write the edited content
       await this.write_file(normalizedPath, content)
+      return { success: true }
+
     } catch (error) {
-      throw new Error(`Failed to edit file ${path}: ${error.message}`)
+      return { error: `Failed to edit file ${path}: ${error.message}` }
     }
   }
 
@@ -200,7 +217,9 @@ export class RemixFilesystemBackend {
    */
   async ls(path?: string): Promise<string[]> {
     try {
+      console.log(`[RemixFilesystemBackend] Listing directory: ${path || 'cwd'}`)
       const targetPath = path ? this.normalizePath(path) : await this.cwd()
+      console.log(`[RemixFilesystemBackend] Target path normalized for ls: ${targetPath}`)
 
       const exists = await this.plugin.call('fileManager', 'exists', targetPath)
       if (!exists) {
@@ -218,14 +237,13 @@ export class RemixFilesystemBackend {
         return files[name].isDirectory ? `${name}/` : name
       })
     } catch (error) {
-      throw new Error(`Failed to list directory ${path || 'cwd'}: ${error.message}`)
+      return [`Failed to list directory ${path || 'cwd'}: ${error.message}`]  
     }
   }
 
-  async lsInfo(path?: string): Promise<{ path: string, is_dir: boolean, size?: number }[]> {
+  async lsInfo(path?: string): Promise<{ name: string, path: string, is_dir: boolean }[]> {
     try {
       const targetPath = path ? this.normalizePath(path) : await this.cwd()
-
       const exists = await this.plugin.call('fileManager', 'exists', targetPath)
       if (!exists) {
         throw new Error(`Path not found: ${targetPath}`)
@@ -237,12 +255,15 @@ export class RemixFilesystemBackend {
       }
 
       const files = await this.plugin.call('fileManager', 'readdir', targetPath)
-      return Object.keys(files).map(name => ({
-        path: `${targetPath}/${name}`.replace('//', '/'),
+
+      const res = Object.keys(files).map(name => ({
+        name,
+        path: `${name}`.replace('//', '/'),
         is_dir: files[name].isDirectory
       }))
+      return res
     } catch (error) {
-      throw new Error(`Failed to list directory info for ${path || 'cwd'}: ${error.message}`)
+      return []
     }
   }
 
@@ -254,7 +275,70 @@ export class RemixFilesystemBackend {
       const normalizedPath = this.normalizePath(path)
       await this.plugin.call('fileManager', 'mkdir', normalizedPath)
     } catch (error) {
-      throw new Error(`Failed to create directory ${path}: ${error.message}`)
+    }
+  }
+
+  async globInfo(pattern: string, path?: string): Promise<{ name: string, path: string, is_dir: boolean }[]> {
+    try {
+      const targetPath = path ? this.normalizePath(path) : await this.cwd()
+      const exists = await this.plugin.call('fileManager', 'exists', targetPath)
+      if (!exists) {
+        throw new Error(`Path not found: ${targetPath}`)
+      }
+
+      const isDir = await this.plugin.call('fileManager', 'isDirectory', targetPath)
+      if (!isDir) {
+        throw new Error(`Not a directory: ${targetPath}`)
+      }
+
+      const files = await this.plugin.call('fileManager', 'readdir', targetPath)
+      const regex = new RegExp(pattern.replace(/\*/g, '.*')) // Simple glob to regex conversion
+
+      return Object.keys(files)
+        .filter(name => regex.test(name))
+        .map(name => ({
+          name,
+          path: `${name}`.replace('//', '/'),
+          is_dir: files[name].isDirectory
+        }))
+    } catch (error) {
+      throw new Error(`Failed to glob directory ${path || 'cwd'} with pattern "${pattern}": ${error.message}`)
+    }
+  }
+
+  async grepRaw(pattern: string, path?: string): Promise<{ file: string, line: number, text: string }[]> {
+    try {
+      const targetPath = path ? this.normalizePath(path) : await this.cwd()
+      const exists = await this.plugin.call('fileManager', 'exists', targetPath)
+      if (!exists) {
+        throw new Error(`Path not found: ${targetPath}`)
+      }
+
+      const isDir = await this.plugin.call('fileManager', 'isDirectory', targetPath)
+      if (!isDir) {
+        throw new Error(`Not a directory: ${targetPath}`)
+      }
+
+      const files = await this.plugin.call('fileManager', 'readdir', targetPath)
+      const regex = new RegExp(pattern)
+
+      const results: { file: string, line: number, text: string }[] = []
+
+      for (const name of Object.keys(files)) {
+        if (!files[name].isDirectory) {
+          const content = await this.plugin.call('fileManager', 'readFile', `${targetPath}/${name}`)
+          const lines = content.split('\n')
+          lines.forEach((line, index) => {
+            if (regex.test(line)) {
+              results.push({ file: `${targetPath}/${name}`, line: index + 1, text: line })
+            }
+          })
+        }
+      }
+
+      return results
+    } catch (error) {
+      throw new Error(`Failed to grep directory ${path || 'cwd'} with pattern "${pattern}": ${error.message}`)
     }
   }
 

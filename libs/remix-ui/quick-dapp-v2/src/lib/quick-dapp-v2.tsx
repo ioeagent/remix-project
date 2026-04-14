@@ -40,6 +40,8 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
   // DappManager now receives the plugin from props instead of a singleton
   const dappManager = useMemo(() => new DappManager(plugin as any), [plugin]);
   const dappManagerRef = useRef(dappManager);
+  // Track workspaces being deleted by us to prevent double SET_DAPPS dispatch
+  const deletingWorkspacesRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     dappsRef.current = appState.dapps;
@@ -180,6 +182,8 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
     };
 
     const handleWorkspaceDeleted = (workspaceName: string) => {
+      // Skip if we triggered this deletion ourselves (prevents double dispatch)
+      if (deletingWorkspacesRef.current.has(workspaceName)) return;
       const filtered = dappsRef.current.filter((d: any) => d.workspaceName !== workspaceName);
       dispatch({ type: 'SET_DAPPS', payload: filtered });
     };
@@ -352,36 +356,82 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
 
   // Handle delete operations
   const handleDeleteOne = async (dapp: DappConfig) => {
-    if (!dapp.workspaceName) return;
+    if (!dapp.workspaceName || !dappManager) return;
 
     try {
-      await plugin.call('filePanel', 'deleteWorkspace', dapp.workspaceName);
-      dispatch({
-        type: 'SET_DAPPS',
-        payload: dappsRef.current.filter((d: DappConfig) => d.id !== dapp.id)
-      });
-      // Re-focus quick-dapp-v2 tab after a delay since deleteWorkspace
-      // triggers async workspace switching that shifts mainPanel focus
-      setTimeout(async () => {
-        try { await plugin.call('tabs', 'focus', 'quick-dapp-v2'); } catch (e) {}
-      }, 500);
+      deletingWorkspacesRef.current.add(dapp.workspaceName);
+      await dappManager.deleteDapp(dapp.workspaceName);
+      const updatedDapps = await dappManager.getDapps();
+      dispatch({ type: 'SET_DAPPS', payload: updatedDapps || []});
+
+      if (!updatedDapps || updatedDapps.length === 0) {
+        dispatch({ type: 'SET_VIEW', payload: 'create' });
+      }
+
+      // Directly clean localStorage.recentWorkspaces
+      try {
+        const raw = localStorage.getItem('recentWorkspaces');
+        if (raw) {
+          const recents = JSON.parse(raw);
+          const cleaned = recents.filter((entry: any) => {
+            const name = typeof entry === 'string' ? entry : entry?.name;
+            return name !== dapp.workspaceName;
+          });
+          localStorage.setItem('recentWorkspaces', JSON.stringify(cleaned));
+        }
+      } catch {}
     } catch (e) {
-      console.error('[QuickDapp] Failed to delete workspace:', e);
+      console.error('[QuickDapp] deleteOne failed:', e);
+    } finally {
+      deletingWorkspacesRef.current.delete(dapp.workspaceName);
     }
   };
 
   const handleDeleteAll = async () => {
-    for (const dapp of dappsRef.current) {
-      if (dapp.workspaceName) {
-        try {
-          await plugin.call('filePanel', 'deleteWorkspace', dapp.workspaceName);
-        } catch (e) {}
+    // Snapshot workspace names before clearing
+    const deletedWorkspaceNames = dappsRef.current
+      .map(d => d.workspaceName)
+      .filter(Boolean);
+
+    try {
+      // Collect workspace names to mark as "deleting by us"
+      for (const dapp of dappsRef.current) {
+        if (dapp.workspaceName) {
+          deletingWorkspacesRef.current.add(dapp.workspaceName);
+        }
       }
+      // Optimistic UI: clear DApp list immediately so user sees instant feedback
+      dispatch({ type: 'SET_DAPPS', payload: []});
+      dispatch({ type: 'SET_VIEW', payload: 'create' });
+
+      await dappManager.deleteAllDapps();
+
+      // Directly clean localStorage.recentWorkspaces to avoid depending on
+      // homeTab's workspaceDeleted event listener (which may not be mounted)
+      try {
+        const raw = localStorage.getItem('recentWorkspaces');
+        if (raw) {
+          const recents = JSON.parse(raw);
+          const cleaned = recents.filter((entry: any) => {
+            const name = typeof entry === 'string' ? entry : entry?.name;
+            return !deletedWorkspaceNames.includes(name);
+          });
+          localStorage.setItem('recentWorkspaces', JSON.stringify(cleaned));
+        }
+      } catch {}
+    } catch (e) {
+      console.error('[QuickDapp] deleteAll failed:', e);
+      // Recover: re-fetch actual state if deletion failed
+      try {
+        const remaining = await dappManager.getDapps();
+        dispatch({ type: 'SET_DAPPS', payload: remaining || []});
+        if (remaining && remaining.length > 0) {
+          dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
+        }
+      } catch {}
+    } finally {
+      deletingWorkspacesRef.current.clear();
     }
-    dispatch({ type: 'SET_DAPPS', payload: []});
-    dispatch({ type: 'SET_VIEW', payload: 'create' });
-    // Re-focus quick-dapp-v2 tab since deleteWorkspace shifts mainPanel focus
-    try { await plugin.call('tabs', 'focus', 'quick-dapp-v2'); } catch (e) {}
   };
 
   const renderContent = () => {

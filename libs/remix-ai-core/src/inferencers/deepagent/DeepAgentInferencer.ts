@@ -398,14 +398,14 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
       let finalMessageFromChain = ''
       for await (const event of eventStream) {
         const eventType = event.event
-        console.log(`[DeepAgentInferencer] Received event: ${eventType}`, event)
+        // console.log(`[DeepAgentInferencer] Received event: ${eventType}`, event)
 
         // Handle different event types from the stream
         if (eventType === 'on_chat_model_stream') {
           // Token-level streaming from the LLM - this is the actual text streaming
           const chunk = event.data?.chunk
           if (chunk?.content) {
-            console.log(`[DeepAgentInferencer] Received token chunk:`, chunk.content)
+            // console.log(`[DeepAgentInferencer] Received token chunk:`, chunk.content)
 
             // Extract delta content - handle different response formats
             let deltaContent = ''
@@ -420,7 +420,7 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
               }
             }
 
-            console.log(`[DeepAgentInferencer] Extracted delta:`, deltaContent)
+            // console.log(`[DeepAgentInferencer] Extracted delta:`, deltaContent)
             if (deltaContent) {
               fullResponse += deltaContent
               // Emit incremental delta for streaming display
@@ -434,18 +434,16 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
             const lastMessage = output.messages[output.messages.length - 1]
             if (lastMessage.content && typeof lastMessage.content === 'string') {
               finalMessageFromChain = lastMessage.content
-              console.log('[DeepAgentInferencer] Chain end - final message length:', finalMessageFromChain.length)
+              // console.log('[DeepAgentInferencer] Chain end - final message length:', finalMessageFromChain.length)
             }
           }
         } else if (eventType === 'on_tool_start') {
           // Tool execution started
           const toolName = event.name
-          console.log(`[DeepAgentInferencer] Tool started: ${toolName}`)
-          this.event.emit('onStreamResult', `\n[Using tool: ${toolName}]\n`)
+          console.log('onStreamResult', `\n[Using tool: ${toolName}]\n\n\n`)
         } else if (eventType === 'on_tool_end') {
           // Tool execution completed
           const toolName = event.name
-          console.log(`[DeepAgentInferencer] Tool completed: ${toolName}`)
         }
       }
 
@@ -459,6 +457,7 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
       console.log('[DeepAgentInferencer] Stream complete, full response length:', fullResponse.length)
       return fullResponse
     } catch (error) {
+      console.error('[DeepAgentInferencer] Error during agent execution:', error)
       if (error.name === 'AbortError') {
         throw new DeepAgentError(
           'Request cancelled by user',
