@@ -70,7 +70,11 @@ export class RunTab extends ViewPlugin {
 
   setDispatch(dispatch: (state: any) => void) {
     this.dispatch = dispatch
-    this.renderComponent()
+    // When dispatch is set (on mount/remount), ensure we render after DOM is ready
+    // Use requestAnimationFrame to ensure DOM elements are created before portals try to attach
+    requestAnimationFrame(() => {
+      this.renderComponent()
+    })
   }
 
   renderComponent() {
