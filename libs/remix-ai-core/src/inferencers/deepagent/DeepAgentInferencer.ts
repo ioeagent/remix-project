@@ -132,7 +132,21 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
     }
 
     // Initialize filesystem backend with shared EventEmitter for approval
-    this.filesystemBackend = new RemixFilesystemBackend(plugin, this.event)
+    const rawBackend = new RemixFilesystemBackend(plugin, this.event)
+
+    // Proxy wrapper: logs every method call from the deepagents library
+    this.filesystemBackend = new Proxy(rawBackend, {
+      get(target, prop, receiver) {
+        const value = Reflect.get(target, prop, receiver)
+        if (typeof value === 'function') {
+          return function (...args: any[]) {
+            console.log(`[HITL][Proxy] Backend.${String(prop)}() called with`, args.length, 'args:', args.map(a => typeof a === 'string' ? a.substring(0, 80) : a))
+            return value.apply(target, args)
+          }
+        }
+        return value
+      }
+    }) as any
 
     // Initialize tools with approval gate
     this.approvalGate = new ToolApprovalGate(plugin, this.event, 'ask_risky')
@@ -165,6 +179,8 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
         await this.memoryBackend.init()
       }
 
+      // LangGraph checkpointer — manages agent internal state (conversation, tool calls)
+      // Ref: Yann's PR #7080 (langchain_skills)
       const checkpointer = new MemorySaver();
 
       // Create DeepAgent configuration
@@ -352,20 +368,9 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
           DeepAgentErrorType.INITIALIZATION_FAILED
         )
       }
-      const chatHistory = buildChatPrompt()
-      let messages = []
-
-      if (chatHistory.length > 0) {
-        messages = [
-          ...chatHistory,
-          { role: 'user', content: context ? `Context:\n${context}\n\nQuestion: ${prompt}` : prompt }
-        ]
-      } else {
-        messages = [
-          { role: 'system', content: REMIX_DEEPAGENT_SYSTEM_PROMPT },
-          { role: 'user', content: context ? `Context:\n${context}\n\nQuestion: ${prompt}` : prompt }
-        ]
-      }
+      const messages = [
+        { role: 'user', content: context ? `Context:\n${context}\n\nQuestion: ${prompt}` : prompt }
+      ]
       console.log('[DeepAgentInferencer] Running answer with messages:')
       const responsePromise = this.runAgent(messages, params)
 
@@ -492,6 +497,7 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
         },
         {
           version: 'v2',
+          // Each request gets a unique thread_id for the LangGraph checkpointer.
           configurable: {
             thread_id: `remix-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
           },
@@ -601,7 +607,6 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
           console.log('[DeepAgentInferencer] Tool call started:', toolName, toolInput)
           this.event.emit('onToolCall', { toolName, toolInput, status: 'start' })
         } else if (eventType === 'on_tool_end') {
-          // Tool execution completed
           const toolName = event.name
           const toolOutput = event.data?.output
           console.log('[DeepAgentInferencer] Tool call ended:', toolName)

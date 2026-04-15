@@ -438,7 +438,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
 
     // Human-in-the-loop: listen for tool approval requests
     const handleToolApproval = (request: ToolApprovalRequest) => {
-      console.log('[HITL] UI received approval request:', request.requestId, request.toolName, request.filePath)
+      console.log('[HITL][UI][Step 5b] Received approval request:', request.requestId, 'tool:', request.toolName, 'path:', request.filePath)
       setPendingApproval(request)
     }
     props.plugin.on('remixAI', 'onToolApprovalRequired', handleToolApproval)
@@ -507,7 +507,8 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
 
   const handleApproveToolAction = useCallback((modifiedArgs?: Record<string, any>) => {
     if (!pendingApproval) return
-    console.log('[HITL] UI approving:', pendingApproval.requestId)
+    console.log('[HITL][UI][Step 6a] User APPROVED:', pendingApproval.requestId, 'hasModifiedArgs:', !!modifiedArgs)
+    if (modifiedArgs) console.log('[HITL][UI] modifiedArgs keys:', Object.keys(modifiedArgs))
     props.plugin.call('remixAI', 'respondToToolApproval', {
       requestId: pendingApproval.requestId,
       approved: true,
@@ -518,7 +519,7 @@ export const RemixUiRemixAiAssistant = React.forwardRef<
 
   const handleRejectToolAction = useCallback(() => {
     if (!pendingApproval) return
-    console.log('[HITL] UI rejecting:', pendingApproval.requestId)
+    console.log('[HITL][UI][Step 6a] User REJECTED:', pendingApproval.requestId)
     props.plugin.call('remixAI', 'respondToToolApproval', {
       requestId: pendingApproval.requestId,
       approved: false
