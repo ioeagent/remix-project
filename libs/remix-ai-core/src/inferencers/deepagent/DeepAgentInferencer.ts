@@ -26,6 +26,7 @@ import { HumanMessage, AIMessage } from '@langchain/core/messages'
 import type { DynamicStructuredTool } from '@langchain/core/tools'
 import { GenerationParams } from '../../types/models'
 import { buildChatPrompt } from '../../prompts/promptBuilder'
+import { MemorySaver } from "@langchain/langgraph"
 
 /**
  * DeepAgentInferencer integrates LangChain DeepAgent with Remix IDE
@@ -66,7 +67,21 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
     }
 
     // Initialize filesystem backend with shared EventEmitter for approval
-    this.filesystemBackend = new RemixFilesystemBackend(plugin, this.event)
+    const rawBackend = new RemixFilesystemBackend(plugin, this.event)
+
+    // Proxy wrapper: logs every method call from the deepagents library
+    this.filesystemBackend = new Proxy(rawBackend, {
+      get(target, prop, receiver) {
+        const value = Reflect.get(target, prop, receiver)
+        if (typeof value === 'function') {
+          return function (...args: any[]) {
+
+            return value.apply(target, args)
+          }
+        }
+        return value
+      }
+    }) as any
 
     // Initialize tools with approval gate
     this.approvalGate = new ToolApprovalGate(plugin, this.event, 'ask_risky')
@@ -113,13 +128,19 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
         await this.memoryBackend.init()
       }
 
+      // LangGraph checkpointer. manages agent internal state (conversation, tool calls).
+      // Ref: Yann's PR #7080 (langchain_skills)
+      const checkpointer = new MemorySaver()
+
       // Create DeepAgent configuration
       console.log('[DeepAgentInferencer] Setting up agent configuration...')
       const agentConfig: any = {
         backend: this.filesystemBackend,
         tools: this.tools,
         model: this.model,
-        systemPrompt: REMIX_DEEPAGENT_SYSTEM_PROMPT
+        systemPrompt: REMIX_DEEPAGENT_SYSTEM_PROMPT,
+        skills: ["skills/"],
+        checkpointer
       }
 
       // Configure specialized subagents
@@ -251,20 +272,9 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
           DeepAgentErrorType.INITIALIZATION_FAILED
         )
       }
-      const chatHistory = buildChatPrompt()
-      let messages = []
-
-      if (chatHistory.length > 0) {
-        messages = [
-          ...chatHistory,
-          { role: 'user', content: context ? `Context:\n${context}\n\nQuestion: ${prompt}` : prompt }
-        ]
-      } else {
-        messages = [
-          { role: 'system', content: REMIX_DEEPAGENT_SYSTEM_PROMPT },
-          { role: 'user', content: context ? `Context:\n${context}\n\nQuestion: ${prompt}` : prompt }
-        ]
-      }
+      const messages = [
+        { role: 'user', content: context ? `Context:\n${context}\n\nQuestion: ${prompt}` : prompt }
+      ]
       console.log('[DeepAgentInferencer] Running answer with messages:')
 
       // Return empty string immediately to signal streaming mode
@@ -390,7 +400,11 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
           messages: langchainMessages
         },
         {
-          version: 'v2'
+          version: 'v2',
+          // Each request gets a unique thread_id for the LangGraph checkpointer.
+          configurable: {
+            thread_id: `remix-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
+          }
         }
       )
 
@@ -398,15 +412,13 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
       let finalMessageFromChain = ''
       for await (const event of eventStream) {
         const eventType = event.event
-        // console.log(`[DeepAgentInferencer] Received event: ${eventType}`, event)
+        console.log(`[DeepAgentInferencer] Event: ${eventType}`, event.name || '')
 
         // Handle different event types from the stream
         if (eventType === 'on_chat_model_stream') {
           // Token-level streaming from the LLM - this is the actual text streaming
           const chunk = event.data?.chunk
           if (chunk?.content) {
-            // console.log(`[DeepAgentInferencer] Received token chunk:`, chunk.content)
-
             // Extract delta content - handle different response formats
             let deltaContent = ''
             if (typeof chunk.content === 'string') {
@@ -420,7 +432,6 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
               }
             }
 
-            // console.log(`[DeepAgentInferencer] Extracted delta:`, deltaContent)
             if (deltaContent) {
               fullResponse += deltaContent
               // Emit incremental delta for streaming display
@@ -434,16 +445,15 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
             const lastMessage = output.messages[output.messages.length - 1]
             if (lastMessage.content && typeof lastMessage.content === 'string') {
               finalMessageFromChain = lastMessage.content
-              // console.log('[DeepAgentInferencer] Chain end - final message length:', finalMessageFromChain.length)
             }
           }
         } else if (eventType === 'on_tool_start') {
-          // Tool execution started
           const toolName = event.name
-          console.log('onStreamResult', `\n[Using tool: ${toolName}]\n\n\n`)
+          console.log(`[DeepAgentInferencer] ★ TOOL START: ${toolName}`, JSON.stringify(event.data?.input || {}).substring(0, 200))
+          console.log('onStreamResult', `\n[Using tool: ${toolName}]\n`)
         } else if (eventType === 'on_tool_end') {
-          // Tool execution completed
           const toolName = event.name
+          console.log(`[DeepAgentInferencer] ★ TOOL END: ${toolName}`, JSON.stringify(event.data?.output || '').substring(0, 200))
         }
       }
 
@@ -454,7 +464,12 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
         fullResponse = finalMessageFromChain
       }
 
-      console.log('[DeepAgentInferencer] Stream complete, full response length:', fullResponse.length)
+      // Flush any pending edit batches — this triggers the HITL modal immediately
+      // after the agent finishes, so the user sees the combined diff right away
+
+      await (this.filesystemBackend as any).flushAllPendingBatches()
+
+      console.log('[DeepAgentInferencer] Full response length:', fullResponse.length)
       return fullResponse
     } catch (error) {
       console.error('[DeepAgentInferencer] Error during agent execution:', error)

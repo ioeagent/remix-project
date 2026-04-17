@@ -33,22 +33,36 @@ export interface ToolPolicyConfig {
 // Read-only tools that never require approval
 // Covers both deepagents built-in names and MCP tool names
 const SAFE_TOOLS = new Set([
-  'read_file', 'file_read', 'list_directory', 'ls',
+  'read_file', 'file_read', 'read_file_chunk', 'grep_file',
+  'list_directory', 'directory_list', 'ls',
   'get_current_file', 'get_opened_files', 'open_file',
   'get_contract_abi', 'get_compiler_config',
   'compile_solidity', 'solidity_compile', 'analyze_contract',
   'dapp_list', 'dapp_get_status', 'dapp_open', 'dapp_navigate',
-  'get_deployed_contracts', 'debug_transaction'
+  'get_deployed_contracts', 'debug_transaction',
+  'file_exists' // read-only check, no side effects
+])
+
+/**
+ * Tools where ToolApprovalGate should write the file directly after approval,
+ * bypassing the handler's execute() which would trigger a second review via showCustomDiff.
+ * This prevents the double-approval problem.
+ */
+export const DIRECT_WRITE_TOOLS = new Set([
+  'file_write', 'file_create', 'file_replace'
 ])
 
 const TOOL_METADATA: Record<string, { category: ToolCategory; risk: ToolRisk }> = {
   // deepagents built-in names
   write_file:       { category: 'file_write', risk: 'high' },
   edit_file:        { category: 'file_write', risk: 'high' },
-  // MCP tool names (in case they differ)
+  // MCP tool names
   file_write:       { category: 'file_write', risk: 'high' },
   file_create:      { category: 'file_write', risk: 'high' },
+  file_replace:     { category: 'file_write', risk: 'high' },
   file_delete:      { category: 'file_delete', risk: 'high' },
+  file_move:        { category: 'file_write', risk: 'high' },
+  file_copy:        { category: 'file_write', risk: 'medium' },
   deploy_contract:  { category: 'deployment', risk: 'high' },
   set_compiler_config: { category: 'other', risk: 'medium' },
   send_transaction: { category: 'transaction', risk: 'high' },
