@@ -15,12 +15,19 @@ import { QueryParams } from '@remix-project/remix-lib'
 import * as packageJson from '../../../../../package.json'
 
 const STORAGE_KEY = 'remix_anonymous_request_tokens'
+const UNREDEEMED_KEY = 'remix_unredeemed_invite_tokens'
 
 interface StoredToken {
   token: string
   group_id: number
   group_name: string
   created_at: string
+}
+
+interface UnredeemedInvite {
+  invite_token: string
+  group_name: string
+  stored_at: string
 }
 
 const profile = {
@@ -40,6 +47,7 @@ export class MembershipRequestPlugin extends Plugin {
   private apiClient: ApiClient
   private pollTimer: ReturnType<typeof setTimeout> | null = null
   private pollStartTime: number = 0
+  private invitationManagerBusy = false
   private state: MembershipRequestState = {
     show: false,
     view: 'loading',
@@ -62,8 +70,19 @@ export class MembershipRequestPlugin extends Plugin {
   }
 
   async onActivation(): Promise<void> {
+    // Track whether invitationManager is currently showing a modal
+    this.on('invitationManager' as any, 'inviteShown', () => { this.invitationManagerBusy = true })
+    this.on('invitationManager' as any, 'inviteClosed', () => { this.invitationManagerBusy = false })
+    this.on('invitationManager' as any, 'inviteRedeemed', (data: { token: string }) => {
+      this.invitationManagerBusy = false
+      // Clean up unredeemed storage when the invite is actually redeemed
+      if (data?.token) this.removeUnredeemedInvite(data.token)
+    })
+
     // Check pending requests on startup
     await this.checkPendingRequests()
+    // Try to show any unredeemed invites from previous sessions
+    await this.checkUnredeemedInvites()
     // Start polling if there are still pending tokens
     const stored = this.getStoredTokens()
     if (stored.length > 0) {
@@ -180,6 +199,20 @@ export class MembershipRequestPlugin extends Plugin {
                 group: item.group_name,
                 inviteToken: inviteNotification.action.invite_token
               })
+              // Store as unredeemed so we can show the invite later if needed
+              this.storeUnredeemedInvite({
+                invite_token: inviteNotification.action.invite_token,
+                group_name: item.group_name,
+                stored_at: new Date().toISOString()
+              })
+              // Show invite modal only if invitationManager is not already busy
+              if (!this.invitationManagerBusy) {
+                try {
+                  await this.call('invitationManager' as any, 'showInvite', inviteNotification.action.invite_token)
+                } catch (e) {
+                  console.error('[MembershipRequest] Failed to show invite modal:', e)
+                }
+              }
             }
           } else {
             this.emit('requestStatusChanged', { token: item.token, status })
@@ -342,6 +375,72 @@ export class MembershipRequestPlugin extends Plugin {
         console.error('[MembershipRequest] Failed to inject notification:', e)
       }
     }
+  }
+
+  /* ==================== Unredeemed Invite Tokens ==================== */
+
+  /**
+   * Check unredeemed invite tokens on app load.
+   * If the token is already redeemed, remove it. If invitationManager is busy
+   * (e.g. showing a URL invite), skip and wait for next round.
+   */
+  private async checkUnredeemedInvites(): Promise<void> {
+    const unredeemed = this.getUnredeemedInvites()
+    if (unredeemed.length === 0) return
+
+    for (const item of unredeemed) {
+      try {
+        // Check if the invite token has already been redeemed
+        const validation = await this.call('invitationManager' as any, 'validateToken', item.invite_token)
+        if (validation?.already_redeemed) {
+          this.removeUnredeemedInvite(item.invite_token)
+          continue
+        }
+        if (!validation?.valid) {
+          // Token is invalid/expired — remove it
+          this.removeUnredeemedInvite(item.invite_token)
+          continue
+        }
+
+        // If invitationManager is already showing an invite, skip for now
+        if (this.invitationManagerBusy) {
+          continue
+        }
+
+        // Show the invite modal
+        try {
+          await this.call('invitationManager' as any, 'showInvite', item.invite_token)
+        } catch (e) {
+          console.error('[MembershipRequest] Failed to show unredeemed invite:', e)
+        }
+        // Only show one at a time
+        break
+      } catch (e) {
+        console.error('[MembershipRequest] Error checking unredeemed invite:', e)
+      }
+    }
+  }
+
+  private getUnredeemedInvites(): UnredeemedInvite[] {
+    try {
+      const raw = localStorage.getItem(UNREDEEMED_KEY)
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  }
+
+  private storeUnredeemedInvite(item: UnredeemedInvite): void {
+    const invites = this.getUnredeemedInvites()
+    if (!invites.find(i => i.invite_token === item.invite_token)) {
+      invites.push(item)
+      localStorage.setItem(UNREDEEMED_KEY, JSON.stringify(invites))
+    }
+  }
+
+  private removeUnredeemedInvite(inviteToken: string): void {
+    const invites = this.getUnredeemedInvites().filter(i => i.invite_token !== inviteToken)
+    localStorage.setItem(UNREDEEMED_KEY, JSON.stringify(invites))
   }
 
   /* ==================== LocalStorage ==================== */
