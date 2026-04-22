@@ -454,3 +454,20 @@ Assist in creating frontend components that interact with deployed smart contrac
 
 # Example Task
 "Frontend Specialist: Create a React component for users to mint new tokens from the MyToken contract. Include form validation and transaction status updates."`
+
+// Re-export DApp Generator prompts
+export {
+  DAPP_GENERATOR_SUBAGENT_PROMPT,
+  buildDAppSystemPrompt,
+  buildDAppUserMessage,
+  parsePages,
+  findMissingImports,
+  isLocalVMChainId,
+  REQUIRED_DAPP_FILES,
+  cleanFileContent,
+  ensureCompleteHtml,
+  // Types
+  type DAppPromptContext,
+  type DAppContractInfo,
+  type DAppUserMessageOptions
+} from './DAppGeneratorPrompts'

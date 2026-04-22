@@ -98,14 +98,14 @@ export class RemixFilesystemBackend {
       console.log(`[RemixFilesystemBackend] File exists: ${exists}`)
 
       // If file exists, show diff for approval
-      if (exists) {
-        console.log(`[RemixFilesystemBackend] Fetching existing content for diff...`)
-        const oldContent = await this.plugin.call('fileManager', 'readFile', normalizedPath)
+      // if (exists) {
+      //   console.log(`[RemixFilesystemBackend] Fetching existing content for diff...`)
+      //   const oldContent = await this.plugin.call('fileManager', 'readFile', normalizedPath)
 
-        // Show custom diff to user
-        // const approved = await this.showCustomDiff(normalizedPath, oldContent, content)
-        // console.log(`[RemixFilesystemBackend] User approved changes: ${approved}`)
-      }
+      //   // Show custom diff to user
+      //   // const approved = await this.showCustomDiff(normalizedPath, oldContent, content)
+      //   // console.log(`[RemixFilesystemBackend] User approved changes: ${approved}`)
+      // }
 
       // Write the file
       await this.plugin.call('fileManager', 'writeFile', normalizedPath, content)

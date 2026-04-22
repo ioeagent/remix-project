@@ -15,7 +15,8 @@ import {
   CODE_EXPLANATION_PROMPT,
   SECURITY_AUDITOR_SUBAGENT_PROMPT,
   CODE_REVIEWER_SUBAGENT_PROMPT,
-  FRONTEND_SPECIALIST_SUBAGENT_PROMPT
+  FRONTEND_SPECIALIST_SUBAGENT_PROMPT,
+  DAPP_GENERATOR_SUBAGENT_PROMPT
 } from './DeepAgentPrompts'
 import { DeepAgentMemoryBackend } from '../../storage/deepAgentMemoryBackend'
 import { IDeepAgentConfig, DeepAgentError, DeepAgentErrorType } from '../../types/deepagent'
@@ -30,6 +31,7 @@ import { BaseChatModel } from '@langchain/core/language_models/chat_models'
 import { AsyncLocalStorageProviderSingleton } from '@langchain/core/singletons'
 import { buildChatPrompt } from '../../prompts/promptBuilder'
 import { MemorySaver } from "@langchain/langgraph";
+import { QuickDappPromptMiddleware } from './DAppGeneratorPrompts'
 
 // Model provider types
 type ModelProvider = 'anthropic' | 'mistralai' | 'openai' | 'ollama'
@@ -199,9 +201,17 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
             model: this.model,
             tools: this.tools,
             backend: this.filesystemBackend
+          },
+          {
+            name: 'DApp Generator',
+            systemPrompt: DAPP_GENERATOR_SUBAGENT_PROMPT,
+            model: this.model,
+            tools: this.tools,
+            middleware: [QuickDappPromptMiddleware],
+            backend: this.filesystemBackend
           }
         ]
-        console.log('[DeepAgentInferencer] Configured 3 specialized subagents: Security Auditor, Code Reviewer, Frontend Specialist')
+        console.log('[DeepAgentInferencer] Configured 4 specialized subagents: Security Auditor, Code Reviewer, Frontend Specialist, DApp Generator')
       }
 
       // Add store if configured
@@ -217,7 +227,7 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
       console.log('[DeepAgentInferencer] Agent created successfully')
       console.log('[DeepAgentInferencer] DeepAgent instance created successfully', this.agent)
 
-      console.log('[DeepAgentInferencer] Initialized successfully')
+      console.log('[DeepAgentInferencer] Initialized successfully', this.agent)
     } catch (error: any) {
       console.error('[DeepAgentInferencer] Initialization failed:', error)
       throw new DeepAgentError(
@@ -439,6 +449,181 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
   }
 
   /**
+   * Answer with a custom system prompt - used for specialized generation like DApps
+   * This creates a temporary agent configuration with the custom prompt
+   */
+  async answerWithCustomSystemPrompt(
+    prompt: string,
+    systemPrompt: string,
+    params: IParams,
+    imageBase64?: string
+  ): Promise<string> {
+    this.event.emit('onInference')
+
+    try {
+      if (!this.agent || !this.model) {
+        throw new DeepAgentError(
+          'DeepAgent not initialized',
+          DeepAgentErrorType.INITIALIZATION_FAILED
+        )
+      }
+
+      console.log('[DeepAgentInferencer] Running answerWithCustomSystemPrompt')
+
+      // For custom system prompts, we need to include the system message explicitly
+      // since the agent was created with the default system prompt
+      const fullPrompt = `${systemPrompt}\n\n---\n\nUser Request:\n${prompt}`
+
+      // Build messages with image support if provided
+      let messages: any[] = []
+
+      if (imageBase64) {
+        // Use multimodal message with image
+        messages = [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image_url',
+                image_url: {
+                  url: imageBase64.startsWith('data:') ? imageBase64 : `data:image/png;base64,${imageBase64}`
+                }
+              },
+              {
+                type: 'text',
+                text: fullPrompt
+              }
+            ]
+          }
+        ]
+      } else {
+        messages = [
+          { role: 'user', content: fullPrompt }
+        ]
+      }
+
+      // Use runAgentWithCustomMessages for non-streaming full response
+      const response = await this.runAgentSync(messages, systemPrompt)
+
+      this.event.emit('onInferenceDone')
+      return response
+    } catch (error) {
+      this.event.emit('onInferenceDone')
+      console.error('[DeepAgentInferencer] answerWithCustomSystemPrompt error:', error)
+      return await this.handleError(error, 'answerWithCustomSystemPrompt', prompt, params)
+    }
+  }
+
+  /**
+   * Run agent synchronously (non-streaming) for full response
+   * Used by DApp generation where we need the complete response
+   */
+  private async runAgentSync(messages: any[], systemPrompt: any): Promise<string> {
+    this.currentAbortController = new AbortController()
+    let fullResponse = ''
+
+    try {
+      // Convert messages to LangChain format with multimodal support
+      const langchainMessages = messages.map(msg => {
+        if (msg.role === 'user') {
+          // Handle multimodal content (images)
+          if (Array.isArray(msg.content)) {
+            return new HumanMessage({
+              content: msg.content.map((part: any) => {
+                if (part.type === 'image_url') {
+                  return {
+                    type: 'image_url',
+                    image_url: part.image_url
+                  }
+                }
+                return { type: 'text', text: part.text || part }
+              })
+            })
+          }
+          return new HumanMessage(msg.content)
+        }
+        if (msg.role === 'assistant') return new AIMessage(msg.content)
+        return new HumanMessage(msg.content)
+      })
+
+      // Stream events but collect full response
+      const eventStream = this.agent.streamEvents(
+        { messages: langchainMessages },
+        {
+          version: 'v2',
+          configurable: {
+            thread_id: `remix-dapp-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
+          },
+          signal: this.currentAbortController?.signal,
+          runtime: {
+            context: { ctx: systemPrompt }
+          }
+        }
+      )
+
+      let finalMessageFromChain = ''
+      for await (const event of eventStream) {
+        if (this.currentAbortController?.signal.aborted) {
+          break
+        }
+
+        const eventType = event.event
+
+        if (eventType === 'on_chat_model_stream') {
+          const chunk = event.data?.chunk
+          if (chunk?.content) {
+            let deltaContent = ''
+            if (typeof chunk.content === 'string') {
+              deltaContent = chunk.content
+            } else if (Array.isArray(chunk.content) && chunk.content.length > 0) {
+              if (chunk.content[0]?.text) {
+                deltaContent = chunk.content[0].text
+              } else if (typeof chunk.content[0] === 'string') {
+                deltaContent = chunk.content[0]
+              }
+            }
+            if (deltaContent) {
+              fullResponse += deltaContent
+            }
+          }
+        } else if (eventType === 'on_chain_end') {
+          const output = event.data?.output
+          if (output?.messages && output.messages.length > 0) {
+            const lastMessage = output.messages[output.messages.length - 1]
+            if (lastMessage.content && typeof lastMessage.content === 'string') {
+              finalMessageFromChain = lastMessage.content
+            }
+          }
+        } else if (eventType === 'on_tool_start') {
+          const toolName = event.name
+          const toolInput = event.data?.input || {}
+          console.log('[DeepAgentInferencer] DApp Tool call started:', toolName)
+          this.event.emit('onToolCall', { toolName, toolInput, status: 'start' })
+        } else if (eventType === 'on_tool_end') {
+          const toolName = event.name
+          console.log('[DeepAgentInferencer] DApp Tool call ended:', toolName)
+        }
+      }
+
+      // Use chain final message if more complete
+      if (finalMessageFromChain && finalMessageFromChain.length > fullResponse.length) {
+        fullResponse = finalMessageFromChain
+      }
+
+      console.log('[DeepAgentInferencer] DApp generation complete, response length:', fullResponse.length)
+      return fullResponse
+    } catch (error: any) {
+      if (error?.name === 'AbortError' || this.currentAbortController?.signal.aborted) {
+        console.log('[DeepAgentInferencer] DApp request cancelled')
+        return fullResponse
+      }
+      throw error
+    } finally {
+      this.currentAbortController = null
+    }
+  }
+
+  /**
    * Code completion method (not supported by DeepAgent, falls back)
    */
   async code_completion(prompt: string, context: string, ctxFiles: any, fileName: string, params: IParams): Promise<any> {
@@ -623,7 +808,6 @@ export class DeepAgentInferencer implements ICompletions, IGeneration {
         return fullResponse
       }
       console.error('[DeepAgentInferencer] Error during agent execution:', error)
-      throw error
     } finally {
       this.currentAbortController = null
       this.event.emit('onToolCall', { toolName:'', toolInput:'', status: 'end' })
