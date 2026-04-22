@@ -311,9 +311,7 @@ export class RemixFilesystemBackend {
     }
   }
 
-  async edit(file_path: string, edits: EditInstruction[]): Promise<any> {
-    return await this.edit_file(file_path, edits)
-  }
+
 
   /**
    * List directory contents
