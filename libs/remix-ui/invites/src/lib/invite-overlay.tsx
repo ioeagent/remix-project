@@ -18,6 +18,7 @@ interface InviteOverlayProps {
   state: InviteState
   onRedeem: (token: string) => Promise<InviteRedeemResponse>
   onClose: () => void
+  onDismissForever?: () => void
   onStartWalkthrough?: (slug: string) => void
   plugin?: any
 }
@@ -30,6 +31,7 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
   state,
   onRedeem,
   onClose,
+  onDismissForever,
   onStartWalkthrough,
   plugin
 }) => {
@@ -105,6 +107,7 @@ export const InviteOverlay: React.FC<InviteOverlayProps> = ({
         error={error}
         onRedeem={onRedeem}
         onClose={onClose}
+        onDismissForever={onDismissForever}
         plugin={plugin}
       />
     )

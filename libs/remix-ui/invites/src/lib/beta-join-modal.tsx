@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { InviteValidateResponse, InviteRedeemResponse } from '@remix-api'
 import { LoginModal } from '@remix-ui/login'
 
@@ -21,6 +21,8 @@ interface BetaJoinModalProps {
   error: string | null;
   /** Called when the user clicks "Join the Beta". */
   onRedeem: (token: string) => Promise<InviteRedeemResponse>;
+  /** Called when the user clicks "Don't show me again". */
+  onDismissForever?: () => void;
   /** Plugin reference passed to LoginButton. */
   plugin?: any;
 }
@@ -276,10 +278,24 @@ function formatExpiry(expiresAt: string | null | undefined): string | null {
 // ─── Main component ──────────────────────────────────────────────
 
 const BetaJoinModal: React.FC<BetaJoinModalProps> = ({
-  open, onClose, token, validation, isAuthenticated, redeeming, error, onRedeem, plugin,
+  open, onClose, token, validation, isAuthenticated, redeeming, error, onRedeem, onDismissForever, plugin,
 }) => {
   const [ctaHovered, setCtaHovered] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [laterHovered, setLaterHovered] = useState(false);
+  const [neverHovered, setNeverHovered] = useState(false);
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
+  const prevAuthRef = useRef(isAuthenticated);
+
+  useEffect(() => {
+    if (!prevAuthRef.current && isAuthenticated) {
+      setShowLogin(false);
+      setJustLoggedIn(true);
+      const t = setTimeout(() => setJustLoggedIn(false), 3000);
+      return () => clearTimeout(t);
+    }
+    prevAuthRef.current = isAuthenticated;
+  }, [isAuthenticated]);
 
   if (!open) return null;
 
@@ -485,6 +501,22 @@ const BetaJoinModal: React.FC<BetaJoinModalProps> = ({
 
           {/* ── CTA ── */}
           <div style={{ padding: "0 28px 20px", animation: "bjFadeUp 0.5s ease 0.45s both" }}>
+            {/* Login success flash */}
+            {justLoggedIn && (
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                marginBottom: 12, padding: "7px 14px", borderRadius: 10,
+                background: "rgba(107,219,138,0.08)", border: "0.5px solid rgba(107,219,138,0.25)",
+                animation: "bjFadeUp 0.3s ease",
+              }}>
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="#6bdb8a" strokeWidth="1.8">
+                  <path d="M2 6.5l3 3 6-6" />
+                </svg>
+                <span style={{ fontSize: 12, color: "#6bdb8a", fontWeight: 500 }}>
+                  Signed in — you're good to go!
+                </span>
+              </div>
+            )}
             {isAuthenticated ? (
               <button
                 onClick={() => onRedeem(token)}
@@ -494,15 +526,18 @@ const BetaJoinModal: React.FC<BetaJoinModalProps> = ({
                 data-id="invite-join-beta-btn"
                 style={{
                   width: "100%", padding: 14, borderRadius: 12,
-                  background: c.cy, border: "none",
+                  background: ctaHovered && !redeeming
+                    ? "linear-gradient(135deg, #8b6ef5, #5b9cf5)"
+                    : "linear-gradient(135deg, #9b7dff, #6b8ef5)",
+                  border: "none",
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14, fontWeight: 500, color: c.bg,
+                  fontSize: 14, fontWeight: 500, color: "#fff",
                   cursor: redeeming ? "wait" : "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   transition: "all 0.2s",
                   opacity: redeeming ? 0.7 : 1,
-                  filter: ctaHovered && !redeeming ? "brightness(1.1)" : "none",
                   transform: ctaHovered && !redeeming ? "translateY(-1px)" : "none",
+                  boxShadow: ctaHovered && !redeeming ? "0 6px 20px rgba(155,125,255,0.35)" : "0 2px 8px rgba(155,125,255,0.2)",
                 }}
               >
                 {redeeming ? (
@@ -548,6 +583,38 @@ const BetaJoinModal: React.FC<BetaJoinModalProps> = ({
             <div style={{ textAlign: "center", fontSize: 11, color: c.td, marginTop: 10, lineHeight: 1.4 }}>
               Free to join. Free to leave anytime. Around a month of testing.
             </div>
+
+            {/* Defer / Dismiss links — only shown when not yet signed in */}
+            {!isAuthenticated && (
+            <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 12 }}>
+              <span
+                onClick={onClose}
+                onMouseEnter={() => setLaterHovered(true)}
+                onMouseLeave={() => setLaterHovered(false)}
+                style={{
+                  fontSize: 11, color: laterHovered ? c.tx : c.tm,
+                  cursor: "pointer", transition: "color 0.2s",
+                  textDecoration: laterHovered ? "underline" : "none",
+                }}
+              >
+                I’ll do this later
+              </span>
+              {onDismissForever && (
+                <span
+                  onClick={onDismissForever}
+                  onMouseEnter={() => setNeverHovered(true)}
+                  onMouseLeave={() => setNeverHovered(false)}
+                  style={{
+                    fontSize: 11, color: neverHovered ? c.tx : c.td,
+                    cursor: "pointer", transition: "color 0.2s",
+                    textDecoration: neverHovered ? "underline" : "none",
+                  }}
+                >
+                  Don’t show me again
+                </span>
+              )}
+            </div>
+            )}
           </div>
 
           {/* ── Footer ── */}

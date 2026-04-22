@@ -10,8 +10,8 @@ const profile = {
   name: 'invitationManager',
   displayName: 'Invitation Manager',
   description: 'Manages invite token validation and redemption',
-  methods: ['showInvite', 'validateToken', 'redeemToken', 'close'],
-  events: ['inviteShown', 'inviteClosed', 'inviteRedeemed'],
+  methods: ['showInvite', 'validateToken', 'redeemToken', 'close', 'dismissForever'],
+  events: ['inviteShown', 'inviteClosed', 'inviteRedeemed', 'inviteDismissedForever'],
   icon: '',
   location: 'none',
   version: packageJson.version,
@@ -202,9 +202,22 @@ export class InvitationManagerPlugin extends Plugin {
   }
 
   /**
+   * Dismiss the invite forever — close and signal that it should not be shown again
+   */
+  async dismissForever(): Promise<void> {
+    const token = this.state.token
+    await this.close()
+    if (token) {
+      this.emit('inviteDismissedForever', { token })
+    }
+  }
+
+  /**
    * Close the invite modal
    */
   async close(): Promise<void> {
+    const closedToken = this.state.token
+
     this.state = {
       show: false,
       token: null,
@@ -222,7 +235,7 @@ export class InvitationManagerPlugin extends Plugin {
       // Ignore
     }
 
-    this.emit('inviteClosed')
+    this.emit('inviteClosed', { token: closedToken })
     this.renderComponent()
   }
 
@@ -352,6 +365,7 @@ export class InvitationManagerPlugin extends Plugin {
         state={dispatchState.state}
         onRedeem={(token) => this.redeemToken(token)}
         onClose={() => this.close()}
+        onDismissForever={() => this.dismissForever()}
         onStartWalkthrough={(slug) => this.startWalkthrough(slug)}
         plugin={dispatchState.plugin}
       />

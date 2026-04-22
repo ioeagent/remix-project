@@ -72,11 +72,34 @@ export class MembershipRequestPlugin extends Plugin {
   async onActivation(): Promise<void> {
     // Track whether invitationManager is currently showing a modal
     this.on('invitationManager' as any, 'inviteShown', () => { this.invitationManagerBusy = true })
-    this.on('invitationManager' as any, 'inviteClosed', () => { this.invitationManagerBusy = false })
+    this.on('invitationManager' as any, 'inviteClosed', (data: { token: string | null }) => {
+      this.invitationManagerBusy = false
+      // User clicked "I'll do this later" — persist the token so we can show the modal again later
+      if (data?.token) {
+        this.storeUnredeemedInvite({
+          invite_token: data.token,
+          group_name: '',
+          stored_at: new Date().toISOString()
+        })
+      }
+    })
     this.on('invitationManager' as any, 'inviteRedeemed', (data: { token: string }) => {
       this.invitationManagerBusy = false
       // Clean up unredeemed storage when the invite is actually redeemed
       if (data?.token) this.removeUnredeemedInvite(data.token)
+    })
+    this.on('invitationManager' as any, 'inviteDismissedForever', (data: { token: string }) => {
+      this.invitationManagerBusy = false
+      // User chose "Don't show me again" — remove from unredeemed storage
+      if (data?.token) this.removeUnredeemedInvite(data.token)
+    })
+
+    // When the user authenticates, silently clean up any unredeemed invite tokens
+    // that were already redeemed server-side (e.g. auto-redeemed on account creation).
+    this.on('auth', 'authStateChanged', async (isAuthenticated: boolean) => {
+      if (isAuthenticated) {
+        await this.purgeRedeemedInvites()
+      }
     })
 
     // Check pending requests on startup
@@ -378,6 +401,27 @@ export class MembershipRequestPlugin extends Plugin {
   }
 
   /* ==================== Unredeemed Invite Tokens ==================== */
+
+  /**
+   * Silently validate all stored unredeemed invite tokens and remove any that
+   * the API reports as already redeemed. Called after the user authenticates
+   * so tokens auto-redeemed on account creation are cleaned up immediately.
+   */
+  private async purgeRedeemedInvites(): Promise<void> {
+    const unredeemed = this.getUnredeemedInvites()
+    if (unredeemed.length === 0) return
+
+    for (const item of unredeemed) {
+      try {
+        const validation = await this.call('invitationManager' as any, 'validateToken', item.invite_token)
+        if (validation?.already_redeemed || !validation?.valid) {
+          this.removeUnredeemedInvite(item.invite_token)
+        }
+      } catch (e) {
+        // Ignore — will be caught next time
+      }
+    }
+  }
 
   /**
    * Check unredeemed invite tokens on app load.
