@@ -41,6 +41,21 @@ interface CREImportAck {
   error?: string
 }
 
+/** Origins allowed to connect to the CRE bridge */
+const ALLOWED_ORIGINS = [
+  'https://cre.solange.dev',
+  // Allow any localhost port for local CRE dev
+  /^https?:\/\/localhost(:\d+)?$/,
+  /^https?:\/\/127\.0\.0\.1(:\d+)?$/,
+]
+
+function isOriginAllowed(origin: string | undefined): boolean {
+  if (!origin) return false
+  return ALLOWED_ORIGINS.some((allowed) =>
+    typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
+  )
+}
+
 let server: WebSocketServer | null = null
 
 function ack(ws: WebSocket, result: CREImportAck) {
@@ -58,11 +73,17 @@ function writeProjectFiles(
   projectName: string,
   files: Record<string, string>
 ): string {
-  const projectDir = path.join(workspaceRoot, projectName)
+  const projectDir = path.resolve(workspaceRoot, projectName)
   fs.mkdirSync(projectDir, { recursive: true })
 
   for (const [filePath, content] of Object.entries(files)) {
-    const fullPath = path.join(projectDir, filePath)
+    const fullPath = path.resolve(projectDir, filePath)
+
+    // Path traversal check: ensure the resolved path stays within projectDir
+    if (!fullPath.startsWith(projectDir + path.sep) && fullPath !== projectDir) {
+      throw new Error(`Path traversal attempt detected: "${filePath}" resolves outside the project directory.`)
+    }
+
     fs.mkdirSync(path.dirname(fullPath), { recursive: true })
     fs.writeFileSync(fullPath, content, 'utf-8')
   }
@@ -138,7 +159,15 @@ export function startCREBridge(): void {
   })
 
   server.on('connection', (ws, req) => {
-    const origin = req.headers.origin ?? 'unknown'
+    const origin = req.headers.origin
+
+    // Origin validation — reject connections from disallowed origins
+    if (!isOriginAllowed(origin)) {
+      console.warn(`[CRE Bridge] Rejected connection from disallowed origin: ${origin ?? '(none)'}`)
+      ws.close(4003, 'Origin not allowed')
+      return
+    }
+
     console.log(`[CRE Bridge] Client connected from ${origin}`)
 
     ws.on('message', (data) => handleMessage(ws, data.toString()))
