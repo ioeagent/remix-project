@@ -637,7 +637,7 @@ export function RemixUiSkillsExplorerModal(props: RemixUiSkillsExplorerModalProp
                   {uploadError && (
                     <div className="alert alert-danger mt-3" role="alert">
                       <i className="fa-solid fa-exclamation-triangle me-2"></i>
-                      {uploadError}
+                      <pre className="mb-0 small" style={{ whiteSpace: 'pre-wrap' }}>{uploadError}</pre>
                     </div>
                   )}
 
@@ -690,7 +690,7 @@ export function RemixUiSkillsExplorerModal(props: RemixUiSkillsExplorerModalProp
                     {uploadError && (
                       <div className="alert alert-danger mb-3 w-100" role="alert">
                         <i className="fa-solid fa-exclamation-triangle me-2"></i>
-                        {uploadError}
+                        <pre className="mb-0 small" style={{ whiteSpace: 'pre-wrap' }}>{uploadError}</pre>
                       </div>
                     )}
 
