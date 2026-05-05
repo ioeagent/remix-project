@@ -110,6 +110,10 @@ app.on('ready', async () => {
   trackEvent('App', 'OS', process.platform, 1);
   if (!isE2E) registerLinuxProtocolHandler();
   require('./engine')
+  // Start the CRE Desktop Bridge WS server so Scaffold CRE can send
+  // project files directly into the active Remix workspace.
+  const { startCREBridge } = require('./lib/creDesktopBridge')
+  startCREBridge()
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
