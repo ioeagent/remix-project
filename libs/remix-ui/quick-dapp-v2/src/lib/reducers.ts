@@ -1,4 +1,4 @@
-import { DappConfig, AppState } from './types';
+import { DappConfig, AppState, FrontendMode } from './types';
 
 const initialInstanceState = {
   name: '',
@@ -22,9 +22,11 @@ export const appInitialState: AppState = {
   instance: { ...initialInstanceState },
   dappProcessing: {},
   generationProgress: null,
+  frontendMode: 'workspace',
 };
 
 export type AppAction =
+  | { type: 'SET_FRONTEND_MODE'; payload: FrontendMode }
   | { type: 'SET_LOADING'; payload: { screen?: boolean } }
   | { type: 'SET_VIEW'; payload: AppState['view'] }
   | { type: 'SET_DAPPS'; payload: DappConfig[] }
@@ -101,6 +103,9 @@ export const appReducer = (state = appInitialState, action: AppAction): AppState
 
   case 'SET_GENERATION_PROGRESS':
     return { ...state, generationProgress: action.payload };
+
+  case 'SET_FRONTEND_MODE':
+    return { ...state, frontendMode: action.payload };
 
   default:
     return state;

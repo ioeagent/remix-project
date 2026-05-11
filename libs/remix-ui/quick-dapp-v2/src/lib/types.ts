@@ -1,4 +1,5 @@
 export type DappStatus = 'draft' | 'creating' | 'updating' | 'created' | 'deployed';
+export type FrontendMode = 'workspace' | 'inline'; // 'inline' = /frontend folder in current workspace
 
 export interface DappConfig {
   _warning: string;
@@ -51,6 +52,7 @@ export interface AppState {
   instance: any;
   dappProcessing: Record<string, boolean>;
   generationProgress: GenerationProgress | null;
+  frontendMode: FrontendMode;
 }
 
 export interface GenerationProgress {

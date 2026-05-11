@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Card } from 'react-bootstrap';
 import { AppContext } from '../../contexts';
-import { GenerationProgress } from '../../types';
+import { FrontendMode, GenerationProgress } from '../../types';
 
 interface CreateInstanceProps {
   isAiLoading: boolean;
@@ -14,6 +14,66 @@ const statusMessages: Record<string, string> = {
   parsing: 'Parsing generated files...',
   validating: 'Validating file structure...',
   complete: 'Generation complete!',
+};
+
+const FrontendModeSelector: React.FC = () => {
+  const { appState, dispatch } = useContext(AppContext);
+  const mode: FrontendMode = appState.frontendMode || 'workspace';
+
+  return (
+    <div className="mb-4" data-id="quickdapp-frontend-mode-selector">
+      <h5 className="mb-2">Where should the frontend be created?</h5>
+      <div className="d-flex gap-3">
+        <div
+          className={`border rounded p-3 flex-grow-1 cursor-pointer ${
+            mode === 'workspace' ? 'border-primary bg-primary bg-opacity-10' : ''
+          }`}
+          style={{ cursor: 'pointer' }}
+          onClick={() => dispatch({ type: 'SET_FRONTEND_MODE', payload: 'workspace' })}
+          data-id="quickdapp-mode-workspace"
+        >
+          <div className="d-flex align-items-center mb-1">
+            <input
+              type="radio"
+              readOnly
+              checked={mode === 'workspace'}
+              className="me-2"
+              style={{ pointerEvents: 'none' }}
+            />
+            <strong>New Workspace</strong>
+          </div>
+          <p className="text-muted mb-0" style={{ fontSize: '0.85rem' }}>
+            Creates a dedicated workspace (e.g. <code>dapp-mycontract-abc123</code>) for the frontend. Switch between
+            workspaces to interact with the contract and the DApp separately.
+          </p>
+        </div>
+
+        <div
+          className={`border rounded p-3 flex-grow-1 cursor-pointer ${
+            mode === 'inline' ? 'border-primary bg-primary bg-opacity-10' : ''
+          }`}
+          style={{ cursor: 'pointer' }}
+          onClick={() => dispatch({ type: 'SET_FRONTEND_MODE', payload: 'inline' })}
+          data-id="quickdapp-mode-inline"
+        >
+          <div className="d-flex align-items-center mb-1">
+            <input
+              type="radio"
+              readOnly
+              checked={mode === 'inline'}
+              className="me-2"
+              style={{ pointerEvents: 'none' }}
+            />
+            <strong><code>/frontend</code> folder <span className="badge bg-success ms-1" style={{ fontSize: '0.7rem' }}>New</span></strong>
+          </div>
+          <p className="text-muted mb-0" style={{ fontSize: '0.85rem' }}>
+            Adds a <code>/frontend</code> directory directly in your current workspace — no workspace switching needed.
+            Ideal when you want the contract and its UI side by side in the file explorer.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
@@ -57,6 +117,8 @@ const CreateInstance: React.FC<CreateInstanceProps> = ({ isAiLoading }) => {
           Transform your smart contracts into interactive DApps with AI.
         </p>
       </div>
+
+      <FrontendModeSelector />
 
       <Card className="border-info" data-id="quickdapp-getting-started">
         <Card.Header className="bg-info bg-opacity-10 border-info">

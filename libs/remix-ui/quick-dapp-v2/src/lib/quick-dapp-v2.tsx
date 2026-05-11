@@ -40,6 +40,7 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
   // DappManager now receives the plugin from props instead of a singleton
   const dappManager = useMemo(() => new DappManager(plugin as any), [plugin]);
   const dappManagerRef = useRef(dappManager);
+  const frontendModeRef = useRef(appState.frontendMode);
   // Track workspaces being deleted by us to prevent double SET_DAPPS dispatch
   const deletingWorkspacesRef = useRef<Set<string>>(new Set());
 
@@ -54,6 +55,10 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
   useEffect(() => {
     dappManagerRef.current = dappManager;
   }, [dappManager]);
+
+  useEffect(() => {
+    frontendModeRef.current = appState.frontendMode;
+  }, [appState.frontendMode]);
 
   useEffect(() => {
     if (!plugin) return;
@@ -73,11 +78,13 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
           sourceFilePath: payload.sourceFilePath || ''
         };
 
-        const newDapp = await dappManager.createDapp(
-          contractData.name,
-          contractData,
-          payload.isBaseMiniApp || false
-        );
+        // Use the frontend mode chosen by the user in the startup modal
+        const currentFrontendMode = frontendModeRef.current || 'workspace';
+        const isInlineMode = currentFrontendMode === 'inline';
+
+        const newDapp = isInlineMode
+          ? await dappManager.createDappInline(contractData.name, contractData, payload.isBaseMiniApp || false)
+          : await dappManager.createDapp(contractData.name, contractData, payload.isBaseMiniApp || false);
 
         dispatch({ type: 'SET_ACTIVE_DAPP', payload: newDapp });
         dispatch({ type: 'SET_DAPPS', payload: [newDapp, ...dappsRef.current]});
@@ -122,7 +129,14 @@ export function RemixUiQuickDappV2({ plugin }: RemixUiQuickDappV2Props): JSX.Ele
 
       try {
         plugin.call('ai-dapp-generator', 'consumePendingResult', workspaceName).catch(() => {})
-        await dappManager.saveGeneratedFiles(workspaceName, data.content);
+        // Check if this dapp was created in inline mode (stored in config)
+        const dappConfig = dappsRef.current.find((d: DappConfig) => d.slug === workspaceName || d.workspaceName === workspaceName);
+        const isInline = (dappConfig as any)?.inlineMode === true;
+        if (isInline) {
+          await dappManager.saveGeneratedFilesInline(data.content);
+        } else {
+          await dappManager.saveGeneratedFiles(workspaceName, data.content);
+        }
 
         if (data.isUpdate) {
           const updatedConfig = await dappManager.updateDappConfig(workspaceName, { status: 'created' });
