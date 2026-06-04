@@ -131,6 +131,7 @@ import { TemplateExplorerModalPlugin } from './app/plugins/template-explorer-mod
 import { SkillsExplorerModalPlugin } from './app/plugins/skills-explorer-modal'
 import { ChecklistExplorerModalPlugin } from './app/plugins/checklist-explorer-modal'
 import { TxRunnerPlugin } from './app/plugins/txRunnerPlugin'
+import { TheGraphPlugin } from './app/plugins/thegraph-plugin'
 
 // Tracking now handled by this.track() method using MatomoManager
 
@@ -707,6 +708,8 @@ class AppComponent {
       feedbackPlugin
     ])
     this.engine.register([templateExplorerModal, skillExplorerModal, checklistExplorerModal, this.topBar])
+    const theGraphPlugin = new TheGraphPlugin()
+    this.engine.register([theGraphPlugin])
 
     this.layout.panels = {
       tabs: { plugin: tabProxy, active: true },

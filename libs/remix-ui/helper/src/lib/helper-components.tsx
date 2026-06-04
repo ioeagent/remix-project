@@ -220,6 +220,7 @@ export const CompileBtn = ({ plugin, appState, id, compileAction }: { plugin: an
 
 export const gitAccessTokenLink = 'https://github.com/settings/tokens/new?scopes=gist,repo&description=Remix%20IDE%20Token'
 export const etherscanTokenLink = 'https://etherscan.io/myapikey'
+export const theGraphStudioLink = 'https://thegraph.com/studio/apikeys/'
 export const sindriAccessTokenLink = 'https://sindri.app'
 
 export const GitHubCredentialsDescription = () => {
@@ -264,6 +265,21 @@ export const EtherscanConfigDescription = () => {
         <a className="text-primary" target="_blank" href={etherscanTokenLink}>
           {intl.formatMessage({ id: 'settings.etherscanAccessTokenText2' })}
         </a> <FormattedMessage id="settings.etherscanAccessTokenText3" />
+      </p>
+    </>
+  )
+}
+
+export const TheGraphConfigDescription = () => {
+  return (
+    <>
+      <p className="mb-1">
+        Enter your free API key from The Graph Studio to search all published subgraphs and query production endpoints.
+      </p>
+      <p className="mb-1">
+        <a className="text-primary" target="_blank" href={theGraphStudioLink}>
+          Get a free API key at thegraph.com/studio
+        </a> — no credit card required.
       </p>
     </>
   )
