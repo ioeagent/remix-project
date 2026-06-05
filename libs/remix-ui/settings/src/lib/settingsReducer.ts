@@ -266,6 +266,14 @@ export const initialState: SettingsState = {
     value: deepagentMoonshotApiKey,
     isLoading: false
   },
+  'thegraph-config': {
+    value: '',
+    isLoading: false
+  },
+  'thegraph-api-key': {
+    value: config.get('settings/thegraph-api-key') || '',
+    isLoading: false
+  },
   toaster: {
     value: '',
     isLoading: false

@@ -3,7 +3,9 @@ import { ChatAnthropic } from '@langchain/anthropic'
 import { ChatMistralAI } from '@langchain/mistralai'
 import { ChatOpenAI } from '@langchain/openai'
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
-import { HTTPClient } from '@mistralai/mistralai/lib/http.js'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { HTTPClient } = require('./mistralHttpShim.js')
+type HTTPClient = any
 import { endpointUrls } from '@remix-endpoints-helper'
 import { ModelSelection, IUserApiKeyConfig } from '../../types/deepagent'
 import { DAPP_MAX_TOKENS } from './constants'

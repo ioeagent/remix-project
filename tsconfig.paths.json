@@ -79,6 +79,9 @@
             "@remix-ui/thegraph": [
               "libs/remix-ui/thegraph/src/index.ts"
             ],
+            "@remix-ui/polymarket": [
+              "libs/remix-ui/polymarket/src/index.ts"
+            ],
             "@remix-ui/plan-manager": [
               "libs/remix-ui/plan-manager/src/index.ts"
             ],

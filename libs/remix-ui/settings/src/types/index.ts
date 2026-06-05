@@ -130,6 +130,8 @@ export interface SettingsState {
   'deepagent-mistral-api-key': ConfigState,
   'deepagent-openai-api-key': ConfigState,
   'deepagent-moonshot-api-key': ConfigState,
+  'thegraph-config': ConfigState,
+  'thegraph-api-key': ConfigState,
   toaster: ConfigState
 }
 export interface SettingsActionPayloadTypes {
