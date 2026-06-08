@@ -18,7 +18,8 @@ const profile = {
   name: 'thegraph',
   displayName: 'The Graph',
   description: 'Discover, create, and query subgraphs with The Graph Protocol',
-  methods: [],
+  // Expose createSubgraphFromContract so udapp/other plugins can call it
+  methods: ['createSubgraphFromContract'],
   events: [],
   icon: THEGRAPH_ICON,
   location: 'sidePanel',
@@ -27,8 +28,36 @@ const profile = {
 }
 
 export class TheGraphPlugin extends ViewPlugin {
+  // Ref to the React component for imperative trigger
+  private _triggerCreate: ((prefill: any) => void) | null = null
+
   constructor() {
     super(profile)
+  }
+
+  /**
+   * Called externally (e.g. from udapp right-click context menu):
+   * plugin.call('thegraph', 'createSubgraphFromContract', { contractName, address, abi, chainId })
+   */
+  async createSubgraphFromContract(params: {
+    contractName: string
+    address: string
+    abi: any[]
+    chainId?: number
+    network?: string
+    startBlock?: number
+  }) {
+    // Activate the panel
+    await this.call('manager', 'activatePlugin', 'thegraph')
+    // Trigger the create modal via the ref callback
+    if (this._triggerCreate) {
+      this._triggerCreate(params)
+    }
+  }
+
+  /** Called from TheGraph component to register the trigger callback */
+  registerCreateTrigger(fn: (prefill: any) => void) {
+    this._triggerCreate = fn
   }
 
   render(): JSX.Element {
